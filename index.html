@@ -172,10 +172,36 @@
   <div id="screen-login" class="container">
     <div class="card card-login p-4">
       <div class="text-center mb-4">
-        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; font-size: 24px;">
-          <i class="bi bi-mortarboard-fill"></i>
-        </div>
-        <h4 class="fw-bold text-dark">Portal Asesmen</h4>
+        
+        <!-- LOGO EDUSBYPRO SVG (Tanpa Link Eksternal) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 80" style="max-height: 85px; margin-bottom: 10px;">
+            <defs>
+                <linearGradient id="gradBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="gradRed" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#be123c;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#e11d48;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <!-- Bentuk Mata Pena (Pendidikan) -->
+            <path d="M 50 75 L 20 45 L 20 15 Q 50 0 80 15 L 80 45 Z" fill="url(#gradBlue)"/>
+            <!-- Siluet Tugu Pahlawan Surabaya -->
+            <path d="M 40 55 L 60 55 L 55 15 L 45 15 Z" fill="url(#gradRed)"/>
+            <path d="M 43 15 L 57 15 L 50 5 Z" fill="#fbbf24"/>
+            <!-- Belahan Mata Pena -->
+            <line x1="50" y1="35" x2="50" y2="60" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="50" cy="32" r="3" fill="#ffffff"/>
+            <!-- Tipografi Teks -->
+            <text x="100" y="45" font-family="'Segoe UI', Tahoma, sans-serif" font-size="30" font-weight="900" fill="#1e293b" letter-spacing="-0.5">
+                EDU<tspan fill="#e11d48">SBY</tspan><tspan fill="#2563eb">PRO</tspan>
+            </text>
+            <text x="103" y="65" font-family="'Segoe UI', Tahoma, sans-serif" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2.5">
+                PORTAL ASESMEN
+            </text>
+        </svg>
+        
         <p class="text-muted small">Silakan masuk menggunakan kredensial sekolah</p>
       </div>
       <div id="login-alert" class="alert alert-danger hidden small text-center fw-bold"></div>
@@ -193,12 +219,15 @@
             <li class="nav-item m-0 p-0 border-0" style="margin:0!important;" role="presentation">
                 <button class="nav-link rounded-pill fw-bold w-100" data-bs-toggle="pill" type="button" role="tab" onclick="document.getElementById('in-role').value = 'ADMIN'">👨‍🏫 Guru/Admin</button>
             </li>
-            
         </ul>
-        <!-- Input tersembunyi penangkap data role -->
         <input type="hidden" id="in-role" value="SISWA">
-        <button type="submit" id="btn-login" class="btn btn-primary w-100 fw-bold py-2">MASUK SISTEM</button>
+        <button type="submit" id="btn-login" class="btn btn-primary w-100 fw-bold py-2 shadow-sm">MASUK SISTEM</button>
       </form>
+    </div>
+    
+    <!-- FOOTER COPYRIGHT LOGIN -->
+    <div class="text-center mt-4 text-muted small">
+        Copyright &copy; 2026 : <strong class="text-primary">ardiyatnapranata</strong>
     </div>
   </div>
 
@@ -576,7 +605,11 @@
         </div>
         <!-- ======================================================= -->
 
-
+<!-- FOOTER ADMIN -->
+        <div class="text-center mt-5 pt-4 pb-2 border-top text-muted small d-print-none">
+            Copyright &copy; 2026 : <strong class="text-primary">ardiyatnapranata</strong>
+        </div>
+		
       </div> <!-- Penutup <div class="content-body"> -->
     </div> <!-- Penutup <div class="main-content"> -->
   </div> <!-- Penutup <div id="screen-admin"> -->
@@ -711,6 +744,11 @@
             </div>
         </div>
         <!-- AKHIR RUANG PEMBAHASAN SISWA -->
+
+<!-- FOOTER SISWA -->
+        <div class="text-center mt-5 pt-4 pb-2 border-top text-muted small d-print-none">
+            Copyright &copy; 2026 : <strong class="text-primary">ardiyatnapranata</strong>
+        </div>
 
       </div>
     </div>
