@@ -279,6 +279,13 @@
             <div class="d-flex gap-2"><button class="btn btn-outline-primary px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="bukaModalImporGlobal()"><i class="bi bi-cloud-download me-1"></i> Impor Bank Soal</button><button class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModalUjianKosong()"><i class="bi bi-plus-lg me-1"></i> Buat Asesmen</button></div>
           </div>
           <div class="row g-4" id="container-kartu-ujian"></div>
+		  
+		  <!-- MUKA ADMIN: FITUR LINK EKSTERNAL -->
+          <div class="mt-5 mb-4 d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
+              <div><h5 class="fw-bold m-0"><i class="bi bi-link-45deg text-success me-2"></i>Tugas Link Eksternal</h5><small class="text-muted">Masukkan link Quizizz, GForm, Kahoot, dll untuk dikerjakan siswa.</small></div>
+              <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddLink')"><i class="bi bi-plus-lg me-1"></i> Tambah Link</button>
+          </div>
+          <div class="row g-4" id="container-link-admin"></div>
         </div>
 
         <!-- 4. STUDIO SOAL CERDAS -->
@@ -633,6 +640,12 @@
               <div><h5 class="fw-bold m-0"><i class="bi bi-journal-check text-primary me-2"></i>Daftar Asesmen Tersedia</h5><small class="text-muted">Pilih asesmen yang sesuai dengan jadwalmu, lalu klik Kerjakan.</small></div>
             </div>
             <div class="row g-4" id="container-ujian-siswa-list"></div>
+			
+			<!-- MUKA SISWA: FITUR LINK EKSTERNAL -->
+            <div class="d-flex justify-content-between align-items-center mt-5 mb-4 bg-white p-4 rounded-4 shadow-sm border border-light">
+              <div><h5 class="fw-bold m-0 text-success"><i class="bi bi-box-arrow-up-right me-2"></i>Tugas Eksternal (Tab Baru)</h5><small class="text-muted">Klik kerjakan untuk membuka Quizizz, GForm, atau website tugas lainnya.</small></div>
+            </div>
+            <div class="row g-4" id="container-link-siswa"></div>
         </div>
 
         <!-- 4. RUANG UJIAN (CBT PLAYER) -->
@@ -675,6 +688,30 @@
             </div>
         </div>
 
+        <!-- 5. RUANG PEMBAHASAN SISWA -->
+        <div id="view-siswa-pembahasan" class="view-section-siswa hidden">
+            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-success-subtle flex-wrap gap-3">
+                <div>
+                    <h5 class="fw-bold m-0 text-success"><i class="bi bi-journal-text me-2"></i>Pembahasan Asesmen</h5>
+                    <small class="text-muted fw-bold" id="bahas-judul-ujian">Memuat...</small>
+                </div>
+                <button class="btn btn-outline-secondary fw-bold rounded-pill px-4" onclick="navigasiSiswa('beranda', document.querySelector('#screen-siswa .sidebar-nav .nav-item'))"><i class="bi bi-arrow-left me-2"></i>Kembali ke Beranda</button>
+            </div>
+            
+            <div class="card border-0 shadow-sm rounded-4 mb-4 bg-primary bg-opacity-10 border-primary-subtle">
+                <div class="card-body p-4 text-center">
+                    <h6 class="fw-bold text-primary mb-1">Skor Percobaan Terakhir Anda</h6>
+                    <h1 class="display-4 fw-bold text-primary m-0" id="bahas-nilai-akhir">0</h1>
+                </div>
+            </div>
+
+            <div id="container-bahas-soal">
+                <!-- Konten Pembahasan akan dimuat JS di sini -->
+                <div class="text-center py-5"><span class="spinner-border text-success"></span><br>Menarik data pembahasan...</div>
+            </div>
+        </div>
+        <!-- AKHIR RUANG PEMBAHASAN SISWA -->
+
       </div>
     </div>
   </div>
@@ -713,6 +750,36 @@
               </div>
           </div>
       </div>
+  </div>
+
+<!-- MODAL TAMBAH LINK EKSTERNAL -->
+  <div class="modal fade" id="modalAddLink" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header border-0 pb-0 pt-4 px-4 bg-success bg-opacity-10 rounded-top"><h5 class="modal-title fw-bold text-success"><i class="bi bi-link-45deg me-1"></i> Tambah Link Asesmen</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body p-4">
+          <form onsubmit="simpanLinkEksternal(event)">
+            <div class="mb-3"><label class="form-label small fw-bold">Nama / Judul Kegiatan</label><input type="text" id="lnk-nama" class="form-control" placeholder="Cth: Ulangan Harian Tema 1" required></div>
+            <div class="row g-3 mb-3">
+                <div class="col-6"><label class="form-label small fw-bold">Platform / Aplikasi</label>
+                    <select id="lnk-platform" class="form-select border-success">
+                        <option value="Quizizz">Quizizz</option>
+                        <option value="Google Forms">Google Forms</option>
+                        <option value="Kahoot">Kahoot!</option>
+                        <option value="Wordwall">Wordwall</option>
+                        <option value="Lainnya">Website Lainnya</option>
+                    </select>
+                </div>
+                <div class="col-6"><label class="form-label small fw-bold">Target Kelas</label>
+                    <select id="lnk-kelas" class="form-select" required></select> <!-- Akan diisi JS otomatis -->
+                </div>
+            </div>
+            <div class="mb-4"><label class="form-label small fw-bold">URL / Link Tujuan</label><input type="url" id="lnk-url" class="form-control bg-light" placeholder="https://" required></div>
+            <div class="text-end"><button type="submit" id="btn-simpan-lnk" class="btn btn-success px-4 fw-bold rounded-pill">Bagikan ke Portal Siswa</button></div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 
 <!-- ========================================== -->
@@ -1061,6 +1128,7 @@
     }
 
     // MESIN PORTAL SISWA (MULTI-ATTEMPT / REMEDIAL)
+    // MESIN PORTAL SISWA (MULTI-ATTEMPT / REMEDIAL & PEMBAHASAN)
     function initPortalSiswa() {
         document.getElementById('welcome-siswa-nama').innerText = currentUser.nama || 'Siswa';
         document.getElementById('siswa-display-initial').innerText = (currentUser.nama || 'S').charAt(0).toUpperCase();
@@ -1099,23 +1167,34 @@
                     let riwayatUjianIni = myRiwayat.filter(h => String(h.kodeUjian).trim() === String(u.kode).trim());
                     let jumlahPernahKerja = riwayatUjianIni.length;
                     
+                    let isBahas = u.bukaPembahasan === 'Ya';
                     let maxAttempt = Number(u.maxAttempt) || 1; 
-                    let isTerkunci = jumlahPernahKerja >= maxAttempt;
+                    // Jika pembahasan dibuka, ujian tidak pernah terkunci (bisa diulang bebas)
+                    let isTerkunci = (jumlahPernahKerja >= maxAttempt) && !isBahas; 
                     
-                    let tombolAksi = isTerkunci 
-                        ? `<button class="btn btn-secondary w-100 fw-bold rounded-pill" disabled><i class="bi bi-lock-fill me-2"></i>Habis (${jumlahPernahKerja}/${maxAttempt === 99 ? 'Bebas' : maxAttempt} Percobaan)</button>`
-                        : `<button class="btn btn-primary w-100 fw-bold rounded-pill" onclick="konfirmasiMulaiUjian('${u.kode}', '${u.nama}', ${u.durasi})"><i class="bi bi-play-circle me-2"></i>Mulai Kerjakan ${jumlahPernahKerja > 0 ? '(Ulang ke-'+(jumlahPernahKerja+1)+')' : ''}</button>`;
+                    let tombolAksi = '';
+                    if (isTerkunci) {
+                        tombolAksi = `<button class="btn btn-secondary w-100 fw-bold rounded-pill" disabled><i class="bi bi-lock-fill me-2"></i>Habis (${jumlahPernahKerja}/${maxAttempt === 99 ? 'Bebas' : maxAttempt} Percobaan)</button>`;
+                    } else if (isBahas && jumlahPernahKerja > 0) {
+                        tombolAksi = `
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success w-100 fw-bold rounded-pill shadow-sm" onclick="bukaPembahasanSiswa('${u.kode}', '${u.nama}')"><i class="bi bi-journal-text me-1"></i> Pembahasan</button>
+                            <button class="btn btn-outline-primary w-100 fw-bold rounded-pill bg-white" onclick="konfirmasiMulaiUjian('${u.kode}', '${u.nama}', ${u.durasi})" title="Kerjakan Ulang"><i class="bi bi-arrow-repeat me-1"></i> Ulang</button>
+                        </div>`;
+                    } else {
+                        tombolAksi = `<button class="btn btn-primary w-100 fw-bold rounded-pill" onclick="konfirmasiMulaiUjian('${u.kode}', '${u.nama}', ${u.durasi})"><i class="bi bi-play-circle me-2"></i>Mulai Kerjakan ${jumlahPernahKerja > 0 ? '(Ulang ke-'+(jumlahPernahKerja+1)+')' : ''}</button>`;
+                    }
 
                     let infoSisa = jumlahPernahKerja > 0 
-                        ? `<p class="small text-danger fw-bold mb-3">Telah dikerjakan: ${jumlahPernahKerja} dari ${maxAttempt === 99 ? 'Bebas' : maxAttempt} kesempatan</p>` 
+                        ? `<p class="small text-danger fw-bold mb-3">Telah dikerjakan: ${jumlahPernahKerja} dari ${isBahas ? 'Bebas (Remedial)' : (maxAttempt === 99 ? 'Bebas' : maxAttempt)} kesempatan</p>` 
                         : `<p class="small text-muted mb-3">Kesempatan: ${maxAttempt === 99 ? 'Bebas' : maxAttempt + ' Kali'}</p>`;
 
                     htmlUjian += `
                     <div class="col-md-6 col-xl-4">
-                        <div class="card h-100 border border-primary-subtle shadow-sm rounded-4">
+                        <div class="card h-100 border border-primary-subtle shadow-sm rounded-4 ${isBahas ? 'bg-success bg-opacity-10 border-success' : ''}">
                             <div class="card-body p-4 text-center">
                                 <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                                    <i class="bi bi-file-earmark-text fs-3"></i>
+                                    <i class="bi ${isBahas ? 'bi-journal-check text-success' : 'bi-file-earmark-text'} fs-3"></i>
                                 </div>
                                 <h5 class="fw-bold text-dark mb-1">${u.nama}</h5>
                                 <p class="text-muted small mb-1">${u.mapel} • ${u.jmlSoal} Soal • ${u.durasi} Menit</p>
@@ -1133,6 +1212,34 @@
             })
             .catch(err => { console.log("Gagal memuat hasil:", err); });
             
+            // SUNTIKAN: MENARIK TUGAS LINK EKSTERNAL UNTUK SISWA
+            panggilAPI("getLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah })
+            .then(links => {
+                let myLinks = links.filter(l => l.status === 'AKTIF' && String(l.kelas).trim() === String(myProfile.kelas).trim());
+                let htmlLink = '';
+                myLinks.forEach(L => {
+                    let iconPlatform = "bi-globe";
+                    if(L.platform === "Quizizz") iconPlatform = "bi-joystick";
+                    if(L.platform === "Google Forms") iconPlatform = "bi-ui-checks";
+                    if(L.platform === "Kahoot") iconPlatform = "bi-controller";
+                    
+                    htmlLink += `
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card h-100 border border-success-subtle shadow-sm rounded-4 bg-success bg-opacity-10">
+                            <div class="card-body p-4 text-center">
+                                <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow-sm" style="width: 60px; height: 60px;">
+                                    <i class="bi ${iconPlatform} fs-3"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-1">${L.nama}</h5>
+                                <p class="text-muted small mb-3">Platform: <b>${L.platform}</b></p>
+                                <button class="btn btn-success w-100 fw-bold rounded-pill" onclick="window.open('${L.url}', '_blank')"><i class="bi bi-box-arrow-up-right me-2"></i>Kerjakan di Tab Baru</button>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                const tgtLink = htmlLink || '<div class="col-12 text-center text-muted py-4 border rounded-4 bg-white"><i class="bi bi-link display-4 text-secondary mb-3 d-block"></i>Belum ada tugas eksternal.</div>';
+                if(document.getElementById('container-link-siswa')) document.getElementById('container-link-siswa').innerHTML = tgtLink;
+            });
         })
         .catch(err => {
             alert("Gagal memuat portal siswa: " + err.message);
@@ -1164,7 +1271,14 @@
     function konfirmasiMulaiUjian(kode, nama, durasi) {
         if(!confirm(`Mulai mengerjakan asesmen:\n${nama}?\n\n⏳ Waktu Anda: ${durasi} Menit.\n⚠️ Jangan menutup Tab/Browser selama ujian, atau akan terhitung kecurangan!`)) return;
         
-        document.body.classList.add('cbt-mode'); // TRIGGER FULLSCREEN
+        // --- TAMBAHAN FITUR NATIVE FULLSCREEN ---
+        let elem = document.documentElement;
+        if (elem.requestFullscreen) { elem.requestFullscreen().catch(err => console.log(err)); }
+        else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen().catch(err => console.log(err)); } // Safari/iOS
+        else if (elem.msRequestFullscreen) { elem.msRequestFullscreen().catch(err => console.log(err)); } // IE/Edge lama
+        // ----------------------------------------
+
+        document.body.classList.add('cbt-mode'); // TRIGGER FULLSCREEN CSS BAWAAN
         document.getElementById('page-title-siswa').innerText = "RUANG UJIAN";
         document.querySelectorAll('.view-section-siswa').forEach(el => el.classList.add('hidden'));
         document.getElementById('view-siswa-ruang-ujian').classList.remove('hidden');
@@ -1177,6 +1291,8 @@
             if(!data || data.length === 0) {
                 alert("Asesmen ini belum memiliki soal.");
                 document.body.classList.remove('cbt-mode');
+                // Keluar fullscreen jika gagal
+                if (document.exitFullscreen) { document.exitFullscreen().catch(err => console.log(err)); }
                 navigasiSiswa('beranda', document.querySelector('.sidebar-nav .nav-item')); return;
             }
             cbtSoal = data; cbtJawaban = {}; cbtRagu = {}; cbtIndexAktif = 0; cheatCount = 0; cbtWaktuSisa = parseInt(durasi) * 60;
@@ -1184,6 +1300,8 @@
         })
         .catch(err => {
             alert("Gagal memuat soal CBT: " + err.message);
+            // Keluar fullscreen jika gagal
+            if (document.exitFullscreen) { document.exitFullscreen().catch(err => console.log(err)); }
         });
     }
 
@@ -1381,6 +1499,12 @@ function mulaiTimerCBT() {
         
         panggilAPI("simpanHasilUjianBackend", payloadHasil)
         .then(res => {
+            // --- TAMBAHAN KELUAR NATIVE FULLSCREEN OTOMATIS ---
+            if (document.exitFullscreen) { document.exitFullscreen().catch(err => console.log(err)); }
+            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen().catch(err => console.log(err)); }
+            else if (document.msExitFullscreen) { document.msExitFullscreen().catch(err => console.log(err)); }
+            // --------------------------------------------------
+
             if (res.success) {
                 document.body.classList.remove('cbt-mode'); 
                 let infoTambahan = adaEssay ? "\nSebagian soal Kompleks/Uraian menunggu koreksi manual Guru." : `\nSkor Asesmen Anda: ${totalNilai}`;
@@ -1533,7 +1657,8 @@ function mulaiTimerCBT() {
             panggilAPI("getSemuaHasil", { kodeSekolah: currentUser.kode_sekolah })
                 .then(hasil => { activeHasilData = hasil || []; })
                 .catch(err => console.log("Gagal memuat hasil:", err));
-
+			
+			loadLinkAdmin();
         })
         .catch(err => {
             alert("Gagal terhubung ke server untuk memuat data dashboard: " + err.message);
@@ -1725,6 +1850,7 @@ function mulaiTimerCBT() {
 
     // ===== FUNGSI RENDER UJIAN ADMIN =====
     // ===== FUNGSI RENDER UJIAN ADMIN (DENGAN TOMBOL HASIL) =====
+    // ===== FUNGSI RENDER UJIAN ADMIN (DENGAN TOMBOL HASIL & PEMBAHASAN) =====
     function renderTabelUjianAdmin() {
         const keyword = document.getElementById('input-cari-ujian') ? document.getElementById('input-cari-ujian').value.toLowerCase() : "";
         let htmlUjian = '';
@@ -1736,6 +1862,7 @@ function mulaiTimerCBT() {
         
         filteredUjian.forEach(u => { 
             const isAktif = u.status === 'AKTIF' ? 'checked' : ''; 
+            const isBahasAktif = u.bukaPembahasan === 'Ya' ? 'checked' : ''; // DETEKSI PEMBAHASAN
             
             // Teks Info Target
             let targetSiswa = [];
@@ -1759,12 +1886,22 @@ function mulaiTimerCBT() {
                         <h5 class="fw-bold text-dark mb-1 text-truncate">${u.nama}</h5>
                         <p class="text-muted small mb-1">${u.mapel} • ${u.jmlSoal} Soal • ${u.durasi} menit</p>
                         <p class="small mb-3 border-bottom pb-2"><i>${infoTarget}</i></p>
-                        <div class="d-flex justify-content-between align-items-center bg-light bg-opacity-50 p-3 rounded-3 mb-4 border">
-                            <span class="small fw-bold">Aktifkan asesmen</span>
-                            <div class="form-check form-switch m-0 fs-5">
-                                <input class="form-check-input border-secondary" type="checkbox" ${isAktif} onchange="toggleStatusUjianClient('${u.kode}', this)">
+                        
+                        <div class="bg-light rounded-3 mb-4 border">
+                            <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                                <span class="small fw-bold">Aktifkan asesmen</span>
+                                <div class="form-check form-switch m-0 fs-5">
+                                    <input class="form-check-input border-secondary" type="checkbox" ${isAktif} onchange="toggleStatusUjianClient('${u.kode}', this)">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center p-3 bg-success bg-opacity-10 rounded-bottom-3">
+                                <span class="small fw-bold text-success"><i class="bi bi-journal-text me-1"></i>Rilis Pembahasan</span>
+                                <div class="form-check form-switch m-0 fs-5">
+                                    <input class="form-check-input border-success" type="checkbox" ${isBahasAktif} onchange="togglePembahasanClient('${u.kode}', this)">
+                                </div>
                             </div>
                         </div>
+
                         <div class="d-flex gap-2">
                             <button class="btn btn-primary btn-sm fw-bold rounded-pill px-4 py-2" onclick="kelolaSoal('${u.kode}', '${u.nama}', ${u.jmlSoal})"><i class="bi bi-list-check me-1"></i> Kelola Soal</button>
                             <button class="btn btn-success btn-sm fw-bold text-white rounded-pill px-3 py-2" onclick="bukaDaftarHasil('${u.kode}', '${u.nama}')"><i class="bi bi-clipboard-data me-1"></i> Hasil</button>
@@ -1871,8 +2008,8 @@ function mulaiTimerCBT() {
         .catch(err => alert("Gagal: " + err.message));
     }
     
-    function toggleStatusUjianClient(kodeUjian, el) { 
-        panggilAPI("toggleStatusUjianBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian, status: el.checked ? 'AKTIF' : 'DRAFT' }); 
+    function togglePembahasanClient(kodeUjian, el) { 
+        panggilAPI("togglePembahasanBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian, statusP: el.checked ? 'Ya' : 'Tidak' }); 
     }
 
     function hapusUjian(kodeUjian) { 
@@ -3533,6 +3670,183 @@ function testKoneksiHybrid() {
       alert("❌ GAGAL: " + error.message);
     });
 }
+
+// ==========================================
+    // JS FITUR LINK EKSTERNAL (ADMIN)
+    // ==========================================
+    function loadLinkAdmin() {
+        panggilAPI("getLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah })
+        .then(data => {
+            let html = '';
+            (data || []).forEach(L => {
+                const isAktif = L.status === 'AKTIF' ? 'checked' : '';
+                html += `
+                <div class="col-md-6 col-xl-4">
+                    <div class="card h-100 border shadow-sm rounded-4 border-success-subtle">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">${L.platform}</span>
+                                <div><span class="badge bg-light text-dark border rounded-pill px-3 py-2">${L.status}</span></div>
+                            </div>
+                            <h5 class="fw-bold text-dark mb-1 text-truncate">${L.nama}</h5>
+                            <p class="small mb-3 border-bottom pb-2 text-muted">Target: Kelas ${L.kelas} • ${L.tgl}</p>
+                            <div class="d-flex justify-content-between align-items-center bg-light bg-opacity-50 p-3 rounded-3 mb-3 border">
+                                <span class="small fw-bold">Tampilkan ke siswa</span>
+                                <div class="form-check form-switch m-0 fs-5"><input class="form-check-input border-secondary" type="checkbox" ${isAktif} onchange="toggleLink('${L.id_link}', this)"></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-success btn-sm fw-bold rounded-pill px-4 flex-grow-1" onclick="window.open('${L.url}', '_blank')"><i class="bi bi-box-arrow-up-right me-1"></i> Cek Link</button>
+                                <button class="btn btn-white text-danger border-0 p-0 fs-5 px-2" onclick="hapusLink('${L.id_link}')"><i class="bi bi-trash3"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('container-link-admin').innerHTML = html || '<div class="col-12 text-center text-muted py-4">Belum ada link eksternal yang dibagikan.</div>';
+            
+            // Otomatis isi dropdown kelas di modal tambah link
+            let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== 'undefined' && k !== '-'))];
+            let classOptions = '<option value="">Pilih Kelas...</option>'; 
+            classes.sort().forEach(c => classOptions += `<option value="${c}">${c}</option>`);
+            if(document.getElementById('lnk-kelas')) document.getElementById('lnk-kelas').innerHTML = classOptions;
+        });
+    }
+
+    function simpanLinkEksternal(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btn-simpan-lnk'); btn.disabled = true; btn.innerHTML = "Menyimpan...";
+        const payload = {
+            kodeSekolah: currentUser.kode_sekolah, nama: document.getElementById('lnk-nama').value,
+            platform: document.getElementById('lnk-platform').value, kelas: document.getElementById('lnk-kelas').value,
+            url: document.getElementById('lnk-url').value
+        };
+        panggilAPI("simpanLinkEksternalBackend", payload).then(res => {
+            btn.disabled = false; btn.innerHTML = "Bagikan ke Portal Siswa";
+            if(res.success) { tutupModal('modalAddLink'); document.getElementById('lnk-nama').value = ''; document.getElementById('lnk-url').value = ''; loadLinkAdmin(); alert(res.message); }
+        }).catch(err => { btn.disabled = false; btn.innerHTML = "Bagikan ke Portal Siswa"; alert("Gagal: " + err.message); });
+    }
+
+    function hapusLink(id) { if(confirm('Hapus link ini dari portal siswa?')) { panggilAPI("hapusLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah, idLink: id }).then(res => { if(res.success) loadLinkAdmin(); }); } }
+    function toggleLink(id, el) { panggilAPI("toggleStatusLinkBackend", { kodeSekolah: currentUser.kode_sekolah, idLink: id, status: el.checked ? 'AKTIF' : 'DRAFT' }); }
+
+// ==========================================
+    // JS FITUR PEMBAHASAN SISWA
+    // ==========================================
+    function bukaPembahasanSiswa(kodeUjian, namaUjian) {
+        // Pindah Layar
+        document.querySelectorAll('.view-section-siswa').forEach(el => el.classList.add('hidden'));
+        document.getElementById('view-siswa-pembahasan').classList.remove('hidden');
+        document.getElementById('page-title-siswa').innerText = "PEMBAHASAN";
+        document.getElementById('bahas-judul-ujian').innerText = namaUjian;
+        document.getElementById('container-bahas-soal').innerHTML = '<div class="text-center py-5"><span class="spinner-border text-success fs-2"></span><br><br>Menarik data lembar jawaban & pembahasan...</div>';
+        
+        // Tarik Soal dan Hasil Siswa dari Server
+        Promise.all([
+            panggilAPI("getSoalUjian", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian }),
+            panggilAPI("getSemuaHasil", { kodeSekolah: currentUser.kode_sekolah })
+        ]).then(responses => {
+            let dataSoal = responses[0];
+            let semuaHasil = responses[1];
+            
+            // Cari hasil dari siswa ini khusus untuk ujian ini
+            let hasilSiswa = semuaHasil.filter(h => String(h.userSiswa).trim() === String(currentUser.username).trim() && String(h.kodeUjian).trim() === String(kodeUjian).trim());
+            let jawabanJSON = {};
+            let nilaiAkhir = 0;
+            
+            if (hasilSiswa.length > 0) {
+                // Ambil hasil percobaan yang terakhir kali dilakukan
+                let lastHasil = hasilSiswa[hasilSiswa.length - 1];
+                try { jawabanJSON = JSON.parse(lastHasil.jawabanJSON); } catch(e){}
+                nilaiAkhir = lastHasil.nilai;
+            }
+            
+            document.getElementById('bahas-nilai-akhir').innerText = nilaiAkhir;
+            
+            let htmlBahas = '';
+            dataSoal.forEach(s => {
+                let jwbSiswa = jawabanJSON[s.nomor] || "<span class='text-muted'>Tidak dijawab</span>";
+                let kunci = s.kunci || "-";
+                let pembahasan = s.pembahasan || "<span class='text-muted'>Tidak ada catatan pembahasan dari guru.</span>";
+                
+                // Format Jawaban Siswa
+                let displayJwb = jwbSiswa;
+                if(Array.isArray(jwbSiswa)) displayJwb = jwbSiswa.sort().join(', ');
+                else if(typeof jwbSiswa === 'object') displayJwb = JSON.stringify(jwbSiswa).replace(/["{}]/g, '').replace(/:/g, ' -> ');
+
+                let isBenar = false;
+                let tipe = String(s.tipe).trim();
+                
+                // Cek Kebenaran (Untuk Label Benar/Salah)
+                if(tipe.includes('Ganda') || tipe.includes('Isian Singkat')) {
+                    if(tipe.includes('MCMA')) {
+                         let jStr = Array.isArray(jwbSiswa) ? jwbSiswa.sort().join('') : "";
+                         let kStr = String(s.kunci || "").replace(/[^A-D]/g, '').split('').sort().join('');
+                         isBenar = (jStr === kStr && jStr !== "");
+                    } else {
+                         isBenar = (String(jwbSiswa).trim().toUpperCase() === String(s.kunci).trim().toUpperCase());
+                    }
+                }
+
+                let statusBadge = '';
+                if (displayJwb === "<span class='text-muted'>Tidak dijawab</span>") {
+                    statusBadge = `<span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-dash-circle me-1"></i> Kosong</span>`;
+                } else if (tipe.includes('Uraian') || tipe.includes('Tugas') || tipe.includes('Kategori')) {
+                    statusBadge = `<span class="badge bg-info text-dark px-3 py-2"><i class="bi bi-info-circle me-1"></i> Soal Uraian/Kompleks</span>`;
+                } else if (isBenar) {
+                    statusBadge = `<span class="badge bg-success px-3 py-2"><i class="bi bi-check-circle-fill me-1"></i> Benar</span>`;
+                } else {
+                    statusBadge = `<span class="badge bg-danger px-3 py-2"><i class="bi bi-x-circle-fill me-1"></i> Salah</span>`;
+                }
+
+                let metaHtml = '';
+                if (s.kompetensi || s.indikator) {
+                    metaHtml = `<div class="bg-light p-3 rounded-3 mb-3 small border">
+                        ${s.kompetensi ? `<div class="mb-1"><span class="fw-bold text-primary">KD:</span> ${s.kompetensi}</div>` : ''}
+                        ${s.indikator ? `<div><span class="fw-bold text-success">Indikator:</span> ${s.indikator}</div>` : ''}
+                    </div>`;
+                }
+
+                htmlBahas += `
+                <div class="card border border-secondary-subtle rounded-4 mb-4 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between border-bottom pb-3 mb-3 align-items-center">
+                            <h6 class="fw-bold text-primary m-0 fs-5">Soal No. ${s.nomor} <span class="badge bg-light text-secondary border ms-2 fs-6 fw-normal">${tipe}</span></h6>
+                            ${statusBadge}
+                        </div>
+                        
+                        ${metaHtml}
+                        
+                        <div class="mb-4 text-dark" style="line-height:1.6; font-size:1.1rem;">${s.pertanyaan}</div>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-danger bg-opacity-10 rounded-4 border border-danger-subtle h-100">
+                                    <small class="text-danger fw-bold d-block mb-2"><i class="bi bi-person-fill me-1"></i>Jawaban Anda:</small>
+                                    <span class="fw-bold text-dark fs-5">${displayJwb}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-success bg-opacity-10 rounded-4 border border-success-subtle h-100">
+                                    <small class="text-success fw-bold d-block mb-2"><i class="bi bi-key-fill me-1"></i>Kunci Jawaban:</small>
+                                    <span class="fw-bold text-dark fs-5">${kunci}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 p-4 bg-light rounded-4 border">
+                            <small class="text-primary fw-bold d-block mb-2"><i class="bi bi-journal-text me-1"></i>Pembahasan:</small>
+                            <div class="text-dark" style="line-height:1.5;">${pembahasan}</div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            document.getElementById('container-bahas-soal').innerHTML = htmlBahas;
+        })
+        .catch(err => {
+            document.getElementById('container-bahas-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Gagal memuat pembahasan: ${err.message}</div>`;
+        });
+    }
 
 </script>
 
