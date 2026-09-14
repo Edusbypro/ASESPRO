@@ -3813,7 +3813,7 @@ function testKoneksiHybrid() {
     function toggleLink(id, el) { panggilAPI("toggleStatusLinkBackend", { kodeSekolah: currentUser.kode_sekolah, idLink: id, status: el.checked ? 'AKTIF' : 'DRAFT' }); }
 
 // ==========================================
-    // JS FITUR PEMBAHASAN SISWA
+    // JS FITUR PEMBAHASAN SISWA (TAMPILAN SEMUA OPSI)
     // ==========================================
     function bukaPembahasanSiswa(kodeUjian, namaUjian) {
         // Pindah Layar
@@ -3847,19 +3847,13 @@ function testKoneksiHybrid() {
             
             let htmlBahas = '';
             dataSoal.forEach(s => {
-                let jwbSiswa = jawabanJSON[s.nomor] || "<span class='text-muted'>Tidak dijawab</span>";
+                let jwbSiswa = jawabanJSON[s.nomor] || "";
                 let kunci = s.kunci || "-";
-                let pembahasan = s.pembahasan || "<span class='text-muted'>Tidak ada catatan pembahasan dari guru.</span>";
-                
-                // Format Jawaban Siswa
-                let displayJwb = jwbSiswa;
-                if(Array.isArray(jwbSiswa)) displayJwb = jwbSiswa.sort().join(', ');
-                else if(typeof jwbSiswa === 'object') displayJwb = JSON.stringify(jwbSiswa).replace(/["{}]/g, '').replace(/:/g, ' -> ');
-
-                let isBenar = false;
+                let pembahasan = s.pembahasan || "<span class='text-muted'>Tidak ada catatan pembahasan khusus.</span>";
                 let tipe = String(s.tipe).trim();
+                let isBenar = false;
                 
-                // Cek Kebenaran (Untuk Label Benar/Salah)
+                // Cek Kebenaran untuk Badge Atas
                 if(tipe.includes('Ganda') || tipe.includes('Isian Singkat')) {
                     if(tipe.includes('MCMA')) {
                          let jStr = Array.isArray(jwbSiswa) ? jwbSiswa.sort().join('') : "";
@@ -3870,11 +3864,133 @@ function testKoneksiHybrid() {
                     }
                 }
 
+                // ========================================================
+                // LOGIKA RENDER TAMPILAN JAWABAN (FULL OPSI)
+                // ========================================================
+                let areaJawabanHtml = '';
+
+                if (tipe === 'Pilihan Ganda') {
+                    let optHtml = '<div class="d-flex flex-column gap-2 mb-4">';
+                    ['A','B','C','D'].forEach(opt => {
+                        if(s['opsi'+opt]) {
+                            let isSiswa = (jwbSiswa === opt);
+                            let isKunci = (kunci === opt);
+                            
+                            let bgClass = "bg-white border-secondary-subtle";
+                            let textClass = "text-dark";
+                            let badge = "";
+
+                            if (isKunci) {
+                                bgClass = "bg-success bg-opacity-10 border-success";
+                                textClass = "text-success fw-bold";
+                                badge = `<span class="badge bg-success ms-auto"><i class="bi bi-key-fill me-1"></i> Kunci</span>`;
+                                if (isSiswa) badge += `<span class="badge bg-primary ms-2"><i class="bi bi-person-fill me-1"></i> Jawaban Anda</span>`;
+                            } else if (isSiswa && !isKunci) {
+                                bgClass = "bg-danger bg-opacity-10 border-danger";
+                                textClass = "text-danger fw-bold";
+                                badge = `<span class="badge bg-danger ms-auto"><i class="bi bi-person-fill me-1"></i> Jawaban Anda</span>`;
+                            }
+
+                            optHtml += `
+                            <div class="d-flex align-items-start p-3 border rounded-4 ${bgClass}">
+                                <div class="fw-bold me-3 ${textClass}">${opt}.</div>
+                                <div class="cbt-opsi-text flex-grow-1 ${textClass}">${s['opsi'+opt]}</div>
+                                <div class="d-flex flex-wrap gap-1 ms-3 align-items-center">${badge}</div>
+                            </div>`;
+                        }
+                    });
+                    optHtml += '</div>';
+                    areaJawabanHtml = optHtml;
+
+                } else if (tipe.includes('MCMA')) {
+                    let arrJwb = Array.isArray(jwbSiswa) ? jwbSiswa : [];
+                    let arrKunci = kunci.split(',').map(x => x.trim()).filter(x => x !== '');
+                    
+                    let optHtml = '<div class="d-flex flex-column gap-2 mb-4">';
+                    ['A','B','C','D'].forEach(opt => {
+                        if(s['opsi'+opt]) {
+                            let isSiswa = arrJwb.includes(opt);
+                            let isKunci = arrKunci.includes(opt);
+                            
+                            let bgClass = "bg-white border-secondary-subtle";
+                            let textClass = "text-dark";
+                            let badge = "";
+
+                            if (isKunci) {
+                                bgClass = "bg-success bg-opacity-10 border-success";
+                                textClass = "text-success fw-bold";
+                                badge = `<span class="badge bg-success ms-auto"><i class="bi bi-key-fill me-1"></i> Kunci</span>`;
+                                if (isSiswa) badge += `<span class="badge bg-primary ms-2"><i class="bi bi-person-fill me-1"></i> Jawaban Anda</span>`;
+                            } else if (isSiswa && !isKunci) {
+                                bgClass = "bg-danger bg-opacity-10 border-danger";
+                                textClass = "text-danger fw-bold";
+                                badge = `<span class="badge bg-danger ms-auto"><i class="bi bi-person-fill me-1"></i> Jawaban Anda</span>`;
+                            }
+
+                            optHtml += `
+                            <div class="d-flex align-items-start p-3 border rounded-4 ${bgClass}">
+                                <div class="fw-bold me-3 ${textClass}"><i class="bi ${isSiswa ? 'bi-check-square-fill' : 'bi-square'}"></i> ${opt}.</div>
+                                <div class="cbt-opsi-text flex-grow-1 ${textClass}">${s['opsi'+opt]}</div>
+                                <div class="d-flex flex-wrap gap-1 ms-3 align-items-center">${badge}</div>
+                            </div>`;
+                        }
+                    });
+                    optHtml += '</div>';
+                    areaJawabanHtml = optHtml;
+
+                } else if (tipe.includes('Kategori') || tipe.includes('Kompleks')) {
+                    let jObj = typeof jwbSiswa === 'object' ? jwbSiswa : {};
+                    let kObj = {};
+                    try { kObj = JSON.parse(s.kunci || "{}"); } catch(e){}
+
+                    let optHtml = `<div class="table-responsive mb-4"><table class="table table-bordered align-middle bg-white shadow-sm rounded">
+                                    <thead class="table-light text-center"><tr><th>Pernyataan</th><th style="width:130px;">Jawaban Anda</th><th style="width:130px;">Kunci Jawaban</th></tr></thead><tbody>`;
+                    
+                    ['A','B','C','D'].forEach(opt => {
+                        if(s['opsi'+opt]) {
+                            let js = jObj[opt] || "-";
+                            let ks = kObj[opt] || "-";
+                            let isBenBenar = (js === ks && js !== "-");
+                            let textClass = isBenBenar ? "text-success fw-bold" : (js !== "-" ? "text-danger fw-bold" : "text-muted");
+                            
+                            let teksOpsiBersih = s['opsi'+opt].replace(/<p[^>]*>/g, '').replace(/<\/p>/g, '');
+                            
+                            optHtml += `<tr>
+                                <td><b class="me-2">${opt}.</b> ${teksOpsiBersih}</td>
+                                <td class="text-center ${textClass}">${js}</td>
+                                <td class="text-center text-success fw-bold">${ks}</td>
+                            </tr>`;
+                        }
+                    });
+                    optHtml += `</tbody></table></div>`;
+                    areaJawabanHtml = optHtml;
+
+                } else {
+                    // Tipe Uraian / Isian / Tugas -> Tetap pakai 2 Kotak (Kiri Kanan)
+                    let displayJwb = jwbSiswa || "<span class='text-muted'>Tidak dijawab</span>";
+                    areaJawabanHtml = `
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-danger bg-opacity-10 rounded-4 border border-danger-subtle h-100">
+                                <small class="text-danger fw-bold d-block mb-2"><i class="bi bi-person-fill me-1"></i>Jawaban Anda:</small>
+                                <div class="text-dark fs-6">${displayJwb}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-success bg-opacity-10 rounded-4 border border-success-subtle h-100">
+                                <small class="text-success fw-bold d-block mb-2"><i class="bi bi-key-fill me-1"></i>Kunci Jawaban:</small>
+                                <div class="text-dark fs-6">${kunci}</div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+                // ========================================================
+
                 let statusBadge = '';
-                if (displayJwb === "<span class='text-muted'>Tidak dijawab</span>") {
+                if (jwbSiswa === "" || jwbSiswa === "<span class='text-muted'>Tidak dijawab</span>" || (Array.isArray(jwbSiswa) && jwbSiswa.length === 0) || (typeof jwbSiswa === 'object' && Object.keys(jwbSiswa).length === 0)) {
                     statusBadge = `<span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-dash-circle me-1"></i> Kosong</span>`;
-                } else if (tipe.includes('Uraian') || tipe.includes('Tugas') || tipe.includes('Kategori')) {
-                    statusBadge = `<span class="badge bg-info text-dark px-3 py-2"><i class="bi bi-info-circle me-1"></i> Soal Uraian/Kompleks</span>`;
+                } else if (tipe.includes('Uraian') || tipe.includes('Tugas') || tipe.includes('Kategori') || tipe.includes('Kompleks')) {
+                    statusBadge = `<span class="badge bg-info text-dark px-3 py-2"><i class="bi bi-info-circle me-1"></i> Uraian/Kompleks</span>`;
                 } else if (isBenar) {
                     statusBadge = `<span class="badge bg-success px-3 py-2"><i class="bi bi-check-circle-fill me-1"></i> Benar</span>`;
                 } else {
@@ -3901,23 +4017,10 @@ function testKoneksiHybrid() {
                         
                         <div class="mb-4 text-dark" style="line-height:1.6; font-size:1.1rem;">${s.pertanyaan}</div>
                         
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="p-3 bg-danger bg-opacity-10 rounded-4 border border-danger-subtle h-100">
-                                    <small class="text-danger fw-bold d-block mb-2"><i class="bi bi-person-fill me-1"></i>Jawaban Anda:</small>
-                                    <span class="fw-bold text-dark fs-5">${displayJwb}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="p-3 bg-success bg-opacity-10 rounded-4 border border-success-subtle h-100">
-                                    <small class="text-success fw-bold d-block mb-2"><i class="bi bi-key-fill me-1"></i>Kunci Jawaban:</small>
-                                    <span class="fw-bold text-dark fs-5">${kunci}</span>
-                                </div>
-                            </div>
-                        </div>
+                        ${areaJawabanHtml}
                         
                         <div class="mt-4 p-4 bg-light rounded-4 border">
-                            <small class="text-primary fw-bold d-block mb-2"><i class="bi bi-journal-text me-1"></i>Pembahasan:</small>
+                            <small class="text-primary fw-bold d-block mb-2"><i class="bi bi-journal-text me-1"></i>Pembahasan Guru:</small>
                             <div class="text-dark" style="line-height:1.5;">${pembahasan}</div>
                         </div>
                     </div>
