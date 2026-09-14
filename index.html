@@ -1913,6 +1913,50 @@ function mulaiTimerCBT() {
         });
         document.getElementById('container-kartu-ujian').innerHTML = htmlUjian || '<div class="col-12 text-center text-muted py-5">Asesmen tidak ditemukan.</div>';
     }
+	
+	function toggleStatusUjianClient(kodeUjian, el) { 
+        let oriColor = !el.checked;
+        el.disabled = true; // Kunci saklar sementara agar tidak dispam klik
+        let newStatus = el.checked ? 'AKTIF' : 'DRAFT';
+        
+        panggilAPI("toggleStatusUjianBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian, status: newStatus })
+        .then(res => {
+            el.disabled = false;
+            if(res && res.success) {
+                // Update teks badge secara instan tanpa perlu refresh
+                let badge = el.closest('.card-body').querySelector('.d-flex.justify-content-between .badge.bg-light');
+                if(badge) badge.innerText = newStatus;
+            } else {
+                alert("Gagal mengupdate status: " + (res ? res.message : "Error server"));
+                el.checked = oriColor; // Kembalikan saklar jika gagal
+            }
+        })
+        .catch(err => {
+            el.disabled = false;
+            el.checked = oriColor;
+            alert("Koneksi terputus: " + err.message);
+        });
+    }
+
+    function togglePembahasanClient(kodeUjian, el) { 
+        let oriColor = !el.checked;
+        el.disabled = true;
+        let newStatus = el.checked ? 'Ya' : 'Tidak';
+        
+        panggilAPI("togglePembahasanBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian, statusP: newStatus })
+        .then(res => {
+            el.disabled = false;
+            if(!res || !res.success) {
+                alert("Gagal merilis pembahasan: " + (res ? res.message : "Error server"));
+                el.checked = oriColor;
+            }
+        })
+        .catch(err => {
+            el.disabled = false;
+            el.checked = oriColor;
+            alert("Koneksi terputus: " + err.message);
+        });
+    }
 
     // ===== FUNGSI MANAJEMEN MODAL UJIAN =====
     // ===== FUNGSI OTOMATIS PENARIK DATA SISWA UNTUK DROPDOWN =====
