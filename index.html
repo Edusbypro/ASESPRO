@@ -1267,6 +1267,33 @@
             }
         }
     });
+	
+	// SENSOR DETEKSI KELUAR FULLSCREEN (TERMASUK TOMBOL ESCAPE)
+    document.addEventListener("fullscreenchange", handleFullscreenExit);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenExit);
+    document.addEventListener("msfullscreenchange", handleFullscreenExit);
+
+    function handleFullscreenExit() {
+        // Jika siswa sedang dalam mode ujian (cbt-mode) DAN status layarnya tidak lagi fullscreen
+        if (document.body.classList.contains('cbt-mode') && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+            cheatCount++; // Menambah hitungan kecurangan yang sudah ada di sistem Anda
+            
+            if (cheatCount >= 3) {
+                alert("🚨 PELANGGARAN FATAL! 🚨\nAnda telah keluar dari mode Layar Penuh (Fullscreen) sebanyak 3 kali.\nUjian dihentikan paksa dan dikumpulkan secara otomatis!");
+                kumpulkanUjian(true);
+            } else {
+                alert(`⚠️ PERINGATAN KECURANGAN (${cheatCount}/3)! ⚠️\nAnda dilarang keluar dari mode Layar Penuh selama ujian berlangsung! Silakan masuk kembali ke mode layar penuh.`);
+                
+                // Coba paksa tarik kembali ke fullscreen (beberapa browser mengizinkan jika dipicu event perpindahan ini)
+                let elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(err => console.log("Perlu interaksi klik untuk fullscreen ulang."));
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen().catch(err => {});
+                }
+            }
+        }
+    }
 
     function konfirmasiMulaiUjian(kode, nama, durasi) {
         if(!confirm(`Mulai mengerjakan asesmen:\n${nama}?\n\n⏳ Waktu Anda: ${durasi} Menit.\n⚠️ Jangan menutup Tab/Browser selama ujian, atau akan terhitung kecurangan!`)) return;
@@ -2441,9 +2468,21 @@ function mulaiTimerCBT() {
     // 2. GANTI FUNGSI SIMPAN PENGATURAN
     function handleSimpanSetting(e) { 
         e.preventDefault(); 
-        const p = { namaSekolah: document.getElementById('set-nama').value, npsn: document.getElementById('set-npsn').value, namaAdmin: document.getElementById('set-admin').value, logo: document.getElementById('set-logo').value, apiKey: document.getElementById('set-apikey').value }; 
+        const p = { 
+            kodeSekolah: currentUser.kode_sekolah, // Menambahkan identitas sekolah yang login
+            namaSekolah: document.getElementById('set-nama').value, 
+            npsn: document.getElementById('set-npsn').value, 
+            namaAdmin: document.getElementById('set-admin').value, 
+            logo: document.getElementById('set-logo').value, 
+            apiKey: document.getElementById('set-apikey').value 
+        }; 
         panggilAPI("updatePengaturanSekolah", p)
-        .then(res => { alert(res.message); currentUser.logo = p.logo; localStorage.setItem('cbt_admin_session', JSON.stringify(currentUser)); loadDashboardData(); })
+        .then(res => { 
+            alert(res.message); 
+            currentUser.logo = p.logo; 
+            localStorage.setItem('cbt_admin_session', JSON.stringify(currentUser)); 
+            loadDashboardData(); 
+        })
         .catch(err => alert("Gagal menyimpan: " + err.message));
     }
 
