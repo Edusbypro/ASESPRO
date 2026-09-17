@@ -2315,12 +2315,15 @@ function mulaiTimerCBT() {
     }
     
     function bukaEditorSoal(nomor) {
-        window.isLoadingSoal = true; 
+        window.isLoadingSoal = true;
         try { tinymce.remove(); } catch(e) {}
+
+        // LAPIS KEAMANAN 1: Tarik data soal, dan langsung isi ke Textarea mentah
+        // Jika TinyMCE telat merender, dia akan otomatis membaca teks ini
+        let s = bankSoalAktif.find(x => parseInt(x.nomor) === parseInt(nomor));
         
-        // Langsung kosongkan area agar tidak menumpuk
-        if(document.getElementById('editor-pertanyaan')) document.getElementById('editor-pertanyaan').value = '';
-        if(document.getElementById('editor-pembahasan')) document.getElementById('editor-pembahasan').value = '';
+        if(document.getElementById('editor-pertanyaan')) document.getElementById('editor-pertanyaan').value = s ? s.pertanyaan || '' : '';
+        if(document.getElementById('editor-pembahasan')) document.getElementById('editor-pembahasan').value = s ? s.pembahasan || '' : '';
 
         localStorage.setItem('cbt_active_soal_nomor', nomor);
         currentSoalNomor = nomor;
@@ -2328,7 +2331,6 @@ function mulaiTimerCBT() {
         if(document.getElementById('label-nomor-soal-aktif')) document.getElementById('label-nomor-soal-aktif').innerText = 'No. ' + nomor;
         if(document.getElementById('input-ganti-nomor')) document.getElementById('input-ganti-nomor').value = nomor;
 
-        let s = bankSoalAktif.find(x => parseInt(x.nomor) === parseInt(nomor));
         document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(r => r.checked = false);
 
         // FITUR BARU: Penarik Poin (AMAN)
@@ -2358,6 +2360,17 @@ function mulaiTimerCBT() {
 
         // MESIN PEMICU TINYMCE (DIBIARKAN ORIGINAL AGAR TIDAK CRASH)
         try { ubahBentukSoal(); } catch(e) {}
+
+        // LAPIS KEAMANAN 2: Injeksi data opsi langsung ke textarea SETELAH di-generate oleh ubahBentukSoal()
+        if (s) {
+            let isPG = document.getElementById('input-bentuk-soal').value.includes('Pilihan Ganda');
+            if(isPG) {
+                if(document.getElementById('editor-opsi-A')) document.getElementById('editor-opsi-A').value = s.opsiA || '';
+                if(document.getElementById('editor-opsi-B')) document.getElementById('editor-opsi-B').value = s.opsiB || '';
+                if(document.getElementById('editor-opsi-C')) document.getElementById('editor-opsi-C').value = s.opsiC || '';
+                if(document.getElementById('editor-opsi-D')) document.getElementById('editor-opsi-D').value = s.opsiD || '';
+            }
+        }
 
         if (s) {
             if(document.getElementById('input-kunci-isian')) document.getElementById('input-kunci-isian').value = s.kunci || '';
@@ -2399,22 +2412,32 @@ function mulaiTimerCBT() {
             // ==============================================================
         }
 
-        // FUNGSI SUNTIK ORIGINAL MILIK ANDA (TANPA LAPIS 1)
-        setTimeout(() => {
-            if (s) {
-                try { if(tinymce.get('editor-pertanyaan')) tinymce.get('editor-pertanyaan').setContent(s.pertanyaan || ''); } catch(e) {}
-                try { if(tinymce.get('editor-pembahasan')) tinymce.get('editor-pembahasan').setContent(s.pembahasan || ''); } catch(e) {}
+        // FUNGSI SUNTIK CERDAS (POLLING) PENGGANTI SETTIMEOUT 400MS
+        // Cek secara berulang setiap 100ms, baru masukkan data jika TinyMCE sudah 100% siap
+        let checkCount = 0;
+        let waitForTinyMCE = setInterval(() => {
+            checkCount++;
+            let edPertanyaan = tinymce.get('editor-pertanyaan');
+            
+            // Jika editor sudah siap (initialized = true) ATAU sudah dicek 20 kali (2 detik timeout)
+            if ((edPertanyaan && edPertanyaan.initialized) || checkCount > 20) {
+                clearInterval(waitForTinyMCE); // Hentikan pengecekan
                 
-                let isPG = document.getElementById('input-bentuk-soal').value.includes('Pilihan Ganda');
-                if(isPG) {
-                    try { if(tinymce.get('editor-opsi-A')) tinymce.get('editor-opsi-A').setContent(s.opsiA || ''); } catch(e) {}
-                    try { if(tinymce.get('editor-opsi-B')) tinymce.get('editor-opsi-B').setContent(s.opsiB || ''); } catch(e) {}
-                    try { if(tinymce.get('editor-opsi-C')) tinymce.get('editor-opsi-C').setContent(s.opsiC || ''); } catch(e) {}
-                    try { if(tinymce.get('editor-opsi-D')) tinymce.get('editor-opsi-D').setContent(s.opsiD || ''); } catch(e) {}
+                if (s) {
+                    try { if(tinymce.get('editor-pertanyaan')) tinymce.get('editor-pertanyaan').setContent(s.pertanyaan || ''); } catch(e) {}
+                    try { if(tinymce.get('editor-pembahasan')) tinymce.get('editor-pembahasan').setContent(s.pembahasan || ''); } catch(e) {}
+                    
+                    let isPG = document.getElementById('input-bentuk-soal').value.includes('Pilihan Ganda');
+                    if(isPG) {
+                        try { if(tinymce.get('editor-opsi-A')) tinymce.get('editor-opsi-A').setContent(s.opsiA || ''); } catch(e) {}
+                        try { if(tinymce.get('editor-opsi-B')) tinymce.get('editor-opsi-B').setContent(s.opsiB || ''); } catch(e) {}
+                        try { if(tinymce.get('editor-opsi-C')) tinymce.get('editor-opsi-C').setContent(s.opsiC || ''); } catch(e) {}
+                        try { if(tinymce.get('editor-opsi-D')) tinymce.get('editor-opsi-D').setContent(s.opsiD || ''); } catch(e) {}
+                    }
                 }
+                window.isLoadingSoal = false;
             }
-            window.isLoadingSoal = false;
-        }, 400);
+        }, 100); // Loop setiap 100 milidetik
     }
     
     function ubahBentukSoal() { const bentuk = document.getElementById('input-bentuk-soal').value; const area = document.getElementById('area-jawaban'); let html = ''; if (bentuk === 'Pilihan Ganda') { html = `<h6 class="fw-bold text-danger mb-3 mt-4"><i class="bi bi-ui-radios me-2"></i>Pilihan Jawaban & Kunci <small class="text-muted">(Maks 7-12 Kata!)</small></h6><div class="row g-3">${['A', 'B', 'C', 'D'].map(opsi => `<div class="col-12"><div class="card border rounded-4 shadow-sm"><div class="card-body p-3 d-flex gap-3 align-items-center"><h4 class="fw-bold text-primary m-0">${opsi}</h4><div class="flex-grow-1"><textarea id="editor-opsi-${opsi}" class="form-control editor-opsi"></textarea></div><div class="text-center bg-light border rounded p-2"><input class="form-check-input fs-4 mb-1 border-primary" type="radio" name="kunciPG" value="${opsi}"><div class="small fw-bold text-muted">Kunci</div></div></div></div></div>`).join('')}</div>`; } else if (bentuk === 'Pilihan Ganda Kompleks - Katagori') { html = `<h6 class="fw-bold text-danger mb-3 mt-4"><i class="bi bi-ui-radios me-2"></i>Pilihan Jawaban Kategori</h6><div class="card border border-primary-subtle shadow-sm mb-4 bg-primary bg-opacity-10 rounded-4"><div class="card-body p-4"><label class="form-label small fw-bold text-primary"><i class="bi bi-tags-fill me-2"></i>Sesuaikan Judul Kategori Penilaian:</label><div class="row g-3 mt-1"><div class="col-6"><input type="text" class="form-control fw-bold text-center border-primary text-primary" value="Benar"><div class="text-center small text-muted mt-1">(Misal: Sesuai, Fakta, Ya)</div></div><div class="col-6"><input type="text" class="form-control fw-bold text-center border-danger text-danger" value="Salah"><div class="text-center small text-muted mt-1">(Misal: Tidak Sesuai, Opini, Tidak)</div></div></div></div></div><div class="row g-3">${['A', 'B', 'C'].map(opsi => `<div class="col-12"><div class="card border rounded-4 shadow-sm"><div class="card-body p-3 d-flex gap-3 align-items-center"><h5 class="fw-bold text-secondary m-0">${opsi}.</h5><div class="flex-grow-1"><textarea id="editor-opsi-${opsi}" class="form-control editor-opsi"></textarea></div><div class="d-flex flex-column gap-2 border-start ps-3"><div class="form-check m-0"><input class="form-check-input border-primary" type="radio" name="kunciKat${opsi}" value="Benar"><label class="form-check-label small fw-bold text-primary">Benar</label></div><div class="form-check m-0"><input class="form-check-input border-danger" type="radio" name="kunciKat${opsi}" value="Salah"><label class="form-check-label small fw-bold text-danger">Salah</label></div></div></div></div></div>`).join('')}<div class="col-12 text-center mt-2"><button class="btn btn-outline-primary btn-sm rounded-pill fw-bold"><i class="bi bi-plus-lg"></i> Tambah Pernyataan</button></div></div>`; } else if (bentuk === 'Pilihan Ganda - MCMA') { html = `<h6 class="fw-bold text-danger mb-3 mt-4"><i class="bi bi-check2-square me-2"></i>Pilihan Jawaban MCMA <small class="text-muted">(Pilih Lebih Dari Satu!)</small></h6><div class="alert alert-warning small border-warning"><i class="bi bi-info-circle-fill me-2"></i>Siswa dapat menceklis lebih dari satu jawaban yang benar.</div><div class="row g-3">${['A', 'B', 'C', 'D'].map(opsi => `<div class="col-12"><div class="card border rounded-4 shadow-sm"><div class="card-body p-3 d-flex gap-3 align-items-center"><h4 class="fw-bold text-primary m-0">${opsi}</h4><div class="flex-grow-1"><textarea id="editor-opsi-${opsi}" class="form-control editor-opsi"></textarea></div><div class="text-center bg-light border rounded p-2"><input class="form-check-input fs-4 mb-1 border-primary" type="checkbox" name="kunciMCMA" value="${opsi}"><div class="small fw-bold text-muted">Kunci</div></div></div></div></div>`).join('')}</div>`; } else if (bentuk === 'Isian Singkat') { html = `<h6 class="fw-bold text-danger mb-3 mt-4"><i class="bi bi-input-cursor-text me-2"></i>Kunci Jawaban Isian Singkat</h6><div class="card border border-warning shadow-sm mb-4 bg-warning bg-opacity-10"><div class="card-body p-4"><label class="form-label fw-bold">Kunci Jawaban Tepat</label><input type="text" id="input-kunci-isian" class="form-control border-warning" placeholder="Ketik jawaban benar di sini..."><div class="form-text mt-2 text-dark"><i class="bi bi-info-circle-fill text-warning me-1"></i> Sistem otomatis membenarkan jawaban siswa yang sama persis.</div></div></div>`; } else if (bentuk === 'Uraian') { html = `<h6 class="fw-bold text-danger mb-3 mt-4"><i class="bi bi-textarea-t me-2"></i>Rubrik Penilaian Uraian</h6><div class="card border border-primary-subtle shadow-sm mb-4 bg-primary bg-opacity-10"><div class="card-body p-4"><label class="form-label fw-bold">Pedoman / Kata Kunci Jawaban</label><textarea id="input-kunci-uraian" class="form-control border-primary-subtle" rows="4" placeholder="Sebutkan poin-poin yang wajib ada..."></textarea><div class="form-text mt-2 text-dark"><i class="bi bi-exclamation-circle-fill text-primary me-1"></i> Uraian dinilai manual oleh Guru.</div></div></div>`; } else if (bentuk === 'Tugas di Rumah') { html = `<h6 class="fw-bold text-danger mb-3 mt-4"><i class="bi bi-cloud-arrow-up-fill me-2"></i>Pengaturan Tugas (Upload File)</h6><div class="alert alert-warning small border-warning"><i class="bi bi-info-circle-fill me-2"></i><b>INFO:</b> Sistem akan menampilkan tombol di portal siswa agar bisa mengunggah hingga 10 file.</div><div class="card border border-primary-subtle shadow-sm mb-4 bg-primary bg-opacity-10"><div class="card-body p-4"><label class="form-label fw-bold">Rubrik Penilaian Kelulusan</label><textarea id="input-kunci-uraian" class="form-control border-primary-subtle" rows="4" placeholder="Contoh: Siswa melampirkan minimal 3 foto..."></textarea></div></div>`; } area.innerHTML = html; initTinyMCE(); }
