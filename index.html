@@ -240,6 +240,7 @@
         <div class="nav-item active" id="menu-beranda" data-menu="beranda" onclick="navigasi('beranda', this)"><i class="bi bi-house-door"></i> Beranda</div>
         <div class="nav-item" id="menu-siswa" data-menu="siswa" onclick="navigasi('siswa', this)"><i class="bi bi-people"></i> Data Siswa</div>
         <div class="nav-item" id="menu-ujian" data-menu="ujian" onclick="navigasi('ujian', this)"><i class="bi bi-journal-check"></i> Ujian / Asesmen</div>
+		<div class="nav-item" id="menu-link" data-menu="link" onclick="navigasi('link', this)"><i class="bi bi-link-45deg"></i> Link Eksternal</div>
         <div class="nav-item" id="menu-kisi" data-menu="kisi" onclick="navigasi('kisi', this)"><i class="bi bi-file-earmark-ruled"></i> Kisi-Kisi Soal</div>
         <div class="nav-item" id="menu-kartu" data-menu="kartu" onclick="navigasi('kartu', this)"><i class="bi bi-person-vcard"></i> Kartu Peserta</div>
         <div class="nav-item" id="menu-laporan" data-menu="laporan" onclick="navigasi('laporan', this)"><i class="bi bi-file-earmark-bar-graph"></i> Laporan Nilai</div>
@@ -309,8 +310,11 @@
           </div>
           <div class="row g-4" id="container-kartu-ujian"></div>
 		  
-		  <!-- MUKA ADMIN: FITUR LINK EKSTERNAL -->
-          <div class="mt-5 mb-4 d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
+        </div>
+
+<!-- 3.B. HALAMAN LINK EKSTERNAL ADMIN -->
+        <div id="view-link" class="view-section hidden">
+          <div class="mb-4 d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
               <div><h5 class="fw-bold m-0"><i class="bi bi-link-45deg text-success me-2"></i>Tugas Link Eksternal</h5><small class="text-muted">Masukkan link Quizizz, GForm, Kahoot, dll untuk dikerjakan siswa.</small></div>
               <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddLink')"><i class="bi bi-plus-lg me-1"></i> Tambah Link</button>
           </div>
@@ -622,6 +626,7 @@
         <div class="nav-item active" data-menusiswa="beranda" onclick="navigasiSiswa('beranda', this)"><i class="bi bi-house-door"></i> Beranda</div>
         <div class="nav-item" data-menusiswa="profil" onclick="navigasiSiswa('profil', this)"><i class="bi bi-person-badge"></i> Profil Saya</div>
         <div class="nav-item" data-menusiswa="ujian" onclick="navigasiSiswa('ujian', this)"><i class="bi bi-journal-text"></i> Asesmen / Ujian</div>
+		<div class="nav-item" data-menusiswa="link" onclick="navigasiSiswa('link', this)"><i class="bi bi-link-45deg"></i> Link Eksternal</div>
       </div>
       <div class="nav-item text-danger mt-auto mb-4" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Keluar</div>
     </div>
@@ -674,8 +679,11 @@
             </div>
             <div class="row g-4" id="container-ujian-siswa-list"></div>
 			
-			<!-- MUKA SISWA: FITUR LINK EKSTERNAL -->
-            <div class="d-flex justify-content-between align-items-center mt-5 mb-4 bg-white p-4 rounded-4 shadow-sm border border-light">
+        </div>
+
+<!-- 3.B. HALAMAN LINK EKSTERNAL SISWA -->
+        <div id="view-siswa-link" class="view-section-siswa hidden">
+            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light">
               <div><h5 class="fw-bold m-0 text-success"><i class="bi bi-box-arrow-up-right me-2"></i>Tugas Eksternal (Tab Baru)</h5><small class="text-muted">Klik kerjakan untuk membuka Quizizz, GForm, atau website tugas lainnya.</small></div>
             </div>
             <div class="row g-4" id="container-link-siswa"></div>
@@ -972,6 +980,11 @@
                     <label class="form-label small fw-bold">Mata Pelajaran</label>
                     <select id="uj-mapel" class="form-select" required>
                         <option value="Pendidikan Agama Islam">Pendidikan Agama Islam</option>
+						<option value="Pendidikan Agama Kristen">Pendidikan Agama Kristen</option>
+						<option value="Pendidikan Agama Katolik">Pendidikan Agama Katolik</option>
+						<option value="Pendidikan Agama Hindu">Pendidikan Agama Hindu</option>
+						<option value="Pendidikan Agama Budha">Pendidikan Agama Budha</option>
+						<option value="Pendidikan Agama KongHuChu">Pendidikan Agama KongHuChu</option>
                         <option value="Pendidikan Pancasila">Pendidikan Pancasila</option>
                         <option value="Bahasa Indonesia">Bahasa Indonesia</option>
                         <option value="Matematika">Matematika</option>
@@ -979,6 +992,11 @@
                         <option value="PJOK">PJOK</option>
                         <option value="Seni Budaya">Seni Budaya</option>
                         <option value="Bahasa Inggris">Bahasa Inggris</option>
+						<option value="Bahasa Jawa">Bahasa Jawa</option>
+						<option value="Ekstrakurikuler">Ekstrakurikuler</option>
+						<option value="Ko Kurikuler">Ko Kurikuler</option>
+						<option value="Komputer">Komputer</option>
+						<option value="Koding dan AI">Koding dan AI</option>
                         <option value="Try Out TKA Umum">Try Out TKA Umum</option>
                     </select>
                 </div>
@@ -1692,7 +1710,6 @@ function mulaiTimerCBT() {
             if (!container) {
                 container = document.createElement('div');
                 container.id = 'cbt-toast-container';
-                // Posisi di pojok kanan bawah agar tidak mengganggu ketikan soal
                 container.className = 'toast-container position-fixed bottom-0 end-0 p-4';
                 container.style.zIndex = '9999';
                 document.body.appendChild(container);
@@ -1720,16 +1737,38 @@ function mulaiTimerCBT() {
             document.getElementById('stat-akt-siswa').innerText = (data.stats && data.stats.siswa_aktif) ? data.stats.siswa_aktif : 0;
             
             if(document.getElementById('stat-tot-ujian')) document.getElementById('stat-tot-ujian').innerText = (data.ujian) ? data.ujian.length : 0;
-            
-            // Menghitung total soal murni dari database bank soal (opsional jika ditarik, tapi ini aman)
             if(document.getElementById('stat-tot-soal')) document.getElementById('stat-tot-soal').innerText = (data.stats && data.stats.jml_soal) ? data.stats.jml_soal : 0;
 
             if(document.getElementById('set-nama')) document.getElementById('set-nama').value = data.setting.nama || '';
             if(document.getElementById('set-npsn')) document.getElementById('set-npsn').value = data.setting.npsn || '';
             if(document.getElementById('set-admin')) document.getElementById('set-admin').value = data.setting.adminName || '';
-            if(document.getElementById('set-apikey')) document.getElementById('set-apikey').value = data.setting.apiKey || ''; 
+            
             if(document.getElementById('set-logo')) document.getElementById('set-logo').value = data.setting.logo || ''; 
             if (data.setting.logo && data.setting.logo.length > 20 && document.getElementById('preview-logo')) { document.getElementById('preview-logo').src = data.setting.logo; }
+
+            // === PERBAIKAN: INJEKSI API KEY CERDAS (ANTI REFRESH) ===
+            if(document.getElementById('set-apikey')) {
+                let currentApiKey = data.setting.apiKey || '';
+                document.getElementById('set-apikey').value = currentApiKey;
+                
+                if (currentApiKey) {
+                    // Karena Portal dan Generator ada di domain yang sama (edusbypro.github.io),
+                    // Kita langsung injeksi API Key ke memori browser agar terbaca otomatis!
+                    localStorage.setItem('gemini_api_key', currentApiKey);
+                    localStorage.setItem('apiKey', currentApiKey); 
+                }
+
+                // Cegah Iframe me-reload terus menerus saat background poller (alarm) berjalan
+                let iframeGen = document.getElementById('iframe-gen');
+                if(iframeGen && currentApiKey && !iframeGen.src.includes('apikey=')) {
+                    iframeGen.src = "https://edusbypro.github.io/CBTSDSBY26/?apikey=" + currentApiKey;
+                }
+                
+                let iframeRpp = document.getElementById('iframe-rpp');
+                if(iframeRpp && currentApiKey && !iframeRpp.src.includes('apikey=')) {
+                    iframeRpp.src = "https://edusbypro.github.io/GENRPPSBY26/?apikey=" + currentApiKey;
+                }
+            }
 
             activeSiswaData = data.siswa || []; filterDataSiswa(); 
             let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== 'undefined' && k !== '-'))];
@@ -1768,16 +1807,13 @@ function mulaiTimerCBT() {
             try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch(e) {}
             renderDashboardUI(data); 
 
-            // --- FITUR BARU: SENSOR LATAR BELAKANG (ALARM) ---
             if(window.intervalCekData) clearInterval(window.intervalCekData);
             
-            // Sensor berjalan mengecek database setiap 60 detik (60000 ms)
             window.intervalCekData = setInterval(() => {
                 panggilAPI("getAdminData", { kodeSekolah: currentUser.kode_sekolah })
                 .then(newData => {
                     if(!newData || newData.error) return;
                     
-                    // Menghitung volume data Lama vs Baru
                     let volLama = (data.ujian ? data.ujian.length : 0) + 
                                   (data.siswa ? data.siswa.length : 0) + 
                                   (data.hasil ? data.hasil.length : 0);
@@ -1786,17 +1822,13 @@ function mulaiTimerCBT() {
                                   (newData.siswa ? newData.siswa.length : 0) + 
                                   (newData.hasil ? newData.hasil.length : 0);
                     
-                    // Jika ada volume data yang bertambah (Ada siswa kumpul jawaban / Ujian baru)
                     if(volBaru > volLama) {
                         tampilkanNotif("Ada data masuk (Ujian/Jawaban Siswa Baru)! <br><a href='javascript:void(0)' onclick='loadDashboardData()' class='text-warning text-decoration-none'>[Klik Di Sini Untuk Sinkronkan Layar]</a>");
-                        
-                        // Perbarui acuan memori agar alarm tidak berbunyi terus untuk data yang sama
                         data = newData; 
                         try { localStorage.setItem(cacheKey, JSON.stringify(newData)); } catch(e) {}
                     }
                 }).catch(e => console.log("Sensor background berjalan offline."));
             }, 60000); 
-            // ----------------------------------------
             
         })
         .catch(err => {
@@ -1990,43 +2022,80 @@ function mulaiTimerCBT() {
     // ===== FUNGSI RENDER UJIAN ADMIN =====
     // ===== FUNGSI RENDER UJIAN ADMIN (DENGAN TOMBOL HASIL) =====
     // ===== FUNGSI RENDER UJIAN ADMIN (DENGAN TOMBOL HASIL & PEMBAHASAN) =====
-    function renderTabelUjianAdmin() {
+    // FUNGSI PEMBERI WARNA & ICON OTOMATIS BERDASARKAN MATA PELAJARAN
+    function getMapelStyle(mapel) {
+        let m = mapel.toLowerCase();
+        if(m.includes('matematika')) return { color: 'danger', icon: 'bi-calculator-fill' };
+        if(m.includes('agama')) return { color: 'success', icon: 'bi-book-half' };
+        if(m.includes('indonesia') || m.includes('inggris') || m.includes('bahasa')) return { color: 'warning', icon: 'bi-translate' };
+        if(m.includes('ipas') || m.includes('ipa')) return { color: 'info', icon: 'bi-globe-asia-australia' };
+        if(m.includes('seni')) return { color: 'primary', icon: 'bi-palette-fill' }; 
+        if(m.includes('pjok') || m.includes('olahraga')) return { color: 'danger', icon: 'bi-bicycle' };
+        if(m.includes('ekstrakurikuler')) return { color: 'dark', icon: 'bi-controller' };
+        return { color: 'primary', icon: 'bi-journal-check' }; // Default
+    }
+
+    function renderTabelUjianAdmin(paksaTampilKode = null) {
         const keyword = document.getElementById('input-cari-ujian') ? document.getElementById('input-cari-ujian').value.toLowerCase() : "";
         let htmlUjian = '';
-        let filteredUjian = activeUjianData;
+        
+        let semuaUjianRev = [...activeUjianData].reverse();
+        let ujianTersedia = semuaUjianRev.filter(u => !String(u.status).startsWith('SAMPAH_'));
+        let ujianSampah = semuaUjianRev.filter(u => String(u.status).startsWith('SAMPAH_'));
         
         if(keyword) {
-            filteredUjian = filteredUjian.filter(u => u.nama.toLowerCase().includes(keyword) || u.kode.toLowerCase().includes(keyword) || u.mapel.toLowerCase().includes(keyword));
+            ujianTersedia = ujianTersedia.filter(u => u.nama.toLowerCase().includes(keyword) || u.kode.toLowerCase().includes(keyword) || u.mapel.toLowerCase().includes(keyword));
         }
-        
-        filteredUjian.forEach(u => { 
+
+        let cardData = [];
+        let tableData = [];
+
+        if (keyword) {
+            cardData = ujianTersedia;
+        } else {
+            if (paksaTampilKode) {
+                let dipaksa = ujianTersedia.find(u => u.kode === paksaTampilKode);
+                if (dipaksa) cardData.push(dipaksa);
+                cardData = cardData.concat(ujianTersedia.filter(u => u.kode !== paksaTampilKode).slice(0, 5));
+                tableData = ujianTersedia; 
+            } else {
+                cardData = ujianTersedia.slice(0, 6);
+                tableData = ujianTersedia.slice(6);
+            }
+        }
+
+        // --- RENDER CARDS (Warna Warni Dinamis) ---
+        cardData.forEach(u => { 
             const isAktif = u.status === 'AKTIF' ? 'checked' : ''; 
-            const isBahasAktif = u.bukaPembahasan === 'Ya' ? 'checked' : ''; // DETEKSI PEMBAHASAN
+            const isBahasAktif = u.bukaPembahasan === 'Ya' ? 'checked' : ''; 
             
-            // Teks Info Target
+            // Dapatkan Gaya (Style) berdasarkan Mapel
+            let style = getMapelStyle(u.mapel);
+            
             let targetSiswa = [];
             if(u.asalSekolah) targetSiswa.push(u.asalSekolah);
             if(u.jenjang) targetSiswa.push(u.jenjang);
             if(u.kelas) targetSiswa.push('Kls ' + u.kelas);
             if(u.rombel) targetSiswa.push('Rb ' + u.rombel);
-            let infoTarget = targetSiswa.length > 0 ? `<span class="text-primary fw-bold">Target: ${targetSiswa.join(' - ')}</span>` : '<span class="text-muted">Target: Semua Siswa</span>';
+            let infoTarget = targetSiswa.length > 0 ? `<span class="text-${style.color} fw-bold">Target: ${targetSiswa.join(' - ')}</span>` : '<span class="text-muted">Target: Semua Siswa</span>';
 
+            // Ganti warna border atas berdasarkan mapel
             htmlUjian += `
             <div class="col-md-6 col-xl-4">
-                <div class="card h-100 border shadow-sm rounded-4">
+                <div class="card h-100 shadow-sm rounded-4 border-top border-4 border-${style.color}" id="card-${u.kode}">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between mb-3">
-                            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">${u.kode}</span>
+                            <span class="badge bg-${style.color} bg-opacity-10 text-${style.color} rounded-pill px-3 py-2 border border-${style.color}-subtle"><i class="${style.icon} me-1"></i> ${u.kode}</span>
                             <div>
-                                <i class="bi bi-pencil-square text-primary fs-5 me-3" style="cursor:pointer" onclick="editUjian('${u.kode}')"></i>
-                                <span class="badge bg-light text-dark border rounded-pill px-3 py-2">${u.status}</span>
+                                <i class="bi bi-pencil-square text-${style.color} fs-5 me-3" style="cursor:pointer" onclick="editUjian('${u.kode}')"></i>
+                                <span class="badge bg-body-secondary text-body border rounded-pill px-3 py-2">${u.status}</span>
                             </div>
                         </div>
-                        <h5 class="fw-bold text-dark mb-1 text-truncate">${u.nama}</h5>
+                        <h5 class="fw-bold text-body mb-1 text-truncate">${u.nama}</h5>
                         <p class="text-muted small mb-1">${u.mapel} • ${u.jmlSoal} Soal • ${u.durasi} menit</p>
                         <p class="small mb-3 border-bottom pb-2"><i>${infoTarget}</i></p>
                         
-                        <div class="bg-light rounded-3 mb-4 border">
+                        <div class="bg-body-tertiary rounded-3 mb-4 border">
                             <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
                                 <span class="small fw-bold">Aktifkan asesmen</span>
                                 <div class="form-check form-switch m-0 fs-5">
@@ -2042,15 +2111,108 @@ function mulaiTimerCBT() {
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button class="btn btn-primary btn-sm fw-bold rounded-pill px-4 py-2" onclick="kelolaSoal('${u.kode}', '${u.nama}', ${u.jmlSoal})"><i class="bi bi-list-check me-1"></i> Kelola Soal</button>
+                            <button class="btn btn-${style.color} btn-sm fw-bold text-white rounded-pill px-4 py-2" onclick="kelolaSoal('${u.kode}', '${u.nama}', ${u.jmlSoal})"><i class="bi bi-list-check me-1"></i> Kelola Soal</button>
                             <button class="btn btn-success btn-sm fw-bold text-white rounded-pill px-3 py-2" onclick="bukaDaftarHasil('${u.kode}', '${u.nama}')"><i class="bi bi-clipboard-data me-1"></i> Hasil</button>
-                            <button class="btn btn-white text-danger border-0 ms-auto p-0 fs-5" onclick="hapusUjian('${u.kode}')"><i class="bi bi-trash3"></i></button>
+                            <button class="btn text-danger border-0 ms-auto p-0 fs-5 bg-transparent" onclick="hapusUjian('${u.kode}')"><i class="bi bi-trash3"></i></button>
                         </div>
                     </div>
                 </div>
             </div>`; 
         });
-        document.getElementById('container-kartu-ujian').innerHTML = htmlUjian || '<div class="col-12 text-center text-muted py-5">Asesmen tidak ditemukan.</div>';
+
+        // --- RENDER TABEL ARSIP (DENGAN FITUR COLLAPSE/MENYUSUT) ---
+        let htmlTable = '';
+        if (tableData.length > 0) {
+            // Tentukan apakah tabel tertutup atau terbuka
+            // Jika ada paksaan nampil kartu dari tabel, otomatis tutup tabel agar fokus ke kartu
+            let isCollapsed = paksaTampilKode ? '' : 'show';
+            let iconChevron = paksaTampilKode ? 'bi-chevron-right' : 'bi-chevron-down';
+
+            htmlTable = `
+            <div class="col-12 mt-4 pt-3 border-top">
+                <div class="d-flex justify-content-between align-items-center mb-3" data-bs-toggle="collapse" data-bs-target="#tabelArsipCollapse" style="cursor: pointer;" title="Klik untuk membuka/menutup tabel arsip">
+                    <h6 class="fw-bold text-primary m-0"><i class="bi bi-archive-fill me-2"></i>Arsip Asesmen Terdahulu (${tableData.length})</h6>
+                    <i class="bi ${iconChevron} text-primary fs-5"></i>
+                </div>
+                
+                <div class="collapse ${isCollapsed}" id="tabelArsipCollapse">
+                    <div class="table-responsive bg-body border shadow-sm rounded-4 p-3" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-hover align-middle mb-0 text-nowrap">
+                            <thead class="table-light text-muted small" style="position: sticky; top: 0; z-index: 1;">
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Asesmen</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Status</th>
+                                    <th>Aksi Cepat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+            tableData.forEach(u => {
+                let badgeStatus = u.status === 'AKTIF' ? '<span class="badge bg-primary rounded-pill">AKTIF</span>' : '<span class="badge border text-body rounded-pill">DRAFT</span>';
+                let s = getMapelStyle(u.mapel); // Warna mapel mini di tabel
+                htmlTable += `
+                                <tr>
+                                    <td><code class="text-${s.color} fw-bold">${u.kode}</code></td>
+                                    <td class="fw-bold text-body">${u.nama}</td>
+                                    <td><i class="${s.icon} text-${s.color} me-1"></i> ${u.mapel}</td>
+                                    <td>${badgeStatus}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-${s.color} rounded-pill fw-bold px-3 shadow-sm" onclick="renderTabelUjianAdmin('${u.kode}'); window.scrollTo({ top: 0, behavior: 'smooth' });">
+                                            <i class="bi bi-arrow-up-circle-fill me-1"></i> Tampilkan Kartu
+                                        </button>
+                                    </td>
+                                </tr>
+                `;
+            });
+            htmlTable += `</tbody></table></div></div></div>`;
+        }
+
+        // --- RENDER TEMPAT SAMPAH ---
+        let htmlSampah = '';
+        if (ujianSampah.length > 0 && !keyword) {
+            htmlSampah = `
+            <div class="col-12 mt-4 pt-3 border-top">
+                <h6 class="fw-bold text-danger mb-3"><i class="bi bi-trash3-fill me-2"></i>Recycle Bin / Tempat Sampah (Auto-Hapus dlm 7 Hari)</h6>
+                <div class="table-responsive bg-danger bg-opacity-10 border border-danger-subtle shadow-sm rounded-4 p-3" style="max-height: 300px; overflow-y: auto;">
+                    <table class="table table-hover table-borderless align-middle mb-0 text-nowrap">
+                        <thead class="text-danger small border-bottom border-danger-subtle">
+                            <tr>
+                                <th>Kode</th>
+                                <th>Nama Asesmen</th>
+                                <th>Mata Pelajaran</th>
+                                <th>Aksi Pulihkan / Hapus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            ujianSampah.forEach(u => {
+                let timestampHapus = parseInt(u.status.split('_')[1]);
+                let sisaMs = (7 * 24 * 60 * 60 * 1000) - (new Date().getTime() - timestampHapus);
+                let sisaHari = Math.ceil(sisaMs / (1000 * 60 * 60 * 24));
+                if (sisaHari < 0) sisaHari = 0;
+                
+                htmlSampah += `
+                            <tr>
+                                <td><code class="text-danger fw-bold">${u.kode}</code></td>
+                                <td class="fw-bold text-body">${u.nama}</td>
+                                <td>${u.mapel} <span class="badge bg-body text-danger border border-danger-subtle ms-2">Sisa ${sisaHari} Hari</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-success rounded-pill fw-bold px-3 shadow-sm me-1" onclick="restoreUjianClient('${u.kode}')">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i> Pulihkan
+                                    </button>
+                                    <button class="btn btn-sm btn-danger rounded-pill fw-bold px-3 shadow-sm" onclick="hapusUjian('${u.kode}', true)">
+                                        <i class="bi bi-x-circle me-1"></i> Hapus Permanen
+                                    </button>
+                                </td>
+                            </tr>
+                `;
+            });
+            htmlSampah += `</tbody></table></div></div>`;
+        }
+
+        document.getElementById('container-kartu-ujian').innerHTML = (htmlUjian || '<div class="col-12 text-center text-muted py-5">Asesmen tidak ditemukan.</div>') + htmlTable + htmlSampah;
     }
 	
 	function toggleStatusUjianClient(kodeUjian, el) { 
@@ -2195,12 +2357,65 @@ function mulaiTimerCBT() {
         panggilAPI("togglePembahasanBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian, statusP: el.checked ? 'Ya' : 'Tidak' }); 
     }
 
-    function hapusUjian(kodeUjian) { 
-        if(confirm('Yakin hapus asesmen ini?')) { 
-            panggilAPI("hapusDataUjian", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian })
-            .then(res => { if(res.success) loadDashboardData(); })
-            .catch(err => alert("Gagal hapus: " + err.message)); 
-        } 
+    function hapusUjian(kodeUjian, isPermanen = false) { 
+        let pesan = isPermanen ? 'Hapus permanen asesmen ini? (Tidak bisa dikembalikan!)' : 'Pindah asesmen ini ke Tempat Sampah?';
+        if(!confirm(pesan)) return; 
+
+        // 1. Simpan cadangan data lokal
+        let backupData = [...activeUjianData];
+        let ujianTarget = activeUjianData.find(u => u.kode === kodeUjian);
+
+        // 2. TAMPILAN OPTIMIS: Eksekusi layar secara instan!
+        if (isPermanen) {
+            activeUjianData = activeUjianData.filter(u => u.kode !== kodeUjian);
+        } else {
+            if (ujianTarget) ujianTarget.status = "SAMPAH_" + new Date().getTime();
+        }
+        renderTabelUjianAdmin();
+        
+        if (typeof tampilkanNotif === "function") {
+            tampilkanNotif(isPermanen ? `Menghapus permanen asesmen...` : `Memindah asesmen <b>${ujianTarget ? ujianTarget.nama : ''}</b> ke Tempat Sampah...`);
+        }
+
+        // 3. Eksekusi Latar Belakang ke Google Sheets
+        panggilAPI("hapusDataUjian", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian })
+        .then(res => { 
+            if(res.success) { 
+                if (typeof tampilkanNotif === "function") tampilkanNotif(isPermanen ? "✅ Asesmen dihapus permanen." : "🗑️ Asesmen dipindah ke Tempat Sampah.");
+            } else {
+                activeUjianData = backupData; // Jika gagal, kembalikan ke layar
+                renderTabelUjianAdmin();
+                alert("Gagal menghapus: " + res.message);
+            }
+        })
+        .catch(err => { 
+            activeUjianData = backupData;
+            renderTabelUjianAdmin();
+            alert("Koneksi terputus: " + err.message); 
+        }); 
+    }
+
+    function restoreUjianClient(kodeUjian) {
+        let backupData = [...activeUjianData];
+        let ujianTarget = activeUjianData.find(u => u.kode === kodeUjian);
+        
+        // TAMPILAN OPTIMIS: Langsung pindahkan dari sampah menjadi DRAFT
+        if (ujianTarget) ujianTarget.status = "DRAFT";
+        renderTabelUjianAdmin();
+        
+        if (typeof tampilkanNotif === "function") tampilkanNotif(`Memulihkan asesmen <b>${ujianTarget.nama}</b>...`);
+
+        // Panggil API Toggle Status (Karena memulihkan = mengubah status dari SAMPAH menjadi DRAFT)
+        panggilAPI("toggleStatusUjianBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian, status: "DRAFT" })
+        .then(res => {
+            if(!res.success) {
+                activeUjianData = backupData; // Rollback layar jika server gagal
+                renderTabelUjianAdmin();
+                alert("Gagal memulihkan: " + res.message);
+            } else {
+                if (typeof tampilkanNotif === "function") tampilkanNotif("✅ Asesmen berhasil dipulihkan.");
+            }
+        });
     }
 
     function downloadTemplateSiswa() { 
