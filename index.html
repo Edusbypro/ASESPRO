@@ -3773,22 +3773,23 @@ function bukaFullscreenRPP(event) {
 // URL di bawah ini sudah saya sesuaikan persis dengan gambar Deployment terbaru Anda!
 const GAS_API_URL = "https://script.google.com/macros/s/AKfycbypIFgjx-vZbGf9jeoHm7e0kFXBaN635w6Qm-bD9dyAQS7Z1Qml2pI1RJ8WNoXga7EX/exec";
 
-// Fungsi pengganti google.script.run
+// Fungsi pengganti google.script.run yang diperkuat untuk menghindari CORS
 function panggilAPI(action, payload = {}) {
   console.log("Mengirim perintah ke server:", action);
   
   return fetch(GAS_API_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "text/plain;charset=utf-8", // Wajib text/plain
+      "Content-Type": "text/plain;charset=utf-8", // Wajib text/plain agar Google tidak memblokir CORS OPTIONS
     },
-    body: JSON.stringify({ action: action, payload: payload }),
-    redirect: "follow" // <--- INI PENANGKAL UTAMANYA! JANGAN SAMPAI HILANG
+    body: JSON.stringify({ action: action, payload: payload })
+    // PERBAIKAN: Hapus 'redirect: "follow"' karena Google Apps Script sering memblokir
+    // redirect antar-origin pada request fetch() dari GitHub Pages jika ada multiple akun.
+    // Membiarkannya default lebih aman.
   })
   .then(response => {
-    // Tangkap jika Google mengirim halaman HTML (<!DOCTYPE) bukan JSON
-    if (!response.ok && !response.redirected) {
-      throw new Error("Akses diblokir oleh Google. Pastikan URL API benar.");
+    if (!response.ok) {
+        throw new Error("HTTP Error: " + response.status);
     }
     return response.text(); 
   })
@@ -3798,8 +3799,9 @@ function panggilAPI(action, payload = {}) {
       if (res.status === "error") throw new Error(res.message);
       return res.data;
     } catch (e) {
-      console.log("Respon Server BUKAN JSON:", text);
-      throw new Error("Server Google meminta login. Harap gunakan Tab Penyamaran (Incognito).");
+      // Jika yang diterima bukan JSON, melainkan halaman login Google (HTML)
+      console.log("Respon Server BUKAN JSON:", text.substring(0, 100) + "...");
+      throw new Error("Akses ditolak Google. Pastikan Deployment diset ke 'Anyone' (Siapa saja).");
     }
   });
 }
