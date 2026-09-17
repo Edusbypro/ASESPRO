@@ -1684,15 +1684,44 @@ function mulaiTimerCBT() {
     }
 
     function loadDashboardData() {
-      // Menggunakan jembatan API Hybrid untuk mengambil data dari Google Sheets
-      panggilAPI("getAdminData", { kodeSekolah: currentUser.kode_sekolah })
-        .then(data => {
-            if(data && data.error) { alert("Gagal memuat data: " + data.message); return; }
+        const cacheKey = "cbt_dash_" + currentUser.kode_sekolah;
+        
+        // --- FITUR BARU: GENERATOR NOTIFIKASI TOAST (POP-UP ALARM) ---
+        const tampilkanNotif = (pesan) => {
+            let container = document.getElementById('cbt-toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'cbt-toast-container';
+                // Posisi di pojok kanan bawah agar tidak mengganggu ketikan soal
+                container.className = 'toast-container position-fixed bottom-0 end-0 p-4';
+                container.style.zIndex = '9999';
+                document.body.appendChild(container);
+            }
+            let idToast = 'tst_' + Date.now();
+            container.insertAdjacentHTML('beforeend', `
+                <div id="${idToast}" class="toast align-items-center text-bg-dark border-0 shadow-lg rounded-4 mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="15000">
+                  <div class="d-flex">
+                    <div class="toast-body fw-bold" style="font-size: 0.9rem;">
+                      <i class="bi bi-bell-fill me-2 text-warning fs-5 align-middle"></i> ${pesan}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-3 m-auto" data-bs-dismiss="toast"></button>
+                  </div>
+                </div>
+            `);
+            let toastEl = document.getElementById(idToast);
+            let bsToast = new bootstrap.Toast(toastEl);
+            bsToast.show();
+        };
+
+        const renderDashboardUI = (data) => {
+            if(data && data.error) { console.error(data.message); return; }
 
             document.getElementById('stat-tot-siswa').innerText = (data.stats && data.stats.jml_siswa) ? data.stats.jml_siswa : 0;
             document.getElementById('stat-akt-siswa').innerText = (data.stats && data.stats.siswa_aktif) ? data.stats.siswa_aktif : 0;
             
-            if(document.getElementById('stat-tot-ujian')) document.getElementById('stat-tot-ujian').innerText = (data.stats && data.stats.jml_ujian) ? data.stats.jml_ujian : 0;
+            if(document.getElementById('stat-tot-ujian')) document.getElementById('stat-tot-ujian').innerText = (data.ujian) ? data.ujian.length : 0;
+            
+            // Menghitung total soal murni dari database bank soal (opsional jika ditarik, tapi ini aman)
             if(document.getElementById('stat-tot-soal')) document.getElementById('stat-tot-soal').innerText = (data.stats && data.stats.jml_soal) ? data.stats.jml_soal : 0;
 
             if(document.getElementById('set-nama')) document.getElementById('set-nama').value = data.setting.nama || '';
@@ -1718,15 +1747,60 @@ function mulaiTimerCBT() {
             activeKisiData = data.kisi || []; 
             renderTabelKisi(); 
             
-            // Mengambil data nilai via API
             panggilAPI("getSemuaHasil", { kodeSekolah: currentUser.kode_sekolah })
                 .then(hasil => { activeHasilData = hasil || []; })
                 .catch(err => console.log("Gagal memuat hasil:", err));
-			
-			loadLinkAdmin();
+            
+            loadLinkAdmin();
+        };
+
+        const cachedData = localStorage.getItem(cacheKey);
+        if (cachedData) {
+            try { renderDashboardUI(JSON.parse(cachedData)); } catch(e) { console.warn("Cache rusak", e); }
+        }
+
+        panggilAPI("getAdminData", { kodeSekolah: currentUser.kode_sekolah })
+        .then(data => {
+            if(data && data.error) { 
+                if(!cachedData) alert("Gagal memuat data: " + data.message); 
+                return; 
+            }
+            try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch(e) {}
+            renderDashboardUI(data); 
+
+            // --- FITUR BARU: SENSOR LATAR BELAKANG (ALARM) ---
+            if(window.intervalCekData) clearInterval(window.intervalCekData);
+            
+            // Sensor berjalan mengecek database setiap 60 detik (60000 ms)
+            window.intervalCekData = setInterval(() => {
+                panggilAPI("getAdminData", { kodeSekolah: currentUser.kode_sekolah })
+                .then(newData => {
+                    if(!newData || newData.error) return;
+                    
+                    // Menghitung volume data Lama vs Baru
+                    let volLama = (data.ujian ? data.ujian.length : 0) + 
+                                  (data.siswa ? data.siswa.length : 0) + 
+                                  (data.hasil ? data.hasil.length : 0);
+                                  
+                    let volBaru = (newData.ujian ? newData.ujian.length : 0) + 
+                                  (newData.siswa ? newData.siswa.length : 0) + 
+                                  (newData.hasil ? newData.hasil.length : 0);
+                    
+                    // Jika ada volume data yang bertambah (Ada siswa kumpul jawaban / Ujian baru)
+                    if(volBaru > volLama) {
+                        tampilkanNotif("Ada data masuk (Ujian/Jawaban Siswa Baru)! <br><a href='javascript:void(0)' onclick='loadDashboardData()' class='text-warning text-decoration-none'>[Klik Di Sini Untuk Sinkronkan Layar]</a>");
+                        
+                        // Perbarui acuan memori agar alarm tidak berbunyi terus untuk data yang sama
+                        data = newData; 
+                        try { localStorage.setItem(cacheKey, JSON.stringify(newData)); } catch(e) {}
+                    }
+                }).catch(e => console.log("Sensor background berjalan offline."));
+            }, 60000); 
+            // ----------------------------------------
+            
         })
         .catch(err => {
-            alert("Gagal terhubung ke server untuk memuat data dashboard: " + err.message);
+            if(!cachedData) alert("Gagal terhubung ke server: " + err.message);
         });
     }
 
