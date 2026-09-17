@@ -1330,6 +1330,9 @@
     document.addEventListener("msfullscreenchange", handleFullscreenExit);
 
     function handleFullscreenExit() {
+        // JIKA SISWA SEDANG DALAM PROSES MENGUMPULKAN UJIAN, ABAIKAN PERINGATAN KECURANGAN INI
+        if (window.isSubmitting) return;
+
         // Jika siswa sedang dalam mode ujian (cbt-mode) DAN status layarnya tidak lagi fullscreen
         if (document.body.classList.contains('cbt-mode') && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
             cheatCount++; // Menambah hitungan kecurangan yang sudah ada di sistem Anda
@@ -1340,7 +1343,6 @@
             } else {
                 alert(`⚠️ PERINGATAN KECURANGAN (${cheatCount}/3)! ⚠️\nAnda dilarang keluar dari mode Layar Penuh selama ujian berlangsung! Silakan masuk kembali ke mode layar penuh.`);
                 
-                // Coba paksa tarik kembali ke fullscreen (beberapa browser mengizinkan jika dipicu event perpindahan ini)
                 let elem = document.documentElement;
                 if (elem.requestFullscreen) {
                     elem.requestFullscreen().catch(err => console.log("Perlu interaksi klik untuk fullscreen ulang."));
@@ -1548,6 +1550,9 @@ function mulaiTimerCBT() {
         
         if(!paksaSelesai && !confirm(`Anda telah menjawab ${dijawabCount} dari ${cbtSoal.length} soal.\nYakin ingin mengumpulkan ujian sekarang?\n\nPerhatian: Anda tidak bisa mengubah jawaban setelah dikumpulkan!`)) return;
         
+        // TANDAI BAHWA SISWA SEDANG MENYERAHKAN UJIAN (Mencegah alarm kecurangan menyala)
+        window.isSubmitting = true;
+
         clearInterval(cbtTimerInterval);
         document.getElementById('cbt-area-soal').innerHTML = '<div class="text-center py-5"><span class="spinner-border text-primary fs-2"></span><br><br>Menyimpan data dan mengoreksi jawaban otomatis...</div>';
         
@@ -1582,24 +1587,27 @@ function mulaiTimerCBT() {
         
         panggilAPI("simpanHasilUjianBackend", payloadHasil)
         .then(res => {
-            // --- TAMBAHAN KELUAR NATIVE FULLSCREEN OTOMATIS ---
+            // Keluar native fullscreen otomatis
             if (document.exitFullscreen) { document.exitFullscreen().catch(err => console.log(err)); }
             else if (document.webkitExitFullscreen) { document.webkitExitFullscreen().catch(err => console.log(err)); }
             else if (document.msExitFullscreen) { document.msExitFullscreen().catch(err => console.log(err)); }
-            // --------------------------------------------------
 
             if (res.success) {
                 document.body.classList.remove('cbt-mode'); 
                 let infoTambahan = adaEssay ? "\nSebagian soal Kompleks/Uraian menunggu koreksi manual Guru." : `\nSkor Asesmen Anda: ${totalNilai}`;
                 alert("Asesmen berhasil diselesaikan!" + infoTambahan);
+                
+                window.isSubmitting = false; // Reset bendera aman
                 navigasiSiswa('beranda', document.querySelector('#screen-siswa .sidebar-nav .nav-item')); 
                 initPortalSiswa();
             } else {
+                window.isSubmitting = false;
                 alert("Gagal menyimpan hasil: " + res.message);
                 document.getElementById('cbt-area-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Gagal menyimpan hasil. Silakan ulangi pengumpulan.</div>`;
             }
         })
         .catch(err => {
+            window.isSubmitting = false;
             alert("GAGAL mengirim ke server: " + err.message + "\nSilakan coba klik Kumpulkan lagi!");
             document.getElementById('cbt-area-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Koneksi terputus. Muat ulang halaman (F5) lalu kumpulkan lagi.</div>`;
         });
