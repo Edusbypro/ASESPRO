@@ -2280,47 +2280,78 @@ function mulaiTimerCBT() {
         document.getElementById('container-kartu-ujian').innerHTML = (htmlUjian || '<div class="col-12 text-center text-muted py-5">Asesmen tidak ditemukan.</div>') + htmlTable + htmlSampah;
     }
 	
-	function toggleStatusUjianClient(kodeUjian, el) { 
-        let oriColor = !el.checked;
-        el.disabled = true; // Kunci saklar sementara agar tidak dispam klik
-        let newStatus = el.checked ? 'AKTIF' : 'DRAFT';
+	// ==========================================
+    // FUNGSI SAKLAR AKTIF/DRAFT (ANTI-BOUNCE)
+    // ==========================================
+    function toggleStatusUjianClient(kodeUjian, elCheckbox) {
+        let statusBaru = elCheckbox.checked ? "AKTIF" : "DRAFT";
         
-        panggilAPI("toggleStatusUjianBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian, status: newStatus })
+        // 1. Update data di layar secara instan (Optimistic UI)
+        let u = activeUjianData.find(x => x.kode === kodeUjian);
+        if(u) u.status = statusBaru;
+        
+        // 2. TIMPA CACHE LOKAL agar saat di-refresh tidak kembali ke Draft!
+        let cacheKey = "cbt_dash_" + currentUser.kode_sekolah;
+        let currentCache = JSON.parse(localStorage.getItem(cacheKey) || "{}");
+        if(currentCache.ujian) {
+            let cu = currentCache.ujian.find(x => x.kode === kodeUjian);
+            if(cu) cu.status = statusBaru;
+            localStorage.setItem(cacheKey, JSON.stringify(currentCache));
+        }
+        
+        renderTabelUjianAdmin(); // Render ulang warna label
+        if(typeof tampilkanNotif === "function") tampilkanNotif(`Status asesmen diubah menjadi <b>${statusBaru}</b>`);
+
+        // 3. Kirim perintah ke Google Sheets
+        panggilAPI("toggleStatusUjianBackend", { 
+            kodeSekolah: currentUser.kode_sekolah, 
+            kodeUjian: kodeUjian, 
+            status: statusBaru // Parameter harus "status" sesuai di code.gs
+        })
         .then(res => {
-            el.disabled = false;
-            if(res && res.success) {
-                // Update teks badge secara instan tanpa perlu refresh
-                let badge = el.closest('.card-body').querySelector('.d-flex.justify-content-between .badge.bg-light');
-                if(badge) badge.innerText = newStatus;
-            } else {
-                alert("Gagal mengupdate status: " + (res ? res.message : "Error server"));
-                el.checked = oriColor; // Kembalikan saklar jika gagal
+            if(!res.success) {
+                alert("Gagal menyimpan status ke server: " + res.message);
+                // Rollback layar jika server menolak
+                elCheckbox.checked = !elCheckbox.checked;
+                if(u) u.status = elCheckbox.checked ? "AKTIF" : "DRAFT";
+                renderTabelUjianAdmin();
             }
         })
-        .catch(err => {
-            el.disabled = false;
-            el.checked = oriColor;
-            alert("Koneksi terputus: " + err.message);
-        });
+        .catch(err => { console.error("Koneksi gagal:", err); });
     }
 
-    function togglePembahasanClient(kodeUjian, el) { 
-        let oriColor = !el.checked;
-        el.disabled = true;
-        let newStatus = el.checked ? 'Ya' : 'Tidak';
+    // ==========================================
+    // FUNGSI SAKLAR PEMBAHASAN (ANTI-BOUNCE)
+    // ==========================================
+    function togglePembahasanClient(kodeUjian, elCheckbox) {
+        let statusBaru = elCheckbox.checked ? "Ya" : "Tidak";
         
-        panggilAPI("togglePembahasanBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian, statusP: newStatus })
-        .then(res => {
-            el.disabled = false;
-            if(!res || !res.success) {
-                alert("Gagal merilis pembahasan: " + (res ? res.message : "Error server"));
-                el.checked = oriColor;
-            }
+        // 1. Update layar secara instan
+        let u = activeUjianData.find(x => x.kode === kodeUjian);
+        if(u) u.bukaPembahasan = statusBaru;
+        
+        // 2. TIMPA CACHE LOKAL
+        let cacheKey = "cbt_dash_" + currentUser.kode_sekolah;
+        let currentCache = JSON.parse(localStorage.getItem(cacheKey) || "{}");
+        if(currentCache.ujian) {
+            let cu = currentCache.ujian.find(x => x.kode === kodeUjian);
+            if(cu) cu.bukaPembahasan = statusBaru;
+            localStorage.setItem(cacheKey, JSON.stringify(currentCache));
+        }
+        
+        renderTabelUjianAdmin();
+        if(typeof tampilkanNotif === "function") tampilkanNotif(`Pembahasan ${statusBaru === 'Ya' ? 'dibuka' : 'ditutup'}`);
+
+        // 3. Kirim perintah ke Google Sheets
+        panggilAPI("togglePembahasanBackend", { 
+            kodeSekolah: currentUser.kode_sekolah, 
+            kodeUjian: kodeUjian, 
+            statusP: statusBaru // Parameter harus "statusP" sesuai di code.gs
         })
-        .catch(err => {
-            el.disabled = false;
-            el.checked = oriColor;
-            alert("Koneksi terputus: " + err.message);
+        .then(res => {
+            if(!res.success) {
+                alert("Gagal menyimpan pengaturan pembahasan: " + res.message);
+            }
         });
     }
 
