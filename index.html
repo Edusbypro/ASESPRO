@@ -697,7 +697,14 @@
                     <div class="card border border-primary-subtle shadow-sm rounded-4 h-100">
                         <div class="card-body p-4 d-flex justify-content-between align-items-center bg-primary bg-opacity-10 rounded-top-4 border-bottom">
                             <div><h5 class="fw-bold m-0 text-primary" id="cbt-judul-ujian">Memuat Asesmen...</h5></div>
-                            <div class="badge bg-white text-danger fs-5 px-3 py-2 rounded-pill shadow-sm border"><i class="bi bi-clock-history me-2"></i><span id="cbt-timer" class="fw-bold">00:00:00</span></div>
+                            <div class="d-flex align-items-center gap-3">
+                                <!-- Kontainer Kamera Pengawas (Disembunyikan secara default) -->
+                                <div id="pengawas-kamera-container" class="rounded overflow-hidden border border-2 border-danger shadow-sm d-none" style="width: 120px; height: 90px; background: #000; position: relative;">
+                                    <video id="pengawas-video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover;"></video>
+                                    <div class="position-absolute bottom-0 w-100 text-center bg-danger bg-opacity-75 text-white" style="font-size: 0.6rem; padding: 2px 0;"><i class="bi bi-record-circle me-1"></i>PENGAWASAN AKTIF</div>
+                                </div>
+                                <div class="badge bg-white text-danger fs-5 px-3 py-2 rounded-pill shadow-sm border"><i class="bi bi-clock-history me-2"></i><span id="cbt-timer" class="fw-bold">00:00:00</span></div>
+                            </div>
                         </div>
                         <div class="card-body p-4 fs-5" id="cbt-area-soal" style="min-height: 45vh;">
                             <!-- Konten Soal Akan Muncul di Sini -->
@@ -973,8 +980,15 @@
           <form id="formAddUjian" onsubmit="simpanUjianBaru(event)">
             <input type="hidden" id="uj-kode-lama">
             <div class="row g-3">
-                <div class="col-md-4"><label class="form-label small fw-bold">Kode Ujian</label><input type="text" id="uj-kode" class="form-control" required></div>
-                <div class="col-md-8"><label class="form-label small fw-bold">Nama Ujian</label><input type="text" id="uj-nama" class="form-control" required></div>
+                <div class="col-md-3"><label class="form-label small fw-bold">Acak Urutan Soal</label><select id="uj-acakSoal" class="form-select"><option value="Ya">Ya</option><option value="Tidak">Tidak</option></select></div>
+                <div class="col-md-3"><label class="form-label small fw-bold">Acak Opsi</label><select id="uj-acakOpsi" class="form-select"><option value="Ya">Ya</option><option value="Tidak">Tidak</option></select></div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-danger"><i class="bi bi-camera-video-fill me-1"></i>Wajib Kamera</label>
+                    <select id="uj-kamera" class="form-select border-danger text-danger fw-bold">
+                        <option value="Tidak">Tidak</option>
+                        <option value="Ya">Ya, Wajib</option>
+                    </select>
+                </div>
                 
                 <div class="col-md-6">
                     <label class="form-label small fw-bold">Mata Pelajaran</label>
@@ -1183,7 +1197,6 @@
       document.getElementById('page-title-siswa').innerText = menu.toUpperCase(); 
     }
 
-    // MESIN PORTAL SISWA (MULTI-ATTEMPT / REMEDIAL)
     // MESIN PORTAL SISWA (MULTI-ATTEMPT / REMEDIAL & PEMBAHASAN)
     function initPortalSiswa() {
         document.getElementById('welcome-siswa-nama').innerText = currentUser.nama || 'Siswa';
@@ -1235,10 +1248,12 @@
                         tombolAksi = `
                         <div class="d-flex gap-2">
                             <button class="btn btn-success w-100 fw-bold rounded-pill shadow-sm" onclick="bukaPembahasanSiswa('${u.kode}', '${u.nama}')"><i class="bi bi-journal-text me-1"></i> Pembahasan</button>
-                            <button class="btn btn-outline-primary w-100 fw-bold rounded-pill bg-white" onclick="konfirmasiMulaiUjian('${u.kode}', '${u.nama}', ${u.durasi})" title="Kerjakan Ulang"><i class="bi bi-arrow-repeat me-1"></i> Ulang</button>
+                            <!-- === DI SINI PARAMETER KAMERA DISUNTIKKAN === -->
+                            <button class="btn btn-outline-primary w-100 fw-bold rounded-pill bg-white" onclick="konfirmasiMulaiUjian('${u.kode}', '${u.nama}', ${u.durasi}, '${u.wajibKamera}')" title="Kerjakan Ulang"><i class="bi bi-arrow-repeat me-1"></i> Ulang</button>
                         </div>`;
                     } else {
-                        tombolAksi = `<button class="btn btn-primary w-100 fw-bold rounded-pill" onclick="konfirmasiMulaiUjian('${u.kode}', '${u.nama}', ${u.durasi})"><i class="bi bi-play-circle me-2"></i>Mulai Kerjakan ${jumlahPernahKerja > 0 ? '(Ulang ke-'+(jumlahPernahKerja+1)+')' : ''}</button>`;
+                        // === DI SINI PARAMETER KAMERA DISUNTIKKAN ===
+                        tombolAksi = `<button class="btn btn-primary w-100 fw-bold rounded-pill" onclick="konfirmasiMulaiUjian('${u.kode}', '${u.nama}', ${u.durasi}, '${u.wajibKamera}')"><i class="bi bi-play-circle me-2"></i>Mulai Kerjakan ${jumlahPernahKerja > 0 ? '(Ulang ke-'+(jumlahPernahKerja+1)+')' : ''}</button>`;
                     }
 
                     let infoSisa = jumlahPernahKerja > 0 
@@ -1310,6 +1325,7 @@
     let cbtWaktuSisa = 0;
     let cbtTimerInterval;
     let cheatCount = 0; // Penghitung Nyontek
+	let kameraStream = null;
 
     // SENSOR ANTI-NYONTEK (Keluar Tab / Minimize Browser)
     document.addEventListener("visibilitychange", () => {
@@ -1330,9 +1346,6 @@
     document.addEventListener("msfullscreenchange", handleFullscreenExit);
 
     function handleFullscreenExit() {
-        // JIKA SISWA SEDANG DALAM PROSES MENGUMPULKAN UJIAN, ABAIKAN PERINGATAN KECURANGAN INI
-        if (window.isSubmitting) return;
-
         // Jika siswa sedang dalam mode ujian (cbt-mode) DAN status layarnya tidak lagi fullscreen
         if (document.body.classList.contains('cbt-mode') && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
             cheatCount++; // Menambah hitungan kecurangan yang sudah ada di sistem Anda
@@ -1343,6 +1356,7 @@
             } else {
                 alert(`⚠️ PERINGATAN KECURANGAN (${cheatCount}/3)! ⚠️\nAnda dilarang keluar dari mode Layar Penuh selama ujian berlangsung! Silakan masuk kembali ke mode layar penuh.`);
                 
+                // Coba paksa tarik kembali ke fullscreen (beberapa browser mengizinkan jika dipicu event perpindahan ini)
                 let elem = document.documentElement;
                 if (elem.requestFullscreen) {
                     elem.requestFullscreen().catch(err => console.log("Perlu interaksi klik untuk fullscreen ulang."));
@@ -1353,41 +1367,80 @@
         }
     }
 
-    function konfirmasiMulaiUjian(kode, nama, durasi) {
-        if(!confirm(`Mulai mengerjakan asesmen:\n${nama}?\n\n⏳ Waktu Anda: ${durasi} Menit.\n⚠️ Jangan menutup Tab/Browser selama ujian, atau akan terhitung kecurangan!`)) return;
+    function konfirmasiMulaiUjian(kode, nama, durasi, statusKamera = 'Tidak') {
+        let isKameraWajib = (statusKamera === 'Ya');
+        let pesanWajib = isKameraWajib ? "\n\n📷 PERHATIAN: Ujian ini mewajibkan pengawasan KAMERA. Pastikan Anda mengizinkan akses kamera pada browser saat diminta." : "";
         
-        // --- TAMBAHAN FITUR NATIVE FULLSCREEN ---
-        let elem = document.documentElement;
-        if (elem.requestFullscreen) { elem.requestFullscreen().catch(err => console.log(err)); }
-        else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen().catch(err => console.log(err)); } // Safari/iOS
-        else if (elem.msRequestFullscreen) { elem.msRequestFullscreen().catch(err => console.log(err)); } // IE/Edge lama
-        // ----------------------------------------
+        if(!confirm(`Mulai mengerjakan asesmen:\n${nama}?\n\n⏳ Waktu Anda: ${durasi} Menit.\n⚠️ Jangan menutup Tab/Browser selama ujian, atau akan terhitung kecurangan!${pesanWajib}`)) return;
 
-        document.body.classList.add('cbt-mode'); // TRIGGER FULLSCREEN CSS BAWAAN
-        document.getElementById('page-title-siswa').innerText = "RUANG UJIAN";
-        document.querySelectorAll('.view-section-siswa').forEach(el => el.classList.add('hidden'));
-        document.getElementById('view-siswa-ruang-ujian').classList.remove('hidden');
-        document.getElementById('cbt-judul-ujian').innerText = nama;
-        document.getElementById('cbt-area-soal').innerHTML = '<div class="text-center py-5"><span class="spinner-border text-primary fs-2"></span><br><br>Menyiapkan Lembar Soal...</div>';
-        document.getElementById('cbt-navigasi-nomor').innerHTML = '';
-        
-        panggilAPI("getSoalUjian", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kode })
-        .then(data => {
-            if(!data || data.length === 0) {
-                alert("Asesmen ini belum memiliki soal.");
-                document.body.classList.remove('cbt-mode');
-                // Keluar fullscreen jika gagal
+        // FUNGSI INTERNAL UNTUK MEMULAI UJIAN (Menghindari duplikasi kode)
+        const eksekusiMulai = () => {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) { elem.requestFullscreen().catch(err => console.log(err)); }
+            else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen().catch(err => console.log(err)); } 
+            else if (elem.msRequestFullscreen) { elem.msRequestFullscreen().catch(err => console.log(err)); } 
+
+            document.body.classList.add('cbt-mode'); 
+            document.getElementById('page-title-siswa').innerText = "RUANG UJIAN";
+            document.querySelectorAll('.view-section-siswa').forEach(el => el.classList.add('hidden'));
+            document.getElementById('view-siswa-ruang-ujian').classList.remove('hidden');
+            document.getElementById('cbt-judul-ujian').innerText = nama;
+            document.getElementById('cbt-area-soal').innerHTML = '<div class="text-center py-5"><span class="spinner-border text-primary fs-2"></span><br><br>Menyiapkan Lembar Soal...</div>';
+            document.getElementById('cbt-navigasi-nomor').innerHTML = '';
+            
+            panggilAPI("getSoalUjian", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kode })
+            .then(data => {
+                if(!data || data.length === 0) {
+                    alert("Asesmen ini belum memiliki soal.");
+                    document.body.classList.remove('cbt-mode');
+                    hentikanKamera(); // Hentikan kamera jika batal
+                    if (document.exitFullscreen) { document.exitFullscreen().catch(err => console.log(err)); }
+                    navigasiSiswa('beranda', document.querySelector('.sidebar-nav .nav-item')); return;
+                }
+                cbtSoal = data; cbtJawaban = {}; cbtRagu = {}; cbtIndexAktif = 0; cheatCount = 0; cbtWaktuSisa = parseInt(durasi) * 60;
+                mulaiTimerCBT(); renderNavigasiCBT(); tampilkanSoalCBT(0);
+            })
+            .catch(err => {
+                alert("Gagal memuat soal CBT: " + err.message);
+                hentikanKamera();
                 if (document.exitFullscreen) { document.exitFullscreen().catch(err => console.log(err)); }
-                navigasiSiswa('beranda', document.querySelector('.sidebar-nav .nav-item')); return;
-            }
-            cbtSoal = data; cbtJawaban = {}; cbtRagu = {}; cbtIndexAktif = 0; cheatCount = 0; cbtWaktuSisa = parseInt(durasi) * 60;
-            mulaiTimerCBT(); renderNavigasiCBT(); tampilkanSoalCBT(0);
-        })
-        .catch(err => {
-            alert("Gagal memuat soal CBT: " + err.message);
-            // Keluar fullscreen jika gagal
-            if (document.exitFullscreen) { document.exitFullscreen().catch(err => console.log(err)); }
-        });
+            });
+        };
+
+        // Jika kamera diwajibkan, minta izin dulu sebelum mengeksekusi mulai
+        if (isKameraWajib) {
+            document.getElementById('page-title-siswa').innerText = "MEMERIKSA KAMERA...";
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(stream => {
+                // Kamera diizinkan!
+                kameraStream = stream;
+                let videoEl = document.getElementById('pengawas-video');
+                let containerCam = document.getElementById('pengawas-kamera-container');
+                
+                videoEl.srcObject = stream;
+                containerCam.classList.remove('d-none'); // Tampilkan kotak video
+                
+                eksekusiMulai(); // Lanjut ujian
+            })
+            .catch(err => {
+                // Kamera ditolak atau tidak ada
+                alert("❌ AKSES KAMERA DITOLAK ATAU TIDAK DITEMUKAN!\n\nAsesmen ini mewajibkan pengawasan kamera. Silakan izinkan akses kamera di pengaturan browser Anda, lalu coba lagi.");
+                document.getElementById('page-title-siswa').innerText = "BERANDA";
+            });
+        } else {
+            // Jika tidak wajib, langsung mulai
+            document.getElementById('pengawas-kamera-container').classList.add('d-none');
+            eksekusiMulai();
+        }
+    }
+
+    // Fungsi pembersih untuk mematikan kamera
+    function hentikanKamera() {
+        if (kameraStream) {
+            kameraStream.getTracks().forEach(track => track.stop());
+            kameraStream = null;
+            document.getElementById('pengawas-kamera-container').classList.add('d-none');
+        }
     }
 
 function mulaiTimerCBT() {
@@ -1596,6 +1649,9 @@ function mulaiTimerCBT() {
                 document.body.classList.remove('cbt-mode'); 
                 let infoTambahan = adaEssay ? "\nSebagian soal Kompleks/Uraian menunggu koreksi manual Guru." : `\nSkor Asesmen Anda: ${totalNilai}`;
                 alert("Asesmen berhasil diselesaikan!" + infoTambahan);
+                
+                // === DI SINI POSISI KAMERA DIMATIKAN ===
+                hentikanKamera(); 
                 
                 window.isSubmitting = false; // Reset bendera aman
                 navigasiSiswa('beranda', document.querySelector('#screen-siswa .sidebar-nav .nav-item')); 
@@ -2094,8 +2150,11 @@ function mulaiTimerCBT() {
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between mb-3">
                             <span class="badge bg-${style.color} bg-opacity-10 text-${style.color} rounded-pill px-3 py-2 border border-${style.color}-subtle"><i class="${style.icon} me-1"></i> ${u.kode}</span>
-                            <div>
-                                <i class="bi bi-pencil-square text-${style.color} fs-5 me-3" style="cursor:pointer" onclick="editUjian('${u.kode}')"></i>
+                            <div class="d-flex align-items-center">
+                                <!-- TOMBOL EDIT DIUBAH MENJADI BUTTON LINGKARAN NYATA AGAR MUDAH DIKLIK -->
+                                <button class="btn btn-sm btn-outline-${style.color} rounded-circle me-2 d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;" onclick="editUjian('${u.kode}')" title="Edit Ujian">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>
                                 <span class="badge bg-body-secondary text-body border rounded-pill px-3 py-2">${u.status}</span>
                             </div>
                         </div>
@@ -2131,8 +2190,6 @@ function mulaiTimerCBT() {
         // --- RENDER TABEL ARSIP (DENGAN FITUR COLLAPSE/MENYUSUT) ---
         let htmlTable = '';
         if (tableData.length > 0) {
-            // Tentukan apakah tabel tertutup atau terbuka
-            // Jika ada paksaan nampil kartu dari tabel, otomatis tutup tabel agar fokus ke kartu
             let isCollapsed = paksaTampilKode ? '' : 'show';
             let iconChevron = paksaTampilKode ? 'bi-chevron-right' : 'bi-chevron-down';
 
@@ -2159,7 +2216,7 @@ function mulaiTimerCBT() {
             `;
             tableData.forEach(u => {
                 let badgeStatus = u.status === 'AKTIF' ? '<span class="badge bg-primary rounded-pill">AKTIF</span>' : '<span class="badge border text-body rounded-pill">DRAFT</span>';
-                let s = getMapelStyle(u.mapel); // Warna mapel mini di tabel
+                let s = getMapelStyle(u.mapel); 
                 htmlTable += `
                                 <tr>
                                     <td><code class="text-${s.color} fw-bold">${u.kode}</code></td>
@@ -2293,15 +2350,18 @@ function mulaiTimerCBT() {
     
     function editUjian(kodeUjian) { 
         let u = activeUjianData.find(x => x.kode === kodeUjian); if(!u) return; 
-        document.getElementById('uj-kode-lama').value = u.kode; 
-        document.getElementById('uj-kode').value = u.kode; 
-        document.getElementById('uj-nama').value = u.nama; 
-        document.getElementById('uj-mapel').value = u.mapel; 
+        
+        // Pemasangan Bumper Keamanan (if document.getElementById) agar tidak crash jika HTML tidak ada
+        if(document.getElementById('uj-kode-lama')) document.getElementById('uj-kode-lama').value = u.kode; 
+        if(document.getElementById('uj-kode')) document.getElementById('uj-kode').value = u.kode; 
+        if(document.getElementById('uj-nama')) document.getElementById('uj-nama').value = u.nama; 
+        if(document.getElementById('uj-mapel')) document.getElementById('uj-mapel').value = u.mapel; 
         
         populateDropdownTargetUjian(); 
         setTimeout(() => {
             const setMultiSelect = (id, valString) => {
                 let select = document.getElementById(id);
+                if (!select) return;
                 Array.from(select.options).forEach(opt => opt.selected = false);
                 if (!valString || valString.trim() === '') return;
                 let values = valString.split(',').map(v => v.trim().toLowerCase());
@@ -2312,37 +2372,102 @@ function mulaiTimerCBT() {
             setMultiSelect('uj-jenjang', u.jenjang); setMultiSelect('uj-kelas', u.kelas); setMultiSelect('uj-rombel', u.rombel); setMultiSelect('uj-asal', u.asalSekolah);
         }, 100);
 
-        document.getElementById('uj-jmlSoal').value = u.jmlSoal; 
-        document.getElementById('uj-tglMulai').value = u.tglMulai.split('-').reverse().join('-'); 
-        document.getElementById('uj-jamMulai').value = u.jamMulai; 
-        document.getElementById('uj-jamSelesai').value = u.jamSelesai; 
-        document.getElementById('uj-durasi').value = u.durasi; 
-        document.getElementById('uj-acakSoal').value = u.acakSoal || 'Ya'; 
-        document.getElementById('uj-acakOpsi').value = u.acakOpsi || 'Ya'; 
+        if(document.getElementById('uj-jmlSoal')) document.getElementById('uj-jmlSoal').value = u.jmlSoal; 
+        if(document.getElementById('uj-tglMulai')) document.getElementById('uj-tglMulai').value = u.tglMulai.split('-').reverse().join('-'); 
+        if(document.getElementById('uj-jamMulai')) document.getElementById('uj-jamMulai').value = u.jamMulai; 
+        if(document.getElementById('uj-jamSelesai')) document.getElementById('uj-jamSelesai').value = u.jamSelesai; 
+        if(document.getElementById('uj-durasi')) document.getElementById('uj-durasi').value = u.durasi; 
+        if(document.getElementById('uj-acakSoal')) document.getElementById('uj-acakSoal').value = u.acakSoal || 'Ya'; 
+        if(document.getElementById('uj-acakOpsi')) document.getElementById('uj-acakOpsi').value = u.acakOpsi || 'Ya'; 
         
-        document.getElementById('uj-poinBenar').value = u.poinBenar !== undefined ? u.poinBenar : 10; 
-        document.getElementById('uj-poinSalah').value = u.poinSalah !== undefined ? u.poinSalah : 0; 
-        document.getElementById('uj-poinKosong').value = u.poinKosong !== undefined ? u.poinKosong : 0; 
+        if(document.getElementById('uj-poinBenar')) document.getElementById('uj-poinBenar').value = u.poinBenar !== undefined ? u.poinBenar : 10; 
+        if(document.getElementById('uj-poinSalah')) document.getElementById('uj-poinSalah').value = u.poinSalah !== undefined ? u.poinSalah : 0; 
+        if(document.getElementById('uj-poinKosong')) document.getElementById('uj-poinKosong').value = u.poinKosong !== undefined ? u.poinKosong : 0; 
+        if(document.getElementById('uj-maxAttempt')) document.getElementById('uj-maxAttempt').value = u.maxAttempt !== undefined ? u.maxAttempt : 1; 
         
-        document.getElementById('uj-maxAttempt').value = u.maxAttempt !== undefined ? u.maxAttempt : 1; 
+        // Fitur kamera (Aman jika HTML-nya belum sempat Anda tambahkan)
+        if(document.getElementById('uj-kamera')) document.getElementById('uj-kamera').value = u.wajibKamera || 'Tidak';
         
-        document.getElementById('title-modal-ujian').innerText = 'Edit Asesmen'; 
+        if(document.getElementById('title-modal-ujian')) document.getElementById('title-modal-ujian').innerText = 'Edit Asesmen'; 
+        
+        // Memaksa modal untuk tetap terbuka apapun yang terjadi
         bukaModal('modalAddUjian'); 
     }
     
     function simpanUjianBaru(e) { 
         e.preventDefault(); 
-        const modeEdit = document.getElementById('uj-kode-lama').value; 
-        const getMultiValues = (id) => Array.from(document.getElementById(id).selectedOptions).map(opt => opt.value).join(', ');
+        
+        // FUNGSI PENGAMAN 1: Mengambil Value dengan Sangat Aman
+        const safeVal = (id, defaultVal = '') => {
+            let el = document.getElementById(id);
+            return el ? el.value : defaultVal;
+        };
 
+        // FUNGSI PENGAMAN 2: Mengambil Pilihan Ganda (Multi-Select)
+        const getMultiValues = (id) => {
+            let el = document.getElementById(id);
+            return el ? Array.from(el.selectedOptions).map(opt => opt.value).join(', ') : '';
+        };
+
+        const btn = e.target.querySelector('button[type="submit"]');
+        let oriText = btn ? btn.innerHTML : "Simpan Ujian";
+        if(btn) { btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...'; btn.disabled = true; }
+
+        const modeEdit = safeVal('uj-kode-lama'); 
+
+        // Merakit Payload dengan sangat aman. Jika elemen HTML hilang, pakai default.
         const p = { 
-            kodeLama: modeEdit, kodeSekolah: currentUser.kode_sekolah, kode: document.getElementById('uj-kode').value, namaUjian: document.getElementById('uj-nama').value, mapel: document.getElementById('uj-mapel').value, jenjang: getMultiValues('uj-jenjang'), kelas: getMultiValues('uj-kelas'), rombel: getMultiValues('uj-rombel'), asalSekolah: getMultiValues('uj-asal'), jmlSoal: document.getElementById('uj-jmlSoal').value, tglMulai: document.getElementById('uj-tglMulai').value, jamMulai: document.getElementById('uj-jamMulai').value, jamSelesai: document.getElementById('uj-jamSelesai').value, durasi: document.getElementById('uj-durasi').value, acakSoal: document.getElementById('uj-acakSoal').value, acakOpsi: document.getElementById('uj-acakOpsi').value, poinBenar: document.getElementById('uj-poinBenar').value, poinSalah: document.getElementById('uj-poinSalah').value, poinKosong: document.getElementById('uj-poinKosong').value, maxAttempt: document.getElementById('uj-maxAttempt').value 
+            kodeLama: modeEdit, 
+            kodeSekolah: currentUser.kode_sekolah, 
+            kode: safeVal('uj-kode'), 
+            namaUjian: safeVal('uj-nama'), 
+            mapel: safeVal('uj-mapel'), 
+            jenjang: getMultiValues('uj-jenjang'), 
+            kelas: getMultiValues('uj-kelas'), 
+            rombel: getMultiValues('uj-rombel'), 
+            asalSekolah: getMultiValues('uj-asal'), 
+            jmlSoal: safeVal('uj-jmlSoal', 30), 
+            tglMulai: safeVal('uj-tglMulai'), 
+            jamMulai: safeVal('uj-jamMulai'), 
+            jamSelesai: safeVal('uj-jamSelesai'), 
+            durasi: safeVal('uj-durasi', 90), 
+            acakSoal: safeVal('uj-acakSoal', 'Ya'), 
+            acakOpsi: safeVal('uj-acakOpsi', 'Ya'), 
+            poinBenar: safeVal('uj-poinBenar', 10), 
+            poinSalah: safeVal('uj-poinSalah', 0), 
+            poinKosong: safeVal('uj-poinKosong', 0), 
+            maxAttempt: safeVal('uj-maxAttempt', 1),
+            wajibKamera: safeVal('uj-kamera', 'Tidak')
         }; 
         
         let targetAction = modeEdit ? "updateDataUjian" : "simpanDataUjian";
+        
         panggilAPI(targetAction, p)
-        .then(res => { if(res.success) { tutupModal('modalAddUjian'); loadDashboardData(); alert(res.message); } })
-        .catch(err => alert("Gagal simpan ujian: " + err.message));
+        .then(res => { 
+            if(btn) { btn.innerHTML = oriText; btn.disabled = false; }
+            if(res.success) { 
+                tutupModal('modalAddUjian'); 
+                
+                // Bersihkan cache agar tabel langsung update
+                localStorage.removeItem("cbt_dash_" + currentUser.kode_sekolah);
+                
+                // Segarkan UI
+                loadDashboardData(); 
+                
+                if (typeof tampilkanNotif === 'function') {
+                    tampilkanNotif('✅ ' + res.message);
+                } else {
+                    alert(res.message); 
+                }
+            } else {
+                alert("Gagal: " + res.message);
+            }
+        })
+        .catch(err => {
+            if(btn) { btn.innerHTML = oriText; btn.disabled = false; }
+            alert("Gagal koneksi ke server: " + err.message);
+            console.error("Detail Error API:", err);
+        });
     }
 
     function bukaModalImporGlobal() { 
