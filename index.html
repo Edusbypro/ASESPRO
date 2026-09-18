@@ -325,7 +325,17 @@
         <div id="view-kelola-soal" class="view-section hidden">
           <div class="d-flex justify-content-between align-items-center mb-4">
             <div><button class="btn btn-outline-secondary btn-sm mb-2 fw-bold rounded-pill px-3" onclick="navigasi('ujian', document.querySelector('.nav-item[data-menu=\'ujian\']'))"><i class="bi bi-arrow-left"></i> Kembali</button><h5 class="fw-bold m-0 text-dark"><i class="bi bi-pencil-square text-primary me-2"></i>Studio Penulisan Soal</h5><small class="text-muted fw-bold" id="info-ujian-aktif">Memuat data...</small></div>
-            <div class="d-flex gap-2"><button class="btn btn-outline-primary px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="importDariWord(event)"><i class="bi bi-file-earmark-word me-2"></i>Impor Word</button><button class="btn btn-outline-danger px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="exportKeWord()"><i class="bi bi-filetype-doc me-2"></i>Ekspor Docs</button><button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="simpanSoalSekarang(event)"><i class="bi bi-cloud-arrow-up me-2"></i>Simpan Soal Ini</button></div>
+            <div class="d-flex gap-2 text-nowrap flex-wrap justify-content-end">
+    <button class="btn btn-outline-primary px-3 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="importDariWord(event)"><i class="bi bi-file-earmark-word me-1"></i>Impor Word</button>
+    <button class="btn btn-outline-danger px-3 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="exportKeWord()"><i class="bi bi-filetype-doc me-1"></i>Ekspor Docs</button>
+    <!-- Tombol Preview Soal Tunggal (Yang Anda buat sebelumnya) -->
+    <button class="btn btn-outline-info px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="previewSoalSiswa()"><i class="bi bi-eye-fill me-2"></i>Preview Soal Ini</button>
+    
+    <!-- TOMBOL BARU: SIMULASI UJIAN PENUH -->
+    <button class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="mulaiSimulasiUjianGuru()"><i class="bi bi-play-circle-fill me-2"></i>Simulasi Ujian</button>
+    
+    <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="simpanSoalSekarang(event)"><i class="bi bi-cloud-arrow-up me-2"></i>Simpan Soal Ini</button>
+</div>
           </div>
           <div class="card border-0 shadow-sm rounded-4 mb-4"><div class="card-body p-4 bg-white border border-info-subtle rounded-4"><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="fw-bold text-info m-0"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Navigasi Nomor Soal</h6></div><div class="d-flex flex-wrap gap-2" id="navigasi-nomor-soal"></div></div></div>
           
@@ -772,6 +782,29 @@
   
 
   <!-- ================= KUMPULAN SEMUA MODAL POP-UP ================= -->
+  
+  <!-- MODAL PREVIEW TAMPILAN SISWA -->
+  <div class="modal fade" id="modalPreviewSoal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+          <div class="modal-content shadow-lg border-0 rounded-4">
+              <div class="modal-header bg-info bg-opacity-10 border-bottom pb-3 pt-4 px-4 d-flex justify-content-between align-items-center rounded-top-4">
+                  <h5 class="modal-title fw-bold text-info-emphasis"><i class="bi bi-eye-fill me-2"></i>Preview Tampilan Siswa</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body p-4 bg-light" style="min-height: 50vh;">
+                  <div class="alert alert-info small mb-4 border-info shadow-sm">
+                      <i class="bi bi-info-circle-fill me-2"></i>Ini adalah simulasi tampilan yang akan dilihat siswa di layar CBT. Tombol pilihan sengaja dimatikan (disabled) pada mode ini.
+                  </div>
+                  <!-- Mockup Card Ujian -->
+                  <div class="card border border-primary-subtle shadow-sm rounded-4 h-100">
+                      <div class="card-body p-4 fs-5" id="area-preview-siswa">
+                          <!-- Konten diinjeksi oleh JS -->
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
   
   <!-- MODAL IMPORT WORD -->
   <div class="modal fade" id="modalImportWord" tabindex="-1">
@@ -1387,6 +1420,9 @@
 
     // SENSOR ANTI-NYONTEK (Keluar Tab / Minimize Browser)
     document.addEventListener("visibilitychange", () => {
+        // Abaikan jika sedang simulasi guru
+        if (window.isModeSimulasiGuru) return; 
+
         if(document.body.classList.contains('cbt-mode') && document.hidden && !window.isSubmitting) {
             cheatCount++;
             if(cheatCount >= 3) {
@@ -1397,24 +1433,23 @@
             }
         }
     });
-	
-	// SENSOR DETEKSI KELUAR FULLSCREEN (TERMASUK TOMBOL ESCAPE)
+    
+    // SENSOR DETEKSI KELUAR FULLSCREEN
     document.addEventListener("fullscreenchange", handleFullscreenExit);
     document.addEventListener("webkitfullscreenchange", handleFullscreenExit);
     document.addEventListener("msfullscreenchange", handleFullscreenExit);
 
     function handleFullscreenExit() {
-        // Jika siswa sedang dalam mode ujian (cbt-mode) DAN status layarnya tidak lagi fullscreen DAN sedang tidak kumpul ujian
+        // Abaikan jika sedang simulasi guru
+        if (window.isModeSimulasiGuru) return; 
+
         if (document.body.classList.contains('cbt-mode') && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement && !window.isSubmitting) {
-            cheatCount++; // Menambah hitungan kecurangan yang sudah ada di sistem Anda
-            
+            cheatCount++; 
             if (cheatCount >= 3) {
                 alert("🚨 PELANGGARAN FATAL! 🚨\nAnda telah keluar dari mode Layar Penuh (Fullscreen) sebanyak 3 kali.\nUjian dihentikan paksa dan dikumpulkan secara otomatis!");
                 kumpulkanUjian(true);
             } else {
                 alert(`⚠️ PERINGATAN KECURANGAN (${cheatCount}/3)! ⚠️\nAnda dilarang keluar dari mode Layar Penuh selama ujian berlangsung! Silakan masuk kembali ke mode layar penuh.`);
-                
-                // Coba paksa tarik kembali ke fullscreen (beberapa browser mengizinkan jika dipicu event perpindahan ini)
                 let elem = document.documentElement;
                 if (elem.requestFullscreen) {
                     elem.requestFullscreen().catch(err => console.log("Perlu interaksi klik untuk fullscreen ulang."));
@@ -4675,6 +4710,247 @@ function testKoneksiHybrid() {
             document.getElementById('container-bahas-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Gagal memuat pembahasan: ${err.message}</div>`;
         });
     }
+
+// ==========================================
+    // FUNGSI PREVIEW TAMPILAN SISWA LANGSUNG DARI EDITOR
+    // ==========================================
+    function previewSoalSiswa() {
+        let tipe = document.getElementById('input-bentuk-soal').value;
+        let nomor = currentSoalNomor || 1;
+        
+        // Tarik teks langsung dari editor yang sedang diketik (tanpa harus simpan dulu)
+        let pertanyaan = tinymce.get('editor-pertanyaan') ? tinymce.get('editor-pertanyaan').getContent() : (document.getElementById('editor-pertanyaan') ? document.getElementById('editor-pertanyaan').value : '');
+        
+        let htmlPreview = `<h5 class="fw-bold text-primary mb-4 border-bottom pb-2">Soal Nomor ${nomor}</h5><div class="mb-4 text-dark" style="line-height: 1.6;">${pertanyaan || '<span class="text-muted small"><em>Belum ada teks pertanyaan...</em></span>'}</div>`;
+        
+        if (tipe.includes('MCMA')) {
+            htmlPreview += `<div class="alert alert-info small mb-3"><i class="bi bi-info-circle-fill me-2"></i>Anda dapat memilih lebih dari satu jawaban (ceklis).</div>`;
+            ['A','B','C','D'].forEach(opt => {
+                let teksOpsi = tinymce.get('editor-opsi-'+opt) ? tinymce.get('editor-opsi-'+opt).getContent() : (document.getElementById('editor-opsi-'+opt) ? document.getElementById('editor-opsi-'+opt).value : '');
+                if(!teksOpsi.trim()) return;
+                htmlPreview += `
+                <label class="form-check border rounded-4 p-3 mb-3 shadow-sm d-flex align-items-center bg-white cbt-opsi-wrapper" style="width: 100%;">
+                    <input class="form-check-input m-0 me-3 fs-4 flex-shrink-0 border-secondary" type="checkbox" value="${opt}" disabled>
+                    <div class="d-flex w-100 fs-6 m-0 align-items-start">
+                        <div class="fw-bold me-2 text-dark">${opt}.</div>
+                        <div class="flex-grow-1 cbt-opsi-text text-dark">${teksOpsi}</div>
+                    </div>
+                </label>`;
+            });
+        } else if (tipe.includes('Kategori') || tipe.includes('Kompleks') || tipe.includes('Katagori')) {
+            htmlPreview += `<div class="table-responsive"><table class="table table-bordered align-middle bg-white shadow-sm rounded">
+                                <thead class="table-light text-center"><tr><th>Pernyataan</th><th style="width:100px;">Benar</th><th style="width:100px;">Salah</th></tr></thead>
+                                <tbody>`;
+            ['A','B','C','D'].forEach(opt => {
+                if(!document.getElementById('editor-opsi-'+opt)) return; 
+                let teksOpsi = tinymce.get('editor-opsi-'+opt) ? tinymce.get('editor-opsi-'+opt).getContent() : document.getElementById('editor-opsi-'+opt).value;
+                if(!teksOpsi.trim()) return;
+                htmlPreview += `<tr>
+                                    <td><div class="cbt-opsi-text text-dark">${teksOpsi}</div></td>
+                                    <td class="text-center bg-success bg-opacity-10">
+                                        <input class="form-check-input fs-4 border-success m-auto" style="display:block;" type="radio" name="pgk_prev_${opt}" disabled>
+                                    </td>
+                                    <td class="text-center bg-danger bg-opacity-10">
+                                        <input class="form-check-input fs-4 border-danger m-auto" style="display:block;" type="radio" name="pgk_prev_${opt}" disabled>
+                                    </td>
+                                 </tr>`;
+            });
+            htmlPreview += `</tbody></table></div>`;
+        } else if (tipe.includes('Uraian') || tipe.includes('Isian') || tipe.includes('Tugas')) {
+            htmlPreview += `<div class="mt-4"><label class="fw-bold mb-2 text-danger"><i class="bi bi-pencil-square me-2"></i>Ketik Jawaban Anda:</label><textarea class="form-control border-primary p-3 rounded-4 shadow-sm" rows="5" placeholder="Siswa akan mengetik jawaban secara detail di sini..." disabled></textarea></div>`;
+        } else { // PG Biasa
+            ['A','B','C','D'].forEach(opt => {
+                let teksOpsi = tinymce.get('editor-opsi-'+opt) ? tinymce.get('editor-opsi-'+opt).getContent() : (document.getElementById('editor-opsi-'+opt) ? document.getElementById('editor-opsi-'+opt).value : '');
+                if(!teksOpsi.trim()) return;
+                htmlPreview += `
+                <label class="form-check border rounded-4 p-3 mb-3 shadow-sm d-flex align-items-center bg-white cbt-opsi-wrapper" style="width: 100%;">
+                    <input class="form-check-input m-0 me-3 fs-4 flex-shrink-0 border-secondary" type="radio" name="opsi_prev_pg" value="${opt}" disabled>
+                    <div class="d-flex w-100 fs-6 m-0 align-items-start">
+                        <div class="fw-bold me-2 text-dark">${opt}.</div>
+                        <div class="flex-grow-1 cbt-opsi-text text-dark">${teksOpsi}</div>
+                    </div>
+                </label>`;
+            });
+        }
+
+        document.getElementById('area-preview-siswa').innerHTML = htmlPreview;
+        bukaModal('modalPreviewSoal');
+    }
+
+// ==========================================
+    // FUNGSI SIMULASI UJIAN PENUH (UNTUK GURU)
+    // Murni berjalan di peramban (client-side), tidak mengirim data ke database
+    // ==========================================
+    function mulaiSimulasiUjianGuru() {
+        if (!bankSoalAktif || bankSoalAktif.length === 0) {
+            alert("Belum ada soal untuk disimulasikan!");
+            return;
+        }
+
+        // Cek durasi dari data ujian saat ini
+        let ujianAktif = activeUjianData.find(u => u.kode === currentUjianId);
+        let durasi = ujianAktif ? parseInt(ujianAktif.durasi) : 90; 
+
+        if (!confirm(`Mulai simulasi tampilan CBT Siswa untuk Asesmen ini?\n\n- Alarm Anti-Cheating DIMATIKAN.\n- Kamera Pengawas DIMATIKAN.\n- Jawaban TIDAK AKAN DISIMPAN ke Database.\n\nKlik OK untuk mulai simulasi.`)) {
+            return;
+        }
+
+        // 1. Simpan soal yang sedang diedit (agar datanya terikat sebelum disimulasi)
+        try { tinymce.triggerSave(); } catch (e) {}
+
+        // 2. Beri penanda gaib bahwa guru sedang dalam mode simulasi
+        window.isModeSimulasiGuru = true;
+
+        // 3. Sembunyikan layar admin, Munculkan layar siswa
+        document.getElementById('screen-admin').classList.add('hidden');
+        document.getElementById('screen-siswa').classList.remove('hidden');
+        document.getElementById('screen-siswa').style.display = 'flex'; // Paksa Tampil
+        
+        // Sembunyikan sidebar siswa (karena guru tidak butuh menu navigasi siswa)
+        let sidebarSiswa = document.querySelector('#screen-siswa .sidebar');
+        if (sidebarSiswa) sidebarSiswa.style.display = 'none';
+
+        // 4. Siapkan arena tempur CBT
+        document.getElementById('page-title-siswa').innerText = "MODE SIMULASI GURU";
+        document.querySelectorAll('.view-section-siswa').forEach(el => el.classList.add('hidden'));
+        document.getElementById('view-siswa-ruang-ujian').classList.remove('hidden');
+        document.getElementById('cbt-judul-ujian').innerHTML = `<span class="badge bg-danger me-2">SIMULASI</span> ` + localStorage.getItem('cbt_active_ujian_nama');
+        document.getElementById('pengawas-kamera-container').classList.add('d-none'); // Matikan kotak kamera
+
+        // 5. Salin data dari Bank Soal Aktif ke Variabel CBT Siswa
+        cbtSoal = JSON.parse(JSON.stringify(bankSoalAktif)); // Deep copy agar aman
+        cbtJawaban = {}; 
+        cbtRagu = {}; 
+        cbtIndexAktif = 0; 
+        cbtWaktuSisa = durasi * 60; // Setel waktu berdasarkan durasi ujian
+        
+        // 6. Jalankan Mesin Utama CBT
+        mulaiTimerCBT(); 
+        renderNavigasiCBT(); 
+        tampilkanSoalCBT(0);
+    }
+
+    // ==========================================
+    // MODIFIKASI FUNGSI KUMPULKAN UJIAN (AGAR TAHU KALAU INI GURU)
+    // ==========================================
+    // Cari fungsi kumpulkanUjian() yang lama, lalu ganti baris awalnya menjadi seperti ini:
+    
+    // GANTI FUNGSI LAMA ANDA MENJADI INI:
+    const fungsiKumpulkanUjianLama = kumpulkanUjian; // Backup fungsi asli (Optional, tapi aman)
+    
+    kumpulkanUjian = function(paksaSelesai = false) {
+        // Cekungan Khusus Jika yang menekan "Kumpulkan" adalah GURU (Mode Simulasi)
+        if (window.isModeSimulasiGuru) {
+            let dijawabCount = Object.keys(cbtJawaban).filter(k => {
+                let j = cbtJawaban[k];
+                if(typeof j === 'string') return j.trim() !== "";
+                if(Array.isArray(j)) return j.length > 0;
+                if(typeof j === 'object') return Object.keys(j).length > 0;
+                return false;
+            }).length;
+
+            if(!paksaSelesai && !confirm(`[MODE SIMULASI]\nAnda telah menjawab ${dijawabCount} dari ${cbtSoal.length} soal.\n\nYakin ingin mengakhiri simulasi dan kembali ke Studio Soal?`)) {
+                return;
+            }
+
+            // Hentikan simulasi, bersihkan jejak
+            clearInterval(cbtTimerInterval);
+            window.isModeSimulasiGuru = false; 
+            
+            // Kembalikan ke layar Studio Soal Admin
+            document.getElementById('screen-siswa').classList.add('hidden');
+            document.getElementById('screen-siswa').style.display = ''; 
+            let sidebarSiswa = document.querySelector('#screen-siswa .sidebar');
+            if (sidebarSiswa) sidebarSiswa.style.display = ''; // Munculkan lagi sidebarnya
+
+            document.getElementById('screen-admin').classList.remove('hidden');
+            
+            // Render ulang soal agar kembali segar
+            let lastNo = localStorage.getItem('cbt_active_soal_nomor') || 1;
+            bukaEditorSoal(lastNo);
+            
+            alert("Simulasi Ujian Selesai. Selamat kembali ke Studio Soal!");
+            return; // Hentikan fungsi di sini, jangan kirim data ke Google Sheets
+        }
+
+        // --- JIKA YANG MENGERJAKAN ADALAH SISWA ASLI ---
+        // (Di bawah ini adalah logika kumpulkan ujian asli Anda yang lama)
+        
+        let dijawabCount = Object.keys(cbtJawaban).filter(k => {
+            let j = cbtJawaban[k];
+            if(typeof j === 'string') return j.trim() !== "";
+            if(Array.isArray(j)) return j.length > 0;
+            if(typeof j === 'object') return Object.keys(j).length > 0;
+            return false;
+        }).length;
+        
+        window.isSubmitting = true;
+
+        if(!paksaSelesai && !confirm(`Anda telah menjawab ${dijawabCount} dari ${cbtSoal.length} soal.\nYakin ingin mengumpulkan ujian sekarang?\n\nPerhatian: Anda tidak bisa mengubah jawaban setelah dikumpulkan!`)) {
+            window.isSubmitting = false;
+            return;
+        }
+
+        clearInterval(cbtTimerInterval);
+        document.getElementById('cbt-area-soal').innerHTML = '<div class="text-center py-5"><span class="spinner-border text-primary fs-2"></span><br><br>Menyimpan data dan mengoreksi jawaban otomatis...</div>';
+        
+        let totalNilai = 0; let adaEssay = false;
+        
+        cbtSoal.forEach(s => {
+            let jwb = cbtJawaban[s.nomor]; let tipeSoal = String(s.tipe).trim();
+            if (tipeSoal.includes('MCMA')) {
+                let jwbStr = Array.isArray(jwb) ? jwb.sort().join('') : "";
+                let kncStr = String(s.kunci || "").replace(/[^A-D]/g, '').split('').sort().join(''); 
+                if (jwbStr === kncStr && jwbStr !== "") totalNilai += Number(s.poinBenar || 10);
+                else if (jwbStr === "") totalNilai += Number(s.poinKosong || 0);
+                else totalNilai += Number(s.poinSalah || 0);
+            } else if (tipeSoal.includes('Kategori') || tipeSoal.includes('Kompleks') || tipeSoal.includes('Katagori')) {
+                try {
+                    let kObj = JSON.parse(s.kunci || "{}"); let jObj = typeof jwb === 'object' ? jwb : {};
+                    let isBenarSemua = true; let dijawabBerapa = Object.keys(jObj).length;
+                    ['A','B','C'].forEach(o => { if (s['opsi'+o] && jObj[o] !== kObj[o]) isBenarSemua = false; });
+                    if (dijawabBerapa === 0) totalNilai += Number(s.poinKosong || 0);
+                    else if (isBenarSemua) totalNilai += Number(s.poinBenar || 10);
+                    else totalNilai += Number(s.poinSalah || 0);
+                } catch(e) { totalNilai += Number(s.poinSalah || 0); }
+            } else if (tipeSoal.includes('Ganda') || tipeSoal.includes('Isian')) {
+                jwb = jwb || "";
+                if(jwb.toString().trim().toUpperCase() === String(s.kunci).trim().toUpperCase()) totalNilai += Number(s.poinBenar || 10);
+                else if (jwb.trim() === "") totalNilai += Number(s.poinKosong || 0);
+                else totalNilai += Number(s.poinSalah || 0);
+            } else { adaEssay = true; } 
+        });
+
+        const payloadHasil = { kodeSekolah: currentUser.kode_sekolah, kodeUjian: cbtSoal[0].kodeUjian, userSiswa: currentUser.username, namaSiswa: currentUser.nama, kelas: currentUser.kelas, jawabanJSON: JSON.stringify(cbtJawaban), nilai: totalNilai, status: adaEssay ? "Menunggu Koreksi Guru" : "Selesai Dinilai" };
+        
+        panggilAPI("simpanHasilUjianBackend", payloadHasil)
+        .then(res => {
+            if (document.exitFullscreen) { document.exitFullscreen().catch(err => console.log(err)); }
+            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen().catch(err => console.log(err)); }
+            else if (document.msExitFullscreen) { document.msExitFullscreen().catch(err => console.log(err)); }
+
+            if (res.success) {
+                document.body.classList.remove('cbt-mode'); 
+                let infoTambahan = adaEssay ? "\nSebagian soal Kompleks/Uraian menunggu koreksi manual Guru." : `\nSkor Asesmen Anda: ${totalNilai}`;
+                alert("Asesmen berhasil diselesaikan!" + infoTambahan);
+                
+                hentikanKamera(); 
+                
+                window.isSubmitting = false; 
+                navigasiSiswa('beranda', document.querySelector('#screen-siswa .sidebar-nav .nav-item')); 
+                initPortalSiswa();
+            } else {
+                window.isSubmitting = false;
+                alert("Gagal menyimpan hasil: " + res.message);
+                document.getElementById('cbt-area-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Gagal menyimpan hasil. Silakan ulangi pengumpulan.</div>`;
+            }
+        })
+        .catch(err => {
+            window.isSubmitting = false;
+            alert("GAGAL mengirim ke server: " + err.message + "\nSilakan coba klik Kumpulkan lagi!");
+            document.getElementById('cbt-area-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Koneksi terputus. Muat ulang halaman (F5) lalu kumpulkan lagi.</div>`;
+        });
+    };
 
 </script>
 
