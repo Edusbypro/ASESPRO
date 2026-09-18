@@ -700,7 +700,7 @@
                             <div class="d-flex align-items-center gap-3">
                                 <!-- Kontainer Kamera Pengawas (Disembunyikan secara default) -->
                                 <div id="pengawas-kamera-container" class="rounded overflow-hidden border border-2 border-danger shadow-sm d-none" style="width: 120px; height: 90px; background: #000; position: relative;">
-                                    <video id="pengawas-video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover;"></video>
+                                    <video id="pengawas-video" autoplay playsinline muted disablePictureInPicture disableRemotePlayback width="120" height="90" style="object-fit: cover;"></video>
                                     <div class="position-absolute bottom-0 w-100 text-center bg-danger bg-opacity-75 text-white" style="font-size: 0.6rem; padding: 2px 0;"><i class="bi bi-record-circle me-1"></i>PENGAWASAN AKTIF</div>
                                 </div>
                                 <div class="badge bg-white text-danger fs-5 px-3 py-2 rounded-pill shadow-sm border"><i class="bi bi-clock-history me-2"></i><span id="cbt-timer" class="fw-bold">00:00:00</span></div>
@@ -974,31 +974,35 @@
   <!-- MODAL UJIAN -->
   <div class="modal fade" id="modalAddUjian" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header border-0 pb-0 pt-4 px-4"><h5 class="modal-title fw-bold" id="title-modal-ujian">Jadwal Ujian Baru</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-content shadow-lg border-0">
+        <div class="modal-header border-0 pb-0 pt-4 px-4">
+            <h5 class="modal-title fw-bold text-primary" id="title-modal-ujian"><i class="bi bi-journal-plus me-2"></i>Buat Asesmen Baru</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
         <div class="modal-body p-4">
           <form id="formAddUjian" onsubmit="simpanUjianBaru(event)">
             <input type="hidden" id="uj-kode-lama">
-            <div class="row g-3">
-                <div class="col-md-3"><label class="form-label small fw-bold">Acak Urutan Soal</label><select id="uj-acakSoal" class="form-select"><option value="Ya">Ya</option><option value="Tidak">Tidak</option></select></div>
-                <div class="col-md-3"><label class="form-label small fw-bold">Acak Opsi</label><select id="uj-acakOpsi" class="form-select"><option value="Ya">Ya</option><option value="Tidak">Tidak</option></select></div>
-                <div class="col-md-3">
-                    <label class="form-label small fw-bold text-danger"><i class="bi bi-camera-video-fill me-1"></i>Wajib Kamera</label>
-                    <select id="uj-kamera" class="form-select border-danger text-danger fw-bold">
-                        <option value="Tidak">Tidak</option>
-                        <option value="Ya">Ya, Wajib</option>
-                    </select>
+            
+            <!-- 1. INFORMASI DASAR -->
+            <div class="row g-3 mb-4 border-bottom pb-4">
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Kode Asesmen <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="uj-kode" placeholder="Misal: MAT6P1" required>
                 </div>
-                
+                <div class="col-md-8">
+                    <label class="form-label small fw-bold">Nama Asesmen <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="uj-nama" placeholder="Misal: Asesmen Matematika Kelas 6 Paket 1" required>
+                </div>
                 <div class="col-md-6">
-                    <label class="form-label small fw-bold">Mata Pelajaran</label>
+                    <label class="form-label small fw-bold">Mata Pelajaran <span class="text-danger">*</span></label>
                     <select id="uj-mapel" class="form-select" required>
+                        <option value="">Pilih Mapel...</option>
                         <option value="Pendidikan Agama Islam">Pendidikan Agama Islam</option>
-						<option value="Pendidikan Agama Kristen">Pendidikan Agama Kristen</option>
-						<option value="Pendidikan Agama Katolik">Pendidikan Agama Katolik</option>
-						<option value="Pendidikan Agama Hindu">Pendidikan Agama Hindu</option>
-						<option value="Pendidikan Agama Budha">Pendidikan Agama Budha</option>
-						<option value="Pendidikan Agama KongHuChu">Pendidikan Agama KongHuChu</option>
+                        <option value="Pendidikan Agama Kristen">Pendidikan Agama Kristen</option>
+                        <option value="Pendidikan Agama Katolik">Pendidikan Agama Katolik</option>
+                        <option value="Pendidikan Agama Hindu">Pendidikan Agama Hindu</option>
+                        <option value="Pendidikan Agama Budha">Pendidikan Agama Budha</option>
+                        <option value="Pendidikan Agama KongHuChu">Pendidikan Agama KongHuChu</option>
                         <option value="Pendidikan Pancasila">Pendidikan Pancasila</option>
                         <option value="Bahasa Indonesia">Bahasa Indonesia</option>
                         <option value="Matematika">Matematika</option>
@@ -1006,53 +1010,107 @@
                         <option value="PJOK">PJOK</option>
                         <option value="Seni Budaya">Seni Budaya</option>
                         <option value="Bahasa Inggris">Bahasa Inggris</option>
-						<option value="Bahasa Jawa">Bahasa Jawa</option>
-						<option value="Ekstrakurikuler">Ekstrakurikuler</option>
-						<option value="Ko Kurikuler">Ko Kurikuler</option>
-						<option value="Komputer">Komputer</option>
-						<option value="Koding dan AI">Koding dan AI</option>
+                        <option value="Bahasa Jawa">Bahasa Jawa</option>
+                        <option value="Ekstrakurikuler">Ekstrakurikuler</option>
+                        <option value="Ko Kurikuler">Ko Kurikuler</option>
+                        <option value="Komputer">Komputer</option>
+                        <option value="Koding dan AI">Koding dan AI</option>
                         <option value="Try Out TKA Umum">Try Out TKA Umum</option>
                     </select>
                 </div>
-                <div class="col-md-3"><label class="form-label small fw-bold">Jml Soal</label><input type="number" id="uj-jmlSoal" class="form-control" value="30" required></div>
-                <div class="col-md-3"><label class="form-label small fw-bold">Durasi (Menit)</label><input type="number" id="uj-durasi" class="form-control" value="90" required></div>
-                
-                <div class="col-12 mt-4 border-top pt-3">
-                    <h6 class="fw-bold text-primary mb-1"><i class="bi bi-person-bounding-box me-2"></i>Target Siswa</h6>
-                    <div class="alert alert-info py-2 small mb-3">
-                        <i class="bi bi-info-circle-fill me-1"></i> Tahan tombol <b>CTRL</b> (atau Command di Mac) saat mengklik untuk memilih lebih dari satu. <b>Biarkan tidak terpilih (kosong)</b> jika ujian ini terbuka untuk semua.
-                    </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold">Jml Soal</label>
+                    <input type="number" class="form-control" id="uj-jmlSoal" value="30" required>
                 </div>
-                <div class="col-md-3"><label class="form-label small fw-bold">Target Jenjang</label><select id="uj-jenjang" class="form-select" multiple size="4"></select></div>
-                <div class="col-md-2"><label class="form-label small fw-bold">Kelas</label><select id="uj-kelas" class="form-select" multiple size="4"></select></div>
-                <div class="col-md-2"><label class="form-label small fw-bold">Rombel</label><select id="uj-rombel" class="form-select" multiple size="4"></select></div>
-                <div class="col-md-5"><label class="form-label small fw-bold">Target Asal Sekolah</label><select id="uj-asal" class="form-select" multiple size="4"></select></div>
-                
-                <div class="col-12 mt-4 border-top pt-3"><h6 class="fw-bold text-primary mb-0"><i class="bi bi-clock-history me-2"></i>Pengaturan Lanjutan</h6></div>
-                <div class="col-md-4"><label class="form-label small fw-bold">Tanggal</label><input type="date" id="uj-tglMulai" class="form-control" required></div>
-                <div class="col-md-4"><label class="form-label small fw-bold">Jam Mulai</label><input type="time" id="uj-jamMulai" class="form-control" required></div>
-                <div class="col-md-4"><label class="form-label small fw-bold">Jam Selesai</label><input type="time" id="uj-jamSelesai" class="form-control" required></div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold">Durasi (Menit)</label>
+                    <input type="number" class="form-control" id="uj-durasi" value="90" required>
+                </div>
+            </div>
+
+            <!-- 2. PENGATURAN LANJUTAN -->
+            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-gear-fill me-2"></i>Pengaturan Lanjutan</h6>
+            <div class="row g-3 mb-4 border-bottom pb-4">
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Tanggal</label>
+                    <input type="date" class="form-control" id="uj-tglMulai" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Jam Mulai</label>
+                    <input type="time" class="form-control" id="uj-jamMulai" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Jam Selesai</label>
+                    <input type="time" class="form-control" id="uj-jamSelesai" required>
+                </div>
                 
                 <div class="col-md-4">
-                    <label class="form-label small fw-bold text-primary"><i class="bi bi-arrow-repeat me-1"></i>Maksimal Percobaan</label>
-                    <select class="form-select border-primary" id="uj-maxAttempt">
+                    <label class="form-label small fw-bold text-primary">Maks Percobaan</label>
+                    <select id="uj-maxAttempt" class="form-select border-primary">
                         <option value="1">1 Kali Saja</option>
-                        <option value="2">2 Kali Percobaan</option>
-                        <option value="3">3 Kali Percobaan</option>
-                        <option value="5">5 Kali Percobaan</option>
+                        <option value="2">2 Kali (1x Remedial)</option>
+                        <option value="3">3 Kali (2x Remedial)</option>
                         <option value="99">Bebas / Tanpa Batas</option>
                     </select>
                 </div>
-                <div class="col-md-4"><label class="form-label small fw-bold">Acak Urutan Soal</label><select id="uj-acakSoal" class="form-select"><option value="Ya">Ya</option><option value="Tidak">Tidak</option></select></div>
-                <div class="col-md-4"><label class="form-label small fw-bold">Acak Opsi</label><select id="uj-acakOpsi" class="form-select"><option value="Ya">Ya</option><option value="Tidak">Tidak</option></select></div>
-
-                <div class="col-12 mt-4 border-top pt-3"><h6 class="fw-bold text-primary mb-0"><i class="bi bi-calculator me-2"></i>Pengaturan Poin Penilaian</h6></div>
-                <div class="col-md-4"><label class="form-label small fw-bold text-success">Poin Jika Benar</label><input type="number" id="uj-poinBenar" class="form-control border-success" value="10" required></div>
-                <div class="col-md-4"><label class="form-label small fw-bold text-danger">Poin Jika Salah</label><input type="number" id="uj-poinSalah" class="form-control border-danger" value="0" required></div>
-                <div class="col-md-4"><label class="form-label small fw-bold text-warning">Poin Jika Kosong</label><input type="number" id="uj-poinKosong" class="form-control border-warning" value="0" required></div>
-
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Acak Urutan Soal</label>
+                    <select id="uj-acakSoal" class="form-select">
+                        <option value="Ya">Ya</option>
+                        <option value="Tidak">Tidak</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Acak Opsi</label>
+                    <select id="uj-acakOpsi" class="form-select">
+                        <option value="Ya">Ya</option>
+                        <option value="Tidak">Tidak</option>
+                    </select>
+                </div>
             </div>
-            <div class="text-end mt-4 pt-3 border-top"><button type="submit" class="btn btn-primary px-4 fw-bold rounded-pill">Simpan Ujian</button></div>
+
+            <!-- 3. TARGET SISWA & KAMERA -->
+            <div class="row g-3 mb-4 border-bottom pb-4">
+                <div class="col-md-8">
+                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-people-fill me-2"></i>Target Siswa</h6>
+                    <div class="alert alert-info py-2 small mb-2"><i class="bi bi-info-circle me-1"></i> Tahan <b>CTRL</b> untuk pilih banyak. Kosongkan jika untuk semua siswa.</div>
+                    <div class="row g-2">
+                        <div class="col-3"><label class="small text-muted">Jenjang</label><select id="uj-jenjang" class="form-select form-select-sm" multiple size="3"><option value="SD">SD</option><option value="SMP">SMP</option></select></div>
+                        <div class="col-3"><label class="small text-muted">Kelas</label><select id="uj-kelas" class="form-select form-select-sm" multiple size="3"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
+                        <div class="col-2"><label class="small text-muted">Rombel</label><select id="uj-rombel" class="form-select form-select-sm" multiple size="3"><option value="A">A</option><option value="B">B</option></select></div>
+                        <div class="col-4"><label class="small text-muted">Asal Sekolah</label><select id="uj-asal" class="form-select form-select-sm" multiple size="3"></select></div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 border-start">
+                    <h6 class="fw-bold text-danger mb-2"><i class="bi bi-camera-video-fill me-2"></i>Kamera & Poin</h6>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-danger">Wajib Kamera</label>
+                        <select id="uj-kamera" class="form-select border-danger text-danger fw-bold">
+                            <option value="Tidak">Tidak</option>
+                            <option value="Ya">Ya, Wajib</option>
+                        </select>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-4">
+                            <label class="small fw-bold text-success">P. Benar</label>
+                            <input type="number" id="uj-poinBenar" class="form-control form-control-sm border-success text-success fw-bold text-center" value="10" required>
+                        </div>
+                        <div class="col-4">
+                            <label class="small fw-bold text-danger">P. Salah</label>
+                            <input type="number" id="uj-poinSalah" class="form-control form-control-sm border-danger text-danger fw-bold text-center" value="0" required>
+                        </div>
+                        <div class="col-4">
+                            <label class="small fw-bold text-warning">P. Kosong</label>
+                            <input type="number" id="uj-poinKosong" class="form-control form-control-sm border-warning text-warning fw-bold text-center" value="0" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary px-5 py-2 fw-bold rounded-pill shadow-sm"><i class="bi bi-save me-2"></i>Simpan Ujian</button>
+            </div>
           </form>
         </div>
       </div>
@@ -1329,7 +1387,7 @@
 
     // SENSOR ANTI-NYONTEK (Keluar Tab / Minimize Browser)
     document.addEventListener("visibilitychange", () => {
-        if(document.body.classList.contains('cbt-mode') && document.hidden) {
+        if(document.body.classList.contains('cbt-mode') && document.hidden && !window.isSubmitting) {
             cheatCount++;
             if(cheatCount >= 3) {
                 alert("🚨 PELANGGARAN FATAL! 🚨\nAnda telah keluar dari halaman ujian sebanyak 3 kali.\nUjian dihentikan paksa dan dikumpulkan secara otomatis!");
@@ -1346,8 +1404,8 @@
     document.addEventListener("msfullscreenchange", handleFullscreenExit);
 
     function handleFullscreenExit() {
-        // Jika siswa sedang dalam mode ujian (cbt-mode) DAN status layarnya tidak lagi fullscreen
-        if (document.body.classList.contains('cbt-mode') && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+        // Jika siswa sedang dalam mode ujian (cbt-mode) DAN status layarnya tidak lagi fullscreen DAN sedang tidak kumpul ujian
+        if (document.body.classList.contains('cbt-mode') && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement && !window.isSubmitting) {
             cheatCount++; // Menambah hitungan kecurangan yang sudah ada di sistem Anda
             
             if (cheatCount >= 3) {
@@ -1417,8 +1475,21 @@
                 let videoEl = document.getElementById('pengawas-video');
                 let containerCam = document.getElementById('pengawas-kamera-container');
                 
-                videoEl.srcObject = stream;
+                // Trik agar video stream bisa terbaca di semua jenis browser
+                if ("srcObject" in videoEl) {
+                    videoEl.srcObject = stream;
+                } else {
+                    videoEl.src = window.URL.createObjectURL(stream); // Fallback browser lama
+                }
+                
+                videoEl.onloadedmetadata = function(e) {
+                    videoEl.play(); // Putar video HANYA setelah datanya siap
+                };
+                
                 containerCam.classList.remove('d-none'); // Tampilkan kotak video
+                
+                // PAKSA BROWSER MEMUTAR VIDEO KAMERA
+                videoEl.play().catch(e => console.log("Autoplay ditahan browser:", e)); 
                 
                 eksekusiMulai(); // Lanjut ujian
             })
@@ -1601,10 +1672,14 @@ function mulaiTimerCBT() {
             return false;
         }).length;
         
-        if(!paksaSelesai && !confirm(`Anda telah menjawab ${dijawabCount} dari ${cbtSoal.length} soal.\nYakin ingin mengumpulkan ujian sekarang?\n\nPerhatian: Anda tidak bisa mengubah jawaban setelah dikumpulkan!`)) return;
-        
-        // TANDAI BAHWA SISWA SEDANG MENYERAHKAN UJIAN (Mencegah alarm kecurangan menyala)
+        // TANDAI BAHWA SISWA SEDANG MEMBACA POP-UP KONFIRMASI (Matikan sensor sementara)
         window.isSubmitting = true;
+
+        if(!paksaSelesai && !confirm(`Anda telah menjawab ${dijawabCount} dari ${cbtSoal.length} soal.\nYakin ingin mengumpulkan ujian sekarang?\n\nPerhatian: Anda tidak bisa mengubah jawaban setelah dikumpulkan!`)) {
+            // Jika siswa batal mengumpulkan, nyalakan kembali sensornya
+            window.isSubmitting = false;
+            return;
+        }
 
         clearInterval(cbtTimerInterval);
         document.getElementById('cbt-area-soal').innerHTML = '<div class="text-center py-5"><span class="spinner-border text-primary fs-2"></span><br><br>Menyimpan data dan mengoreksi jawaban otomatis...</div>';
@@ -2321,6 +2396,48 @@ function mulaiTimerCBT() {
     }
 
     // ==========================================
+    // FUNGSI SAKLAR AKTIF/DRAFT (ANTI-BOUNCE)
+    // ==========================================
+    function toggleStatusUjianClient(kodeUjian, elCheckbox) {
+        let statusBaru = elCheckbox.checked ? "AKTIF" : "DRAFT";
+        
+        // 1. Update data di layar secara instan (Optimistic UI)
+        let u = activeUjianData.find(x => x.kode === kodeUjian);
+        if(u) u.status = statusBaru;
+        
+        // 2. TIMPA CACHE LOKAL agar saat di-refresh tidak kembali ke Draft!
+        let cacheKey = "cbt_dash_" + currentUser.kode_sekolah;
+        let currentCache = {};
+        try { currentCache = JSON.parse(localStorage.getItem(cacheKey) || "{}"); } catch(e) {}
+        
+        if(currentCache && currentCache.ujian) {
+            let cu = currentCache.ujian.find(x => x.kode === kodeUjian);
+            if(cu) cu.status = statusBaru;
+            localStorage.setItem(cacheKey, JSON.stringify(currentCache));
+        }
+        
+        renderTabelUjianAdmin(); // Render ulang warna label
+        if(typeof tampilkanNotif === "function") tampilkanNotif(`Status asesmen diubah menjadi <b>${statusBaru}</b>`);
+
+        // 3. Kirim perintah ke Google Sheets
+        panggilAPI("toggleStatusUjianBackend", { 
+            kodeSekolah: currentUser.kode_sekolah, 
+            kodeUjian: kodeUjian, 
+            status: statusBaru // Parameter harus "status" sesuai di code.gs
+        })
+        .then(res => {
+            if(!res.success) {
+                alert("Gagal menyimpan status ke server: " + res.message);
+                // Rollback layar jika server menolak
+                elCheckbox.checked = !elCheckbox.checked;
+                if(u) u.status = elCheckbox.checked ? "AKTIF" : "DRAFT";
+                renderTabelUjianAdmin();
+            }
+        })
+        .catch(err => { console.error("Koneksi gagal:", err); });
+    }
+
+    // ==========================================
     // FUNGSI SAKLAR PEMBAHASAN (ANTI-BOUNCE)
     // ==========================================
     function togglePembahasanClient(kodeUjian, elCheckbox) {
@@ -2332,8 +2449,10 @@ function mulaiTimerCBT() {
         
         // 2. TIMPA CACHE LOKAL
         let cacheKey = "cbt_dash_" + currentUser.kode_sekolah;
-        let currentCache = JSON.parse(localStorage.getItem(cacheKey) || "{}");
-        if(currentCache.ujian) {
+        let currentCache = {};
+        try { currentCache = JSON.parse(localStorage.getItem(cacheKey) || "{}"); } catch(e) {}
+        
+        if(currentCache && currentCache.ujian) {
             let cu = currentCache.ujian.find(x => x.kode === kodeUjian);
             if(cu) cu.bukaPembahasan = statusBaru;
             localStorage.setItem(cacheKey, JSON.stringify(currentCache));
@@ -2515,10 +2634,6 @@ function mulaiTimerCBT() {
         panggilAPI("prosesImportUjianGlobal", { kodeSekolah: currentUser.kode_sekolah, kodeAsal: kodeAsal, kodeUjAsal: kodeUjAsal })
         .then(res => { document.getElementById('page-title').innerText = 'Ujian / Asesmen'; if(res.success) { alert(res.message); loadDashboardData(); } else { alert('Gagal mengimpor: ' + res.message); } })
         .catch(err => alert("Gagal: " + err.message));
-    }
-    
-    function togglePembahasanClient(kodeUjian, el) { 
-        panggilAPI("togglePembahasanBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian, statusP: el.checked ? 'Ya' : 'Tidak' }); 
     }
 
     function hapusUjian(kodeUjian, isPermanen = false) { 
