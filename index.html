@@ -3647,8 +3647,12 @@ function mulaiTimerCBT() {
     let dataHasilAktif = [];
     let soalUntukKoreksi = [];
     let koreksiSiswaAktif = null;
+    let currentUjianKodeAktif = null;
+    let currentUjianNamaAktif = null;
 
     function bukaDaftarHasil(kodeUjian, namaUjian) {
+        currentUjianKodeAktif = kodeUjian;
+        currentUjianNamaAktif = namaUjian;
         document.getElementById('title-hasil-ujian').innerText = namaUjian;
         document.getElementById('tb-daftar-hasil').innerHTML = '<tr><td colspan="7" class="text-center py-5"><span class="spinner-border text-primary"></span><br>Menarik rekap data...</td></tr>';
         bukaModal('modalDaftarHasil');
@@ -3672,6 +3676,9 @@ function mulaiTimerCBT() {
             let tgl = h.tanggal; 
             let badgeStatus = h.status.includes('Menunggu') ? `<span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-hourglass-split me-1"></i>${h.status}</span>` : `<span class="badge bg-success px-3 py-2"><i class="bi bi-check-all me-1"></i>${h.status}</span>`;
             html += `<tr>
+                <td class="text-center">
+                    <input class="form-check-input check-hasil-siswa" type="checkbox" value="${idx}">
+                </td>
                 <td class="fw-bold">${h.namaSiswa}<br><small class="text-muted">${h.userSiswa}</small></td>
                 <td>${h.kelas}</td>
                 <td class="small text-muted">${tgl}</td>
@@ -3684,10 +3691,10 @@ function mulaiTimerCBT() {
                 </td>
             </tr>`;
         });
-        document.getElementById('tb-daftar-hasil').innerHTML = html || '<tr><td colspan="6" class="text-center py-5 text-muted">Belum ada siswa yang mengumpulkan asesmen ini.</td></tr>';
+        document.getElementById('tb-daftar-hasil').innerHTML = html || '<tr><td colspan="7" class="text-center py-5 text-muted">Belum ada siswa yang mengumpulkan asesmen ini.</td></tr>';
     }
 
-    // FUNGSI RESET DENGAN PENANGKAPAN TOMBOL AMAN
+    // FUNGSI RESET DENGAN TABEL TETAP TERBUKA
     function resetUjianSiswa(btnElement, idHasil) {
         if(!confirm("YAKIN INGIN MERESET UJIAN INI?\n\nSeluruh jawaban siswa akan Dihapus Permanen. Tombol di portal siswa akan kembali biru dan siswa harus mengulang ujian dari awal!")) return;
         
@@ -3699,7 +3706,11 @@ function mulaiTimerCBT() {
         .then(res => {
             if(res.success) {
                 alert(res.message);
-                tutupModal('modalDaftarHasil');
+                
+                // TABEL TIDAK DITUTUP, melainkan langsung menarik ulang data terbaru
+                if (currentUjianKodeAktif && currentUjianNamaAktif) {
+                    bukaDaftarHasil(currentUjianKodeAktif, currentUjianNamaAktif);
+                }
                 loadDashboardData();
             } else {
                 alert("Gagal mereset: " + res.message);
