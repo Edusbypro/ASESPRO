@@ -247,6 +247,7 @@
         <div class="nav-item" id="menu-supervisi" data-menu="supervisi" onclick="navigasi('supervisi', this)" style="display:none;"><i class="bi bi-shield-check"></i> Supervisi Kepsek</div>
         <div class="nav-item" id="menu-generator" data-menu="generator" onclick="navigasi('generator', this)"><i class="bi bi-magic"></i> Generator Soal AI</div>
         <div class="nav-item" id="menu-rpp" data-menu="rpp" onclick="navigasi('rpp', this)"><i class="bi bi-journal-text"></i> Generator RPP AI</div>
+		<div class="nav-item" id="menu-kinerja" data-menu="kinerja" onclick="navigasi('kinerja', this)"><i class="bi bi-cloud-arrow-up text-success"></i> Kinerja Guru</div>
         <div class="nav-item" id="menu-pengaturan" data-menu="pengaturan" onclick="navigasi('pengaturan', this)"><i class="bi bi-gear"></i> Pengaturan</div>
         <div class="nav-item" id="menu-guru" data-menu="guru" onclick="navigasi('guru', this)"><i class="bi bi-person-workspace"></i> Manajemen Guru</div>
       </div>
@@ -275,10 +276,78 @@
         <div id="view-beranda" class="view-section">
           <div class="banner-welcome mb-4 d-flex justify-content-between align-items-center">
             <div><h4 class="fw-bold mb-1">Selamat datang,<br><span id="welcome-admin">Administrator</span></h4><p class="mb-0 opacity-75 small" id="welcome-school">Administrator - TP 2026/2027</p></div>
-            <div class="text-end p-3"><h1 class="fw-bold m-0" id="live-clock">00.00.00</h1></div>
+            <div class="text-end p-3">
+                <h1 class="fw-bold m-0" id="live-clock" style="font-variant-numeric: tabular-nums;">00.00.00</h1>
+                <!-- TAMBAHAN TANGGAL -->
+                <p class="mb-0 opacity-75 small fw-bold" id="live-date">Memuat Tanggal...</p>
+            </div>
           </div>
-          <div class="card border-0 shadow-sm rounded-4 mb-4"><div class="card-body p-4"><h6 class="fw-bold mb-3 text-dark">Akses Cepat</h6><div class="row g-3"><div class="col-md-3"><div class="quick-card" onclick="navigasi('siswa', document.querySelectorAll('.nav-item')[1])"><i class="bi bi-people-fill text-danger bg-danger bg-opacity-10 p-3 rounded-4"></i><h6 class="fw-bold m-0 mt-3">Data Siswa</h6></div></div><div class="col-md-3"><div class="quick-card" onclick="navigasi('ujian', document.querySelectorAll('.nav-item')[2])"><i class="bi bi-journal-text text-danger bg-danger bg-opacity-10 p-3 rounded-4"></i><h6 class="fw-bold m-0 mt-3">Ujian / Asesmen</h6></div></div><div class="col-md-3"><div class="quick-card" onclick="navigasi('kartu', document.querySelectorAll('.nav-item')[4])"><i class="bi bi-person-badge-fill text-danger bg-danger bg-opacity-10 p-3 rounded-4"></i><h6 class="fw-bold m-0 mt-3">Kartu Peserta</h6></div></div><div class="col-md-3"><div class="quick-card" onclick="navigasi('laporan', document.querySelectorAll('.nav-item')[6])"><i class="bi bi-file-earmark-bar-graph-fill text-danger bg-danger bg-opacity-10 p-3 rounded-4"></i><h6 class="fw-bold m-0 mt-3">Laporan Nilai</h6></div></div></div></div></div>
-          <div class="row g-3 mb-4"><div class="col-md-3"><div class="stat-card d-flex align-items-center gap-3"><div class="bg-danger bg-opacity-10 p-3 rounded-3 text-danger"><i class="bi bi-people-fill fs-4"></i></div><div><small class="text-muted">Total Siswa</small><h4 class="fw-bold m-0" id="stat-tot-siswa">0</h4></div></div></div><div class="col-md-3"><div class="stat-card d-flex align-items-center gap-3"><div class="bg-success bg-opacity-10 p-3 rounded-3 text-success"><i class="bi bi-person-check-fill fs-4"></i></div><div><small class="text-muted">Siswa Aktif</small><h4 class="fw-bold m-0" id="stat-akt-siswa">0</h4></div></div></div><div class="col-md-3"><div class="stat-card d-flex align-items-center gap-3"><div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning"><i class="bi bi-journal-check fs-4"></i></div><div><small class="text-muted">Ujian Dibuat</small><h4 class="fw-bold m-0" id="stat-tot-ujian">0</h4></div></div></div><div class="col-md-3"><div class="stat-card d-flex align-items-center gap-3"><div class="bg-info bg-opacity-10 p-3 rounded-3 text-info"><i class="bi bi-card-list fs-4"></i></div><div><small class="text-muted">Butir Soal</small><h4 class="fw-bold m-0" id="stat-tot-soal">0</h4></div></div></div></div>
+          <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+              <h6 class="fw-bold mb-3 text-dark">Akses Cepat</h6>
+              <div class="row g-3">
+                <div class="col-md-2">
+                  <div class="quick-card" onclick="navigasi('siswa', document.querySelectorAll('.nav-item')[1])">
+                    <i class="bi bi-people-fill text-danger bg-danger bg-opacity-10 p-3 rounded-4"></i>
+                    <h6 class="fw-bold m-0 mt-3">Data Siswa</h6>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="quick-card" onclick="navigasi('ujian', document.querySelectorAll('.nav-item')[2])">
+                    <i class="bi bi-journal-text text-danger bg-danger bg-opacity-10 p-3 rounded-4"></i>
+                    <h6 class="fw-bold m-0 mt-3">Ujian / Asesmen</h6>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="quick-card" onclick="navigasi('kartu', document.querySelectorAll('.nav-item')[4])">
+                    <i class="bi bi-person-badge-fill text-danger bg-danger bg-opacity-10 p-3 rounded-4"></i>
+                    <h6 class="fw-bold m-0 mt-3">Kartu Peserta</h6>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="quick-card" onclick="navigasi('laporan', document.querySelectorAll('.nav-item')[6])">
+                    <i class="bi bi-file-earmark-bar-graph-fill text-danger bg-danger bg-opacity-10 p-3 rounded-4"></i>
+                    <h6 class="fw-bold m-0 mt-3">Laporan Nilai</h6>
+                  </div>
+                </div>
+                <!-- TAMBAHAN: TOMBOL KINERJA GURU -->
+                <div class="col-md-3">
+                  <div class="quick-card border-success" onclick="bukaModal('modalKinerjaGuru')">
+                    <i class="bi bi-cloud-arrow-up-fill text-success bg-success bg-opacity-10 p-3 rounded-4"></i>
+                    <h6 class="fw-bold m-0 mt-3 text-success">Upload Kinerja</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BARIS KARTU STATISTIK (DIBIARKAN TETAP SAMA) -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-3">
+              <div class="stat-card d-flex align-items-center gap-3">
+                <div class="bg-danger bg-opacity-10 p-3 rounded-3 text-danger"><i class="bi bi-people-fill fs-4"></i></div>
+                <div><small class="text-muted">Total Siswa</small><h4 class="fw-bold m-0" id="stat-tot-siswa">0</h4></div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="stat-card d-flex align-items-center gap-3">
+                <div class="bg-success bg-opacity-10 p-3 rounded-3 text-success"><i class="bi bi-person-check-fill fs-4"></i></div>
+                <div><small class="text-muted">Siswa Aktif</small><h4 class="fw-bold m-0" id="stat-akt-siswa">0</h4></div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="stat-card d-flex align-items-center gap-3">
+                <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning"><i class="bi bi-journal-check fs-4"></i></div>
+                <div><small class="text-muted">Ujian Dibuat</small><h4 class="fw-bold m-0" id="stat-tot-ujian">0</h4></div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="stat-card d-flex align-items-center gap-3">
+                <div class="bg-info bg-opacity-10 p-3 rounded-3 text-info"><i class="bi bi-card-list fs-4"></i></div>
+                <div><small class="text-muted">Butir Soal</small><h4 class="fw-bold m-0" id="stat-tot-soal">0</h4></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- 2. DATA SISWA -->
@@ -500,6 +569,31 @@
             </div>
         </div>
         
+		<!-- ========================================== -->
+        <!-- 9.5 KINERJA GURU (PORTAL ADMIN/GURU) -->
+        <!-- ========================================== -->
+        <div id="view-kinerja" class="view-section hidden">
+          <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-success-subtle">
+            <div>
+                <h5 class="fw-bold m-0 text-success"><i class="bi bi-cloud-arrow-up me-2"></i>Ruang Kinerja Guru</h5>
+                <small class="text-muted">Upload dan kelola bukti kinerja (RPP, Soal, Media) Anda di sini.</small>
+            </div>
+            <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalKinerjaGuru')">
+                <i class="bi bi-plus-lg me-1"></i> Upload Kinerja Baru
+            </button>
+          </div>
+
+          <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-5 text-center text-muted">
+                <i class="bi bi-cloud-check display-1 text-success opacity-50 mb-3 d-block"></i>
+                <h5 class="fw-bold text-dark">Portal Pengumpulan Kinerja</h5>
+                <p class="mb-0">Klik tombol <b>Upload Kinerja Baru</b> di sudut kanan atas untuk mengirim tautan file ke Kepala Sekolah.</p>
+                <p class="small mt-2">Pastikan link Google Drive Anda sudah di-setting "Siapa saja yang memiliki link" (Anyone with the link).</p>
+            </div>
+          </div>
+        </div>
+		
+		
         <!-- 10. PENGATURAN -->
         <div id="view-pengaturan" class="view-section hidden">
           <div class="table-container">
@@ -534,9 +628,12 @@
         
         <!-- 11. MANAJEMEN GURU -->
         <div id="view-guru" class="view-section hidden">
-          <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light">
+          <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
             <div><h5 class="fw-bold m-0"><i class="bi bi-person-workspace text-primary me-2"></i>Manajemen Guru</h5><small class="text-muted">Kelola akun guru untuk memberikan akses login ke portal asesmen.</small></div>
-            <button class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddGuru')"><i class="bi bi-person-plus-fill me-1"></i> Tambah Akun Guru</button>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-success px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="bukaModal('modalImportGuru')"><i class="bi bi-file-earmark-excel me-1"></i> Impor Excel</button>
+                <button class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="document.getElementById('formAddGuru').reset(); document.getElementById('gr-user-lama').value=''; document.getElementById('title-modal-guru').innerText='Akun Guru'; bukaModal('modalAddGuru');"><i class="bi bi-person-plus-fill me-1"></i> Tambah Akun</button>
+            </div>
           </div>
           <div class="table-container p-0 border-0 bg-transparent">
             <div class="card border-0 shadow-sm rounded-4">
@@ -783,6 +880,58 @@
 
   <!-- ================= KUMPULAN SEMUA MODAL POP-UP ================= -->
   
+  <!-- MODAL UPLOAD KINERJA GURU -->
+  <div class="modal fade" id="modalKinerjaGuru" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header border-0 pb-0 pt-4 px-4 bg-success bg-opacity-10 rounded-top">
+            <h5 class="modal-title fw-bold text-success"><i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload Bukti Kinerja</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form onsubmit="simpanKinerjaGuru(event)">
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Nama Guru</label>
+                <input type="text" id="kin-nama" class="form-control bg-light" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">NIP (Opsional)</label>
+                <input type="text" id="kin-nip" class="form-control" placeholder="Masukkan NIP jika ada">
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label class="form-label small fw-bold">Kelas</label>
+                    <input type="text" id="kin-kelas" class="form-control" placeholder="Contoh: 6A" required>
+                </div>
+                <div class="col-6">
+                    <label class="form-label small fw-bold">Mata Pelajaran</label>
+                    <input type="text" id="kin-mapel" class="form-control" placeholder="Contoh: Tematik" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Jenis Upload</label>
+                <select id="kin-jenis" class="form-select border-success">
+                    <option value="RPP / Modul Ajar">RPP / Modul Ajar</option>
+                    <option value="Soal Offline">Soal Offline</option>
+                    <option value="Media Pembelajaran Interaktif">Media Pembelajaran Interaktif</option>
+                    <option value="Asesmen Siswa">Asesmen Siswa</option>
+                    <option value="Lainnya">Lainnya</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="form-label small fw-bold">Link Tautan Drive (File yang diupload)</label>
+                <input type="url" id="kin-url" class="form-control border-primary" placeholder="https://drive.google.com/..." required>
+                <div class="form-text small"><i class="bi bi-info-circle text-primary"></i> Pastikan link Google Drive disetting "Siapa saja memiliki link".</div>
+            </div>
+            <div class="text-end border-top pt-3">
+                <button type="submit" id="btn-simpan-kin" class="btn btn-success px-4 fw-bold rounded-pill shadow-sm">Kirim ke Kepala Sekolah</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- MODAL PREVIEW TAMPILAN SISWA -->
   <div class="modal fade" id="modalPreviewSoal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
@@ -1004,6 +1153,27 @@
     </div>
   </div>
 
+<!-- MODAL IMPORT GURU EXCEL -->
+  <div class="modal fade" id="modalImportGuru" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow-lg border-0">
+        <div class="modal-header border-0 pb-0 pt-4 px-4">
+          <h5 class="modal-title fw-bold text-success"><i class="bi bi-file-earmark-excel me-2"></i>Impor Data Guru</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <button type="button" class="btn btn-outline-primary mb-3 rounded-pill fw-bold w-100" onclick="downloadTemplateGuru()">
+            <i class="bi bi-download me-2"></i> Download Template Excel
+          </button>
+          <form onsubmit="prosesImportGuruExcel(event)">
+            <input type="file" id="file-import-guru" class="form-control mb-3" accept=".xlsx" required>
+            <button type="submit" id="btn-prosesImportGuru" class="btn btn-success w-100 rounded-pill fw-bold shadow-sm">Proses & Simpan Data</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL UJIAN -->
   <div class="modal fade" id="modalAddUjian" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -1167,62 +1337,99 @@
     let currentUser = null; let currentUjianId = null; let currentJmlSoal = 0; let activeUjianData = []; let bankSoalAktif = []; let globalBankUjianData = []; let activeKisiData = []; let activeSiswaData = []; let activeGuruData = []; let activeHasilData = []; let currentSoalNomor = 1; let progressChartInstance = null; let supervisiSoalData = []; let aktifNisnLaporan = null;
 
     document.addEventListener("DOMContentLoaded", function() {
-      setInterval(() => { 
-        const clockEl = document.getElementById('live-clock');
-        if(clockEl) clockEl.innerText = new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit', second:'2-digit'}).replace(/:/g, '.'); 
-      }, 1000);
-      
-      const savedSession = localStorage.getItem('cbt_admin_session');
-      if (savedSession) { 
-        try {
-            currentUser = JSON.parse(savedSession); 
-            document.getElementById('screen-login').classList.add('hidden'); 
-            // JALUR LALU LINTAS AUTO-LOGIN: Pisahkan Siswa dan Admin
-    if (currentUser.role === 'SISWA') {
-        document.getElementById('screen-siswa').classList.remove('hidden');
-        initPortalSiswa();
-    } else {
-        document.getElementById('screen-admin').classList.remove('hidden'); 
-        updateAdminUI(currentUser); 
-        loadDashboardData();
-    } 
+        // --- 1. SCRIPT JAM & TANGGAL HIDUP ---
+        const updateClock = () => {
+            const now = new Date();
             
-            const lastMenu = localStorage.getItem('cbt_active_menu');
-            const lastUjian = localStorage.getItem('cbt_active_ujian_id');
-            const lastNoSoal = localStorage.getItem('cbt_active_soal_nomor');
-            const lastNamaUjian = localStorage.getItem('cbt_active_ujian_nama');
-            const lastJmlSoal = localStorage.getItem('cbt_active_ujian_jml');
-            
-            // JIKA TERAKHIR BERADA DI STUDIO SOAL
-            if (lastUjian) {
-                // Kunci menu aktif agar tidak ditimpa saat refresh
-                localStorage.setItem('cbt_active_menu', 'kelola-soal');
-                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-                const navUjian = document.querySelector('.nav-item[data-menu="ujian"]');
-                if(navUjian) navUjian.classList.add('active');
-
-                // Polling cerdas: Tunggu UI siap sebelum merender soal
-                const waitData = setInterval(() => {
-                    if (document.getElementById('view-kelola-soal')) {
-                        clearInterval(waitData);
-                        document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-                        document.getElementById('view-kelola-soal').classList.remove('hidden');
-                        document.getElementById('page-title').innerText = 'KELOLA SOAL';
-
-                        kelolaSoal(lastUjian, lastNamaUjian || 'Ujian', parseInt(lastJmlSoal || 30));
-                        if(lastNoSoal) { setTimeout(() => bukaEditorSoal(parseInt(lastNoSoal)), 800); }
-                    }
-                }, 500); // Mengecek kesiapan sistem setiap setengah detik
-                
-            } else if(lastMenu && lastMenu !== 'beranda') {
-                const navEl = document.querySelector(`.nav-item[data-menu="${lastMenu}"]`);
-                if(navEl) { navigasi(lastMenu, navEl); }
+            // Update Jam
+            const clockEl = document.getElementById('live-clock');
+            if(clockEl) {
+                clockEl.innerText = now.toLocaleTimeString('id-ID', {
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit',
+                    hour12: false
+                }).replace(/:/g, '.');
             }
-        } catch(e) {}
-      }
+
+            // Update Tanggal
+            const dateEl = document.getElementById('live-date');
+            if(dateEl) {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                dateEl.innerText = now.toLocaleDateString('id-ID', options);
+            }
+        };
+        updateClock(); // Jalankan langsung
+        setInterval(updateClock, 1000); // Ulangi setiap detik
+
+        // --- 2. PENGECEKAN SESI LOGIN ---
+        const savedSession = localStorage.getItem('cbt_admin_session');
+        if (savedSession) { 
+            try {
+                currentUser = JSON.parse(savedSession); 
+                document.getElementById('screen-login').classList.add('hidden'); 
+                
+                // JALUR LALU LINTAS AUTO-LOGIN: Pisahkan Siswa dan Admin
+                if (currentUser.role === 'SISWA') {
+                    document.getElementById('screen-siswa').classList.remove('hidden');
+                    initPortalSiswa();
+                } else {
+                    document.getElementById('screen-admin').classList.remove('hidden'); 
+                    updateAdminUI(currentUser); 
+                    loadDashboardData();
+                } 
+                    
+                // --- 3. PEMBACAAN MENU TERAKHIR (AUTO-NAVIGASI) ---
+                const lastMenu = localStorage.getItem('cbt_active_menu');
+                const lastUjian = localStorage.getItem('cbt_active_ujian_id');
+                const lastNoSoal = localStorage.getItem('cbt_active_soal_nomor');
+                const lastNamaUjian = localStorage.getItem('cbt_active_ujian_nama');
+                const lastJmlSoal = localStorage.getItem('cbt_active_ujian_jml');
+                    
+                if (lastUjian && currentUser.role !== 'SISWA') {
+                    // JIKA TERAKHIR BERADA DI STUDIO SOAL
+                    localStorage.setItem('cbt_active_menu', 'kelola-soal');
+                    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                    const navUjian = document.querySelector('.nav-item[data-menu="ujian"]');
+                    if(navUjian) navUjian.classList.add('active');
+
+                    const waitData = setInterval(() => {
+                        if (document.getElementById('view-kelola-soal')) {
+                            clearInterval(waitData);
+                            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+                            document.getElementById('view-kelola-soal').classList.remove('hidden');
+                            document.getElementById('page-title').innerText = 'KELOLA SOAL';
+
+                            kelolaSoal(lastUjian, lastNamaUjian || 'Ujian', parseInt(lastJmlSoal || 30));
+                            if(lastNoSoal) { setTimeout(() => bukaEditorSoal(parseInt(lastNoSoal)), 800); }
+                        }
+                    }, 500); 
+                    
+                } else if (lastMenu && currentUser.role !== 'SISWA') {
+                    // JIKA BUKAN DI STUDIO SOAL, BUKA MENU TERAKHIR ADMIN
+                    setTimeout(() => {
+                        let targetMenu = lastMenu || 'beranda';
+                        let navEl = document.querySelector(`.nav-item[data-menu="${targetMenu}"]`);
+                        if(navEl) { navigasi(targetMenu, navEl); }
+                    }, 300);
+                }
+            } catch(e) {
+                // Jika data JSON di memori rusak, bersihkan agar tidak macet
+                console.error("Kesalahan sesi:", e);
+                localStorage.removeItem('cbt_admin_session');
+            }
+        }
     });
 
-    function bukaModal(id) { try { var el = document.getElementById(id); var m = bootstrap.Modal.getInstance(el); if (!m) m = new bootstrap.Modal(el); m.show(); } catch(e) { alert("Error Buka Modal: " + e.message); } }
+    function bukaModal(id) { 
+        try { 
+            // Jika yang dibuka adalah modal Kinerja Guru, otomatis isi namanya
+            if (id === 'modalKinerjaGuru') {
+                document.getElementById('kin-nama').value = currentUser.nama;
+            }
+            var el = document.getElementById(id); var m = bootstrap.Modal.getInstance(el); if (!m) m = new bootstrap.Modal(el); m.show(); 
+        } catch(e) { alert("Error Buka Modal: " + e.message); } 
+    }
     function tutupModal(id) { try { var el = document.getElementById(id); var m = bootstrap.Modal.getInstance(el); if (m) m.hide(); } catch(e) {} }
 
     function handleLoginAman(e) { 
@@ -1728,17 +1935,32 @@ function mulaiTimerCBT() {
 
     function updateAdminUI(user) { 
         try {
-            document.getElementById('welcome-admin').innerText = user.nama || 'User'; document.getElementById('admin-display-initial').innerText = (user.nama || 'U').charAt(0).toUpperCase(); 
+            document.getElementById('welcome-admin').innerText = user.nama || 'User'; 
+            document.getElementById('admin-display-initial').innerText = (user.nama || 'U').charAt(0).toUpperCase(); 
             let displaySchool = user.nama_sekolah || '';
-            if (user.role === 'KEPSEK') { document.body.classList.add('theme-kepsek'); document.getElementById('menu-supervisi').style.display='block'; } 
-            else { document.body.classList.remove('theme-kepsek'); document.getElementById('menu-supervisi').style.display='none'; }
             document.getElementById('welcome-school').innerText = displaySchool + ' - TP 2026/2027'; 
             let cleanSchool = displaySchool.split(':')[0] || displaySchool;
             document.getElementById('sidebar-school-name').innerHTML = '<i class="bi bi-mortarboard-fill text-primary me-2"></i> <span class="fw-bold">' + cleanSchool + '</span>'; 
             
-            // Nama di Header atas bergantung pada peran
-            document.getElementById('topbar-role').innerText = (user.role==='KEPSEK') ? 'Kepala Sekolah' : (user.role==='SISWA' ? 'Siswa' : 'Administrator / Guru');
-        } catch(e) {}
+            // ==========================================
+            // ISOLASI ROLE GURU
+            // ==========================================
+            let isGuru = (user.role && user.role.toLowerCase() === 'guru');
+            
+            if (isGuru) {
+                document.getElementById('topbar-role').innerText = 'Guru Bidang Studi / Kelas';
+                // Menyembunyikan hak akses eksklusif Admin
+                if(document.getElementById('menu-guru')) document.getElementById('menu-guru').style.display = 'none';
+                if(document.getElementById('menu-pengaturan')) document.getElementById('menu-pengaturan').style.display = 'none';
+                if(document.getElementById('menu-siswa')) document.getElementById('menu-siswa').style.display = 'none';
+            } else {
+                document.getElementById('topbar-role').innerText = 'Administrator Utama';
+                // Menampilkan semua hak akses jika yang login Admin
+                if(document.getElementById('menu-guru')) document.getElementById('menu-guru').style.display = 'flex';
+                if(document.getElementById('menu-pengaturan')) document.getElementById('menu-pengaturan').style.display = 'flex';
+                if(document.getElementById('menu-siswa')) document.getElementById('menu-siswa').style.display = 'flex';
+            }
+        } catch(e) { console.error("Error UI:", e); }
     }
 
     // FUNGSI PENYEMBUNYI MENU KHUSUS SISWA
@@ -1763,6 +1985,8 @@ function mulaiTimerCBT() {
             document.getElementById('menu-pengaturan').style.display = 'flex';
             document.getElementById('menu-guru').style.display = 'flex';
             
+			if(document.getElementById('menu-kinerja')) document.getElementById('menu-kinerja').style.display = 'flex';
+			
             // Pastikan menu generator juga tampil untuk guru/admin:
             if(document.getElementById('menu-generator')) document.getElementById('menu-generator').style.display = 'flex';
         }
@@ -2154,7 +2378,7 @@ function mulaiTimerCBT() {
         return { color: 'primary', icon: 'bi-journal-check' }; // Default
     }
 
-    function renderTabelUjianAdmin(paksaTampilKode = null) {
+function renderTabelUjianAdmin(paksaTampilKode = null) {
         const keyword = document.getElementById('input-cari-ujian') ? document.getElementById('input-cari-ujian').value.toLowerCase() : "";
         let htmlUjian = '';
         
@@ -2162,6 +2386,14 @@ function mulaiTimerCBT() {
         let ujianTersedia = semuaUjianRev.filter(u => !String(u.status).startsWith('SAMPAH_'));
         let ujianSampah = semuaUjianRev.filter(u => String(u.status).startsWith('SAMPAH_'));
         
+        // --- FILTER KHUSUS GURU ---
+        // Jika yang login guru, SEMBUNYIKAN soal yang bukan miliknya
+        let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
+        if (isGuru) {
+            ujianTersedia = ujianTersedia.filter(u => String(u.kode).includes('_#' + currentUser.username));
+            ujianSampah = ujianSampah.filter(u => String(u.kode).includes('_#' + currentUser.username));
+        }
+
         if(keyword) {
             ujianTersedia = ujianTersedia.filter(u => u.nama.toLowerCase().includes(keyword) || u.kode.toLowerCase().includes(keyword) || u.mapel.toLowerCase().includes(keyword));
         }
@@ -2183,12 +2415,11 @@ function mulaiTimerCBT() {
             }
         }
 
-        // --- RENDER CARDS (Warna Warni Dinamis) ---
+        // --- RENDER CARDS ---
         cardData.forEach(u => { 
             const isAktif = u.status === 'AKTIF' ? 'checked' : ''; 
             const isBahasAktif = u.bukaPembahasan === 'Ya' ? 'checked' : ''; 
             
-            // Dapatkan Gaya (Style) berdasarkan Mapel
             let style = getMapelStyle(u.mapel);
             
             let targetSiswa = [];
@@ -2198,15 +2429,16 @@ function mulaiTimerCBT() {
             if(u.rombel) targetSiswa.push('Rb ' + u.rombel);
             let infoTarget = targetSiswa.length > 0 ? `<span class="text-${style.color} fw-bold">Target: ${targetSiswa.join(' - ')}</span>` : '<span class="text-muted">Target: Semua Siswa</span>';
 
-            // Ganti warna border atas berdasarkan mapel
+            // Membersihkan tagger _#username agar tampilan badge rapi
+            let kodeTampil = String(u.kode).split('_#')[0];
+            
             htmlUjian += `
             <div class="col-md-6 col-xl-4">
                 <div class="card h-100 shadow-sm rounded-4 border-top border-4 border-${style.color}" id="card-${u.kode}">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between mb-3">
-                            <span class="badge bg-${style.color} bg-opacity-10 text-${style.color} rounded-pill px-3 py-2 border border-${style.color}-subtle"><i class="${style.icon} me-1"></i> ${u.kode}</span>
+                            <span class="badge bg-${style.color} bg-opacity-10 text-${style.color} rounded-pill px-3 py-2 border border-${style.color}-subtle"><i class="${style.icon} me-1"></i> ${kodeTampil}</span>
                             <div class="d-flex align-items-center">
-                                <!-- TOMBOL EDIT DIUBAH MENJADI BUTTON LINGKARAN NYATA AGAR MUDAH DIKLIK -->
                                 <button class="btn btn-sm btn-outline-${style.color} rounded-circle me-2 d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;" onclick="editUjian('${u.kode}')" title="Edit Ujian">
                                     <i class="bi bi-pencil-fill"></i>
                                 </button>
@@ -2242,7 +2474,7 @@ function mulaiTimerCBT() {
             </div>`; 
         });
 
-        // --- RENDER TABEL ARSIP (DENGAN FITUR COLLAPSE/MENYUSUT) ---
+        // --- RENDER TABEL ARSIR ---
         let htmlTable = '';
         if (tableData.length > 0) {
             let isCollapsed = paksaTampilKode ? '' : 'show';
@@ -2271,10 +2503,12 @@ function mulaiTimerCBT() {
             `;
             tableData.forEach(u => {
                 let badgeStatus = u.status === 'AKTIF' ? '<span class="badge bg-primary rounded-pill">AKTIF</span>' : '<span class="badge border text-body rounded-pill">DRAFT</span>';
-                let s = getMapelStyle(u.mapel); 
+                let s = getMapelStyle(u.mapel);
+                let kodeTampil = String(u.kode).split('_#')[0];
+                
                 htmlTable += `
                                 <tr>
-                                    <td><code class="text-${s.color} fw-bold">${u.kode}</code></td>
+                                    <td><code class="text-${s.color} fw-bold">${kodeTampil}</code></td>
                                     <td class="fw-bold text-body">${u.nama}</td>
                                     <td><i class="${s.icon} text-${s.color} me-1"></i> ${u.mapel}</td>
                                     <td>${badgeStatus}</td>
@@ -2312,10 +2546,11 @@ function mulaiTimerCBT() {
                 let sisaMs = (7 * 24 * 60 * 60 * 1000) - (new Date().getTime() - timestampHapus);
                 let sisaHari = Math.ceil(sisaMs / (1000 * 60 * 60 * 24));
                 if (sisaHari < 0) sisaHari = 0;
+                let kodeTampil = String(u.kode).split('_#')[0];
                 
                 htmlSampah += `
                             <tr>
-                                <td><code class="text-danger fw-bold">${u.kode}</code></td>
+                                <td><code class="text-danger fw-bold">${kodeTampil}</code></td>
                                 <td class="fw-bold text-body">${u.nama}</td>
                                 <td>${u.mapel} <span class="badge bg-body text-danger border border-danger-subtle ms-2">Sisa ${sisaHari} Hari</span></td>
                                 <td>
@@ -2481,9 +2716,14 @@ function mulaiTimerCBT() {
     function editUjian(kodeUjian) { 
         let u = activeUjianData.find(x => x.kode === kodeUjian); if(!u) return; 
         
-        // Pemasangan Bumper Keamanan (if document.getElementById) agar tidak crash jika HTML tidak ada
+        // Pemasangan Bumper Keamanan
         if(document.getElementById('uj-kode-lama')) document.getElementById('uj-kode-lama').value = u.kode; 
-        if(document.getElementById('uj-kode')) document.getElementById('uj-kode').value = u.kode; 
+        
+        // ---> PEMBERSIHAN TAGGER DI FORM EDIT <---
+        if(document.getElementById('uj-kode')) {
+            document.getElementById('uj-kode').value = String(u.kode).split('_#')[0]; 
+        }
+
         if(document.getElementById('uj-nama')) document.getElementById('uj-nama').value = u.nama; 
         if(document.getElementById('uj-mapel')) document.getElementById('uj-mapel').value = u.mapel; 
         
@@ -2527,13 +2767,11 @@ function mulaiTimerCBT() {
     function simpanUjianBaru(e) { 
         e.preventDefault(); 
         
-        // FUNGSI PENGAMAN 1: Mengambil Value dengan Sangat Aman
         const safeVal = (id, defaultVal = '') => {
             let el = document.getElementById(id);
             return el ? el.value : defaultVal;
         };
 
-        // FUNGSI PENGAMAN 2: Mengambil Pilihan Ganda (Multi-Select)
         const getMultiValues = (id) => {
             let el = document.getElementById(id);
             return el ? Array.from(el.selectedOptions).map(opt => opt.value).join(', ') : '';
@@ -2545,11 +2783,18 @@ function mulaiTimerCBT() {
 
         const modeEdit = safeVal('uj-kode-lama'); 
 
-        // Merakit Payload dengan sangat aman. Jika elemen HTML hilang, pakai default.
+        // Tagger khusus Guru
+        let kodeInput = safeVal('uj-kode');
+        if (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru') {
+            if (!kodeInput.includes('_#')) {
+                kodeInput = kodeInput + '_#' + currentUser.username;
+            }
+        }
+
         const p = { 
             kodeLama: modeEdit, 
             kodeSekolah: currentUser.kode_sekolah, 
-            kode: safeVal('uj-kode'), 
+            kode: kodeInput, 
             namaUjian: safeVal('uj-nama'), 
             mapel: safeVal('uj-mapel'), 
             jenjang: getMultiValues('uj-jenjang'), 
@@ -2577,13 +2822,8 @@ function mulaiTimerCBT() {
             if(btn) { btn.innerHTML = oriText; btn.disabled = false; }
             if(res.success) { 
                 tutupModal('modalAddUjian'); 
-                
-                // Bersihkan cache agar tabel langsung update
                 localStorage.removeItem("cbt_dash_" + currentUser.kode_sekolah);
-                
-                // Segarkan UI
                 loadDashboardData(); 
-                
                 if (typeof tampilkanNotif === 'function') {
                     tampilkanNotif('✅ ' + res.message);
                 } else {
@@ -4933,6 +5173,108 @@ function testKoneksiHybrid() {
             document.getElementById('cbt-area-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Koneksi terputus. Muat ulang halaman (F5) lalu kumpulkan lagi.</div>`;
         });
     };
+
+// ==========================================
+    // FUNGSI KINERJA GURU (MENGIRIM LINK UPLOAD)
+    // ==========================================
+    function simpanKinerjaGuru(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btn-simpan-kin');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Mengirim...';
+
+        const now = new Date();
+        const tglUpload = ("0" + now.getDate()).slice(-2) + "/" + ("0" + (now.getMonth() + 1)).slice(-2) + "/" + now.getFullYear() + " " + now.getHours() + ":" + now.getMinutes();
+        
+        const payload = {
+            kodeSekolah: currentUser.kode_sekolah,
+            namaGuru: currentUser.nama,
+            nip: document.getElementById('kin-nip').value,
+            kelas: document.getElementById('kin-kelas').value,
+            mapel: document.getElementById('kin-mapel').value,
+            jenis: document.getElementById('kin-jenis').value,
+            tglUpload: tglUpload,
+            link: document.getElementById('kin-url').value
+        };
+
+        panggilAPI("simpanKinerjaGuruBackend", payload)
+        .then(res => {
+            btn.disabled = false;
+            btn.innerHTML = 'Kirim ke Kepala Sekolah';
+            if (res.success) {
+                alert("Bukti kinerja berhasil diunggah! Kepala sekolah dapat memantaunya di dashboard.");
+                document.getElementById('kin-nip').value = '';
+                document.getElementById('kin-kelas').value = '';
+                document.getElementById('kin-mapel').value = '';
+                document.getElementById('kin-url').value = '';
+                tutupModal('modalKinerjaGuru');
+            } else {
+                alert(res.message);
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            btn.innerHTML = 'Kirim ke Kepala Sekolah';
+            alert("Gagal koneksi: " + err.message);
+        });
+    }
+
+// ==========================================
+    // FUNGSI IMPORT EXCEL GURU
+    // ==========================================
+    function downloadTemplateGuru() { 
+        const wb = XLSX.utils.book_new(); 
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+            ["Nama_Lengkap", "Username", "Password", "Role"], 
+            ["Erna Kartika, S.Pd", "ernakartika", "kaiju007", "guru"]
+        ]), "Template_Guru"); 
+        XLSX.writeFile(wb, "Template_Import_Guru.xlsx"); 
+    }
+
+    function prosesImportGuruExcel(e) { 
+        e.preventDefault(); 
+        const b = document.getElementById('btn-prosesImportGuru'); 
+        const file = document.getElementById('file-import-guru').files[0]; 
+        if(!file) return; 
+        
+        b.disabled = true; 
+        b.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...'; 
+        
+        const reader = new FileReader(); 
+        reader.onload = async function(ev) { 
+            try { 
+                const data = ev.target.result; 
+                const wb = XLSX.read(data, {type:'binary'}); 
+                const jA = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]); 
+                
+                if(jA.length === 0) throw new Error("Data Kosong"); 
+                
+                let sks = 0; 
+                for(let i=0; i<jA.length; i++){ 
+                    let r = jA[i]; 
+                    if(r.Nama_Lengkap && r.Username){ 
+                        await panggilAPI("simpanDataGuruBackend", {
+                            kodeSekolah: currentUser.kode_sekolah, 
+                            userLama: '', 
+                            nama: r.Nama_Lengkap, 
+                            username: String(r.Username).replace(/\s+/g, '').toLowerCase(), 
+                            password: r.Password || '123456', 
+                            role: (r.Role || 'guru').toLowerCase()
+                        }); 
+                        sks++; 
+                    } 
+                } 
+                tutupModal('modalImportGuru'); 
+                loadDataGuru(); 
+                alert(`Berhasil mengimpor ${sks} akun guru!`); 
+            } catch(err) {
+                alert("File salah format atau gagal diproses.");
+            } 
+            b.disabled = false; 
+            b.innerHTML = 'Proses & Simpan Data'; 
+        }; 
+        reader.readAsBinaryString(file); 
+    }
 
 </script>
 
