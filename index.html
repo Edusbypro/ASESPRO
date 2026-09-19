@@ -1449,34 +1449,6 @@
             cheatCount++; 
             if (cheatCount >= 3) {
                 alert("🚨 PELANGGARAN FATAL! 🚨\nAnda telah keluar dari mode Layar Penuh (Fullscreen) sebanyak 3 kali.\nUjian dihentikan paksa dan dikumpulkan secara otomatis!");
-                
-                // PERUBAHAN: Menambahkan status "Terkunci (Cheating)"
-                kumpulkanUjian(true, "Terkunci (Cheating)"); 
-            } else {
-                alert(`⚠️ PERINGATAN KECURANGAN (${cheatCount}/3)! ⚠️\nAnda dilarang keluar dari mode Layar Penuh selama ujian berlangsung! Silakan masuk kembali ke mode layar penuh.`);
-                let elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen().catch(err => console.log("Perlu interaksi klik untuk fullscreen ulang."));
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen().catch(err => {});
-                }
-            }
-        }
-    }
-    
-    // SENSOR DETEKSI KELUAR FULLSCREEN
-    document.addEventListener("fullscreenchange", handleFullscreenExit);
-    document.addEventListener("webkitfullscreenchange", handleFullscreenExit);
-    document.addEventListener("msfullscreenchange", handleFullscreenExit);
-
-    function handleFullscreenExit() {
-        // Abaikan jika sedang simulasi guru
-        if (window.isModeSimulasiGuru) return; 
-
-        if (document.body.classList.contains('cbt-mode') && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement && !window.isSubmitting) {
-            cheatCount++; 
-            if (cheatCount >= 3) {
-                alert("🚨 PELANGGARAN FATAL! 🚨\nAnda telah keluar dari mode Layar Penuh (Fullscreen) sebanyak 3 kali.\nUjian dihentikan paksa dan dikumpulkan secara otomatis!");
                 kumpulkanUjian(true);
             } else {
                 alert(`⚠️ PERINGATAN KECURANGAN (${cheatCount}/3)! ⚠️\nAnda dilarang keluar dari mode Layar Penuh selama ujian berlangsung! Silakan masuk kembali ke mode layar penuh.`);
@@ -1750,88 +1722,6 @@ function mulaiTimerCBT() {
             html += `<button class="btn ${colorClass} fw-bold m-1" style="width: 48px; height: 48px; border-radius: 12px;" onclick="tampilkanSoalCBT(${idx})">${s.nomor}</button>`;
         });
         document.getElementById('cbt-navigasi-nomor').innerHTML = html;
-    }
-
-    // PENGHITUNG JUMLAH SOAL YANG DIJAWAB DAN NILAI PG/MCMA/PGK
-    function kumpulkanUjian(paksaSelesai = false) {
-        let dijawabCount = Object.keys(cbtJawaban).filter(k => {
-            let j = cbtJawaban[k];
-            if(typeof j === 'string') return j.trim() !== "";
-            if(Array.isArray(j)) return j.length > 0;
-            if(typeof j === 'object') return Object.keys(j).length > 0;
-            return false;
-        }).length;
-        
-        // TANDAI BAHWA SISWA SEDANG MEMBACA POP-UP KONFIRMASI (Matikan sensor sementara)
-        window.isSubmitting = true;
-
-        if(!paksaSelesai && !confirm(`Anda telah menjawab ${dijawabCount} dari ${cbtSoal.length} soal.\nYakin ingin mengumpulkan ujian sekarang?\n\nPerhatian: Anda tidak bisa mengubah jawaban setelah dikumpulkan!`)) {
-            // Jika siswa batal mengumpulkan, nyalakan kembali sensornya
-            window.isSubmitting = false;
-            return;
-        }
-
-        clearInterval(cbtTimerInterval);
-        document.getElementById('cbt-area-soal').innerHTML = '<div class="text-center py-5"><span class="spinner-border text-primary fs-2"></span><br><br>Menyimpan data dan mengoreksi jawaban otomatis...</div>';
-        
-        let totalNilai = 0; let adaEssay = false;
-        
-        cbtSoal.forEach(s => {
-            let jwb = cbtJawaban[s.nomor]; let tipeSoal = String(s.tipe).trim();
-            if (tipeSoal.includes('MCMA')) {
-                let jwbStr = Array.isArray(jwb) ? jwb.sort().join('') : "";
-                let kncStr = String(s.kunci || "").replace(/[^A-D]/g, '').split('').sort().join(''); 
-                if (jwbStr === kncStr && jwbStr !== "") totalNilai += Number(s.poinBenar || 10);
-                else if (jwbStr === "") totalNilai += Number(s.poinKosong || 0);
-                else totalNilai += Number(s.poinSalah || 0);
-            } else if (tipeSoal.includes('Kategori') || tipeSoal.includes('Kompleks') || tipeSoal.includes('Katagori')) {
-                try {
-                    let kObj = JSON.parse(s.kunci || "{}"); let jObj = typeof jwb === 'object' ? jwb : {};
-                    let isBenarSemua = true; let dijawabBerapa = Object.keys(jObj).length;
-                    ['A','B','C'].forEach(o => { if (s['opsi'+o] && jObj[o] !== kObj[o]) isBenarSemua = false; });
-                    if (dijawabBerapa === 0) totalNilai += Number(s.poinKosong || 0);
-                    else if (isBenarSemua) totalNilai += Number(s.poinBenar || 10);
-                    else totalNilai += Number(s.poinSalah || 0);
-                } catch(e) { totalNilai += Number(s.poinSalah || 0); }
-            } else if (tipeSoal.includes('Ganda') || tipeSoal.includes('Isian')) {
-                jwb = jwb || "";
-                if(jwb.toString().trim().toUpperCase() === String(s.kunci).trim().toUpperCase()) totalNilai += Number(s.poinBenar || 10);
-                else if (jwb.trim() === "") totalNilai += Number(s.poinKosong || 0);
-                else totalNilai += Number(s.poinSalah || 0);
-            } else { adaEssay = true; } 
-        });
-
-        const payloadHasil = { kodeSekolah: currentUser.kode_sekolah, kodeUjian: cbtSoal[0].kodeUjian, userSiswa: currentUser.username, namaSiswa: currentUser.nama, kelas: currentUser.kelas, jawabanJSON: JSON.stringify(cbtJawaban), nilai: totalNilai, status: adaEssay ? "Menunggu Koreksi Guru" : "Selesai Dinilai" };
-        
-        panggilAPI("simpanHasilUjianBackend", payloadHasil)
-        .then(res => {
-            // Keluar native fullscreen otomatis
-            if (document.exitFullscreen) { document.exitFullscreen().catch(err => console.log(err)); }
-            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen().catch(err => console.log(err)); }
-            else if (document.msExitFullscreen) { document.msExitFullscreen().catch(err => console.log(err)); }
-
-            if (res.success) {
-                document.body.classList.remove('cbt-mode'); 
-                let infoTambahan = adaEssay ? "\nSebagian soal Kompleks/Uraian menunggu koreksi manual Guru." : `\nSkor Asesmen Anda: ${totalNilai}`;
-                alert("Asesmen berhasil diselesaikan!" + infoTambahan);
-                
-                // === DI SINI POSISI KAMERA DIMATIKAN ===
-                hentikanKamera(); 
-                
-                window.isSubmitting = false; // Reset bendera aman
-                navigasiSiswa('beranda', document.querySelector('#screen-siswa .sidebar-nav .nav-item')); 
-                initPortalSiswa();
-            } else {
-                window.isSubmitting = false;
-                alert("Gagal menyimpan hasil: " + res.message);
-                document.getElementById('cbt-area-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Gagal menyimpan hasil. Silakan ulangi pengumpulan.</div>`;
-            }
-        })
-        .catch(err => {
-            window.isSubmitting = false;
-            alert("GAGAL mengirim ke server: " + err.message + "\nSilakan coba klik Kumpulkan lagi!");
-            document.getElementById('cbt-area-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Koneksi terputus. Muat ulang halaman (F5) lalu kumpulkan lagi.</div>`;
-        });
     }
 
     // ===== AKHIR MESIN CBT =====
@@ -4383,30 +4273,6 @@ function mulaiTimerCBT() {
     function togglePilihSemuaHasil(masterCheckbox) {
         const checkboxes = document.querySelectorAll('.check-hasil-siswa');
         checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
-    }
-
-    // Perbarui fungsi render tabel hasil agar memuat kotak centang (checkbox)
-    function renderTabelDaftarHasil() {
-        let html = '';
-        dataHasilAktif.forEach((h, idx) => {
-            let tgl = h.tanggal;
-            let badgeStatus = h.status.includes('Menunggu') ? `<span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-hourglass-split me-1"></i>${h.status}</span>` : `<span class="badge bg-success px-3 py-2"><i class="bi bi-check-all me-1"></i>${h.status}</span>`;
-            html += `<tr>
-                <td class="text-center">
-                    <input class="form-check-input check-hasil-siswa" type="checkbox" value="${idx}">
-                </td>
-                <td class="fw-bold">${h.namaSiswa}<br><small class="text-muted">${h.userSiswa}</small></td>
-                <td>${h.kelas}</td>
-                <td class="small text-muted">${tgl}</td>
-                <td>${badgeStatus}</td>
-                <td><h4 class="fw-bold text-primary m-0">${h.nilaiAkhir}</h4></td>
-                <td>
-                    <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-2 me-1" onclick="bukaKoreksiDetail(${idx})"><i class="bi bi-search"></i> Cek Analisis</button>
-                    <button class="btn btn-danger btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${h.idHasil}')"><i class="bi bi-unlock-fill"></i> Reset</button>
-                </td>
-            </tr>`;
-        });
-        document.getElementById('tb-daftar-hasil').innerHTML = html || '<tr><td colspan="7" class="text-center py-5 text-muted">Belum ada siswa yang mengumpulkan asesmen ini.</td></tr>';
     }
 
     // Fungsi Utama: Ekspor ke Excel (Semua atau Berdasarkan Ceklis)
