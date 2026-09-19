@@ -571,7 +571,52 @@
   </div>
 
   <!-- MODAL TELAAH KEPSEK -->
-  <div class="modal fade" id="modalTelaahKepsek" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"><div class="modal-content border-0 shadow-lg rounded-4"><div class="modal-header bg-primary text-white border-0 pb-3 pt-4 px-4 d-flex justify-content-between align-items-center"><h5 class="modal-title fw-bold"><i class="bi bi-search me-2"></i>Telaah Kartu Soal</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-4 bg-light"><div class="bg-white p-4 rounded-4 mb-4 border shadow-sm" id="telaah-preview-soal" style="font-size: 1.1rem; line-height: 1.6;"></div><form onsubmit="simpanKeputusanTelaah(event)"><input type="hidden" id="tl-nomor"><div class="card border-0 shadow-sm rounded-4 bg-white"><div class="card-body p-4"><label class="form-label fw-bold text-primary mb-3"><i class="bi bi-award-fill me-2"></i>Keputusan Telaah Kepala Sekolah:</label><div class="d-flex flex-wrap gap-3 mb-4 p-3 bg-light rounded-3 border"><div class="form-check"><input class="form-check-input border-secondary" type="radio" name="tl-status" value="Approve" id="tl-s1" required><label class="form-check-label text-success fw-bold" for="tl-s1"><i class="bi bi-check-circle-fill me-1"></i> Approve (Setuju)</label></div><div class="form-check"><input class="form-check-input border-secondary" type="radio" name="tl-status" value="Revisi" id="tl-s2"><label class="form-check-label text-warning fw-bold" for="tl-s2"><i class="bi bi-pencil-fill me-1"></i> Revisi</label></div><div class="form-check"><input class="form-check-input border-secondary" type="radio" name="tl-status" value="Ditolak" id="tl-s3"><label class="form-check-label text-danger fw-bold" for="tl-s3"><i class="bi bi-x-circle-fill me-1"></i> Ditolak</label></div></div><div class="mb-3"><label class="form-label fw-bold small text-muted">Komentar / Arahan untuk Guru (Opsional):</label><textarea id="tl-komentar" class="form-control border-secondary-subtle rounded-3" rows="3" placeholder="Misal: Harap ganti gambar dengan yang lebih jelas..."></textarea></div><div class="text-end mt-4 pt-3 border-top"><button type="submit" id="btn-simpan-telaah" class="btn btn-primary px-5 py-2 fw-bold rounded-pill shadow-sm">Simpan Keputusan</button></div></div></div></form></div></div></div></div>
+  <div class="modal fade" id="modalTelaahKepsek" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+          <div class="modal-content border-0 shadow-lg rounded-4">
+              <div class="modal-header bg-primary text-white border-0 pb-3 pt-4 px-4 d-flex justify-content-between align-items-center">
+                  <h5 class="modal-title fw-bold"><i class="bi bi-search me-2"></i>Telaah Kartu Soal</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body p-4 bg-light">
+                  <div class="bg-white p-4 rounded-4 mb-4 border shadow-sm" id="telaah-preview-soal" style="font-size: 1.1rem; line-height: 1.6;"></div>
+                  
+                  <form id="formTelaahKepsek" onsubmit="simpanKeputusanTelaah(event)">
+                      <!-- PENEMPATAN HIDDEN INPUT YANG BENAR -->
+                      <input type="hidden" id="tl-nomor" name="nomorSoal">
+                      
+                      <div class="card border-0 shadow-sm rounded-4 bg-white">
+                          <div class="card-body p-4">
+                              <label class="form-label fw-bold text-primary mb-3"><i class="bi bi-award-fill me-2"></i>Keputusan Telaah Kepala Sekolah:</label>
+                              <div class="d-flex flex-wrap gap-3 mb-4 p-3 bg-light rounded-3 border">
+                                  <div class="form-check">
+                                      <input class="form-check-input border-secondary" type="radio" name="tl-status" value="Approve" id="tl-s1" required>
+                                      <label class="form-check-label text-success fw-bold" for="tl-s1"><i class="bi bi-check-circle-fill me-1"></i> Approve (Setuju)</label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input class="form-check-input border-secondary" type="radio" name="tl-status" value="Revisi" id="tl-s2">
+                                      <label class="form-check-label text-warning fw-bold" for="tl-s2"><i class="bi bi-pencil-fill me-1"></i> Revisi</label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input class="form-check-input border-secondary" type="radio" name="tl-status" value="Ditolak" id="tl-s3">
+                                      <label class="form-check-label text-danger fw-bold" for="tl-s3"><i class="bi bi-x-circle-fill me-1"></i> Ditolak</label>
+                                  </div>
+                              </div>
+                              <div class="mb-3">
+                                  <label class="form-label fw-bold small text-muted">Komentar / Arahan untuk Guru (Opsional):</label>
+                                  <textarea id="tl-komentar" class="form-control border-secondary-subtle rounded-3" rows="3" placeholder="Misal: Harap ganti gambar dengan yang lebih jelas..."></textarea>
+                              </div>
+                              <div class="text-end mt-4 pt-3 border-top">
+                                  <button type="submit" id="btn-simpan-telaah" class="btn btn-primary px-5 py-2 fw-bold rounded-pill shadow-sm">Simpan Keputusan</button>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
+                  
+              </div>
+          </div>
+      </div>
+  </div>
 
   <!-- MODAL TAMBAH LINK EKSTERNAL -->
   <div class="modal fade" id="modalAddLink" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow-lg"><div class="modal-header border-0 pb-0 pt-4 px-4 bg-success bg-opacity-10 rounded-top"><h5 class="modal-title fw-bold text-success"><i class="bi bi-link-45deg me-1"></i> Tambah Link Asesmen</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><form onsubmit="simpanLinkEksternal(event)"><div class="mb-3"><label class="form-label small fw-bold">Nama / Judul Kegiatan</label><input type="text" id="lnk-nama" class="form-control" placeholder="Cth: Ulangan Harian Tema 1" required></div><div class="row g-3 mb-3"><div class="col-6"><label class="form-label small fw-bold">Platform / Aplikasi</label><select id="lnk-platform" class="form-select border-success"><option value="Quizizz">Quizizz</option><option value="Google Forms">Google Forms</option><option value="Kahoot">Kahoot!</option><option value="Wordwall">Wordwall</option><option value="Lainnya">Website Lainnya</option></select></div><div class="col-6"><label class="form-label small fw-bold">Target Kelas</label><select id="lnk-kelas" class="form-select border-success" required></select></div></div><div class="mb-4"><label class="form-label small fw-bold">URL / Link Tujuan</label><input type="url" id="lnk-url" class="form-control bg-light" placeholder="https://" required></div><div class="text-end"><button type="submit" id="btn-simpan-lnk" class="btn btn-success px-4 fw-bold rounded-pill">Simpan Link</button></div></form></div></div></div></div>
@@ -612,7 +657,7 @@
     // ==========================================
     // SISTEM INTI & VARIABEL GLOBAL
     // ==========================================
-    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwtfP8Zk4UgyWgzs9a96bOtWcFYWLJ1hgkzwyCn4R04d7br4MBxz5wlyR90GlXXToAE0w/exec";
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzkbpwR0QHis7BImF9UA6xpTF3UKZpoA2mt4KVphPkGPWNOyjy8AlPRyubgHCoMl71agQ/exec";
     let currentUser = null; 
     let activeUjianData = []; let activeSiswaData = []; let bankSoalAktif = []; let activeGuruData = []; let activeKisiData = [];
     let currentUjianId = null; let currentSoalNomor = 1; let currentJmlSoal = 30; let intervalLiveKepsek;
@@ -770,10 +815,15 @@ document.getElementById('stat-ujian').innerText = jumlahUjianAktif;
     function tarikSoalUntukTelaah() {
         const k = document.getElementById('kepsek-filter-ujian').value; if(!k) return;
         document.getElementById('tb-kepsek-telaah').innerHTML = '<tr><td colspan="5" class="py-5"><span class="spinner-border"></span></td></tr>';
-        panggilAPI("getSoalUjian", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: k }).then(data => {
+        
+        // Penambahan timestampBypass untuk menembus cache saat refresh status
+        panggilAPI("getSoalUjian", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: k, timestampBypass: new Date().getTime() }).then(data => {
             kepsekSoalAktif = data; let html = ''; let dft=0, stj=0, tlk=0;
             data.forEach(s => {
-                let st = s.status_telaah || 'Draft'; let bg = 'bg-warning text-dark'; if(st==='Approve'){bg='bg-success';stj++;}else if(st.includes('Revisi')||st==='Ditolak'){bg='bg-danger';tlk++;}else{dft++;}
+                let st = s.status_telaah || 'Draft'; let bg = 'bg-warning text-dark'; 
+                if(st==='Approve'){bg='bg-success';stj++;}
+                else if(st.includes('Revisi')||st==='Ditolak'){bg='bg-danger';tlk++;}
+                else{dft++;}
                 let snip = s.pertanyaan.replace(/<[^>]+>/g,'').substring(0,50)+'...';
                 html += `<tr><td>${s.nomor}</td><td class="text-start small">${snip}</td><td>${s.tipe||'PG'}</td><td><span class="badge ${bg}">${st}</span></td><td><button class="btn btn-sm btn-primary rounded-pill" onclick="bukaModalTelaahKepsek('${s.nomor}')">Telaah</button></td></tr>`;
             });
@@ -784,20 +834,108 @@ document.getElementById('stat-ujian').innerText = jumlahUjianAktif;
 
     function bukaModalTelaahKepsek(no) {
         let s = kepsekSoalAktif.find(x => String(x.nomor) === String(no)); if(!s) return;
+        
+        // 1. Tampilkan KD dan Indikator
+        let htmlMeta = '';
+        if (s.kompetensi || s.indikator) {
+            htmlMeta = `<div class="bg-light p-3 rounded-3 mb-3 small border">
+                ${s.kompetensi ? `<div class="mb-1"><span class="fw-bold text-primary">KD:</span> ${s.kompetensi}</div>` : ''}
+                ${s.indikator ? `<div><span class="fw-bold text-success">Indikator:</span> ${s.indikator}</div>` : ''}
+            </div>`;
+        }
+
+        let html = htmlMeta + `<div class="mb-3 text-dark" style="font-size:1.1rem;">${s.pertanyaan}</div><div class="d-flex flex-column gap-2 mb-3">`;
+        
+        // 2. Tampilkan Opsi dan Kunci
+        let tipeSoal = String(s.tipe || 'Pilihan Ganda').trim();
+        if(tipeSoal.includes('Ganda') && !tipeSoal.includes('Kompleks') && !tipeSoal.includes('Kategori')) { 
+            ['A','B','C','D'].forEach(o => { 
+                if(s['opsi'+o]){ 
+                    let isK = false;
+                    if (tipeSoal.includes('MCMA')) {
+                        let kArr = String(s.kunci || "").split(',');
+                        isK = kArr.some(k => k.trim().toUpperCase() === o);
+                    } else {
+                        isK = String(s.kunci || "").trim().toUpperCase() === o;
+                    }
+                    let c = isK ? 'bg-success bg-opacity-10 border-success' : 'bg-white border-secondary-subtle'; 
+                    html += `<div class="p-3 border rounded-3 ${c}"><b class="me-2">${o}.</b>${s['opsi'+o]}</div>`; 
+                } 
+            }); 
+        } else if(tipeSoal.includes('Kategori') || tipeSoal.includes('Kompleks')) {
+            let kObj = {}; try { kObj = JSON.parse(s.kunci || "{}"); } catch(e){}
+            html += `<table class="table table-bordered bg-white small"><thead><tr><th>Pernyataan</th><th style="width:80px">Kunci</th></tr></thead><tbody>`;
+            ['A','B','C','D'].forEach(opt => {
+                if(s['opsi'+opt]) { html += `<tr><td>${s['opsi'+opt]}</td><td class="text-center fw-bold text-success">${kObj[opt] || '-'}</td></tr>`; }
+            });
+            html += `</tbody></table>`;
+        } else if(s.kunci) { 
+            html += `<div class="p-3 bg-success bg-opacity-10 border border-success rounded-3"><small class="text-success fw-bold d-block">Kunci Jawaban:</small>${s.kunci}</div>`; 
+        }
+        html += `</div>`;
+
+        // 3. Tampilkan Pembahasan
+        if (s.pembahasan) {
+            html += `<div class="mt-3 p-3 bg-light rounded-3 border"><small class="text-primary fw-bold d-block mb-1">Pembahasan Guru:</small><div class="text-dark small">${s.pembahasan}</div></div>`;
+        }
+
+        document.getElementById('telaah-preview-soal').innerHTML = html;
+        document.getElementById('tl-s1').checked=(s.status_telaah==='Approve'); 
+        document.getElementById('tl-s2').checked=(s.status_telaah==='Revisi'); 
+        document.getElementById('tl-s3').checked=(s.status_telaah==='Ditolak'); 
+        document.getElementById('tl-komentar').value=s.komentar_kepsek||'';
+        
+        // MENGISI HIDDEN INPUT
         document.getElementById('tl-nomor').value = s.nomor;
-        let html = `<div class="mb-3 text-dark">${s.pertanyaan}</div><div class="d-flex flex-column gap-2 mb-3">`;
-        if(s.tipe && s.tipe.includes('Ganda')) { ['A','B','C','D'].forEach(o => { if(s['opsi'+o]){ let isK = s.kunci&&s.kunci.includes(o); let c = isK?'bg-success bg-opacity-10 border-success':'bg-white border-secondary-subtle'; html += `<div class="p-2 border rounded-3 ${c}"><b>${o}.</b>${s['opsi'+o]}</div>`; } }); }
-        else if(s.kunci) { html += `<div class="p-3 bg-success bg-opacity-10 border border-success rounded-3"><small class="text-success d-block">Kunci:</small>${s.kunci}</div>`; }
-        document.getElementById('telaah-preview-soal').innerHTML = html + `</div>`;
-        document.getElementById('tl-s1').checked=(s.status_telaah==='Approve'); document.getElementById('tl-s2').checked=(s.status_telaah==='Revisi'); document.getElementById('tl-s3').checked=(s.status_telaah==='Ditolak'); document.getElementById('tl-komentar').value=s.komentar_kepsek||'';
+        
         bukaModal('modalTelaahKepsek');
     }
 
     function simpanKeputusanTelaah(e) {
-        e.preventDefault(); const btn = document.getElementById('btn-simpan-telaah'); btn.disabled=true; btn.innerText='Menyimpan...';
+        e.preventDefault(); 
+        const btn = document.getElementById('btn-simpan-telaah'); 
+        
+        // MENGAMBIL NILAI NOMOR DARI HIDDEN INPUT
+        const nomor = document.getElementById('tl-nomor').value;
+
+        if (!nomor) {
+            alert("Error: Nomor soal tidak terdeteksi!");
+            return;
+        }
+
+        let oriTeks = btn.innerHTML;
+        btn.disabled = true; 
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
+        
         let st = document.querySelector('input[name="tl-status"]:checked');
-        panggilAPI("simpanTelaahSoalBackend", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: document.getElementById('kepsek-filter-ujian').value, nomor: document.getElementById('tl-nomor').value, statusTelaah: st?st.value:'Draft', komentar: document.getElementById('tl-komentar').value })
-        .then(res => { btn.disabled=false; btn.innerText='Simpan'; if(res.success){ tutupModal('modalTelaahKepsek'); tarikSoalUntukTelaah(); } });
+        const statusTelaah = st ? st.value : 'Draft';
+        const komentar = document.getElementById('tl-komentar').value;
+        const kodeUjian = document.getElementById('kepsek-filter-ujian').value;
+
+        panggilAPI("simpanTelaahSoalBackend", { 
+            kodeSekolah: currentUser.kode_sekolah, 
+            kodeUjian: kodeUjian, 
+            nomor: nomor, 
+            statusTelaah: statusTelaah, 
+            komentar: komentar 
+        })
+        .then(res => { 
+            btn.disabled = false; 
+            btn.innerHTML = oriTeks; 
+            if(res.success){ 
+                tutupModal('modalTelaahKepsek'); 
+                localStorage.removeItem("cbt_dash_" + currentUser.kode_sekolah);
+                tarikSoalUntukTelaah(); 
+                alert("✅ Keputusan Telaah berhasil disimpan!");
+            } else {
+                alert("Gagal Server: " + res.message); // Akan menampilkan error asli dari Google Script
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            btn.innerHTML = oriTeks;
+            alert("Gagal koneksi: " + err.message);
+        });
     }
 
     // ==========================================
