@@ -475,14 +475,44 @@
 
         <!-- 5. KISI-KISI SOAL -->
         <div id="view-kisi" class="view-section hidden">
-          <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light">
-            <div><h5 class="fw-bold m-0"><i class="bi bi-file-earmark-ruled text-primary me-2"></i>Penyusunan Kisi-Kisi Soal</h5><small class="text-muted">Kelola blueprint/kisi-kisi ujian secara langsung.</small></div>
+          <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
+            <div>
+                <h5 class="fw-bold m-0"><i class="bi bi-file-earmark-ruled text-primary me-2"></i>Penyusunan Kisi-Kisi Soal</h5>
+                <small class="text-muted">Kelola blueprint/kisi-kisi ujian secara langsung.</small>
+            </div>
+            
+            <div class="d-flex gap-2 align-items-center flex-wrap">
+                <div class="input-group" style="max-width: 250px;">
+                  <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                  <input type="text" id="filter-kisi-mapel" class="form-control border-start-0 ps-0" placeholder="Cari Mapel/Kelas..." oninput="renderTabelKisi()">
+                </div>
+                <!-- FITUR BARU: Dropdown Filter Kepemilikan Kisi-Kisi -->
+                <select id="filter-kepemilikan-kisi" class="form-select border-primary text-primary fw-bold" style="width: auto;" onchange="renderTabelKisi()">
+                    <option value="SAYA">Kisi-Kisi Kelas Saya</option>
+                    <option value="SEMUA">Semua Kisi-Kisi</option>
+                </select>
+            </div>
+
             <div class="d-flex gap-2">
                 <button class="btn btn-outline-success px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="exportKisiExcel()"><i class="bi bi-file-earmark-excel me-1"></i> Ekspor Excel</button>
-                <button class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddKisi')"><i class="bi bi-plus-lg me-1"></i> Tambah Kisi-Kisi</button>
+                <button class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModalKisiKosong()"><i class="bi bi-plus-lg me-1"></i> Tambah Kisi-Kisi</button>
             </div>
           </div>
-          <div class="card border-0 shadow-sm rounded-4"><div class="card-body p-0"><div class="table-responsive"><table class="table table-hover table-bordered align-middle m-0 text-center" style="font-size: 0.85rem;"><thead class="table-light align-middle text-muted"><tr><th>ID Kisi</th><th>Mapel</th><th>Kelas</th><th>Kompetensi</th><th>Indikator</th><th>Jenis Teks</th><th>Bentuk Soal</th><th>Aksi</th></tr></thead><tbody id="tb-kisi"></tbody></table></div></div></div>
+          
+          <div class="card border-0 shadow-sm rounded-4">
+              <div class="card-body p-0">
+                  <div class="table-responsive">
+                      <table class="table table-hover table-bordered align-middle m-0 text-center" style="font-size: 0.85rem;">
+                          <thead class="table-light align-middle text-muted">
+                              <tr>
+                                  <th>ID Kisi</th><th>Mapel</th><th>Kelas</th><th class="text-start">Kompetensi</th><th class="text-start">Indikator</th><th>Jenis Teks</th><th>Bentuk Soal</th><th>Aksi</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tb-kisi"></tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
         </div>
 
         <!-- 6. KARTU PESERTA -->
@@ -3324,7 +3354,96 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
         } 
     }
 
-    function renderTabelKisi() { const filterMapel = document.getElementById('filter-kisi-mapel') ? document.getElementById('filter-kisi-mapel').value.toLowerCase() : ""; let html = ''; let arrFilter = activeKisiData; if(filterMapel) { arrFilter = arrFilter.filter(k => k.mapel.toLowerCase().includes(filterMapel)); } arrFilter.forEach(k => { html += `<tr><td class="fw-bold text-primary">${k.id}</td><td class="text-start">${k.mapel}</td><td>${k.kelas}</td><td class="text-start">${k.kompetensi}</td><td>${k.indikator}</td><td>${k.jenisTeks}</td><td>${k.bentuk}</td><td><i class="bi bi-pencil text-primary me-2" style="cursor:pointer" onclick="editKisi('${k.id}')"></i><i class="bi bi-trash text-danger" style="cursor:pointer" onclick="hapusKisi('${k.id}')"></i></td></tr>`; }); document.getElementById('tb-kisi').innerHTML = html || '<tr><td colspan="8" class="text-center py-5 text-muted">Belum ada data kisi-kisi yang ditambahkan.</td></tr>'; }
+    function renderTabelKisi() { 
+        const filterMapel = document.getElementById('filter-kisi-mapel') ? document.getElementById('filter-kisi-mapel').value.toLowerCase() : ""; 
+        const filterKepemilikan = document.getElementById('filter-kepemilikan-kisi') ? document.getElementById('filter-kepemilikan-kisi').value : "SAYA";
+        
+        let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
+        let allowedClasses = [];
+        if (isGuru && currentUser.kelasAjar) {
+            allowedClasses = currentUser.kelasAjar.split(',').map(x => String(x).trim());
+        }
+
+        let html = ''; 
+        let arrFilter = activeKisiData; 
+
+        // 1. FILTER KEPEMILIKAN (Hanya saring milik sendiri jika "SAYA" dipilih)
+        if (isGuru && filterKepemilikan === "SAYA") {
+            arrFilter = arrFilter.filter(k => allowedClasses.includes(String(k.kelas).trim()));
+        }
+
+        // 2. FILTER PENCARIAN TEKS
+        if(filterMapel) { 
+            arrFilter = arrFilter.filter(k => k.mapel.toLowerCase().includes(filterMapel) || k.kelas.toLowerCase().includes(filterMapel)); 
+        } 
+
+        arrFilter.forEach(k => { 
+            // 3. PROTEKSI HAK AKSES TOMBOL EDIT & HAPUS
+            let isMilikSaya = true;
+            if (isGuru && !allowedClasses.includes(String(k.kelas).trim())) {
+                isMilikSaya = false;
+            }
+
+            // Tombol Copy selalu menyala untuk semua orang
+            let btnCopy = `<button class="btn btn-sm btn-outline-info rounded-circle me-1 shadow-sm" onclick="copyKisi('${k.id}')" title="Duplikat / Salin Kisi-kisi ini"><i class="bi bi-copy"></i></button>`;
+            
+            let btnEdit = isMilikSaya 
+                ? `<button class="btn btn-sm btn-outline-primary rounded-circle me-1 shadow-sm" onclick="editKisi('${k.id}')" title="Edit Kisi-kisi"><i class="bi bi-pencil"></i></button>`
+                : `<button class="btn btn-sm btn-outline-secondary rounded-circle me-1 opacity-50" disabled title="Hanya guru kelas terkait yang bisa mengedit"><i class="bi bi-lock-fill"></i></button>`;
+            
+            let btnHapus = isMilikSaya
+                ? `<button class="btn btn-sm btn-outline-danger rounded-circle shadow-sm" onclick="hapusKisi('${k.id}')" title="Hapus"><i class="bi bi-trash"></i></button>`
+                : ``;
+
+            html += `<tr>
+                <td class="fw-bold text-primary">${k.id}</td>
+                <td class="text-start fw-bold text-dark">${k.mapel}</td>
+                <td><span class="badge bg-light text-dark border px-2 py-1">Kls ${k.kelas}</span></td>
+                <td class="text-start">${k.kompetensi}</td>
+                <td class="text-start">${k.indikator}</td>
+                <td>${k.jenisTeks || '-'}</td>
+                <td>${k.bentuk}</td>
+                <td class="text-nowrap">${btnCopy}${btnEdit}${btnHapus}</td>
+            </tr>`; 
+        }); 
+
+        document.getElementById('tb-kisi').innerHTML = html || `<tr><td colspan="8" class="text-center py-5 text-muted">Belum ada data kisi-kisi yang ditambahkan.</td></tr>`; 
+    }
+	
+	function copyKisi(id) { 
+        let k = activeKisiData.find(x => x.id === id); 
+        if(!k) return; 
+        
+        // PENTING: Kosongkan idLama agar sistem menganggap ini baris BARU saat disimpan
+        document.getElementById('kisi-idLama').value = ''; 
+        
+        // Ekstrak data dan masukkan ke dalam form modal
+        document.getElementById('kisi-mapel').value = k.mapel; 
+        
+        // LOGIKA CERDAS: Jika Guru meng-copy milik kelas lain, otomatis ubah target kelasnya menjadi kelas yang ia ajar!
+        let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
+        let defaultKelas = k.kelas;
+        if (isGuru && currentUser.kelasAjar) {
+             let allowedClasses = currentUser.kelasAjar.split(',').map(x => String(x).trim());
+             if (allowedClasses.length > 0 && !allowedClasses.includes(String(k.kelas).trim())) {
+                 defaultKelas = allowedClasses[0]; 
+             }
+        }
+        document.getElementById('kisi-kelas').value = defaultKelas; 
+        
+        document.getElementById('kisi-kompetensi').value = k.kompetensi; 
+        if(document.getElementById('kisi-sub')) document.getElementById('kisi-sub').value = k.subkompetensi || ''; 
+        document.getElementById('kisi-indikator').value = k.indikator; 
+        document.getElementById('kisi-jenis').value = k.jenisTeks || ''; 
+        document.getElementById('kisi-bentuk').value = k.bentuk; 
+        document.getElementById('kisi-kode').value = k.kodeSoal || ''; 
+        document.getElementById('kisi-no').value = k.noSoal || ''; 
+        document.getElementById('kisi-stimulus').value = k.stimulus || ''; 
+        
+        document.getElementById('title-modal-kisi').innerText = 'Duplikat Kisi-Kisi Baru'; 
+        bukaModal('modalAddKisi'); 
+    }
+	
     function bukaModalKisiKosong() { document.getElementById('formAddKisi').reset(); document.getElementById('kisi-idLama').value = ''; document.getElementById('title-modal-kisi').innerText = 'Tambah Baris Kisi-Kisi'; bukaModal('modalAddKisi'); }
     function editKisi(id) { let k = activeKisiData.find(x => x.id === id); if(!k) return; document.getElementById('kisi-idLama').value = k.id; document.getElementById('kisi-mapel').value = k.mapel; document.getElementById('kisi-kelas').value = k.kelas; document.getElementById('kisi-kompetensi').value = k.kompetensi; document.getElementById('kisi-sub').value = k.subkompetensi; document.getElementById('kisi-indikator').value = k.indikator; document.getElementById('kisi-jenis').value = k.jenisTeks; document.getElementById('kisi-bentuk').value = k.bentuk; document.getElementById('kisi-kode').value = k.kodeSoal; document.getElementById('kisi-no').value = k.noSoal; document.getElementById('kisi-stimulus').value = k.stimulus; document.getElementById('title-modal-kisi').innerText = 'Edit Baris Kisi-Kisi'; bukaModal('modalAddKisi'); }
 
