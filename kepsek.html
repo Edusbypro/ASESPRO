@@ -363,6 +363,9 @@
                 <button class="btn btn-outline-danger px-3 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="exportKeWord()"><i class="bi bi-filetype-doc me-1"></i>Ekspor Docs</button>
                 <button class="btn btn-outline-info px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="previewSoalSiswa()"><i class="bi bi-eye-fill me-2"></i>Preview Soal</button>
                 <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="simpanSoalSekarang(event)"><i class="bi bi-cloud-arrow-up me-2"></i>Simpan Soal Ini</button>
+				<button class="btn btn-outline-info btn-sm fw-bold rounded-pill px-3 shadow-sm ms-2" onclick="bukaModalAksara()" title="Panduan Menulis Aksara Jawa, Arab & Matematika">
+    <i class="bi bi-translate me-1"></i> Bantuan Penulisan
+</button>
             </div>
           </div>
           
@@ -635,6 +638,76 @@
 
 
   <!-- ======================= KUMPULAN MODAL POP-UP ======================= -->
+  
+  <!-- MODAL BANTUAN AKSARA, ARAB & MATEMATIKA -->
+<div class="modal fade" id="modalAksaraArab" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl"> <!-- Diperlebar jadi modal-xl -->
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header bg-info bg-opacity-10 border-bottom-0 pb-3">
+                <h5 class="modal-title fw-bold text-info-emphasis"><i class="bi bi-translate me-2"></i>Panduan Ketik Aksara, Arab & Matematika</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row g-4">
+                    <!-- 1. TUTORIAL AKSARA JAWA -->
+                    <div class="col-md-4">
+                        <div class="card h-100 border-warning-subtle shadow-sm rounded-4">
+                            <div class="card-body">
+                                <h6 class="fw-bold text-warning-emphasis mb-3">1. Aksara Jawa (Hanacaraka)</h6>
+                                <p class="small text-muted mb-3">Cara paling aman agar Aksara Jawa tidak rusak di HP siswa adalah dengan <b>menjadikannya gambar</b>.</p>
+                                <ol class="small mb-4 ps-3 text-secondary">
+                                    <li>Klik tombol Buka Web di bawah ini.</li>
+                                    <li>Ketik abjad latin, web otomatis mengubahnya ke Aksara Jawa.</li>
+                                    <li>Gunakan pemotong layar <b>(Windows + Shift + S)</b>, blok teks Jawanya.</li>
+                                    <li>Di Studio Soal, tekan <b>Ctrl + V (Paste)</b>.</li>
+                                </ol>
+                                <a href="https://bennylin.github.io/transliterasijawa/" target="_blank" class="btn btn-warning w-100 fw-bold text-dark rounded-pill shadow-sm mt-auto"><i class="bi bi-box-arrow-up-right me-2"></i>Web Aksara Jawa</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 2. TUTORIAL BAHASA ARAB -->
+                    <div class="col-md-4">
+                        <div class="card h-100 border-success-subtle shadow-sm rounded-4">
+                            <div class="card-body">
+                                <h6 class="fw-bold text-success-emphasis mb-3">2. Huruf Arab / Hijaiyah</h6>
+                                <p class="small text-muted mb-3">Ketik huruf latin biasa, dan akan otomatis berubah menjadi huruf Arab bersambung.</p>
+                                <ol class="small mb-4 ps-3 text-secondary">
+                                    <li>Klik tombol Keyboard Arab di bawah.</li>
+                                    <li>Ketik abjad latin (misal: <i>bismillah</i>), blok lalu <b>Copy (Salin)</b>.</li>
+                                    <li>Di Studio Soal, klik ikon <b>RTL (Panah Kanan ke Kiri)</b> di toolbar editor.</li>
+                                    <li>Tekan <b>Ctrl + V (Paste)</b>.</li>
+                                </ol>
+                                <a href="https://www.yamli.com/arabic-keyboard/" target="_blank" class="btn btn-success w-100 fw-bold text-white rounded-pill shadow-sm mt-auto"><i class="bi bi-box-arrow-up-right me-2"></i>Keyboard Arab (Yamli)</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. TUTORIAL MATEMATIKA & GRAFIK -->
+                    <div class="col-md-4">
+                        <div class="card h-100 border-primary-subtle shadow-sm rounded-4">
+                            <div class="card-body">
+                                <h6 class="fw-bold text-primary-emphasis mb-3">3. Matematika, Grafik & Shape</h6>
+                                <p class="small text-muted mb-3">Untuk menjamin rumus/grafik tidak berantakan di HP siswa, <b>Wajib dijadikan Gambar (Screenshot)</b>.</p>
+                                <ol class="small mb-4 ps-3 text-secondary">
+                                    <li>Buka <b>MS Word</b> (Rumus/Shape) atau <b>Excel</b> (Grafik/Chart).</li>
+                                    <li>Buat materi Anda di sana dengan rapi.</li>
+                                    <li>Tekan tombol <b>Windows + Shift + S</b> di keyboard, lalu blok rumus/grafiknya.</li>
+                                    <li>Di Studio Soal, tekan <b>Ctrl + V (Paste)</b>.</li>
+                                </ol>
+                                <a href="https://editor.codecogs.com/" target="_blank" class="btn btn-primary w-100 fw-bold text-white rounded-pill shadow-sm mt-auto"><i class="bi bi-box-arrow-up-right me-2"></i>Web Rumus Online (Opsional)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Tutup Panduan</button>
+            </div>
+        </div>
+    </div>
+</div>
+  
   <!-- MODAL UJIAN -->
   <div class="modal fade" id="modalAddUjian" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -803,6 +876,11 @@
 
     function bukaModal(id) { try { let el = document.getElementById(id); let m = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el); m.show(); } catch(e){} }
     function tutupModal(id) { try { let m = bootstrap.Modal.getInstance(document.getElementById(id)); if(m) m.hide(); } catch(e){} }
+	function bukaModalAksara() {
+        var modalAksara = new bootstrap.Modal(document.getElementById('modalAksaraArab'));
+        modalAksara.show();
+    }
+	
     function bukaFullscreenIframe() { document.getElementById("view-generator").classList.toggle("pseudo-fullscreen"); }
     function parseSafeDate(str) { let d = new Date(str); if(!isNaN(d.getTime())) return d; let p = String(str).split(' '); if(p.length >= 2) { let dP = p[0].split('/'); let tP = p[1].split(':'); if(dP.length===3) return new Date(dP[2], dP[1]-1, dP[0], tP[0]||0, tP[1]||0, tP[2]||0); dP = p[0].split('-'); if(dP.length===3) return new Date(dP[0], dP[1]-1, dP[2], tP[0]||0, tP[1]||0, tP[2]||0); } return new Date(); }
 
@@ -848,6 +926,8 @@
             } 
         }
     });
+
+
 
     // ==========================================
     // LOGIN & NAVIGASI
