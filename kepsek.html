@@ -92,11 +92,36 @@
   <!-- LOGIN SCREEN KEPSEK -->
   <div id="screen-login" class="container">
     <div class="card card-login p-4">
+      
+      <!-- INI BAGIAN YANG DIGANTI (LOGO SVG EDUSBYPRO UNGU) -->
       <div class="text-center mb-4">
-        <i class="bi bi-shield-lock-fill text-primary" style="font-size: 3rem;"></i>
-        <h4 class="fw-bold mt-2 text-dark">Portal Eksekutif</h4>
-        <p class="text-muted small">Khusus Kepala Sekolah / Supervisor</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 80" style="max-height: 85px; margin-bottom: 10px;">
+            <defs>
+                <linearGradient id="gradPurple" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#581c87;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#7e22ce;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="gradRed" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#be123c;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#e11d48;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <path d="M 50 75 L 20 45 L 20 15 Q 50 0 80 15 L 80 45 Z" fill="url(#gradPurple)"/>
+            <path d="M 40 55 L 60 55 L 55 15 L 45 15 Z" fill="url(#gradRed)"/>
+            <path d="M 43 15 L 57 15 L 50 5 Z" fill="#fbbf24"/>
+            <line x1="50" y1="35" x2="50" y2="60" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="50" cy="32" r="3" fill="#ffffff"/>
+            <text x="100" y="45" font-family="'Segoe UI', Tahoma, sans-serif" font-size="30" font-weight="900" fill="#1e293b" letter-spacing="-0.5">
+                EDU<tspan fill="#e11d48">SBY</tspan><tspan fill="#7e22ce">PRO</tspan>
+            </text>
+            <text x="103" y="65" font-family="'Segoe UI', Tahoma, sans-serif" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2.5">
+                PORTAL EKSEKUTIF
+            </text>
+        </svg>
+        <p class="text-muted small mt-2">Khusus Kepala Sekolah / Supervisor</p>
       </div>
+      <!-- BATAS AKHIR LOGO -->
+
       <div id="login-alert" class="alert alert-danger hidden small text-center fw-bold"></div>
       
       <form onsubmit="handleLoginKepsek(event)">
