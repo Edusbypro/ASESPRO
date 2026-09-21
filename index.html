@@ -364,28 +364,47 @@
           </div>
         </div>
 
-        <!-- 3. UJIAN / ASESMEN ONLINE -->
+        <!-- 4. UJIAN / ASESMEN ONLINE -->
         <div id="view-ujian" class="view-section hidden">
           <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
-            <div><h5 class="fw-bold m-0"><i class="bi bi-journal-check text-primary me-2"></i>Jadwal Asesmen / Ujian Online</h5><small class="text-muted">Administrator membuat asesmen dan memonitor ujian.</small></div>
+            <div>
+                <h5 class="fw-bold m-0"><i class="bi bi-journal-check text-primary me-2"></i>Jadwal Asesmen / Ujian Online</h5>
+                <small class="text-muted">Administrator membuat asesmen dan memonitor ujian.</small>
+            </div>
             
-            <!-- TAMBAHAN: Kolom Pencarian Ujian -->
-            <div class="input-group" style="max-width: 300px;">
-              <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-              <input type="text" id="input-cari-ujian" class="form-control border-start-0 ps-0" placeholder="Cari Nama/Kode Ujian..." oninput="renderTabelUjianAdmin()">
+            <div class="d-flex gap-2 align-items-center flex-wrap">
+                <div class="input-group" style="max-width: 250px;">
+                  <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                  <input type="text" id="input-cari-ujian" class="form-control border-start-0 ps-0" placeholder="Cari Nama/Kode Ujian..." oninput="renderTabelUjianAdmin()">
+                </div>
+                <!-- FITUR BARU: Dropdown Filter Kepemilikan -->
+                <select id="filter-kepemilikan-ujian" class="form-select border-primary text-primary fw-bold" style="width: auto;" onchange="renderTabelUjianAdmin()">
+                    <option value="SAYA">Asesmen Saya</option>
+                    <option value="SEMUA">Semua Asesmen</option>
+                </select>
             </div>
 
-            <div class="d-flex gap-2"><button class="btn btn-outline-primary px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="bukaModalImporGlobal()"><i class="bi bi-cloud-download me-1"></i> Impor Bank Soal</button><button class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModalUjianKosong()"><i class="bi bi-plus-lg me-1"></i> Buat Asesmen</button></div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="bukaModalImporGlobal()"><i class="bi bi-cloud-download me-1"></i> Impor Bank Soal</button>
+                <button class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModalUjianKosong()"><i class="bi bi-plus-lg me-1"></i> Buat Asesmen</button>
+            </div>
           </div>
+          
           <div class="row g-4" id="container-kartu-ujian"></div>
-		  
         </div>
 
 <!-- 3.B. HALAMAN LINK EKSTERNAL ADMIN -->
         <div id="view-link" class="view-section hidden">
           <div class="mb-4 d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
               <div><h5 class="fw-bold m-0"><i class="bi bi-link-45deg text-success me-2"></i>Tugas Link Eksternal</h5><small class="text-muted">Masukkan link Quizizz, GForm, Kahoot, dll untuk dikerjakan siswa.</small></div>
-              <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddLink')"><i class="bi bi-plus-lg me-1"></i> Tambah Link</button>
+              <div class="d-flex gap-2 align-items-center">
+                  <!-- FITUR BARU: Dropdown Filter Kepemilikan -->
+                  <select id="filter-kepemilikan-link" class="form-select border-success text-success fw-bold" style="width: auto;" onchange="loadLinkAdmin()">
+                      <option value="SAYA">Link Saya</option>
+                      <option value="SEMUA">Semua Link</option>
+                  </select>
+                  <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddLink')"><i class="bi bi-plus-lg me-1"></i> Tambah Link</button>
+              </div>
           </div>
           <div class="row g-4" id="container-link-admin"></div>
         </div>
@@ -494,42 +513,75 @@
 
 
         <!-- 8. LAPORAN PENILAIAN SISWA -->
+        <!-- LAPORAN PENILAIAN SISWA -->
         <div id="view-laporan" class="view-section hidden">
           <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light d-print-none">
-            <div><h5 class="fw-bold m-0"><i class="bi bi-file-earmark-bar-graph text-primary me-2"></i>Cetak Laporan Rapor Siswa</h5><small class="text-muted">Pilih siswa dan ceklis nilai asesmen yang ingin dimasukkan ke dalam Rapor PDF.</small></div>
+            <div>
+                <h5 class="fw-bold m-0"><i class="bi bi-file-earmark-bar-graph text-primary me-2"></i>Cetak Laporan Rapor Siswa</h5>
+                <small class="text-muted">Pilih siswa dan ceklis nilai asesmen yang ingin dimasukkan ke dalam Rapor PDF.</small>
+            </div>
             <div class="d-flex gap-2 align-items-center">
-                <select class="form-select border shadow-sm rounded-pill px-4 bg-white fw-bold text-primary" id="filter-laporan-kelas" onchange="renderTabelLaporanSiswa()" style="width: auto;"><option value="">-- Pilih Kelas --</option></select>
+                <select class="form-select border shadow-sm rounded-pill px-4 bg-white fw-bold text-primary" id="filter-laporan-kelas" onchange="renderTabelLaporanSiswa()" style="width: auto;">
+                    <option value="">-- Pilih Kelas --</option>
+                </select>
             </div>
           </div>
 
           <div class="row g-4 d-print-none" id="laporan-main-area">
+             <!-- KOLOM KIRI: DAFTAR SISWA -->
              <div class="col-md-5">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card border-0 shadow-sm rounded-4" style="min-height: 400px;">
                     <div class="card-body p-0">
-                        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
-                            <table class="table table-hover align-middle m-0 text-nowrap"><thead class="table-light" style="position: sticky; top: 0; z-index: 1;"><tr><th class="ps-4">Siswa</th><th>Aksi</th></tr></thead><tbody id="tb-laporan-siswa"><tr><td colspan="2" class="text-center py-5 text-muted">Pilih kelas di atas.</td></tr></tbody></table>
+                        <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                            <table class="table table-hover align-middle m-0 text-nowrap">
+                                <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+                                    <tr><th class="ps-4 py-3">Nama Siswa</th><th class="text-center">Aksi</th></tr>
+                                </thead>
+                                <tbody id="tb-laporan-siswa">
+                                    <tr><td colspan="2" class="text-center py-5 text-muted">Pilih kelas di atas.</td></tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
              </div>
 
+             <!-- KOLOM KANAN: PANEL LAPORAN -->
              <div class="col-md-7">
-                <div class="card border-0 shadow-sm rounded-4 h-100 bg-white" id="panel-konfigurasi-rapor" style="display:none;">
+                <!-- PANEL KOSONG -->
+                <div id="panel-konfigurasi-kosong" class="d-flex flex-column align-items-center justify-content-center text-muted bg-white rounded-4 border shadow-sm" style="height: 400px;">
+                    <i class="bi bi-arrow-left-square display-4 mb-3 text-secondary"></i>
+                    <p class="m-0 fs-5">Klik tombol <b>Laporan</b> dari daftar siswa di samping.</p>
+                </div>
+
+                <!-- PANEL KONFIGURASI RAPOR -->
+                <div class="card border-0 shadow-sm rounded-4 bg-white" id="panel-konfigurasi-rapor" style="display:none; min-height: 400px;">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-                            <div><h5 class="fw-bold m-0 text-primary" id="lap-nama-siswa">Nama Siswa</h5><small class="text-muted" id="lap-nisn-siswa">NISN</small></div>
-                            <button class="btn btn-danger fw-bold rounded-pill shadow-sm" onclick="downloadLaporanPDF()"><i class="bi bi-file-pdf me-1"></i> Unduh PDF</button>
+                            <div>
+                                <h5 class="fw-bold m-0 text-primary" id="lap-nama-siswa">Nama Siswa</h5>
+                                <small class="text-muted" id="lap-nisn-siswa">NISN</small>
+                            </div>
+                            <button class="btn btn-danger fw-bold rounded-pill shadow-sm" onclick="downloadLaporanPDF()">
+                                <i class="bi bi-file-pdf me-1"></i> Unduh PDF
+                            </button>
                         </div>
                         <h6 class="fw-bold mb-3"><i class="bi bi-list-check me-2"></i>Pilih Nilai Asesmen:</h6>
-                        <div id="lap-checkbox-ujian" class="d-flex flex-column gap-2 mb-4 bg-light p-3 rounded-3 border" style="max-height: 200px; overflow-y: auto;"></div>
+                        
+                        <!-- WADAH CHECKBOX MATA PELAJARAN (Tingginya dibatasi agar bisa di-scroll) -->
+                        <div id="lap-checkbox-ujian" class="mb-4 bg-light p-3 rounded-3 border" style="max-height: 250px; overflow-y: auto;">
+                            <!-- Data akan di-render oleh JavaScript -->
+                        </div>
+                        
                         <h6 class="fw-bold mb-3"><i class="bi bi-graph-up-arrow me-2"></i>Grafik Perkembangan Nilai:</h6>
-                        <div class="border rounded-3 p-3 bg-white"><canvas id="grafikProgressNilai" style="width: 100%; height: 250px;"></canvas></div>
+                        <div class="border rounded-3 p-3 bg-white">
+                            <canvas id="grafikProgressNilai" style="width: 100%; height: 250px;"></canvas>
+                        </div>
                     </div>
                 </div>
-                <div id="panel-konfigurasi-kosong" class="h-100 d-flex flex-column align-items-center justify-content-center text-muted bg-white rounded-4 border p-5"><i class="bi bi-arrow-left-square display-4 mb-3 text-secondary"></i><p class="m-0">Klik tombol <b>Lihat Laporan</b>.</p></div>
              </div>
           </div>
-
+          
           <!-- HIDDEN CONTAINER FOR PDF -->
           <div id="print-laporan-container" style="display:none; position: relative;">
               <div class="rapor-header" style="text-align: center; border-bottom: 3px solid black; padding-bottom: 15px; margin-bottom: 20px; position: relative; min-height: 100px;">
@@ -537,15 +589,26 @@
                   <div style="padding-left: 100px; padding-right: 10px;">
                       <h3 style="margin:0; font-family:Arial, sans-serif; text-transform:uppercase; font-size: 16px; font-weight: bold;">LAPORAN NILAI ASESMEN SISWA</h3>
                       <h2 style="margin:5px 0; font-family:Arial, sans-serif; text-transform:uppercase; font-size: 22px; font-weight: bold;" id="print-sekolah">NAMA SEKOLAH</h2>
-                      <p style="margin:0; font-size:14px;">Tanggal Asesmen : <span id="print-tanggal-asesmen"></span></p>
+                      <p style="margin:0; font-size:14px;">Tanggal Cetak : <span id="print-tanggal-asesmen"></span></p>
                   </div>
               </div>
-              <table style="width:100%; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 14px;"><tr><td style="width: 100px;"><b>Nama Peserta</b></td><td>: <span id="print-nama"></span></td><td style="width: 80px;"><b>Fase/Kelas</b></td><td>: <span id="print-kelas"></span></td></tr><tr><td><b>NISN</b></td><td>: <span id="print-nisn"></span></td><td><b>Semester</b></td><td>: Genap</td></tr></table>
+              <table style="width:100%; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 14px;">
+                  <tr><td style="width: 100px;"><b>Nama Peserta</b></td><td>: <span id="print-nama"></span></td><td style="width: 80px;"><b>Fase/Kelas</b></td><td>: <span id="print-kelas"></span></td></tr>
+                  <tr><td><b>NISN / User</b></td><td>: <span id="print-nisn"></span></td><td><b>Semester</b></td><td>: Genap</td></tr>
+              </table>
               <h4 style="font-family:Arial, sans-serif; font-size: 14px; margin-bottom:10px;">A. Daftar Nilai Asesmen</h4>
-              <table class="rapor-table"><thead><tr><th style="width:5%;">No</th><th style="width:25%;">Mata Pelajaran</th><th style="width:40%;">Nama Asesmen</th><th style="width:15%;">Skor (0-100)</th><th style="width:15%;">Predikat</th></tr></thead><tbody id="print-tb-nilai"></tbody></table>
+              <table class="rapor-table">
+                  <thead><tr><th style="width:5%;">No</th><th style="width:25%;">Mata Pelajaran</th><th style="width:40%;">Nama Asesmen</th><th style="width:15%;">Skor Akhir</th><th style="width:15%;">Predikat</th></tr></thead>
+                  <tbody id="print-tb-nilai"></tbody>
+              </table>
               <h4 style="font-family:Arial, sans-serif; font-size: 14px; margin-top:20px; margin-bottom:10px;">B. Grafik Tren Perkembangan</h4>
               <div style="width:100%; text-align:center; margin-bottom:40px;"><img id="print-chart-img" src="" style="max-width:100%; height:auto;"></div>
-              <table style="width:100%; font-family: Arial, sans-serif; font-size: 14px; margin-top: 50px;"><tr><td style="width: 60%; text-align: center;">Mengetahui,<br>Orang Tua / Wali<br><br><br><br>.........................................</td><td style="width: 40%; text-align: center;">Wali Kelas,<br><br><br><br><br><b><span id="print-wali-kelas">Administrator Utama</span></b></td></tr></table>
+              <table style="width:100%; font-family: Arial, sans-serif; font-size: 14px; margin-top: 50px;">
+                  <tr>
+                      <td style="width: 60%; text-align: center;">Mengetahui,<br>Orang Tua / Wali<br><br><br><br>.........................................</td>
+                      <td style="width: 40%; text-align: center;">Wali Kelas,<br><br><br><br><br><b><span id="print-wali-kelas">Administrator Utama</span></b></td>
+                  </tr>
+              </table>
           </div>
         </div>
 
@@ -1130,23 +1193,47 @@
   <div class="modal fade" id="modalAddGuru" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header border-0 pb-0 pt-4 px-4"><h5 class="modal-title fw-bold" id="title-modal-guru">Akun Guru</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold" id="title-modal-guru">Akun Guru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
             <div class="modal-body p-4">
                 <form id="formAddGuru" onsubmit="event.preventDefault(); simpanGuru();">
                     <input type="hidden" id="gr-user-lama">
                     <div class="row g-3">
-                        <div class="col-12"><label class="form-label small fw-bold">Nama Lengkap</label><input type="text" id="gr-nama" class="form-control" required></div>
-                        <div class="col-12"><label class="form-label small fw-bold text-primary">Username</label><input type="text" id="gr-user" class="form-control border-primary" required></div>
-                        <div class="col-12"><label class="form-label small fw-bold text-primary">Password</label><input type="text" id="gr-pass" class="form-control border-primary" required></div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Nama Lengkap</label>
+                            <input type="text" id="gr-nama" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-primary">Username</label>
+                            <input type="text" id="gr-user" class="form-control border-primary" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-primary">Password</label>
+                            <input type="text" id="gr-pass" class="form-control border-primary" required>
+                        </div>
                         <div class="col-12">
                             <label class="form-label small fw-bold">Role Akun</label>
-                            <select id="gr-role" class="form-select border-primary" required>
+                            <!-- PERUBAHAN: Menambahkan onchange untuk menyembunyikan ceklis kelas jika role-nya kepsek -->
+                            <select id="gr-role" class="form-select border-primary" required onchange="toggleAreaKelasAjar()">
                                 <option value="guru">Guru Biasa</option>
                                 <option value="kepsek">Kepala Sekolah</option>
                             </select>
                         </div>
+                        
+                        <!-- FITUR BARU: WADAH CEKLIS KELAS AJAR -->
+                        <div class="col-12 mt-3" id="area-kelas-ajar">
+                            <label class="form-label small fw-bold text-success"><i class="bi bi-person-check-fill me-1"></i>Akses Kelas yang Diajar (Ceklis)</label>
+                            <div id="cb-kelas-ajar" class="d-flex flex-wrap gap-2 p-3 bg-success bg-opacity-10 border border-success-subtle rounded-3">
+                                <!-- Kotak-kotak centang kelas akan dimuat di sini secara otomatis oleh JavaScript -->
+                            </div>
+                        </div>
+                        
                     </div>
-                    <div class="text-end mt-4 pt-3 border-top"><button type="submit" class="btn btn-primary px-4 fw-bold rounded-pill shadow-sm" id="btn-simpan-guru">Simpan</button></div>
+                    <div class="text-end mt-4 pt-3 border-top">
+                        <button type="submit" class="btn btn-primary px-4 fw-bold rounded-pill shadow-sm" id="btn-simpan-guru">Simpan</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -1952,7 +2039,6 @@ function mulaiTimerCBT() {
                 // Menyembunyikan hak akses eksklusif Admin
                 if(document.getElementById('menu-guru')) document.getElementById('menu-guru').style.display = 'none';
                 if(document.getElementById('menu-pengaturan')) document.getElementById('menu-pengaturan').style.display = 'none';
-                if(document.getElementById('menu-siswa')) document.getElementById('menu-siswa').style.display = 'none';
             } else {
                 document.getElementById('topbar-role').innerText = 'Administrator Utama';
                 // Menampilkan semua hak akses jika yang login Admin
@@ -2028,11 +2114,33 @@ function mulaiTimerCBT() {
         let selectEl = document.getElementById('filter-kartu-kelas-mandiri');
         if (!selectEl) return;
         
-        let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== 'undefined' && k !== '-'))];
+        let isGuru = (currentUser && currentUser.role === 'guru');
+        let allowedClasses = [];
+        
+        if (isGuru && currentUser.kelasAjar) {
+            allowedClasses = currentUser.kelasAjar.split(',').map(x => x.trim());
+        }
+
+        let classes = [];
+        if (typeof activeSiswaData !== 'undefined' && activeSiswaData.length > 0) {
+            // Filter daftar kelas yang muncul di dropdown
+            let semuaKelas = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== 'undefined' && k !== '-'))];
+            
+            if (isGuru && allowedClasses.length > 0) {
+                classes = semuaKelas.filter(c => allowedClasses.includes(c));
+            } else {
+                classes = semuaKelas;
+            }
+        }
+        
         let classOptions = '<option value="">-- Pilih Kelas --</option>'; 
         classes.sort().forEach(c => classOptions += `<option value="${c}">${c}</option>`);
         
         selectEl.innerHTML = classOptions;
+        
+        // PENTING: Update juga dropdown di menu Laporan Nilai agar sinkron
+        let selectLaporan = document.getElementById('filter-laporan-kelas');
+        if (selectLaporan) selectLaporan.innerHTML = classOptions;
     }
 
     // 1. GANTI FUNGSI GANTI PASSWORD
@@ -2076,64 +2184,104 @@ function mulaiTimerCBT() {
         const renderDashboardUI = (data) => {
             if(data && data.error) { console.error(data.message); return; }
 
-            document.getElementById('stat-tot-siswa').innerText = (data.stats && data.stats.jml_siswa) ? data.stats.jml_siswa : 0;
-            document.getElementById('stat-akt-siswa').innerText = (data.stats && data.stats.siswa_aktif) ? data.stats.siswa_aktif : 0;
-            
-            if(document.getElementById('stat-tot-ujian')) document.getElementById('stat-tot-ujian').innerText = (data.ujian) ? data.ujian.length : 0;
-            if(document.getElementById('stat-tot-soal')) document.getElementById('stat-tot-soal').innerText = (data.stats && data.stats.jml_soal) ? data.stats.jml_soal : 0;
-
-            if(document.getElementById('set-nama')) document.getElementById('set-nama').value = data.setting.nama || '';
-            if(document.getElementById('set-npsn')) document.getElementById('set-npsn').value = data.setting.npsn || '';
-            if(document.getElementById('set-admin')) document.getElementById('set-admin').value = data.setting.adminName || '';
-            
-            if(document.getElementById('set-logo')) document.getElementById('set-logo').value = data.setting.logo || ''; 
-            if (data.setting.logo && data.setting.logo.length > 20 && document.getElementById('preview-logo')) { document.getElementById('preview-logo').src = data.setting.logo; }
-
-            // === PERBAIKAN: INJEKSI API KEY CERDAS (ANTI REFRESH) ===
-            if(document.getElementById('set-apikey')) {
-                let currentApiKey = data.setting.apiKey || '';
-                document.getElementById('set-apikey').value = currentApiKey;
-                
-                if (currentApiKey) {
-                    // Karena Portal dan Generator ada di domain yang sama (edusbypro.github.io),
-                    // Kita langsung injeksi API Key ke memori browser agar terbaca otomatis!
-                    localStorage.setItem('gemini_api_key', currentApiKey);
-                    localStorage.setItem('apiKey', currentApiKey); 
-                }
-
-                // Cegah Iframe me-reload terus menerus saat background poller (alarm) berjalan
-                let iframeGen = document.getElementById('iframe-gen');
-                if(iframeGen && currentApiKey && !iframeGen.src.includes('apikey=')) {
-                    iframeGen.src = "https://edusbypro.github.io/CBTSDSBY26/?apikey=" + currentApiKey;
-                }
-                
-                let iframeRpp = document.getElementById('iframe-rpp');
-                if(iframeRpp && currentApiKey && !iframeRpp.src.includes('apikey=')) {
-                    iframeRpp.src = "https://edusbypro.github.io/GENRPPSBY26/?apikey=" + currentApiKey;
-                }
-            }
-
-            activeSiswaData = data.siswa || []; filterDataSiswa(); 
-            let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== 'undefined' && k !== '-'))];
-            let classOptions = '<option value="">-- Pilih Kelas --</option>'; classes.sort().forEach(c => classOptions += `<option value="${c}">${c}</option>`);
-            if(document.getElementById('filter-kartu-kelas')) document.getElementById('filter-kartu-kelas').innerHTML = classOptions;
-            if(document.getElementById('filter-laporan-kelas')) document.getElementById('filter-laporan-kelas').innerHTML = classOptions;
-            
+            // 1. Simpan Data Mentah
+            activeSiswaData = data.siswa || []; 
             activeUjianData = data.ujian || []; 
-            renderTabelUjianAdmin(); 
+            activeKisiData = data.kisi || [];
             
-            let optUjian = '<option value="">-- Pilih Asesmen --</option>'; activeUjianData.forEach(u => optUjian += `<option value="${u.kode}">${u.nama} (${u.mapel})</option>`);
-            if(document.getElementById('filter-analisis-ujian')) document.getElementById('filter-analisis-ujian').innerHTML = optUjian;
-            if(document.getElementById('filter-supervisi-ujian')) document.getElementById('filter-supervisi-ujian').innerHTML = optUjian;
+            let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
 
-            activeKisiData = data.kisi || []; 
-            renderTabelKisi(); 
-            
-            panggilAPI("getSemuaHasil", { kodeSekolah: currentUser.kode_sekolah })
-                .then(hasil => { activeHasilData = hasil || []; })
-                .catch(err => console.log("Gagal memuat hasil:", err));
-            
-            loadLinkAdmin();
+            // 2. FUNGSI EKSEKUTOR (Hanya berjalan JIKA profil kelas guru sudah ditemukan)
+            const eksekusiRender = (kelasAjarGuru) => {
+                let allowedClasses = [];
+                if (isGuru && kelasAjarGuru) {
+                    allowedClasses = kelasAjarGuru.split(',').map(x => String(x).trim());
+                    // Simpan ke sesi agar tidak perlu antri ke database lagi
+                    currentUser.kelasAjar = kelasAjarGuru;
+                    localStorage.setItem('cbt_admin_session', JSON.stringify(currentUser));
+                }
+
+                // FILTER SISWA BERDASARKAN KELAS
+                let filteredSiswa = activeSiswaData;
+                if (isGuru) {
+                    filteredSiswa = allowedClasses.length > 0 ? activeSiswaData.filter(s => allowedClasses.includes(String(s.kelas).trim())) : [];
+                }
+
+                // FILTER UJIAN BERDASARKAN PEMBUAT
+                let filteredUjian = activeUjianData;
+                if (isGuru) {
+                    filteredUjian = activeUjianData.filter(u => String(u.kode).includes('_#' + currentUser.username));
+                }
+
+                // TAMPILKAN STATISTIK AMAN KE BERANDA
+                document.getElementById('stat-tot-siswa').innerText = filteredSiswa.length;
+                document.getElementById('stat-akt-siswa').innerText = filteredSiswa.length;
+                if(document.getElementById('stat-tot-ujian')) document.getElementById('stat-tot-ujian').innerText = filteredUjian.length;
+                
+                if(document.getElementById('stat-tot-soal')) {
+                    let totalSoalGuru = 0;
+                    filteredUjian.forEach(u => { totalSoalGuru += Number(u.jmlSoal) || 0; });
+                    document.getElementById('stat-tot-soal').innerText = isGuru ? totalSoalGuru : ((data.stats && data.stats.jml_soal) ? data.stats.jml_soal : 0);
+                }
+
+                if(document.getElementById('set-nama')) document.getElementById('set-nama').value = data.setting.nama || '';
+                if(document.getElementById('set-npsn')) document.getElementById('set-npsn').value = data.setting.npsn || '';
+                if(document.getElementById('set-admin')) document.getElementById('set-admin').value = data.setting.adminName || '';
+                if(document.getElementById('set-logo')) document.getElementById('set-logo').value = data.setting.logo || ''; 
+                if(data.setting.logo && data.setting.logo.length > 20 && document.getElementById('preview-logo')) { document.getElementById('preview-logo').src = data.setting.logo; }
+
+                if(document.getElementById('set-apikey')) {
+                    let currentApiKey = data.setting.apiKey || '';
+                    document.getElementById('set-apikey').value = currentApiKey;
+                    if (currentApiKey) {
+                        localStorage.setItem('gemini_api_key', currentApiKey);
+                        localStorage.setItem('apiKey', currentApiKey); 
+                    }
+                    let iframeGen = document.getElementById('iframe-gen');
+                    if(iframeGen && currentApiKey && !iframeGen.src.includes('apikey=')) { iframeGen.src = "https://edusbypro.github.io/CBTSDSBY26/?apikey=" + currentApiKey; }
+                    let iframeRpp = document.getElementById('iframe-rpp');
+                    if(iframeRpp && currentApiKey && !iframeRpp.src.includes('apikey=')) { iframeRpp.src = "https://edusbypro.github.io/GENRPPSBY26/?apikey=" + currentApiKey; }
+                }
+
+                // Render komponen tabel lainnya menggunakan data yang sudah terfilter
+                filterDataSiswa(); 
+                
+                let classes = [...new Set(filteredSiswa.map(s => String(s.kelas).trim()).filter(k => k && k !== 'undefined' && k !== '-'))];
+                let classOptions = '<option value="">-- Pilih Kelas --</option>'; classes.sort().forEach(c => classOptions += `<option value="${c}">${c}</option>`);
+                if(document.getElementById('filter-kartu-kelas-mandiri')) document.getElementById('filter-kartu-kelas-mandiri').innerHTML = classOptions;
+                if(document.getElementById('filter-laporan-kelas')) document.getElementById('filter-laporan-kelas').innerHTML = classOptions;
+                
+                renderTabelUjianAdmin(); 
+                
+                let optUjian = '<option value="">-- Pilih Asesmen --</option>'; filteredUjian.forEach(u => optUjian += `<option value="${u.kode}">${u.nama} (${u.mapel})</option>`);
+                if(document.getElementById('filter-analisis-ujian')) document.getElementById('filter-analisis-ujian').innerHTML = optUjian;
+                if(document.getElementById('filter-supervisi-ujian')) document.getElementById('filter-supervisi-ujian').innerHTML = optUjian;
+
+                renderTabelKisi(); 
+                
+                panggilAPI("getSemuaHasil", { kodeSekolah: currentUser.kode_sekolah })
+                    .then(hasil => { activeHasilData = hasil || []; })
+                    .catch(err => console.log("Gagal memuat hasil:", err));
+                
+                loadLinkAdmin();
+            };
+
+            // 3. LOGIKA PENAHAN (Menunggu data kelasAjar guru tersedia sebelum merender)
+            if (isGuru) {
+                if (currentUser.kelasAjar !== undefined && currentUser.kelasAjar !== null) {
+                    eksekusiRender(currentUser.kelasAjar);
+                } else {
+                    // Tarik data guru dulu dari server agar aman
+                    panggilAPI("getDataGuruBackend", { kodeSekolah: currentUser.kode_sekolah }).then(guruList => {
+                        activeGuruData = guruList || [];
+                        let profilSaya = guruList.find(x => x.username === currentUser.username);
+                        let kelasSaya = profilSaya ? (profilSaya.kelasAjar || '') : '';
+                        eksekusiRender(kelasSaya);
+                    }).catch(() => eksekusiRender('')); // Fallback jika gagal
+                }
+            } else {
+                eksekusiRender(''); // Jika Admin, gas render semua
+            }
         };
 
         const cachedData = localStorage.getItem(cacheKey);
@@ -2151,28 +2299,19 @@ function mulaiTimerCBT() {
             renderDashboardUI(data); 
 
             if(window.intervalCekData) clearInterval(window.intervalCekData);
-            
             window.intervalCekData = setInterval(() => {
                 panggilAPI("getAdminData", { kodeSekolah: currentUser.kode_sekolah })
                 .then(newData => {
                     if(!newData || newData.error) return;
-                    
-                    let volLama = (data.ujian ? data.ujian.length : 0) + 
-                                  (data.siswa ? data.siswa.length : 0) + 
-                                  (data.hasil ? data.hasil.length : 0);
-                                  
-                    let volBaru = (newData.ujian ? newData.ujian.length : 0) + 
-                                  (newData.siswa ? newData.siswa.length : 0) + 
-                                  (newData.hasil ? newData.hasil.length : 0);
-                    
+                    let volLama = (data.ujian ? data.ujian.length : 0) + (data.siswa ? data.siswa.length : 0) + (data.hasil ? data.hasil.length : 0);
+                    let volBaru = (newData.ujian ? newData.ujian.length : 0) + (newData.siswa ? newData.siswa.length : 0) + (newData.hasil ? newData.hasil.length : 0);
                     if(volBaru > volLama) {
                         tampilkanNotif("Ada data masuk (Ujian/Jawaban Siswa Baru)! <br><a href='javascript:void(0)' onclick='loadDashboardData()' class='text-warning text-decoration-none'>[Klik Di Sini Untuk Sinkronkan Layar]</a>");
                         data = newData; 
                         try { localStorage.setItem(cacheKey, JSON.stringify(newData)); } catch(e) {}
                     }
-                }).catch(e => console.log("Sensor background berjalan offline."));
+                }).catch(e => console.log("Sensor berjalan offline."));
             }, 60000); 
-            
         })
         .catch(err => {
             if(!cachedData) alert("Gagal terhubung ke server: " + err.message);
@@ -2263,8 +2402,30 @@ function mulaiTimerCBT() {
     }
 
     function filterDataSiswa() {
-        const keyword = document.getElementById('input-cari-siswa').value.toLowerCase(); let htmlSiswa = '';
-        let filteredData = activeSiswaData.filter(s => String(s.nama).toLowerCase().includes(keyword) || String(s.user).toLowerCase().includes(keyword));
+        // Bumper anti-crash jika kotak pencarian belum diload
+        const searchInput = document.getElementById('input-cari-siswa');
+        const keyword = searchInput ? searchInput.value.toLowerCase() : ''; 
+        let htmlSiswa = '';
+        
+        let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
+        
+        let allowedClasses = [];
+        if (isGuru && currentUser.kelasAjar) {
+            allowedClasses = currentUser.kelasAjar.split(',').map(x => String(x).trim());
+        }
+
+        let filteredData = activeSiswaData.filter(s => {
+            let matchKeyword = String(s.nama).toLowerCase().includes(keyword) || String(s.user).toLowerCase().includes(keyword);
+            
+            // JIKA GURU: Pastikan kelas siswa terdaftar di allowedClasses
+            let matchAkses = true;
+            if (isGuru) {
+                matchAkses = allowedClasses.includes(String(s.kelas).trim());
+            }
+            
+            return matchKeyword && matchAkses;
+        });
+
         filteredData.forEach((s) => { 
             htmlSiswa += `<tr>
                 <td><div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width:40px;height:40px;"><i class="bi bi-person fs-5"></i></div></td>
@@ -2279,58 +2440,189 @@ function mulaiTimerCBT() {
                 <td><i class="bi bi-trash3 text-danger fs-5 ms-3" style="cursor:pointer;" onclick="hapusSiswa('${s.user}')"></i></td>
             </tr>`; 
         }); 
-        document.getElementById('tb-siswa').innerHTML = htmlSiswa || '<tr><td colspan="10" class="text-center text-muted py-5">Siswa tidak ditemukan.</td></tr>';
+        
+        const tbSiswa = document.getElementById('tb-siswa');
+        if (tbSiswa) {
+            tbSiswa.innerHTML = htmlSiswa || `<tr><td colspan="10" class="text-center text-muted py-5">${isGuru ? 'Tidak ada siswa di kelas yang Anda ajar.' : 'Siswa tidak ditemukan.'}</td></tr>`;
+        }
     }
 
     function renderTabelLaporanSiswa() {
-        const fKelas = document.getElementById('filter-laporan-kelas').value; let arr = activeSiswaData;
-        if(fKelas) arr = arr.filter(s => String(s.kelas).trim() === String(fKelas).trim()); let html = '';
-        arr.forEach(s => { html += `<tr><td class="ps-4 fw-bold text-dark">${s.nama}</td><td><button class="btn btn-sm btn-outline-primary rounded-pill fw-bold" onclick="bukaPanelLaporanSiswa('${s.user}')"><i class="bi bi-eye me-1"></i> Laporan</button></td></tr>`; });
+        const fKelas = document.getElementById('filter-laporan-kelas').value; 
+        
+        let isGuru = (currentUser && currentUser.role === 'guru');
+        let allowedClasses = [];
+        if (isGuru && currentUser.kelasAjar) {
+            allowedClasses = currentUser.kelasAjar.split(',').map(x => x.trim());
+        }
+
+        // Filter data siswa sesuai hak akses guru
+        let arr = activeSiswaData;
+        if (isGuru && allowedClasses.length > 0) {
+            arr = arr.filter(s => allowedClasses.includes(String(s.kelas).trim()));
+        }
+
+        if(fKelas) arr = arr.filter(s => String(s.kelas).trim() === String(fKelas).trim()); 
+        
+        let html = '';
+        arr.forEach(s => { 
+            html += `<tr><td class="ps-4 fw-bold text-dark">${s.nama}</td><td><button class="btn btn-sm btn-outline-primary rounded-pill fw-bold" onclick="bukaPanelLaporanSiswa('${s.user}')"><i class="bi bi-eye me-1"></i> Laporan</button></td></tr>`; 
+        });
+        
         document.getElementById('tb-laporan-siswa').innerHTML = html || `<tr><td colspan="2" class="text-center py-5 text-muted">${fKelas ? 'Tidak ada siswa.' : 'Pilih kelas di atas.'}</td></tr>`;
     }
 
-    function bukaPanelLaporanSiswa(nisn) {
-        aktifNisnLaporan = nisn; const siswa = activeSiswaData.find(s => s.user === nisn); if(!siswa) return;
-        document.getElementById('panel-konfigurasi-kosong').style.display = 'none'; document.getElementById('panel-konfigurasi-rapor').style.display = 'block';
-        document.getElementById('lap-nama-siswa').innerText = siswa.nama; document.getElementById('lap-nisn-siswa').innerText = "NISN: " + siswa.user + " | Kelas: " + siswa.kelas;
+    function bukaPanelLaporanSiswa(nisn) { 
+        aktifNisnLaporan = nisn; 
+        const siswa = activeSiswaData.find(s => s.user === nisn); 
+        if(!siswa) return;
 
-        let riwayatUjian = activeHasilData.filter(h => h.userSiswa === nisn); let htmlCheck = '';
-        if(riwayatUjian.length === 0) { htmlCheck = '<div class="text-muted small">Belum ada riwayat ujian untuk siswa ini.</div>'; } 
-        else { riwayatUjian.forEach(h => { let infoUjian = activeUjianData.find(u => u.kode === h.kodeUjian) || {nama: h.kodeUjian, mapel: 'Umum'}; htmlCheck += `<div class="form-check border-bottom pb-2"><input class="form-check-input check-laporan-nilai" type="checkbox" value="${h.kodeUjian}" checked onchange="updateGrafikLaporan()"><label class="form-check-label w-100 d-flex justify-content-between small"><span><b>${infoUjian.mapel}</b> - ${infoUjian.nama}</span><span class="badge bg-success rounded-pill">Nilai: ${h.nilai}</span></label></div>`; }); }
-        document.getElementById('lap-checkbox-ujian').innerHTML = htmlCheck; updateGrafikLaporan();
+        document.getElementById('panel-konfigurasi-kosong').style.display = 'none'; 
+        document.getElementById('panel-konfigurasi-rapor').style.display = 'block';
+        document.getElementById('lap-nama-siswa').innerText = siswa.nama; 
+        document.getElementById('lap-nisn-siswa').innerText = `NISN/User: ${siswa.user} | Kelas: ${siswa.kelas}`;
+
+        panggilAPI("getSemuaHasil", {kodeSekolah: currentUser.kode_sekolah}).then(r => { 
+            let riwayatSiswa = (r || []).filter(h => h.userSiswa === nisn); 
+            let htmlCheck = ''; 
+
+            if(riwayatSiswa.length === 0) { 
+                htmlCheck = '<div class="text-muted small py-4 text-center">Belum ada riwayat ujian untuk siswa ini.</div>'; 
+            } else { 
+                // SISTEM GROUPING MAPEL
+                let groupedMapel = {};
+                
+                riwayatSiswa.forEach(h => {
+                    let infoUjian = activeUjianData.find(u => u.kode === h.kodeUjian) || {nama: h.kodeUjian, mapel: 'Lain-lain'};
+                    let mapel = infoUjian.mapel;
+                    
+                    if (!groupedMapel[mapel]) { groupedMapel[mapel] = []; }
+                    
+                    // Mendeteksi percobaan remedial (Ke-2, Ke-3) agar judul tidak membingungkan
+                    let namaTestTampil = infoUjian.nama;
+                    if (h.namaSiswa && h.namaSiswa.includes("(Ke-")) {
+                        let matchPercobaan = h.namaSiswa.match(/\(Ke-\d+\)/);
+                        if (matchPercobaan) namaTestTampil += ` <span class="badge bg-secondary ms-1">${matchPercobaan[0]}</span>`;
+                    }
+
+                    let skor = h.nilaiAkhir !== undefined ? h.nilaiAkhir : h.nilai;
+
+                    groupedMapel[mapel].push({
+                        kodeUjian: h.kodeUjian,
+                        namaUjian: namaTestTampil,
+                        nilai: skor
+                    });
+                });
+
+                // RENDER TAMPILAN BERDASARKAN KELOMPOK MAPEL
+                for (let mapel in groupedMapel) {
+                    htmlCheck += `<div class="fw-bold text-primary border-bottom border-primary-subtle pb-1 mb-2 mt-3"><i class="bi bi-book-half me-2"></i>${mapel}</div>`;
+                    
+                    groupedMapel[mapel].forEach(item => {
+                        let badgeClass = item.nilai >= 75 ? 'bg-success' : 'bg-danger';
+                        htmlCheck += `
+                        <div class="form-check pb-2 ms-2 mb-1">
+                            <input class="form-check-input check-laporan-nilai border-secondary" type="checkbox" value="${item.kodeUjian}" checked onchange="updateGrafikLaporan()">
+                            <label class="form-check-label w-100 d-flex justify-content-between small align-items-center" style="cursor: pointer;">
+                                <span class="text-dark">${item.namaUjian}</span>
+                                <span class="badge ${badgeClass} rounded-pill shadow-sm px-2 py-1">Skor: ${item.nilai}</span>
+                            </label>
+                        </div>`;
+                    });
+                }
+            } 
+            document.getElementById('lap-checkbox-ujian').innerHTML = htmlCheck; 
+            if(typeof updateGrafikLaporan === 'function') updateGrafikLaporan();
+        }); 
     }
 
     function updateGrafikLaporan() {
         if(!aktifNisnLaporan) return;
-        const cbList = document.querySelectorAll('.check-laporan-nilai'); const selectedUjian = Array.from(cbList).filter(cb => cb.checked).map(cb => cb.value);
+        const cbList = document.querySelectorAll('.check-laporan-nilai'); 
+        const selectedUjian = Array.from(cbList).filter(cb => cb.checked).map(cb => cb.value);
+        
         let labels = []; let dataPoints = [];
         let riwayatTerpilih = activeHasilData.filter(h => h.userSiswa === aktifNisnLaporan && selectedUjian.includes(h.kodeUjian));
-        riwayatTerpilih.forEach(h => { let infoUjian = activeUjianData.find(u => u.kode === h.kodeUjian); let nama = infoUjian ? infoUjian.nama : h.kodeUjian; labels.push(nama); dataPoints.push(h.nilai); });
+        
+        riwayatTerpilih.forEach(h => { 
+            let infoUjian = activeUjianData.find(u => u.kode === h.kodeUjian) || {nama: h.kodeUjian}; 
+            let nama = infoUjian.nama;
+            
+            if (h.namaSiswa && h.namaSiswa.includes("(Ke-")) {
+                let pM = h.namaSiswa.match(/\(Ke-\d+\)/);
+                if (pM) nama += ` ${pM[0]}`;
+            }
+
+            let skor = h.nilaiAkhir !== undefined ? h.nilaiAkhir : h.nilai;
+            labels.push(nama.length > 25 ? nama.substring(0,25)+'...' : nama); 
+            dataPoints.push(skor); 
+        });
 
         const ctx = document.getElementById('grafikProgressNilai').getContext('2d');
         if(progressChartInstance) { progressChartInstance.destroy(); }
-        progressChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Skor Asesmen', data: dataPoints, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', borderWidth: 3, tension: 0.3, fill: true, pointRadius: 5, pointBackgroundColor: '#e11d48' }] }, options: { responsive: true, maintainAspectRatio: false, animation: false, scales: { y: { beginAtZero: true, max: 100 } } } });
+        progressChartInstance = new Chart(ctx, { 
+            type: 'line', 
+            data: { labels: labels, datasets: [{ label: 'Skor Asesmen', data: dataPoints, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', borderWidth: 3, tension: 0.3, fill: true, pointRadius: 5, pointBackgroundColor: '#e11d48' }] }, 
+            options: { responsive: true, maintainAspectRatio: false, animation: false, scales: { y: { beginAtZero: true, max: 100 } } } 
+        });
     }
 
     function downloadLaporanPDF() {
-        if(!aktifNisnLaporan) return; const siswa = activeSiswaData.find(s => s.user === aktifNisnLaporan); if(!siswa) return;
-        const cbList = document.querySelectorAll('.check-laporan-nilai'); const selectedUjian = Array.from(cbList).filter(cb => cb.checked).map(cb => cb.value);
+        if(!aktifNisnLaporan) return; 
+        const siswa = activeSiswaData.find(s => s.user === aktifNisnLaporan); 
+        if(!siswa) return;
+        
+        const cbList = document.querySelectorAll('.check-laporan-nilai'); 
+        const selectedUjian = Array.from(cbList).filter(cb => cb.checked).map(cb => cb.value);
         if(selectedUjian.length === 0) { alert('Pilih minimal 1 asesmen untuk dicetak!'); return; }
 
-        const tgl = new Date(); const dateStamp = ("0" + tgl.getDate()).slice(-2) + "-" + ("0" + (tgl.getMonth()+1)).slice(-2) + "-" + tgl.getFullYear();
-        document.getElementById('print-nama').innerText = siswa.nama; document.getElementById('print-nisn').innerText = siswa.user; document.getElementById('print-kelas').innerText = siswa.kelas;
+        const tgl = new Date(); 
+        const dateStamp = ("0" + tgl.getDate()).slice(-2) + "-" + ("0" + (tgl.getMonth()+1)).slice(-2) + "-" + tgl.getFullYear();
+        
+        document.getElementById('print-nama').innerText = siswa.nama; 
+        document.getElementById('print-nisn').innerText = siswa.user; 
+        document.getElementById('print-kelas').innerText = siswa.kelas;
         document.getElementById('print-sekolah').innerText = document.getElementById('set-nama').value || 'Nama Sekolah';
         document.getElementById('print-logo').src = document.getElementById('set-logo').value || 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Pendidikan_Nasional_logo.png/120px-Pendidikan_Nasional_logo.png';
-        document.getElementById('print-tanggal-asesmen').innerText = dateStamp; document.getElementById('print-wali-kelas').innerText = currentUser.nama || 'Administrator Utama';
+        document.getElementById('print-tanggal-asesmen').innerText = dateStamp; 
+        document.getElementById('print-wali-kelas').innerText = currentUser.nama || 'Wali Kelas';
 
         let htmlTb = ''; let no = 1;
+        
         let riwayatTerpilih = activeHasilData.filter(h => h.userSiswa === aktifNisnLaporan && selectedUjian.includes(h.kodeUjian));
-        riwayatTerpilih.forEach(h => { let infoUjian = activeUjianData.find(u => u.kode === h.kodeUjian) || {nama: h.kodeUjian, mapel: 'Umum'}; let predikat = h.nilai >= 90 ? 'A (Sangat Baik)' : (h.nilai >= 80 ? 'B (Baik)' : (h.nilai >= 70 ? 'C (Cukup)' : 'D (Kurang)')); htmlTb += `<tr><td>${no++}</td><td style="text-align:left;">${infoUjian.mapel}</td><td style="text-align:left;">${infoUjian.nama}</td><td><b>${h.nilai}</b></td><td>${predikat}</td></tr>`; });
+        
+        // Urutkan tabel PDF berdasarkan Mata Pelajaran agar rapi
+        riwayatTerpilih.sort((a, b) => {
+            let mapelA = (activeUjianData.find(u => u.kode === a.kodeUjian) || {mapel: 'Z'}).mapel;
+            let mapelB = (activeUjianData.find(u => u.kode === b.kodeUjian) || {mapel: 'Z'}).mapel;
+            return mapelA.localeCompare(mapelB);
+        });
+
+        riwayatTerpilih.forEach(h => { 
+            let infoUjian = activeUjianData.find(u => u.kode === h.kodeUjian) || {nama: h.kodeUjian, mapel: 'Lain-lain'}; 
+            
+            let skorAkhir = h.nilaiAkhir !== undefined ? h.nilaiAkhir : h.nilai;
+            let predikat = skorAkhir >= 90 ? 'A (Sangat Baik)' : (skorAkhir >= 80 ? 'B (Baik)' : (skorAkhir >= 70 ? 'C (Cukup)' : 'D (Kurang)')); 
+            
+            let namaPrint = infoUjian.nama;
+            if (h.namaSiswa && h.namaSiswa.includes("(Ke-")) {
+                let pM = h.namaSiswa.match(/\(Ke-\d+\)/);
+                if (pM) namaPrint += ` ${pM[0]}`;
+            }
+
+            htmlTb += `<tr><td>${no++}</td><td style="text-align:left;">${infoUjian.mapel}</td><td style="text-align:left;">${namaPrint}</td><td><b>${skorAkhir}</b></td><td>${predikat}</td></tr>`; 
+        });
+        
         document.getElementById('print-tb-nilai').innerHTML = htmlTb;
 
-        const chartCanvas = document.getElementById('grafikProgressNilai'); document.getElementById('print-chart-img').src = chartCanvas.toDataURL("image/png");
-        const element = document.getElementById('print-laporan-container'); element.style.display = 'block'; document.getElementById('page-title').innerText = "Memproses Laporan PDF...";
-        const opt = { margin: 0.5, filename: `Rapor_Asesmen_${siswa.user}_${siswa.nama.replace(/\s+/g,'_')}.pdf`, image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
+        const chartCanvas = document.getElementById('grafikProgressNilai'); 
+        document.getElementById('print-chart-img').src = chartCanvas.toDataURL("image/png");
+        
+        const element = document.getElementById('print-laporan-container'); 
+        element.style.display = 'block'; 
+        document.getElementById('page-title').innerText = "Memproses Laporan PDF...";
+        
+        const opt = { margin: 0.5, filename: `Rapor_${siswa.user}_${siswa.nama.replace(/\s+/g,'_')}.pdf`, image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
         html2pdf().set(opt).from(element).save().then(() => { element.style.display = 'none'; document.getElementById('page-title').innerText = "Laporan Nilai"; });
     }
 
@@ -2342,12 +2634,46 @@ function mulaiTimerCBT() {
         .catch(err => { document.getElementById('tb-guru').innerHTML = '<tr><td colspan="5" class="text-center py-5 text-danger">Gagal memuat: '+err.message+'</td></tr>'; });
     }
 
-    function editGuru(username) { let g = activeGuruData.find(x => x.username === username); if(!g) return; document.getElementById('gr-user-lama').value = g.username; document.getElementById('gr-nama').value = g.nama; document.getElementById('gr-user').value = g.username; document.getElementById('gr-pass').value = g.password; document.getElementById('gr-role').value = g.role; document.getElementById('title-modal-guru').innerText = 'Edit Akun'; bukaModal('modalAddGuru'); }
+    function toggleAreaKelasAjar() {
+        let role = document.getElementById('gr-role').value;
+        document.getElementById('area-kelas-ajar').style.display = role === 'guru' ? 'block' : 'none';
+    }
 
-    // 4. GANTI FUNGSI SIMPAN AKUN GURU BARU
+    function renderCheckboxKelasAjar(kelasTerpilih = "") {
+        let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== '-'))].sort();
+        let html = ''; let arrPilih = kelasTerpilih.split(',').map(x => x.trim());
+        classes.forEach(c => {
+            let chk = arrPilih.includes(c) ? 'checked' : '';
+            html += `<div class="form-check"><input class="form-check-input chk-kelas-ajar" type="checkbox" value="${c}" ${chk}><label class="form-check-label small fw-bold">${c}</label></div>`;
+        });
+        document.getElementById('cb-kelas-ajar').innerHTML = html || '<small class="text-muted">Data siswa belum ada. Tidak ada kelas yang bisa dipilih.</small>';
+    }
+
+    function editGuru(u) { 
+        let g = activeGuruData.find(x=>x.username===u); if(!g) return; 
+        document.getElementById('gr-user-lama').value = g.username; 
+        document.getElementById('gr-nama').value = g.nama; 
+        document.getElementById('gr-user').value = g.username; 
+        document.getElementById('gr-pass').value = g.password; 
+        document.getElementById('gr-role').value = g.role; 
+        toggleAreaKelasAjar();
+        renderCheckboxKelasAjar(g.kelasAjar || "");
+        document.getElementById('title-modal-guru').innerText = 'Edit Akun'; 
+        bukaModal('modalAddGuru'); 
+    }
+
     function simpanGuru() { 
         const btn = document.getElementById('btn-simpan-guru'); const oriText = btn.innerHTML; btn.innerHTML = 'Menyimpan...'; btn.disabled = true; 
-        const payload = { kodeSekolah: currentUser.kode_sekolah, userLama: document.getElementById('gr-user-lama').value, nama: document.getElementById('gr-nama').value, username: document.getElementById('gr-user').value, password: document.getElementById('gr-pass').value, role: document.getElementById('gr-role').value }; 
+        
+        let arrKelas = [];
+        document.querySelectorAll('.chk-kelas-ajar:checked').forEach(el => arrKelas.push(el.value));
+        
+        const payload = { 
+            kodeSekolah: currentUser.kode_sekolah, userLama: document.getElementById('gr-user-lama').value, 
+            nama: document.getElementById('gr-nama').value, username: document.getElementById('gr-user').value, 
+            password: document.getElementById('gr-pass').value, role: document.getElementById('gr-role').value,
+            kelasAjar: document.getElementById('gr-role').value === 'guru' ? arrKelas.join(',') : ''
+        }; 
         panggilAPI("simpanDataGuruBackend", payload)
         .then(res => { btn.innerHTML = oriText; btn.disabled = false; if(res.success) { tutupModal('modalAddGuru'); loadDataGuru(); alert(res.message); } else { alert(res.message); } })
         .catch(err => { btn.innerHTML = oriText; btn.disabled = false; alert("Gagal: " + err.message); });
@@ -2380,6 +2706,11 @@ function mulaiTimerCBT() {
 
 function renderTabelUjianAdmin(paksaTampilKode = null) {
         const keyword = document.getElementById('input-cari-ujian') ? document.getElementById('input-cari-ujian').value.toLowerCase() : "";
+        
+        // [TAMBAHAN 1] Mengambil nilai dari dropdown filter kepemilikan
+        let selectFilter = document.getElementById('filter-kepemilikan-ujian');
+        const filterKepemilikan = selectFilter ? selectFilter.value : "SAYA";
+
         let htmlUjian = '';
         
         let semuaUjianRev = [...activeUjianData].reverse();
@@ -2387,9 +2718,11 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
         let ujianSampah = semuaUjianRev.filter(u => String(u.status).startsWith('SAMPAH_'));
         
         // --- FILTER KHUSUS GURU ---
-        // Jika yang login guru, SEMBUNYIKAN soal yang bukan miliknya
+        // Jika yang login guru, SEMBUNYIKAN soal yang bukan miliknya (Berdasarkan Pilihan Dropdown)
         let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
-        if (isGuru) {
+        
+        // [TAMBAHAN 2] Filter diperbarui: Hanya saring jika memilih "SAYA"
+        if (isGuru && filterKepemilikan === "SAYA") {
             ujianTersedia = ujianTersedia.filter(u => String(u.kode).includes('_#' + currentUser.username));
             ujianSampah = ujianSampah.filter(u => String(u.kode).includes('_#' + currentUser.username));
         }
@@ -2432,6 +2765,28 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
             // Membersihkan tagger _#username agar tampilan badge rapi
             let kodeTampil = String(u.kode).split('_#')[0];
             
+            // [TAMBAHAN 3] PROTEKSI HAK AKSES GURU
+            let isMilikSaya = true;
+            if (isGuru && !String(u.kode).includes('_#' + currentUser.username)) {
+                isMilikSaya = false;
+            }
+
+            // Tombol Edit
+            let btnEdit = isMilikSaya 
+                ? `<button class="btn btn-sm btn-outline-${style.color} rounded-circle me-2 d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;" onclick="editUjian('${u.kode}')" title="Edit Ujian"><i class="bi bi-pencil-fill"></i></button>`
+                : `<button class="btn btn-sm btn-outline-secondary rounded-circle me-2 d-flex justify-content-center align-items-center opacity-50" style="width: 32px; height: 32px;" disabled title="Hanya pembuat yang bisa mengedit"><i class="bi bi-lock-fill"></i></button>`;
+            
+            // Tombol Copy Baru
+            let btnCopy = `<button class="btn btn-sm btn-outline-info rounded-circle me-2 d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;" onclick="duplikatUjianLokal('${u.kode}', '${u.nama.replace(/'/g, "\\'")}')" title="Duplikat / Salin Asesmen Ini"><i class="bi bi-copy"></i></button>`;
+            
+            let disableSwitch = isMilikSaya ? "" : "disabled";
+            let labelKelola = isMilikSaya ? `<i class="bi bi-list-check me-1"></i> Kelola Soal` : `<i class="bi bi-eye-fill me-1"></i> Lihat Soal`;
+            let classKelola = isMilikSaya ? `btn-${style.color}` : `btn-secondary`;
+            
+            let btnHapus = isMilikSaya 
+                ? `<button class="btn text-danger border-0 ms-auto p-0 fs-5 bg-transparent" onclick="hapusUjian('${u.kode}')"><i class="bi bi-trash3"></i></button>`
+                : `<button class="btn text-secondary border-0 ms-auto p-0 fs-5 bg-transparent opacity-25" disabled><i class="bi bi-trash3"></i></button>`;
+            
             htmlUjian += `
             <div class="col-md-6 col-xl-4">
                 <div class="card h-100 shadow-sm rounded-4 border-top border-4 border-${style.color}" id="card-${u.kode}">
@@ -2439,9 +2794,9 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                         <div class="d-flex justify-content-between mb-3">
                             <span class="badge bg-${style.color} bg-opacity-10 text-${style.color} rounded-pill px-3 py-2 border border-${style.color}-subtle"><i class="${style.icon} me-1"></i> ${kodeTampil}</span>
                             <div class="d-flex align-items-center">
-                                <button class="btn btn-sm btn-outline-${style.color} rounded-circle me-2 d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;" onclick="editUjian('${u.kode}')" title="Edit Ujian">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </button>
+                                <!-- [TAMBAHAN 4] Sisipkan tombol copy di sini -->
+                                ${btnCopy}
+                                ${btnEdit}
                                 <span class="badge bg-body-secondary text-body border rounded-pill px-3 py-2">${u.status}</span>
                             </div>
                         </div>
@@ -2453,21 +2808,23 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                             <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
                                 <span class="small fw-bold">Aktifkan asesmen</span>
                                 <div class="form-check form-switch m-0 fs-5">
-                                    <input class="form-check-input border-secondary" type="checkbox" ${isAktif} onchange="toggleStatusUjianClient('${u.kode}', this)">
+                                    <!-- [TAMBAHAN 5] Sisipkan proteksi saklar di sini -->
+                                    <input class="form-check-input border-secondary" type="checkbox" ${isAktif} ${disableSwitch} onchange="toggleStatusUjianClient('${u.kode}', this)">
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center p-3 bg-success bg-opacity-10 rounded-bottom-3">
                                 <span class="small fw-bold text-success"><i class="bi bi-journal-text me-1"></i>Rilis Pembahasan</span>
                                 <div class="form-check form-switch m-0 fs-5">
-                                    <input class="form-check-input border-success" type="checkbox" ${isBahasAktif} onchange="togglePembahasanClient('${u.kode}', this)">
+                                    <input class="form-check-input border-success" type="checkbox" ${isBahasAktif} ${disableSwitch} onchange="togglePembahasanClient('${u.kode}', this)">
                                 </div>
                             </div>
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button class="btn btn-${style.color} btn-sm fw-bold text-white rounded-pill px-4 py-2" onclick="kelolaSoal('${u.kode}', '${u.nama}', ${u.jmlSoal})"><i class="bi bi-list-check me-1"></i> Kelola Soal</button>
+                            <!-- [TAMBAHAN 6] Sisipkan label dan class kelola di sini -->
+                            <button class="btn ${classKelola} btn-sm fw-bold text-white rounded-pill px-4 py-2" onclick="kelolaSoal('${u.kode}', '${u.nama}', ${u.jmlSoal})">${labelKelola}</button>
                             <button class="btn btn-success btn-sm fw-bold text-white rounded-pill px-3 py-2" onclick="bukaDaftarHasil('${u.kode}', '${u.nama}')"><i class="bi bi-clipboard-data me-1"></i> Hasil</button>
-                            <button class="btn text-danger border-0 ms-auto p-0 fs-5 bg-transparent" onclick="hapusUjian('${u.kode}')"><i class="bi bi-trash3"></i></button>
+                            ${btnHapus}
                         </div>
                     </div>
                 </div>
@@ -2548,6 +2905,9 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                 if (sisaHari < 0) sisaHari = 0;
                 let kodeTampil = String(u.kode).split('_#')[0];
                 
+                // [TAMBAHAN 7] Proteksi agar guru tidak melihat sampah orang lain
+                if (isGuru && filterKepemilikan === "SAYA" && !String(u.kode).includes('_#' + currentUser.username)) return;
+
                 htmlSampah += `
                             <tr>
                                 <td><code class="text-danger fw-bold">${kodeTampil}</code></td>
@@ -2567,7 +2927,10 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
             htmlSampah += `</tbody></table></div></div>`;
         }
 
-        document.getElementById('container-kartu-ujian').innerHTML = (htmlUjian || '<div class="col-12 text-center text-muted py-5">Asesmen tidak ditemukan.</div>') + htmlTable + htmlSampah;
+        let containerUjian = document.getElementById('container-kartu-ujian');
+        if (containerUjian) {
+            containerUjian.innerHTML = (htmlUjian || '<div class="col-12 text-center text-muted py-5">Asesmen tidak ditemukan.</div>') + htmlTable + htmlSampah;
+        }
     }
 	
 	// ==========================================
@@ -4687,12 +5050,43 @@ function testKoneksiHybrid() {
 // ==========================================
     // JS FITUR LINK EKSTERNAL (ADMIN)
     // ==========================================
+    // ==========================================
+    // JS FITUR LINK EKSTERNAL (ADMIN & GURU)
+    // ==========================================
     function loadLinkAdmin() {
         panggilAPI("getLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah })
         .then(data => {
-            let html = '';
-            (data || []).forEach(L => {
+            let html = ''; 
+            let isGuru = (currentUser && currentUser.role && String(currentUser.role).toLowerCase() === 'guru');
+            
+            let filterElement = document.getElementById('filter-kepemilikan-link');
+            const filterKepemilikan = filterElement ? filterElement.value : "SAYA";
+            
+            let filteredLinks = data || [];
+            
+            // JIKA GURU: Filter Kepemilikan "SAYA" atau "SEMUA"
+            if (isGuru && filterKepemilikan === "SAYA") {
+                filteredLinks = filteredLinks.filter(l => String(l.pembuat).trim() === String(currentUser.username).trim());
+            }
+
+            filteredLinks.forEach(L => {
                 const isAktif = L.status === 'AKTIF' ? 'checked' : '';
+                
+                // --- PROTEKSI HAK AKSES GURU ---
+                let isMilikSaya = true;
+                if (isGuru && String(L.pembuat).trim() !== String(currentUser.username).trim()) {
+                    isMilikSaya = false;
+                }
+                
+                let disableSwitch = isMilikSaya ? '' : 'disabled title="Hanya pembuat yang bisa mengubah status"';
+                let btnHapus = isMilikSaya 
+                    ? `<button class="btn btn-white text-danger border-0 p-0 fs-5 px-2" onclick="hapusLink('${L.id_link}')"><i class="bi bi-trash3"></i></button>` 
+                    : `<button class="btn btn-white text-secondary border-0 p-0 fs-5 px-2 opacity-50" disabled><i class="bi bi-trash3"></i></button>`;
+                
+                // FITUR BARU: Tombol Copy Link
+                let btnCopy = `<button class="btn btn-outline-info btn-sm fw-bold rounded-pill px-3" onclick="copyLinkEksternal('${L.nama.replace(/'/g, "\\'")}', '${L.platform}', '${L.url}')" title="Salin / Duplikat Link Ini"><i class="bi bi-copy"></i></button>`;
+                // -------------------------------
+                
                 html += `
                 <div class="col-md-6 col-xl-4">
                     <div class="card h-100 border shadow-sm rounded-4 border-success-subtle">
@@ -4702,14 +5096,17 @@ function testKoneksiHybrid() {
                                 <div><span class="badge bg-light text-dark border rounded-pill px-3 py-2">${L.status}</span></div>
                             </div>
                             <h5 class="fw-bold text-dark mb-1 text-truncate">${L.nama}</h5>
+                            <p class="small mb-1 text-muted">Pembuat: <b>${L.pembuat}</b></p>
                             <p class="small mb-3 border-bottom pb-2 text-muted">Target: Kelas ${L.kelas} • ${L.tgl}</p>
                             <div class="d-flex justify-content-between align-items-center bg-light bg-opacity-50 p-3 rounded-3 mb-3 border">
                                 <span class="small fw-bold">Tampilkan ke siswa</span>
-                                <div class="form-check form-switch m-0 fs-5"><input class="form-check-input border-secondary" type="checkbox" ${isAktif} onchange="toggleLink('${L.id_link}', this)"></div>
+                                <div class="form-check form-switch m-0 fs-5"><input class="form-check-input border-secondary" type="checkbox" ${isAktif} ${disableSwitch} onchange="toggleLink('${L.id_link}', this)"></div>
                             </div>
                             <div class="d-flex gap-2">
+                                <!-- Menyisipkan Tombol Copy di sebelah kiri tombol Cek Link -->
+                                ${btnCopy}
                                 <button class="btn btn-outline-success btn-sm fw-bold rounded-pill px-4 flex-grow-1" onclick="window.open('${L.url}', '_blank')"><i class="bi bi-box-arrow-up-right me-1"></i> Cek Link</button>
-                                <button class="btn btn-white text-danger border-0 p-0 fs-5 px-2" onclick="hapusLink('${L.id_link}')"><i class="bi bi-trash3"></i></button>
+                                ${btnHapus}
                             </div>
                         </div>
                     </div>
@@ -4717,10 +5114,14 @@ function testKoneksiHybrid() {
             });
             document.getElementById('container-link-admin').innerHTML = html || '<div class="col-12 text-center text-muted py-4">Belum ada link eksternal yang dibagikan.</div>';
             
-            // Otomatis isi dropdown kelas di modal tambah link
-            let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== 'undefined' && k !== '-'))];
-            let classOptions = '<option value="">Pilih Kelas...</option>'; 
-            classes.sort().forEach(c => classOptions += `<option value="${c}">${c}</option>`);
+            let allowedClasses = [];
+            if (isGuru && currentUser.kelasAjar) {
+                allowedClasses = currentUser.kelasAjar.split(',').map(x => String(x).trim());
+            } else {
+                allowedClasses = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== '-'))];
+            }
+            let classOptions = '<option value="">Pilih Target Kelas...</option>'; 
+            allowedClasses.sort().forEach(c => classOptions += `<option value="${c}">${c}</option>`);
             if(document.getElementById('lnk-kelas')) document.getElementById('lnk-kelas').innerHTML = classOptions;
         });
     }
@@ -4731,7 +5132,8 @@ function testKoneksiHybrid() {
         const payload = {
             kodeSekolah: currentUser.kode_sekolah, nama: document.getElementById('lnk-nama').value,
             platform: document.getElementById('lnk-platform').value, kelas: document.getElementById('lnk-kelas').value,
-            url: document.getElementById('lnk-url').value
+            url: document.getElementById('lnk-url').value,
+            pembuat: currentUser.username // <-- Menandai siapa pembuatnya
         };
         panggilAPI("simpanLinkEksternalBackend", payload).then(res => {
             btn.disabled = false; btn.innerHTML = "Bagikan ke Portal Siswa";
@@ -4741,6 +5143,19 @@ function testKoneksiHybrid() {
 
     function hapusLink(id) { if(confirm('Hapus link ini dari portal siswa?')) { panggilAPI("hapusLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah, idLink: id }).then(res => { if(res.success) loadLinkAdmin(); }); } }
     function toggleLink(id, el) { panggilAPI("toggleStatusLinkBackend", { kodeSekolah: currentUser.kode_sekolah, idLink: id, status: el.checked ? 'AKTIF' : 'DRAFT' }); }
+
+function copyLinkEksternal(namaAsli, platform, url) {
+        // 1. Mengisi form Tambah Link secara otomatis
+        document.getElementById('lnk-nama').value = namaAsli + " (Salinan)";
+        document.getElementById('lnk-platform').value = platform;
+        document.getElementById('lnk-url').value = url;
+        
+        // Kosongkan kelas agar guru diwajibkan memilih kelasnya sendiri sebelum menyimpan
+        if(document.getElementById('lnk-kelas')) document.getElementById('lnk-kelas').value = "";
+        
+        // 2. Tampilkan form-nya
+        bukaModal('modalAddLink');
+    }
 
 // ==========================================
     // JS FITUR PEMBAHASAN SISWA (TAMPILAN SEMUA OPSI)
@@ -5304,6 +5719,49 @@ function testKoneksiHybrid() {
             b.innerHTML = 'Proses & Simpan Data'; 
         }; 
         reader.readAsBinaryString(file); 
+    }
+
+// ==========================================
+    // FUNGSI DUPLIKAT ASESMEN LOKAL (ANTAR GURU)
+    // ==========================================
+    function duplikatUjianLokal(kodeLama, namaLama) {
+        let namaBaru = prompt("Masukkan NAMA BARU untuk asesmen salinan ini:", namaLama + " (Salinan)");
+        if (!namaBaru) return; // Batal jika kosong
+
+        let randomKode = "COPY" + Math.floor(Math.random() * 10000);
+        let kodeBaru = randomKode;
+        if (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru') {
+            kodeBaru += "_#" + currentUser.username;
+        }
+
+        let isConfirm = confirm(`Asesmen akan disalin ke akun Anda dengan identitas:\n\nNama: "${namaBaru}"\nKode Baru: ${randomKode}\n\nLanjutkan proses duplikasi?`);
+        if (!isConfirm) return;
+
+        let oriHeader = document.getElementById('page-title').innerText;
+        document.getElementById('page-title').innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyalin Asesmen...';
+        
+        panggilAPI("duplikatUjianLokal", {
+            kodeSekolah: currentUser.kode_sekolah,
+            kodeLama: kodeLama,
+            kodeBaru: kodeBaru,
+            namaBaru: namaBaru
+        })
+        .then(res => {
+            document.getElementById('page-title').innerText = oriHeader;
+            if (res.success) {
+                if (typeof tampilkanNotif === "function") tampilkanNotif("✅ " + res.message);
+                else alert("✅ " + res.message);
+                
+                localStorage.removeItem("cbt_dash_" + currentUser.kode_sekolah);
+                loadDashboardData(); 
+            } else {
+                alert("Gagal menduplikat: " + res.message);
+            }
+        })
+        .catch(err => {
+            document.getElementById('page-title').innerText = oriHeader;
+            alert("Terjadi kesalahan jaringan: " + err.message);
+        });
     }
 
 </script>
