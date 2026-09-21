@@ -386,11 +386,18 @@
 
         <!-- ========================================== -->
         <!-- 6. LINK EKSTERNAL -->
-        <!-- ========================================== -->
         <div id="view-link" class="view-section hidden">
           <div class="mb-4 d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
-              <div><h5 class="fw-bold m-0"><i class="bi bi-link-45deg text-success me-2"></i>Tugas Link Eksternal</h5><small class="text-muted">Masukkan link Quizizz, GForm, Kahoot, dll.</small></div>
-              <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddLink')"><i class="bi bi-plus-lg me-1"></i> Tambah Link</button>
+              <div>
+                  <h5 class="fw-bold m-0"><i class="bi bi-link-45deg text-success me-2"></i>Tugas Link Eksternal</h5>
+                  <small class="text-muted">Pantau link Quizizz, GForm, Kahoot, dll yang dibagikan guru.</small>
+              </div>
+              <div class="d-flex gap-2">
+                  <select id="filter-link-guru" class="form-select border-success text-success fw-bold rounded-pill px-4" onchange="loadLinkAdmin()">
+                      <option value="SEMUA">-- Semua Guru --</option>
+                  </select>
+                  <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddLink')"><i class="bi bi-plus-lg me-1"></i> Tambah Link</button>
+              </div>
           </div>
           <div class="row g-4" id="container-link-admin"></div>
         </div>
@@ -432,50 +439,102 @@
 
         <!-- ========================================== -->
         <!-- 9. LAPORAN NILAI -->
-        <!-- ========================================== -->
+        <!-- LAPORAN PENILAIAN SISWA -->
         <div id="view-laporan" class="view-section hidden">
           <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light d-print-none">
             <div>
-                <h5 class="fw-bold m-0"><i class="bi bi-file-earmark-bar-graph text-primary me-2"></i>Laporan Rapor Siswa</h5>
+                <h5 class="fw-bold m-0"><i class="bi bi-file-earmark-bar-graph text-primary me-2"></i>Cetak Laporan Rapor Siswa</h5>
                 <small class="text-muted">Pilih siswa dan ceklis nilai asesmen yang ingin dimasukkan ke dalam Rapor PDF.</small>
             </div>
             <div class="d-flex gap-2 align-items-center">
-                <select class="form-select border shadow-sm rounded-pill px-4 bg-white fw-bold text-primary" id="filter-laporan-kelas" onchange="renderTabelLaporanSiswa()" style="width: auto;"><option value="">-- Pilih Kelas --</option></select>
+                <select class="form-select border shadow-sm rounded-pill px-4 bg-white fw-bold text-primary" id="filter-laporan-kelas" onchange="renderTabelLaporanSiswa()" style="width: auto;">
+                    <option value="">-- Pilih Kelas --</option>
+                </select>
             </div>
           </div>
+
           <div class="row g-4 d-print-none" id="laporan-main-area">
-             <div class="col-md-5"><div class="card border-0 shadow-sm rounded-4 h-100"><div class="card-body p-0"><div class="table-responsive" style="max-height: 500px; overflow-y: auto;"><table class="table table-hover align-middle m-0 text-nowrap"><thead class="table-light" style="position: sticky; top: 0; z-index: 1;"><tr><th class="ps-4">Siswa</th><th>Aksi</th></tr></thead><tbody id="tb-laporan-siswa"><tr><td colspan="2" class="text-center py-5 text-muted">Pilih kelas di atas.</td></tr></tbody></table></div></div></div></div>
-             <div class="col-md-7">
-                <div class="card border-0 shadow-sm rounded-4 h-100 bg-white" id="panel-konfigurasi-rapor" style="display:none;">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-                            <div><h5 class="fw-bold m-0 text-primary" id="lap-nama-siswa">Nama Siswa</h5><small class="text-muted" id="lap-nisn-siswa">NISN</small></div>
-                            <button class="btn btn-danger fw-bold rounded-pill shadow-sm" onclick="downloadLaporanPDF()"><i class="bi bi-file-pdf me-1"></i> Unduh PDF</button>
+             <!-- KOLOM KIRI: DAFTAR SISWA -->
+             <div class="col-md-5">
+                <div class="card border-0 shadow-sm rounded-4" style="min-height: 400px;">
+                    <div class="card-body p-0">
+                        <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                            <table class="table table-hover align-middle m-0 text-nowrap">
+                                <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+                                    <tr><th class="ps-4 py-3">Nama Siswa</th><th class="text-center">Aksi</th></tr>
+                                </thead>
+                                <tbody id="tb-laporan-siswa">
+                                    <tr><td colspan="2" class="text-center py-5 text-muted">Pilih kelas di atas.</td></tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <h6 class="fw-bold mb-3"><i class="bi bi-list-check me-2"></i>Pilih Nilai Asesmen:</h6>
-                        <div id="lap-checkbox-ujian" class="d-flex flex-column gap-2 mb-4 bg-light p-3 rounded-3 border" style="max-height: 200px; overflow-y: auto;"></div>
-                        <h6 class="fw-bold mb-3"><i class="bi bi-graph-up-arrow me-2"></i>Grafik Perkembangan Nilai:</h6>
-                        <div class="border rounded-3 p-3 bg-white"><canvas id="grafikProgressNilai" style="width: 100%; height: 250px;"></canvas></div>
                     </div>
                 </div>
-                <div id="panel-konfigurasi-kosong" class="h-100 d-flex flex-column align-items-center justify-content-center text-muted bg-white rounded-4 border p-5"><i class="bi bi-arrow-left-square display-4 mb-3 text-secondary"></i><p class="m-0">Klik tombol <b>Lihat Laporan</b>.</p></div>
+             </div>
+
+             <!-- KOLOM KANAN: PANEL LAPORAN -->
+             <div class="col-md-7">
+                <!-- PANEL KOSONG -->
+                <div id="panel-konfigurasi-kosong" class="d-flex flex-column align-items-center justify-content-center text-muted bg-white rounded-4 border shadow-sm" style="height: 400px;">
+                    <i class="bi bi-arrow-left-square display-4 mb-3 text-secondary"></i>
+                    <p class="m-0 fs-5">Klik tombol <b>Laporan</b> dari daftar siswa di samping.</p>
+                </div>
+
+                <!-- PANEL KONFIGURASI RAPOR -->
+                <div class="card border-0 shadow-sm rounded-4 bg-white" id="panel-konfigurasi-rapor" style="display:none; min-height: 400px;">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                            <div>
+                                <h5 class="fw-bold m-0 text-primary" id="lap-nama-siswa">Nama Siswa</h5>
+                                <small class="text-muted" id="lap-nisn-siswa">NISN</small>
+                            </div>
+                            <button class="btn btn-danger fw-bold rounded-pill shadow-sm" onclick="downloadLaporanPDF()">
+                                <i class="bi bi-file-pdf me-1"></i> Unduh PDF
+                            </button>
+                        </div>
+                        <h6 class="fw-bold mb-3"><i class="bi bi-list-check me-2"></i>Pilih Nilai Asesmen:</h6>
+                        
+                        <!-- WADAH CHECKBOX MATA PELAJARAN (Tingginya dibatasi agar bisa di-scroll) -->
+                        <div id="lap-checkbox-ujian" class="mb-4 bg-light p-3 rounded-3 border" style="max-height: 250px; overflow-y: auto;">
+                            <!-- Data akan di-render oleh JavaScript -->
+                        </div>
+                        
+                        <h6 class="fw-bold mb-3"><i class="bi bi-graph-up-arrow me-2"></i>Grafik Perkembangan Nilai:</h6>
+                        <div class="border rounded-3 p-3 bg-white">
+                            <canvas id="grafikProgressNilai" style="width: 100%; height: 250px;"></canvas>
+                        </div>
+                    </div>
+                </div>
              </div>
           </div>
           
           <!-- HIDDEN CONTAINER FOR PDF -->
           <div id="print-laporan-container" style="display:none; position: relative;">
               <div class="rapor-header" style="text-align: center; border-bottom: 3px solid black; padding-bottom: 15px; margin-bottom: 20px; position: relative; min-height: 100px;">
-                  <img src="" id="print-logo" style="width: 90px; height: 90px; object-fit: contain; position: absolute; left: 10px; top: 0;">
+                  <img src="" id="print-logo" alt="Logo" style="width: 90px; height: 90px; object-fit: contain; position: absolute; left: 10px; top: 0;">
                   <div style="padding-left: 100px; padding-right: 10px;">
                       <h3 style="margin:0; font-family:Arial, sans-serif; text-transform:uppercase; font-size: 16px; font-weight: bold;">LAPORAN NILAI ASESMEN SISWA</h3>
                       <h2 style="margin:5px 0; font-family:Arial, sans-serif; text-transform:uppercase; font-size: 22px; font-weight: bold;" id="print-sekolah">NAMA SEKOLAH</h2>
-                      <p style="margin:0; font-size:14px;">Tanggal Asesmen : <span id="print-tanggal-asesmen"></span></p>
+                      <p style="margin:0; font-size:14px;">Tanggal Cetak : <span id="print-tanggal-asesmen"></span></p>
                   </div>
               </div>
-              <table style="width:100%; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 14px;"><tr><td style="width: 100px;"><b>Nama Peserta</b></td><td>: <span id="print-nama"></span></td><td style="width: 80px;"><b>Fase/Kelas</b></td><td>: <span id="print-kelas"></span></td></tr><tr><td><b>NISN</b></td><td>: <span id="print-nisn"></span></td><td><b>Semester</b></td><td>: Genap</td></tr></table>
-              <table class="rapor-table"><thead><tr><th style="width:5%;">No</th><th style="width:25%;">Mata Pelajaran</th><th style="width:40%;">Nama Asesmen</th><th style="width:15%;">Skor (0-100)</th><th style="width:15%;">Predikat</th></tr></thead><tbody id="print-tb-nilai"></tbody></table>
+              <table style="width:100%; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 14px;">
+                  <tr><td style="width: 100px;"><b>Nama Peserta</b></td><td>: <span id="print-nama"></span></td><td style="width: 80px;"><b>Fase/Kelas</b></td><td>: <span id="print-kelas"></span></td></tr>
+                  <tr><td><b>NISN / User</b></td><td>: <span id="print-nisn"></span></td><td><b>Semester</b></td><td>: Genap</td></tr>
+              </table>
+              <h4 style="font-family:Arial, sans-serif; font-size: 14px; margin-bottom:10px;">A. Daftar Nilai Asesmen</h4>
+              <table class="rapor-table">
+                  <thead><tr><th style="width:5%;">No</th><th style="width:25%;">Mata Pelajaran</th><th style="width:40%;">Nama Asesmen</th><th style="width:15%;">Skor Akhir</th><th style="width:15%;">Predikat</th></tr></thead>
+                  <tbody id="print-tb-nilai"></tbody>
+              </table>
+              <h4 style="font-family:Arial, sans-serif; font-size: 14px; margin-top:20px; margin-bottom:10px;">B. Grafik Tren Perkembangan</h4>
               <div style="width:100%; text-align:center; margin-bottom:40px;"><img id="print-chart-img" src="" style="max-width:100%; height:auto;"></div>
-              <table style="width:100%; font-family: Arial, sans-serif; font-size: 14px; margin-top: 50px;"><tr><td style="width: 60%; text-align: center;">Mengetahui,<br>Orang Tua / Wali<br><br><br><br>.........................................</td><td style="width: 40%; text-align: center;">Wali Kelas,<br><br><br><br><br><b><span id="print-wali-kelas">Kepala Sekolah</span></b></td></tr></table>
+              <table style="width:100%; font-family: Arial, sans-serif; font-size: 14px; margin-top: 50px;">
+                  <tr>
+                      <td style="width: 60%; text-align: center;">Mengetahui,<br>Orang Tua / Wali<br><br><br><br>.........................................</td>
+                      <td style="width: 40%; text-align: center;">Wali Kelas,<br><br><br><br><br><b><span id="print-wali-kelas">Administrator Utama</span></b></td>
+                  </tr>
+              </table>
           </div>
         </div>
 
@@ -622,7 +681,55 @@
   <div class="modal fade" id="modalAddLink" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow-lg"><div class="modal-header border-0 pb-0 pt-4 px-4 bg-success bg-opacity-10 rounded-top"><h5 class="modal-title fw-bold text-success"><i class="bi bi-link-45deg me-1"></i> Tambah Link Asesmen</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><form onsubmit="simpanLinkEksternal(event)"><div class="mb-3"><label class="form-label small fw-bold">Nama / Judul Kegiatan</label><input type="text" id="lnk-nama" class="form-control" placeholder="Cth: Ulangan Harian Tema 1" required></div><div class="row g-3 mb-3"><div class="col-6"><label class="form-label small fw-bold">Platform / Aplikasi</label><select id="lnk-platform" class="form-select border-success"><option value="Quizizz">Quizizz</option><option value="Google Forms">Google Forms</option><option value="Kahoot">Kahoot!</option><option value="Wordwall">Wordwall</option><option value="Lainnya">Website Lainnya</option></select></div><div class="col-6"><label class="form-label small fw-bold">Target Kelas</label><select id="lnk-kelas" class="form-select border-success" required></select></div></div><div class="mb-4"><label class="form-label small fw-bold">URL / Link Tujuan</label><input type="url" id="lnk-url" class="form-control bg-light" placeholder="https://" required></div><div class="text-end"><button type="submit" id="btn-simpan-lnk" class="btn btn-success px-4 fw-bold rounded-pill">Simpan Link</button></div></form></div></div></div></div>
 
   <!-- MODAL GURU -->
-  <div class="modal fade" id="modalAddGuru" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0 pb-0 pt-4 px-4"><h5 class="modal-title fw-bold" id="title-modal-guru">Akun Guru</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><form id="formAddGuru" onsubmit="event.preventDefault(); simpanGuru();"><input type="hidden" id="gr-user-lama"><div class="row g-3"><div class="col-12"><label class="form-label small fw-bold">Nama Lengkap</label><input type="text" id="gr-nama" class="form-control" required></div><div class="col-12"><label class="form-label small fw-bold text-primary">Username</label><input type="text" id="gr-user" class="form-control border-primary" required></div><div class="col-12"><label class="form-label small fw-bold text-primary">Password</label><input type="text" id="gr-pass" class="form-control border-primary" required></div><div class="col-12"><label class="form-label small fw-bold">Role Akun</label><select id="gr-role" class="form-select border-primary" required><option value="guru">Guru Biasa</option><option value="kepsek">Kepala Sekolah</option></select></div></div><div class="text-end mt-4 pt-3 border-top"><button type="submit" class="btn btn-primary px-4 fw-bold rounded-pill shadow-sm" id="btn-simpan-guru">Simpan</button></div></form></div></div></div></div>
+  <div class="modal fade" id="modalAddGuru" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold" id="title-modal-guru">Akun Guru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="formAddGuru" onsubmit="event.preventDefault(); simpanGuru();">
+                    <input type="hidden" id="gr-user-lama">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Nama Lengkap</label>
+                            <input type="text" id="gr-nama" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-primary">Username</label>
+                            <input type="text" id="gr-user" class="form-control border-primary" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-primary">Password</label>
+                            <input type="text" id="gr-pass" class="form-control border-primary" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Role Akun</label>
+                            <!-- PERUBAHAN: Menambahkan onchange untuk menyembunyikan ceklis kelas jika role-nya kepsek -->
+                            <select id="gr-role" class="form-select border-primary" required onchange="toggleAreaKelasAjar()">
+                                <option value="guru">Guru Biasa</option>
+                                <option value="kepsek">Kepala Sekolah</option>
+                            </select>
+                        </div>
+                        
+                        <!-- FITUR BARU: WADAH CEKLIS KELAS AJAR -->
+                        <div class="col-12 mt-3" id="area-kelas-ajar">
+                            <label class="form-label small fw-bold text-success"><i class="bi bi-person-check-fill me-1"></i>Akses Kelas yang Diajar (Ceklis)</label>
+                            <div id="cb-kelas-ajar" class="d-flex flex-wrap gap-2 p-3 bg-success bg-opacity-10 border border-success-subtle rounded-3">
+                                <!-- Kotak-kotak centang kelas akan dimuat di sini secara otomatis oleh JavaScript -->
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="text-end mt-4 pt-3 border-top">
+                        <button type="submit" class="btn btn-primary px-4 fw-bold rounded-pill shadow-sm" id="btn-simpan-guru">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
 
   <!-- MODAL IMPORT GURU EXCEL -->
   <div class="modal fade" id="modalImportGuru" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content shadow-lg border-0"><div class="modal-header border-0 pb-0 pt-4 px-4"><h5 class="modal-title fw-bold text-success"><i class="bi bi-file-earmark-excel me-2"></i>Impor Data Guru</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4"><button type="button" class="btn btn-outline-primary mb-3 rounded-pill fw-bold w-100" onclick="downloadTemplateGuru()"><i class="bi bi-download me-2"></i> Download Template Excel</button><form onsubmit="prosesImportGuruExcel(event)"><input type="file" id="file-import-guru" class="form-control mb-3" accept=".xlsx" required><button type="submit" id="btn-prosesImportGuru" class="btn btn-success w-100 rounded-pill fw-bold shadow-sm">Proses & Simpan Data</button></form></div></div></div></div>
@@ -783,15 +890,53 @@
         panggilAPI("getAdminData", { kodeSekolah: currentUser.kode_sekolah }).then(data => {
             if(!data || data.error) return;
             document.getElementById('stat-siswa').innerText = data.stats.siswa_aktif || 0;
+            
             // Menghitung HANYA ujian yang berstatus 'AKTIF'
-let jumlahUjianAktif = data.ujian ? data.ujian.filter(u => u.status === 'AKTIF').length : 0;
-document.getElementById('stat-ujian').innerText = jumlahUjianAktif;
+            let jumlahUjianAktif = data.ujian ? data.ujian.filter(u => u.status === 'AKTIF').length : 0;
+            document.getElementById('stat-ujian').innerText = jumlahUjianAktif;
             document.getElementById('stat-soal').innerText = data.stats.jml_soal || 0;
-            activeUjianData = data.ujian || []; activeSiswaData = data.siswa || []; activeKisiData = data.kisi || [];
-            if(document.getElementById('set-nama')) { document.getElementById('set-nama').value = data.setting.nama||''; document.getElementById('set-npsn').value = data.setting.npsn||''; document.getElementById('set-admin').value = data.setting.adminName||''; document.getElementById('set-apikey').value = data.setting.apiKey||''; if(data.setting.logo) { document.getElementById('set-logo').value = data.setting.logo; document.getElementById('preview-logo').src = data.setting.logo; } }
+            
+            activeUjianData = data.ujian || []; 
+            activeSiswaData = data.siswa || []; // <--- INI SANGAT PENTING: MENGISI DATA SISWA
+            activeKisiData = data.kisi || [];
+            
+            if(document.getElementById('set-nama')) { 
+                document.getElementById('set-nama').value = data.setting.nama||''; 
+                document.getElementById('set-npsn').value = data.setting.npsn||''; 
+                document.getElementById('set-admin').value = data.setting.adminName||''; 
+                document.getElementById('set-apikey').value = data.setting.apiKey||''; 
+                if(data.setting.logo) { 
+                    document.getElementById('set-logo').value = data.setting.logo; 
+                    document.getElementById('preview-logo').src = data.setting.logo; 
+                } 
+            }
+            
             renderTabelUjianAdmin();
-            let opt = '<option value="">-- Pilih Asesmen Guru --</option>'; activeUjianData.forEach(u => opt += `<option value="${u.kode}">${u.nama}</option>`); document.getElementById('kepsek-filter-ujian').innerHTML = opt;
+            
+            // Mengisi dropdown filter Ujian
+            let opt = '<option value="">-- Pilih Asesmen Guru --</option>'; 
+            activeUjianData.forEach(u => opt += `<option value="${u.kode}">${u.nama}</option>`); 
+            document.getElementById('kepsek-filter-ujian').innerHTML = opt;
+
+            // Mengisi dropdown Kelas untuk menu Laporan dan Kartu Peserta
+            inisiatifDropdownKelasLangsung();
         });
+    }
+	
+	function inisiatifDropdownKelasLangsung() {
+        let selectKartu = document.getElementById('filter-kartu-kelas-mandiri');
+        let selectLaporan = document.getElementById('filter-laporan-kelas');
+        
+        let classes = [];
+        if (typeof activeSiswaData !== 'undefined' && activeSiswaData.length > 0) {
+            classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== 'undefined' && k !== '-'))];
+        }
+        
+        let classOptions = '<option value="">-- Pilih Kelas --</option>'; 
+        classes.sort().forEach(c => classOptions += `<option value="${c}">${c}</option>`);
+        
+        if (selectKartu) selectKartu.innerHTML = classOptions;
+        if (selectLaporan) selectLaporan.innerHTML = classOptions;
     }
 
     // ==========================================
@@ -1415,9 +1560,52 @@ document.getElementById('stat-ujian').innerText = jumlahUjianAktif;
         document.getElementById('tb-guru').innerHTML = '<tr><td colspan="5" class="text-center py-5"><span class="spinner-border text-primary"></span></td></tr>';
         panggilAPI("getDataGuruBackend", { kodeSekolah: currentUser.kode_sekolah }).then(d => { activeGuruData=d||[]; let h=''; d.forEach(g => { h+=`<tr><td class="fw-bold">${g.nama}</td><td class="text-muted">${g.username}</td><td>${g.password}</td><td><span class="badge border text-dark">${g.role}</span></td><td><button class="btn btn-sm btn-light text-primary me-2" onclick="editGuru('${g.username}')"><i class="bi bi-pencil"></i></button><button class="btn btn-sm btn-light text-danger" onclick="hapusGuru('${g.username}')"><i class="bi bi-trash"></i></button></td></tr>`; }); document.getElementById('tb-guru').innerHTML=h||'<tr><td colspan="5" class="py-4 text-center">Belum ada akun guru.</td></tr>'; });
     }
-    function simpanGuru() { const b=document.getElementById('btn-simpan-guru'); b.disabled=true; b.innerHTML='Load...'; const p = { kodeSekolah: currentUser.kode_sekolah, userLama: document.getElementById('gr-user-lama').value, nama: document.getElementById('gr-nama').value, username: document.getElementById('gr-user').value, password: document.getElementById('gr-pass').value, role: document.getElementById('gr-role').value }; panggilAPI("simpanDataGuruBackend", p).then(r => { b.disabled=false; b.innerHTML='Simpan'; if(r.success){ tutupModal('modalAddGuru'); loadDataGuru(); } alert(r.message); }); }
+	function toggleAreaKelasAjar() {
+        let role = document.getElementById('gr-role').value;
+        document.getElementById('area-kelas-ajar').style.display = role === 'guru' ? 'block' : 'none';
+    }
+
+    function renderCheckboxKelasAjar(kelasTerpilih = "") {
+        let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== '-'))].sort();
+        let html = ''; let arrPilih = kelasTerpilih.split(',').map(x => x.trim());
+        classes.forEach(c => {
+            let chk = arrPilih.includes(c) ? 'checked' : '';
+            html += `<div class="form-check"><input class="form-check-input chk-kelas-ajar" type="checkbox" value="${c}" ${chk}><label class="form-check-label small fw-bold">${c}</label></div>`;
+        });
+        document.getElementById('cb-kelas-ajar').innerHTML = html || '<small class="text-muted">Data siswa belum ada. Tidak ada kelas yang bisa dipilih.</small>';
+    }
+
+    function editGuru(u) { 
+        let g = activeGuruData.find(x=>x.username===u); if(!g) return; 
+        document.getElementById('gr-user-lama').value = g.username; 
+        document.getElementById('gr-nama').value = g.nama; 
+        document.getElementById('gr-user').value = g.username; 
+        document.getElementById('gr-pass').value = g.password; 
+        document.getElementById('gr-role').value = g.role; 
+        toggleAreaKelasAjar();
+        renderCheckboxKelasAjar(g.kelasAjar || "");
+        document.getElementById('title-modal-guru').innerText = 'Edit Akun'; 
+        bukaModal('modalAddGuru'); 
+    }
+
+    function simpanGuru() { 
+        const btn = document.getElementById('btn-simpan-guru'); const oriText = btn.innerHTML; btn.innerHTML = 'Menyimpan...'; btn.disabled = true; 
+        
+        let arrKelas = [];
+        document.querySelectorAll('.chk-kelas-ajar:checked').forEach(el => arrKelas.push(el.value));
+        
+        const payload = { 
+            kodeSekolah: currentUser.kode_sekolah, userLama: document.getElementById('gr-user-lama').value, 
+            nama: document.getElementById('gr-nama').value, username: document.getElementById('gr-user').value, 
+            password: document.getElementById('gr-pass').value, role: document.getElementById('gr-role').value,
+            kelasAjar: document.getElementById('gr-role').value === 'guru' ? arrKelas.join(',') : ''
+        }; 
+        panggilAPI("simpanDataGuruBackend", payload)
+        .then(res => { btn.innerHTML = oriText; btn.disabled = false; if(res.success) { tutupModal('modalAddGuru'); loadDataGuru(); alert(res.message); } else { alert(res.message); } })
+        .catch(err => { btn.innerHTML = oriText; btn.disabled = false; alert("Gagal: " + err.message); });
+    }
     function hapusGuru(u) { if(confirm('Hapus akun guru?')) panggilAPI("hapusDataGuruBackend", {kodeSekolah: currentUser.kode_sekolah, username: u}).then(()=>loadDataGuru()); }
-    function editGuru(u) { let g=activeGuruData.find(x=>x.username===u); if(g) { document.getElementById('gr-user-lama').value=g.username; document.getElementById('gr-nama').value=g.nama; document.getElementById('gr-user').value=g.username; document.getElementById('gr-pass').value=g.password; document.getElementById('gr-role').value=g.role; bukaModal('modalAddGuru'); } }
+    
     function downloadTemplateGuru() { const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([["Nama_Lengkap", "Username", "Password", "Role"], ["Ahmad Guru, S.Pd", "ahmad123", "guruhebat", "guru"]]), "Template_Guru"); XLSX.writeFile(wb, "Template_Import_Guru.xlsx"); }
     function prosesImportGuruExcel(e) { e.preventDefault(); const b=document.getElementById('btn-prosesImportGuru'); const file=document.getElementById('file-import-guru').files[0]; if(!file)return; b.disabled=true; b.innerHTML='Menyimpan...'; const reader=new FileReader(); reader.onload=async function(ev) { try { const data=ev.target.result; const wb=XLSX.read(data, {type:'binary'}); const jA=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]); if(jA.length===0)throw new Error(); let sks=0; for(let i=0;i<jA.length;i++){ let r=jA[i]; if(r.Nama_Lengkap&&r.Username){ await panggilAPI("simpanDataGuruBackend", {kodeSekolah: currentUser.kode_sekolah, userLama:'', nama: r.Nama_Lengkap, username: r.Username, password: r.Password||'123456', role: r.Role||'guru'}); sks++; } } tutupModal('modalImportGuru'); loadDataGuru(); alert(`Berhasil mengimpor ${sks} akun guru!`); }catch(err){alert("File salah format.");} b.disabled=false; b.innerHTML='Proses Data'; }; reader.readAsBinaryString(file); }
 
@@ -1425,13 +1613,42 @@ document.getElementById('stat-ujian').innerText = jumlahUjianAktif;
     // LINK EKSTERNAL (SEMUA KELAS)
     // ==========================================
     function loadLinkAdmin() {
-        panggilAPI("getLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah }).then(d => {
-            let html = ''; (d || []).forEach(L => { let c=L.status==='AKTIF'?'checked':''; html += `<div class="col-md-6 col-xl-4"><div class="card h-100 shadow-sm rounded-4 border border-success-subtle"><div class="card-body p-4"><div class="d-flex justify-content-between mb-2"><span class="badge bg-success bg-opacity-10 text-success">${L.platform}</span><span class="badge border text-dark">${L.status}</span></div><h5 class="fw-bold mb-1">${L.nama}</h5><p class="small text-muted mb-3">Target: ${L.kelas}</p><div class="form-check form-switch mb-3"><input class="form-check-input" type="checkbox" ${c} onchange="panggilAPI('toggleStatusLinkBackend', {kodeSekolah:currentUser.kode_sekolah, idLink:'${L.id_link}', status:this.checked?'AKTIF':'DRAFT'})"><label class="small fw-bold">Tampilkan ke Siswa</label></div><div class="d-flex gap-2"><button class="btn btn-outline-success btn-sm rounded-pill w-100" onclick="window.open('${L.url}')">Cek Link</button><button class="btn text-danger p-0" onclick="if(confirm('Hapus?')) panggilAPI('hapusLinkEksternalBackend', {kodeSekolah:currentUser.kode_sekolah, idLink:'${L.id_link}'}).then(()=>loadLinkAdmin())"><i class="bi bi-trash"></i></button></div></div></div></div>`; });
-            document.getElementById('container-link-admin').innerHTML = html||'<div class="col-12 py-5 text-center text-muted">Belum ada link.</div>';
+        panggilAPI("getLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah }).then(data => {
+            let html = ''; 
+            
+            // Populasi Filter Dropdown Guru
+            let semuaPembuat = [...new Set((data || []).map(l => l.pembuat))].filter(p => p);
+            let selectFilter = document.getElementById('filter-link-guru');
+            if (selectFilter && selectFilter.options.length === 1) { // Jika baru ada opsi 'Semua'
+                semuaPembuat.forEach(p => {
+                    let infoGuru = activeGuruData.find(g => g.username === p);
+                    let namaTampil = infoGuru ? infoGuru.nama : p;
+                    selectFilter.innerHTML += `<option value="${p}">${namaTampil}</option>`;
+                });
+            }
+
+            let filterPembuat = selectFilter ? selectFilter.value : "SEMUA";
+            let filteredLinks = data || [];
+            
+            if (filterPembuat !== "SEMUA") {
+                filteredLinks = filteredLinks.filter(l => l.pembuat === filterPembuat);
+            }
+
+            filteredLinks.forEach(L => { 
+                let c = L.status === 'AKTIF' ? 'checked' : ''; 
+                let infoGuru = activeGuruData.find(g => g.username === L.pembuat);
+                let namaTampil = infoGuru ? infoGuru.nama : L.pembuat;
+                
+                html += `<div class="col-md-6 col-xl-4"><div class="card h-100 shadow-sm rounded-4 border border-success-subtle"><div class="card-body p-4"><div class="d-flex justify-content-between mb-2"><span class="badge bg-success bg-opacity-10 text-success">${L.platform}</span><span class="badge border text-dark">${L.status}</span></div><h5 class="fw-bold mb-1">${L.nama}</h5><p class="small text-muted mb-1">Dibuat oleh: <b>${namaTampil}</b></p><p class="small text-muted mb-3 border-bottom pb-2">Target: Kelas ${L.kelas}</p><div class="form-check form-switch mb-3"><input class="form-check-input" type="checkbox" ${c} onchange="panggilAPI('toggleStatusLinkBackend', {kodeSekolah:currentUser.kode_sekolah, idLink:'${L.id_link}', status:this.checked?'AKTIF':'DRAFT'})"><label class="small fw-bold">Tampilkan ke Siswa</label></div><div class="d-flex gap-2"><button class="btn btn-outline-success btn-sm rounded-pill w-100" onclick="window.open('${L.url}')">Cek Link</button><button class="btn text-danger p-0" onclick="if(confirm('Hapus?')) panggilAPI('hapusLinkEksternalBackend', {kodeSekolah:currentUser.kode_sekolah, idLink:'${L.id_link}'}).then(()=>loadLinkAdmin())"><i class="bi bi-trash"></i></button></div></div></div></div>`; 
+            });
+            document.getElementById('container-link-admin').innerHTML = html || '<div class="col-12 py-5 text-center text-muted">Tidak ada link eksternal yang ditemukan.</div>';
+            
             let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k!=='-'))].sort();
             let opt = `<option value="${classes.join(', ')}">-- Semua Kelas --</option>`; classes.forEach(c => opt += `<option value="${c}">Kelas ${c}</option>`); document.getElementById('lnk-kelas').innerHTML = opt;
         });
     }
+
+    function simpanLinkEksternal(e) { e.preventDefault(); panggilAPI("simpanLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah, nama: document.getElementById('lnk-nama').value, platform: document.getElementById('lnk-platform').value, kelas: document.getElementById('lnk-kelas').value, url: document.getElementById('lnk-url').value, pembuat: currentUser.username }).then(r => { if(r.success){ tutupModal('modalAddLink'); loadLinkAdmin(); } }); }
     function simpanLinkEksternal(e) { e.preventDefault(); panggilAPI("simpanLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah, nama: document.getElementById('lnk-nama').value, platform: document.getElementById('lnk-platform').value, kelas: document.getElementById('lnk-kelas').value, url: document.getElementById('lnk-url').value }).then(r => { if(r.success){ tutupModal('modalAddLink'); loadLinkAdmin(); } }); }
 
     // ==========================================
@@ -1448,7 +1665,167 @@ document.getElementById('stat-ujian').innerText = jumlahUjianAktif;
     function renderKartuPesertaMandiri() { const cls=document.getElementById('filter-kartu-kelas-mandiri').value; const sw=activeSiswaData.filter(s=>s.kelas===cls); let h=''; sw.forEach(s=>{ h+=`<div class="col-md-6 kartu-item"><div class="card p-3 border-2 border-dark mb-3"><div class="d-flex align-items-center mb-3 border-bottom pb-2"><h5 class="fw-bold m-0 w-100 text-center">KARTU UJIAN</h5></div><table class="table table-sm table-borderless small m-0"><tr><td style="width:30%">Nama</td><td>: <b>${s.nama}</b></td></tr><tr><td>Username</td><td>: <code>${s.user}</code></td></tr><tr><td>Password</td><td>: <code>${s.pass}</code></td></tr><tr><td>Kelas</td><td>: ${s.kelas}</td></tr></table></div></div>`; }); document.getElementById('container-kartu-preview').innerHTML=h; document.getElementById('container-kartu-preview').style.display='flex'; document.getElementById('pesan-kartu-kosong').style.display='none'; }
     function inisiatifDropdownKelasLangsung() { let classes=[...new Set(activeSiswaData.map(s=>String(s.kelas).trim()).filter(k=>k&&k!=='-'))].sort(); let opt='<option value="">-- Pilih Kelas --</option>'; classes.forEach(c=>opt+=`<option value="${c}">${c}</option>`); document.getElementById('filter-kartu-kelas-mandiri').innerHTML=opt; document.getElementById('filter-laporan-kelas').innerHTML=opt; }
     function renderTabelLaporanSiswa() { const cls=document.getElementById('filter-laporan-kelas').value; let sw=activeSiswaData.filter(s=>s.kelas===cls); let h=''; sw.forEach(s=>{ h+=`<tr><td class="fw-bold ps-4">${s.nama}</td><td><button class="btn btn-sm btn-outline-primary rounded-pill" onclick="bukaPanelLaporanSiswa('${s.user}')">Laporan</button></td></tr>`; }); document.getElementById('tb-laporan-siswa').innerHTML=h||'<tr><td colspan="2" class="text-center py-5">Pilih kelas di atas.</td></tr>'; }
-    function bukaPanelLaporanSiswa(nisn) { document.getElementById('panel-konfigurasi-kosong').style.display='none'; document.getElementById('panel-konfigurasi-rapor').style.display='block'; let s=activeSiswaData.find(x=>x.user===nisn); if(!s)return; document.getElementById('lap-nama-siswa').innerText=s.nama; document.getElementById('lap-nisn-siswa').innerText=`NISN: ${s.user} | Kelas: ${s.kelas}`; panggilAPI("getSemuaHasil", {kodeSekolah:currentUser.kode_sekolah}).then(r=>{ let myR=(r||[]).filter(h=>h.userSiswa===nisn); let hCheck=''; myR.forEach(h=>{ hCheck+=`<div class="form-check pb-2 border-bottom"><input class="form-check-input" type="checkbox" checked disabled><label class="form-check-label w-100 d-flex justify-content-between small"><span>${h.kodeUjian}</span><b>Skor: ${h.nilaiAkhir}</b></label></div>`; }); document.getElementById('lap-checkbox-ujian').innerHTML=hCheck||'<div class="text-muted small">Belum ada riwayat ujian.</div>'; }); }
+	
+    function bukaPanelLaporanSiswa(nisn) { 
+        aktifNisnLaporan = nisn; 
+        const siswa = activeSiswaData.find(s => s.user === nisn); 
+        if(!siswa) return;
+
+        document.getElementById('panel-konfigurasi-kosong').style.display = 'none'; 
+        document.getElementById('panel-konfigurasi-rapor').style.display = 'block';
+        document.getElementById('lap-nama-siswa').innerText = siswa.nama; 
+        document.getElementById('lap-nisn-siswa').innerText = `NISN/User: ${siswa.user} | Kelas: ${siswa.kelas}`;
+
+        panggilAPI("getSemuaHasil", {kodeSekolah: currentUser.kode_sekolah}).then(r => { 
+            let riwayatSiswa = (r || []).filter(h => h.userSiswa === nisn); 
+            
+            // Simpan riwayat sementara ke memori agar Grafik & PDF bisa membacanya
+            window.tempHasilSiswa = riwayatSiswa; 
+            
+            let htmlCheck = ''; 
+
+            if(riwayatSiswa.length === 0) { 
+                htmlCheck = '<div class="text-muted small py-4 text-center">Belum ada riwayat ujian untuk siswa ini.</div>'; 
+            } else { 
+                // SISTEM GROUPING MAPEL
+                let groupedMapel = {};
+                
+                riwayatSiswa.forEach(h => {
+                    let infoUjian = activeUjianData.find(u => u.kode === h.kodeUjian) || {nama: h.kodeUjian, mapel: 'Lain-lain'};
+                    let mapel = infoUjian.mapel;
+                    
+                    if (!groupedMapel[mapel]) { groupedMapel[mapel] = []; }
+                    
+                    // Mendeteksi percobaan remedial (Ke-2, Ke-3)
+                    let namaTestTampil = infoUjian.nama;
+                    if (h.namaSiswa && h.namaSiswa.includes("(Ke-")) {
+                        let matchPercobaan = h.namaSiswa.match(/\(Ke-\d+\)/);
+                        if (matchPercobaan) namaTestTampil += ` <span class="badge bg-secondary ms-1">${matchPercobaan[0]}</span>`;
+                    }
+
+                    let skor = h.nilaiAkhir !== undefined ? h.nilaiAkhir : h.nilai;
+
+                    groupedMapel[mapel].push({
+                        kodeUjian: h.kodeUjian,
+                        namaUjian: namaTestTampil,
+                        nilai: skor
+                    });
+                });
+
+                // RENDER TAMPILAN BERDASARKAN KELOMPOK MAPEL
+                for (let mapel in groupedMapel) {
+                    htmlCheck += `<div class="fw-bold text-primary border-bottom border-primary-subtle pb-1 mb-2 mt-3"><i class="bi bi-book-half me-2"></i>${mapel}</div>`;
+                    
+                    groupedMapel[mapel].forEach(item => {
+                        let badgeClass = item.nilai >= 75 ? 'bg-success' : 'bg-danger';
+                        htmlCheck += `
+                        <div class="form-check pb-2 ms-2 mb-1">
+                            <input class="form-check-input check-laporan-nilai border-secondary" type="checkbox" value="${item.kodeUjian}" checked onchange="updateGrafikLaporan()">
+                            <label class="form-check-label w-100 d-flex justify-content-between small align-items-center" style="cursor: pointer;">
+                                <span class="text-dark">${item.namaUjian}</span>
+                                <span class="badge ${badgeClass} rounded-pill shadow-sm px-2 py-1">Skor: ${item.nilai}</span>
+                            </label>
+                        </div>`;
+                    });
+                }
+            } 
+            document.getElementById('lap-checkbox-ujian').innerHTML = htmlCheck; 
+            
+            // Panggil grafik
+            if(typeof updateGrafikLaporan === 'function') updateGrafikLaporan();
+        }); 
+    }
+
+    function updateGrafikLaporan() {
+        if(!aktifNisnLaporan || !window.tempHasilSiswa) return;
+        const cbList = document.querySelectorAll('.check-laporan-nilai'); 
+        const selectedUjian = Array.from(cbList).filter(cb => cb.checked).map(cb => cb.value);
+        
+        let labels = []; let dataPoints = [];
+        let riwayatTerpilih = window.tempHasilSiswa.filter(h => selectedUjian.includes(h.kodeUjian));
+        
+        riwayatTerpilih.forEach(h => { 
+            let infoUjian = activeUjianData.find(u => u.kode === h.kodeUjian) || {nama: h.kodeUjian}; 
+            let nama = infoUjian.nama;
+            
+            if (h.namaSiswa && h.namaSiswa.includes("(Ke-")) {
+                let pM = h.namaSiswa.match(/\(Ke-\d+\)/);
+                if (pM) nama += ` ${pM[0]}`;
+            }
+
+            let skor = h.nilaiAkhir !== undefined ? h.nilaiAkhir : h.nilai;
+            labels.push(nama.length > 25 ? nama.substring(0,25)+'...' : nama); 
+            dataPoints.push(skor); 
+        });
+
+        const ctx = document.getElementById('grafikProgressNilai').getContext('2d');
+        if(progressChartInstance) { progressChartInstance.destroy(); }
+        progressChartInstance = new Chart(ctx, { 
+            type: 'line', 
+            data: { labels: labels, datasets: [{ label: 'Skor Asesmen', data: dataPoints, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', borderWidth: 3, tension: 0.3, fill: true, pointRadius: 5, pointBackgroundColor: '#e11d48' }] }, 
+            options: { responsive: true, maintainAspectRatio: false, animation: false, scales: { y: { beginAtZero: true, max: 100 } } } 
+        });
+    }
+
+    function downloadLaporanPDF() {
+        if(!aktifNisnLaporan || !window.tempHasilSiswa) return; 
+        const siswa = activeSiswaData.find(s => s.user === aktifNisnLaporan); 
+        if(!siswa) return;
+        
+        const cbList = document.querySelectorAll('.check-laporan-nilai'); 
+        const selectedUjian = Array.from(cbList).filter(cb => cb.checked).map(cb => cb.value);
+        if(selectedUjian.length === 0) { alert('Pilih minimal 1 asesmen untuk dicetak!'); return; }
+
+        const tgl = new Date(); 
+        const dateStamp = ("0" + tgl.getDate()).slice(-2) + "-" + ("0" + (tgl.getMonth()+1)).slice(-2) + "-" + tgl.getFullYear();
+        
+        document.getElementById('print-nama').innerText = siswa.nama; 
+        document.getElementById('print-nisn').innerText = siswa.user; 
+        document.getElementById('print-kelas').innerText = siswa.kelas;
+        document.getElementById('print-sekolah').innerText = document.getElementById('set-nama').value || 'Nama Sekolah';
+        document.getElementById('print-logo').src = document.getElementById('set-logo').value || 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Pendidikan_Nasional_logo.png/120px-Pendidikan_Nasional_logo.png';
+        document.getElementById('print-tanggal-asesmen').innerText = dateStamp; 
+        document.getElementById('print-wali-kelas').innerText = currentUser.nama || 'Kepala Sekolah';
+
+        let htmlTb = ''; let no = 1;
+        
+        let riwayatTerpilih = window.tempHasilSiswa.filter(h => selectedUjian.includes(h.kodeUjian));
+        
+        // Urutkan tabel PDF berdasarkan Mata Pelajaran agar rapi
+        riwayatTerpilih.sort((a, b) => {
+            let mapelA = (activeUjianData.find(u => u.kode === a.kodeUjian) || {mapel: 'Z'}).mapel;
+            let mapelB = (activeUjianData.find(u => u.kode === b.kodeUjian) || {mapel: 'Z'}).mapel;
+            return mapelA.localeCompare(mapelB);
+        });
+
+        riwayatTerpilih.forEach(h => { 
+            let infoUjian = activeUjianData.find(u => u.kode === h.kodeUjian) || {nama: h.kodeUjian, mapel: 'Lain-lain'}; 
+            
+            let skorAkhir = h.nilaiAkhir !== undefined ? h.nilaiAkhir : h.nilai;
+            let predikat = skorAkhir >= 90 ? 'A (Sangat Baik)' : (skorAkhir >= 80 ? 'B (Baik)' : (skorAkhir >= 70 ? 'C (Cukup)' : 'D (Kurang)')); 
+            
+            let namaPrint = infoUjian.nama;
+            if (h.namaSiswa && h.namaSiswa.includes("(Ke-")) {
+                let pM = h.namaSiswa.match(/\(Ke-\d+\)/);
+                if (pM) namaPrint += ` ${pM[0]}`;
+            }
+
+            htmlTb += `<tr><td>${no++}</td><td style="text-align:left;">${infoUjian.mapel}</td><td style="text-align:left;">${namaPrint}</td><td><b>${skorAkhir}</b></td><td>${predikat}</td></tr>`; 
+        });
+        
+        document.getElementById('print-tb-nilai').innerHTML = htmlTb;
+
+        const chartCanvas = document.getElementById('grafikProgressNilai'); 
+        document.getElementById('print-chart-img').src = chartCanvas.toDataURL("image/png");
+        
+        const element = document.getElementById('print-laporan-container'); 
+        element.style.display = 'block'; 
+        document.getElementById('page-title').innerText = "Memproses Laporan PDF...";
+        
+        const opt = { margin: 0.5, filename: `Rapor_${siswa.user}_${siswa.nama.replace(/\s+/g,'_')}.pdf`, image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
+        html2pdf().set(opt).from(element).save().then(() => { element.style.display = 'none'; document.getElementById('page-title').innerText = "Laporan Nilai"; });
+    }
+
     function simpanKisiKisi(e) { e.preventDefault(); const p = { idLama: document.getElementById('kisi-idLama').value, kodeSekolah: currentUser.kode_sekolah, mapel: document.getElementById('kisi-mapel').value, kelas: document.getElementById('kisi-kelas').value, kompetensi: document.getElementById('kisi-kompetensi').value, indikator: document.getElementById('kisi-indikator').value, bentuk: document.getElementById('kisi-bentuk').value, jenisTeks: document.getElementById('kisi-jenis')?document.getElementById('kisi-jenis').value:'', kodeSoal: document.getElementById('kisi-kode')?document.getElementById('kisi-kode').value:'', noSoal: document.getElementById('kisi-no')?document.getElementById('kisi-no').value:'', stimulus: document.getElementById('kisi-stimulus')?document.getElementById('kisi-stimulus').value:'' }; panggilAPI("simpanDataKisi", p).then(r=>{ if(r.success){ tutupModal('modalAddKisi'); loadDataAwalKepsek(); } }); }
     function bukaModalKisiKosong() { document.getElementById('formAddKisi').reset(); document.getElementById('kisi-idLama').value=''; bukaModal('modalAddKisi'); }
 	
