@@ -5617,9 +5617,10 @@ function copyLinkEksternal(namaAsli, platform, url) {
         tampilkanSoalCBT(0);
     }
 
-    const fungsiKumpulkanUjianLama = kumpulkanUjian; 
-    
-    kumpulkanUjian = function(paksaSelesai = false, pesanStatus = null) {
+    // ==========================================
+    // FUNGSI MENGUMPULKAN UJIAN (SISWA & GURU)
+    // ==========================================
+    function kumpulkanUjian(paksaSelesai = false, pesanStatus = null) {
         if (window.isModeSimulasiGuru) {
             let dijawabCount = Object.keys(cbtJawaban).filter(k => {
                 let j = cbtJawaban[k];
@@ -5720,7 +5721,7 @@ function copyLinkEksternal(namaAsli, platform, url) {
                 let infoTambahan = adaEssay ? "\nSebagian soal Kompleks/Uraian menunggu koreksi manual Guru." : `\nSkor Asesmen Anda: ${totalNilai}`;
                 alert("Asesmen berhasil diselesaikan!" + infoTambahan);
                 
-                hentikanKamera(); 
+                if (typeof hentikanKamera === 'function') hentikanKamera(); 
                 
                 window.isSubmitting = false; 
                 navigasiSiswa('beranda', document.querySelector('#screen-siswa .sidebar-nav .nav-item')); 
@@ -5736,7 +5737,7 @@ function copyLinkEksternal(namaAsli, platform, url) {
             alert("GAGAL mengirim ke server: " + err.message + "\nSilakan coba klik Kumpulkan lagi!");
             document.getElementById('cbt-area-soal').innerHTML = `<div class="text-center py-5 text-danger"><i class="bi bi-x-circle display-4"></i><br>Koneksi terputus. Muat ulang halaman (F5) lalu kumpulkan lagi.</div>`;
         });
-    };
+    }
 
 // ==========================================
     // FUNGSI KINERJA GURU (MENGIRIM LINK UPLOAD)
