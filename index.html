@@ -209,7 +209,15 @@
       <form onsubmit="handleLoginAman(event)">
         <div class="mb-3"><label class="form-label small fw-bold">Kode Sekolah</label><input type="text" id="in-kode" class="form-control" required value="KA07SBY"></div>
         <div class="mb-3"><label class="form-label small fw-bold">Username</label><input type="text" id="in-user" class="form-control" required></div>
-        <div class="mb-3"><label class="form-label small fw-bold">Password</label><input type="password" id="in-pass" class="form-control" required></div>
+        <div class="mb-3">
+            <label class="form-label small fw-bold">Password</label>
+            <div class="input-group">
+                <input type="password" id="in-pass" class="form-control border-end-0" required>
+                <button class="btn btn-outline-secondary bg-white border border-start-0" type="button" onclick="togglePasswordLogin()" tabindex="-1">
+                    <i class="bi bi-eye-slash text-muted" id="icon-pass-login"></i>
+                </button>
+            </div>
+        </div>
         <!-- TAB LOGIN ROLE -->
         <label class="form-label small fw-bold mt-2">Masuk Sebagai:</label>
         <ul class="nav nav-pills nav-justified mb-4 p-1 bg-light rounded-pill border" id="loginTab" role="tablist">
@@ -6284,6 +6292,22 @@ function copyLinkEksternal(namaAsli, platform, url) {
             btnTrigger.disabled = false;
 
         }, 500); // Beri waktu UI untuk update tombol jadi 'Proses'
+    }
+
+// FUNGSI UNTUK MENGINTIP PASSWORD DI HALAMAN LOGIN
+    function togglePasswordLogin() {
+        let pwdInput = document.getElementById('in-pass');
+        let icon = document.getElementById('icon-pass-login');
+        
+        if (pwdInput.type === 'password') {
+            pwdInput.type = 'text'; // Tampilkan teks
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
+            icon.classList.replace('text-muted', 'text-primary'); // Ikon menyala biru
+        } else {
+            pwdInput.type = 'password'; // Sembunyikan teks
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+            icon.classList.replace('text-primary', 'text-muted'); // Ikon kembali abu-abu
+        }
     }
 
 </script>
