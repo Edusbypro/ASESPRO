@@ -4247,7 +4247,7 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
         const kelas = document.getElementById('kop-kelas').value || '......';
         const sekolah = document.getElementById('kop-sekolah').value || 'Nama Sekolah';
         
-        // PERUBAHAN SAKTI: Mengambil kode gambar murni (Base64) dari menu Pengaturan agar tidak terblokir di Word
+        // Mengambil kode gambar murni (Base64) dari menu Pengaturan agar tidak terblokir di Word
         const logoBase64 = document.getElementById('set-logo') ? document.getElementById('set-logo').value : '';
         const logoRender = logoBase64 ? `<img src="${logoBase64}" style="width:75px; height:auto;">` : ``;
         
@@ -4299,11 +4299,12 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                     mso-footer-margin: 36.0pt;
                     mso-paper-source: 0;
                 }
-                div.WordSection1, table, td, p, span { font-family: "Times New Roman", serif; font-size: 12pt; }
+                div.WordSection1, table, td, th, p, span { font-family: "Times New Roman", serif; font-size: 12pt; }
                 div.WordSection1 { page: WordSection1; text-align: justify; }
                 p { margin: 0pt 0pt 4pt 0pt; padding: 0pt; }
                 table.soal-container { width: 100%; border-collapse: collapse; margin-bottom: 12pt; page-break-inside: avoid; }
                 td { vertical-align: top; padding: 2pt 4pt; }
+                th { background-color: #f2f2f2; text-align: center; border: 1pt solid black; font-weight: bold; padding: 4pt; }
                 td p { margin: 0pt !important; padding: 0pt !important; text-indent: 0pt !important; }
                 img { max-width: 450px; height: auto; }
                 .meta-box { border: 1pt solid #ccc; padding: 6pt; margin-bottom: 10pt; font-size: 11pt; background-color: #fcfcfc; }
@@ -4330,10 +4331,16 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                 </table>
         `;
 
-        // MESIN PENGHANCUR INLINE FONT (Untuk memusnahkan font Arial bawaan copas)
+        // MESIN PENGHANCUR INLINE FONT
         const musnahkanFontBawaan = (htmlTxt) => {
             if (!htmlTxt) return '';
             return htmlTxt.replace(/font-family\s*:\s*[^;"]+;?/gi, '').replace(/font-size\s*:\s*[^;"]+;?/gi, '');
+        };
+
+        const cleanOpsi = (txt) => {
+            if (!txt) return '';
+            let cleaned = musnahkanFontBawaan(txt).replace(/^<p[^>]*>/i, '').replace(/<\/p>$/i, '').trim();
+            return `<span style="font-family: 'Times New Roman', serif; font-size: 12pt; margin-left: 0; padding-left: 0; text-indent: 0;">${cleaned}</span>`;
         };
 
         soalSorted.forEach((s) => {
@@ -4353,31 +4360,61 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                 html += `</div>`;
             }
 
-            // Cetak Teks Soal (Dibersihkan dari font asing)
+            // Cetak Teks Soal
             let teksSoalBersih = musnahkanFontBawaan(s.pertanyaan || "").replace(/<p>/gi, '<p style="margin:0 0 10pt 0; font-family: \'Times New Roman\', serif; font-size: 12pt;">');
             html += `<div style="margin-bottom: 10pt; font-family: 'Times New Roman', serif; font-size: 12pt;">${teksSoalBersih}</div>`;
 
-            // Garis pemisah sebelum opsi jawaban
-            if (s_opsi && s.tipe && s.tipe.includes('Pilihan Ganda')) {
-                html += `<hr style="border: none; border-top: 0.5pt solid #ccc; margin: 8pt 0 10pt 0;">`;
-            }
+            if (s_opsi) {
+                // LOGIKA RENDER OPSI JAWABAN BERDASARKAN TIPE SOAL
+                if (s.tipe && (s.tipe.includes('Kategori') || s.tipe.includes('Katagori') || s.tipe.includes('Kompleks'))) {
+                    // Tipe Tabel Kategori (Benar/Salah)
+                    html += `
+                        <table style="width:100%; border-collapse: collapse; margin-bottom: 12pt;">
+                            <tr>
+                                <th>Pernyataan</th>
+                                <th style="width: 70px;">Benar</th>
+                                <th style="width: 70px;">Salah</th>
+                            </tr>
+                    `;
+                    ['A','B','C','D'].forEach(opt => {
+                        let teksOpsi = s['opsi'+opt];
+                        if(teksOpsi) {
+                            html += `
+                            <tr>
+                                <td style="border: 1pt solid black; padding: 4pt;">${cleanOpsi(teksOpsi)}</td>
+                                <td style="border: 1pt solid black; text-align: center; vertical-align: middle;"></td>
+                                <td style="border: 1pt solid black; text-align: center; vertical-align: middle;"></td>
+                            </tr>`;
+                        }
+                    });
+                    html += `</table>`;
 
-            // Cetak Opsi Jawaban (Dibersihkan dari font asing)
-            if (s_opsi && s.tipe && s.tipe.includes('Pilihan Ganda')) {
-                let cleanOpsi = (txt) => {
-                    if (!txt) return '';
-                    let cleaned = musnahkanFontBawaan(txt).replace(/^<p[^>]*>/i, '').replace(/<\/p>$/i, '').trim();
-                    return `<span style="font-family: 'Times New Roman', serif; font-size: 12pt; margin-left: 0; padding-left: 0; text-indent: 0;">${cleaned}</span>`;
-                };
+                } else if (s.tipe && s.tipe.includes('MCMA')) {
+                    // Tipe Checkbox MCMA (Kotak)
+                    html += `<table style="width:100%; margin-top:4pt; margin-bottom:12pt; border-collapse: collapse;">`;
+                    ['A','B','C','D'].forEach(opt => {
+                        let teksOpsi = s['opsi'+opt];
+                        if(teksOpsi) {
+                            // Mencetak kotak (checkbox) Unicode U+2610
+                            html += `<tr><td style="width:25px; vertical-align: top; padding: 4pt 0; font-family: 'Times New Roman', serif; font-size: 14pt;">&#9744;</td><td style="vertical-align: top; padding: 4pt 0;">${cleanOpsi(teksOpsi)}</td></tr>`;
+                        }
+                    });
+                    html += `</table>`;
 
-                html += `<table style="width:100%; margin-top:4pt; margin-bottom:12pt; border-collapse: collapse;">
-                            <tr><td style="width:25px; vertical-align: top; padding: 4pt 0; font-family: 'Times New Roman', serif; font-size: 12pt;"><b>A.</b></td><td style="vertical-align: top; padding: 4pt 0;">${cleanOpsi(s.opsiA)}</td></tr>
-                            <tr><td style="width:25px; vertical-align: top; padding: 4pt 0; font-family: 'Times New Roman', serif; font-size: 12pt;"><b>B.</b></td><td style="vertical-align: top; padding: 4pt 0;">${cleanOpsi(s.opsiB)}</td></tr>
-                            <tr><td style="width:25px; vertical-align: top; padding: 4pt 0; font-family: 'Times New Roman', serif; font-size: 12pt;"><b>C.</b></td><td style="vertical-align: top; padding: 4pt 0;">${cleanOpsi(s.opsiC)}</td></tr>
-                            <tr><td style="width:25px; vertical-align: top; padding: 4pt 0; font-family: 'Times New Roman', serif; font-size: 12pt;"><b>D.</b></td><td style="vertical-align: top; padding: 4pt 0;">${cleanOpsi(s.opsiD)}</td></tr>
-                       </table>`;
-            } else { 
-                html += `<div style="height: 10pt;"></div>`; 
+                } else if (s.tipe && s.tipe.includes('Pilihan Ganda')) {
+                    // Tipe Pilihan Ganda Biasa (A, B, C, D)
+                    html += `<table style="width:100%; margin-top:4pt; margin-bottom:12pt; border-collapse: collapse;">`;
+                    ['A','B','C','D'].forEach(opt => {
+                        let teksOpsi = s['opsi'+opt];
+                        if(teksOpsi) {
+                            html += `<tr><td style="width:25px; vertical-align: top; padding: 4pt 0; font-family: 'Times New Roman', serif; font-size: 12pt;"><b>${opt}.</b></td><td style="vertical-align: top; padding: 4pt 0;">${cleanOpsi(teksOpsi)}</td></tr>`;
+                        }
+                    });
+                    html += `</table>`;
+                } else {
+                     // Tipe Uraian / Isian Singkat
+                     html += `<div style="height: 40pt;"></div>`;
+                }
             }
 
             // Garis pemisah sebelum Kunci Jawaban
