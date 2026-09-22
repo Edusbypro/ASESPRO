@@ -1192,9 +1192,13 @@
                   <h5 class="modal-title fw-bold"><i class="bi bi-clipboard-data me-2"></i>Rekap Hasil Ujian: <span id="title-hasil-ujian">Memuat...</span></h5>
                   
                   <!-- TOMBOL AKSI EKSPOR EXCEL -->
+                  <!-- TOMBOL AKSI EKSPOR EXCEL & ANALISIS -->
                   <div class="d-flex gap-2">
+                      <button class="btn btn-info btn-sm fw-bold text-dark px-3 rounded-pill shadow-sm" onclick="eksporAnalisisKDSemua()">
+                          <i class="bi bi-bar-chart-fill me-1"></i> Analisis KD (Excel)
+                      </button>
                       <button class="btn btn-light btn-sm fw-bold text-success px-3 rounded-pill shadow-sm" onclick="eksporExcelHasil('terpilih')">
-                          <i class="bi bi-file-earmark-excel-fill me-1"></i> Ekspor Terpilih (Ceklis)
+                          <i class="bi bi-file-earmark-excel-fill me-1"></i> Ekspor Terpilih
                       </button>
                       <button class="btn btn-success btn-sm fw-bold px-3 rounded-pill shadow-sm" onclick="eksporExcelHasil('semua')">
                           <i class="bi bi-file-earmark-excel me-1"></i> Ekspor Semua
@@ -1239,7 +1243,12 @@
                       <h5 class="modal-title fw-bold text-primary mb-1"><i class="bi bi-check2-all me-2"></i>Koreksi & Analisis Jawaban</h5>
                       <small class="text-muted fw-bold" id="koreksi-nama-siswa">Siswa: -</small>
                   </div>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  <div class="d-flex align-items-center gap-3">
+                      <button class="btn btn-outline-primary btn-sm fw-bold rounded-pill px-3 shadow-sm" onclick="cetakAnalisisIndividu()">
+                          <i class="bi bi-printer-fill me-1"></i> Cetak Analisis
+                      </button>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
               </div>
               <div class="modal-body p-4 bg-light" style="max-height: 70vh; overflow-y: auto;" id="area-koreksi-detail">
                   <div class="text-center py-5"><span class="spinner-border text-primary"></span><br>Membongkar Lembar Jawaban...</div>
@@ -4606,6 +4615,9 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
         try { jwbJSON = JSON.parse(koreksiSiswaAktif.jawabanJSON); } catch(e){}
         let htmlKoreksi = '';
         
+        // 1. SIAPKAN PENAMPUNG REKAP ANALISIS KD
+        let rekapKD = {};
+        
         soalUntukKoreksi.forEach(s => {
             let jwbSiswa = jwbJSON[s.nomor] || "<span class='text-muted'>Tidak dijawab</span>";
             let kunci = s.kunci || "-";
@@ -4619,8 +4631,9 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
             let statusBenar = `<span class="badge bg-secondary px-3 py-2 fs-6">Menunggu Koreksi Manual</span>`;
             let inputPoin = `<input type="number" class="form-control fs-5 fw-bold text-center border-primary input-poin-koreksi" data-nomor="${s.nomor}" value="0" style="width: 90px;" oninput="hitungUlangTotalPoin()">`;
             
+            let isBenar = false; // Deklarasi di luar agar terbaca oleh Perekap KD
+            
             if(tipe.includes('Ganda') || tipe.includes('Isian Singkat')) {
-                let isBenar = false;
                 if(tipe.includes('MCMA')) {
                      let jStr = Array.isArray(jwbSiswa) ? jwbSiswa.sort().join('') : "";
                      let kStr = String(s.kunci || "").replace(/[^A-D]/g, '').split('').sort().join('');
@@ -4641,6 +4654,16 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                 }
             } else {
                  inputPoin = `<input type="number" class="form-control fs-5 fw-bold text-center border-primary input-poin-koreksi text-primary shadow-sm" value="0" style="width: 100px; background:#eff6ff;" oninput="hitungUlangTotalPoin()">`;
+            }
+
+            // 2. CATAT DATA KE DALAM PEREKAP KD
+            let namaKD = s.kompetensi && String(s.kompetensi).trim() !== "" ? s.kompetensi : "Materi Umum";
+            if (!rekapKD[namaKD]) { rekapKD[namaKD] = { total: 0, benar: 0 }; }
+            rekapKD[namaKD].total += 1;
+            
+            // Analisis otomatis ini hanya menghitung Soal Pilihan Ganda & Isian Singkat
+            if (tipe.includes('Ganda') || tipe.includes('Isian Singkat')) {
+                 if (isBenar) { rekapKD[namaKD].benar += 1; }
             }
 
             htmlKoreksi += `
@@ -4666,7 +4689,51 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
             </div>`;
         });
         
-        document.getElementById('area-koreksi-detail').innerHTML = htmlKoreksi;
+        // 3. RENDER TABEL ANALISIS KD DI BAGIAN PALING ATAS
+        let htmlRekapKD = `
+        <div class="card border border-primary-subtle shadow-sm rounded-4 mb-4 bg-primary bg-opacity-10">
+            <div class="card-body p-4">
+                <h5 class="fw-bold text-primary mb-3"><i class="bi bi-bar-chart-fill me-2"></i>Analisis Penguasaan Kompetensi Dasar (KD)</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered bg-white align-middle text-center m-0 shadow-sm rounded">
+                        <thead class="table-light text-muted">
+                            <tr>
+                                <th class="text-start">Kompetensi Dasar / Materi</th>
+                                <th style="width: 120px;">Total Soal</th>
+                                <th style="width: 120px;">Benar</th>
+                                <th style="width: 150px;">Daya Serap</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+        for (let kd in rekapKD) {
+            let dataKD = rekapKD[kd];
+            let persen = dataKD.total > 0 ? Math.round((dataKD.benar / dataKD.total) * 100) : 0;
+            
+            // Pemberian warna otomatis berdasarkan persentase (Hijau > 75%, Kuning > 50%, Merah < 50%)
+            let badgeClass = persen >= 75 ? 'bg-success' : (persen >= 50 ? 'bg-warning text-dark' : 'bg-danger');
+
+            htmlRekapKD += `
+                            <tr>
+                                <td class="text-start fw-bold text-secondary">${kd}</td>
+                                <td class="fs-5">${dataKD.total}</td>
+                                <td class="fs-5 text-success fw-bold">${dataKD.benar}</td>
+                                <td><span class="badge ${badgeClass} fs-6 rounded-pill px-3 py-2">${persen}%</span></td>
+                            </tr>`;
+        }
+
+        htmlRekapKD += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4 border-secondary opacity-25">
+        <h5 class="fw-bold text-dark mb-4"><i class="bi bi-list-check me-2"></i>Rincian Jawaban Siswa</h5>
+        `;
+
+        // Menggabungkan Tabel KD di atas, lalu rincian soal di bawahnya
+        document.getElementById('area-koreksi-detail').innerHTML = htmlRekapKD + htmlKoreksi;
         bukaModal('modalKoreksiDetail');
         hitungUlangTotalPoin(); 
     }
@@ -6035,6 +6102,188 @@ function copyLinkEksternal(namaAsli, platform, url) {
             observer.disconnect();
         });
         observer.observe(areaSoal, { childList: true, subtree: true });
+    }
+
+// ==========================================
+    // FITUR CETAK ANALISIS INDIVIDU (PDF/PRINTER)
+    // ==========================================
+    function cetakAnalisisIndividu() {
+        if (!koreksiSiswaAktif) return;
+        
+        // Ambil isi HTML dari area koreksi
+        let isiKoreksi = document.getElementById('area-koreksi-detail').innerHTML;
+        let namaSiswa = koreksiSiswaAktif.namaSiswa;
+        let kelasSiswa = koreksiSiswaAktif.kelas;
+        let namaUjian = currentUjianNamaAktif || "Ujian";
+        let nilaiSiswa = document.getElementById('koreksi-total-nilai').innerText;
+        
+        // Buka Jendela Baru Khusus Cetak
+        let printWindow = window.open('', '', 'height=800,width=1000');
+        printWindow.document.write('<html><head><title>Analisis_' + namaSiswa.replace(/\s+/g, '_') + '</title>');
+        
+        // Masukkan styling Bootstrap dan CSS tambahan agar rapi saat dicetak
+        printWindow.document.write(`
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+            <style>
+                body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 30px; background: white; color: black; }
+                .card { border: 1px solid #ddd !important; box-shadow: none !important; margin-bottom: 20px !important; break-inside: avoid; }
+                .bg-light { background-color: #f8f9fa !important; }
+                .badge { border: 1px solid #666; color: #000 !important; background: transparent !important; }
+                input[type="number"] { border: none; background: transparent; font-weight: bold; font-size: 1.2rem; }
+                @media print {
+                    @page { margin: 15mm; }
+                    .card-body { padding: 15px !important; }
+                    .text-success { color: #198754 !important; }
+                    .text-danger { color: #dc3545 !important; }
+                    .text-primary { color: #0d6efd !important; }
+                }
+            </style>
+        </head><body>`);
+        
+        // Kop Judul Analisis
+        printWindow.document.write(`
+            <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 15px; margin-bottom: 25px;">
+                <h3 class="fw-bold mb-1">LEMBAR ANALISIS HASIL ASESMEN</h3>
+                <h5 class="mb-1">${namaUjian}</h5>
+                <h6 class="text-muted">Nama: ${namaSiswa} | Kelas: ${kelasSiswa} | Skor Akhir: <span class="fw-bold fs-5">${nilaiSiswa}</span></h6>
+            </div>
+        `);
+        
+        printWindow.document.write(isiKoreksi);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        
+        // Tunggu gambar dan font termuat, lalu cetak
+        setTimeout(() => {
+            printWindow.print();
+        }, 800);
+    }
+
+    // ==========================================
+    // FITUR EKSPOR ANALISIS KD SELURUH KELAS (EXCEL)
+    // ==========================================
+    function eksporAnalisisKDSemua() {
+        if (!dataHasilAktif || dataHasilAktif.length === 0) {
+            alert('Belum ada data ujian yang masuk untuk dianalisis.');
+            return;
+        }
+
+        let btnTrigger = event.currentTarget;
+        let oriHtml = btnTrigger.innerHTML;
+        btnTrigger.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Proses...';
+        btnTrigger.disabled = true;
+
+        setTimeout(() => {
+            // 1. Ekstrak Semua Nama KD Unik dari Soal Ujian Aktif
+            let daftarKD = [];
+            soalUntukKoreksi.forEach(s => {
+                let namaKD = s.kompetensi && String(s.kompetensi).trim() !== "" ? s.kompetensi : "Materi Umum";
+                if(!daftarKD.includes(namaKD)) daftarKD.push(namaKD);
+            });
+
+            // 2. Siapkan Kerangka Tabel Excel
+            let namaAsesmen = document.getElementById('title-hasil-ujian').innerText;
+            let ws_data = [
+                ["REKAPITULASI DAYA SERAP KOMPETENSI DASAR (KD) KELAS"],
+                ["Mata Ujian", ": " + namaAsesmen],
+                ["Waktu Ekspor", ": " + new Date().toLocaleString('id-ID')],
+                [],
+                ["No", "NISN", "Nama Siswa", "Nilai Akhir", ...daftarKD] // Header Kolom KD
+            ];
+
+            // Ambil profil ujian untuk filter siswa
+            let ujianAktif = activeUjianData.find(u => u.kode === currentUjianKodeAktif);
+            let targetSiswa = activeSiswaData;
+            
+            if (ujianAktif) {
+                targetSiswa = activeSiswaData.filter(s => {
+                    const checkMatch = (targetStr, studentProfile) => {
+                        if (!targetStr || String(targetStr).trim() === '' || String(targetStr).trim().toLowerCase() === 'undefined') return true; 
+                        if (!studentProfile || String(studentProfile).trim() === '') return false; 
+                        let targets = String(targetStr).split(',').map(x => x.trim().toLowerCase());
+                        return targets.includes(String(studentProfile).trim().toLowerCase());
+                    };
+                    return checkMatch(ujianAktif.jenjang, s.jenjang) && checkMatch(ujianAktif.kelas, s.kelas) && checkMatch(ujianAktif.rombel, s.rombel) && checkMatch(ujianAktif.asalSekolah, s.asal);
+                });
+            }
+
+            let noUrut = 1;
+
+            // 3. Looping Semua Siswa
+            targetSiswa.forEach(siswa => {
+                let hasilSiswa = dataHasilAktif.find(h => String(h.userSiswa).trim() === String(siswa.user).trim());
+                
+                // Lewati siswa yang belum mengerjakan atau curang/kosong
+                if (!hasilSiswa || !hasilSiswa.jawabanJSON || hasilSiswa.status.includes("Curang")) return;
+
+                let jwbJSON = {};
+                try { jwbJSON = JSON.parse(hasilSiswa.jawabanJSON); } catch(e){}
+
+                // Penampung nilai KD per anak
+                let rekapAnak = {};
+                daftarKD.forEach(kd => rekapAnak[kd] = { total: 0, benar: 0 });
+
+                // Cocokkan jawaban dengan kunci
+                soalUntukKoreksi.forEach(s => {
+                    let jwbSiswa = jwbJSON[s.nomor] || "";
+                    let namaKD = s.kompetensi && String(s.kompetensi).trim() !== "" ? s.kompetensi : "Materi Umum";
+                    let tipe = String(s.tipe).trim();
+                    let isBenar = false;
+
+                    // Hitungan otomatis hanya untuk PG dan Isian
+                    if(tipe.includes('Ganda') || tipe.includes('Isian Singkat')) {
+                        if(tipe.includes('MCMA')) {
+                             let jStr = Array.isArray(jwbSiswa) ? jwbSiswa.sort().join('') : "";
+                             let kStr = String(s.kunci || "").replace(/[^A-D]/g, '').split('').sort().join('');
+                             isBenar = (jStr === kStr && jStr !== "");
+                        } else {
+                             isBenar = (String(jwbSiswa).trim().toUpperCase() === String(s.kunci).trim().toUpperCase());
+                        }
+                    }
+
+                    rekapAnak[namaKD].total += 1;
+                    if(isBenar) rekapAnak[namaKD].benar += 1;
+                });
+
+                // Masukkan data siswa ke array Excel
+                let rowSiswa = [noUrut++, siswa.user, siswa.nama, hasilSiswa.nilaiAkhir];
+                
+                // Ekstrak persentase tiap KD
+                daftarKD.forEach(kd => {
+                    let r = rekapAnak[kd];
+                    let persen = r.total > 0 ? Math.round((r.benar / r.total) * 100) : 0;
+                    rowSiswa.push(persen + "%"); // Simpan dengan format persen
+                });
+
+                ws_data.push(rowSiswa);
+            });
+
+            if (noUrut === 1) {
+                alert("Belum ada siswa valid yang menyelesaikan ujian untuk dianalisis.");
+                btnTrigger.innerHTML = oriHtml;
+                btnTrigger.disabled = false;
+                return;
+            }
+
+            // 4. Ekspor menjadi file Excel (.xlsx) menggunakan pustaka XLSX
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            
+            // Perlebar kolom agar rapi
+            let wscols = [{wch: 5}, {wch: 15}, {wch: 35}, {wch: 12}];
+            daftarKD.forEach(() => wscols.push({wch: 15}));
+            ws['!cols'] = wscols;
+
+            XLSX.utils.book_append_sheet(wb, ws, "Daya_Serap_KD");
+            
+            let namaFileClean = namaAsesmen.replace(/[^a-zA-Z0-9]/g, '_');
+            XLSX.writeFile(wb, `Analisis_KD_Kelas_${namaFileClean}.xlsx`);
+
+            btnTrigger.innerHTML = oriHtml;
+            btnTrigger.disabled = false;
+
+        }, 500); // Beri waktu UI untuk update tombol jadi 'Proses'
     }
 
 </script>
