@@ -252,6 +252,7 @@
         <div class="nav-item" id="menu-kisi" data-menu="kisi" onclick="navigasi('kisi', this)"><i class="bi bi-file-earmark-ruled"></i> Kisi-Kisi Soal</div>
         <div class="nav-item" id="menu-kartu" data-menu="kartu" onclick="navigasi('kartu', this)"><i class="bi bi-person-vcard"></i> Kartu Peserta</div>
         <div class="nav-item" id="menu-laporan" data-menu="laporan" onclick="navigasi('laporan', this)"><i class="bi bi-file-earmark-bar-graph"></i> Laporan Nilai</div>
+		<div class="nav-item" id="menu-leger" data-menu="leger" onclick="navigasi('leger', this)"><i class="bi bi-journal-plus text-warning"></i> Leger Siswa (Manual)</div>
         <div class="nav-item" id="menu-supervisi" data-menu="supervisi" onclick="navigasi('supervisi', this)" style="display:none;"><i class="bi bi-shield-check"></i> Supervisi Kepsek</div>
         <div class="nav-item" id="menu-generator" data-menu="generator" onclick="navigasi('generator', this)"><i class="bi bi-magic"></i> Generator Soal AI</div>
         <div class="nav-item" id="menu-rpp" data-menu="rpp" onclick="navigasi('rpp', this)"><i class="bi bi-journal-text"></i> Generator RPP AI</div>
@@ -654,6 +655,69 @@
           </div>
         </div>
 
+<!-- ========================================== -->
+        <!-- 8.5 LEGER SISWA (NILAI MANUAL / OFFLINE)   -->
+        <!-- ========================================== -->
+        <div id="view-leger" class="view-section hidden">
+          <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
+            <div>
+                <h5 class="fw-bold m-0"><i class="bi bi-journal-plus text-warning me-2"></i>Leger Siswa (Nilai Manual)</h5>
+                <small class="text-muted">Input nilai dari tugas/ujian offline (kertas) untuk dianalisis sistem.</small>
+            </div>
+            <div class="d-flex gap-2 align-items-center flex-wrap">
+                <select id="filter-leger-kelas" class="form-select border-warning text-dark fw-bold rounded-pill px-4" style="width: auto;" onchange="renderTabelLeger()">
+                    <option value="">-- Semua Kelas --</option>
+                </select>
+                <button class="btn btn-outline-warning text-dark px-4 py-2 fw-bold rounded-pill shadow-sm bg-white" onclick="bukaModal('modalImportLeger')"><i class="bi bi-file-earmark-excel me-1"></i> Impor Excel</button>
+                <button class="btn btn-warning px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModalAddLeger()"><i class="bi bi-pencil-square me-1"></i> Input Manual</button>
+            </div>
+          </div>
+          
+          <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                  <div class="stat-card border-start border-4 border-warning">
+                      <small class="text-muted fw-bold">Total Data Masuk</small>
+                      <h3 class="fw-bold m-0 text-warning mt-2" id="stat-leger-total">0</h3>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="stat-card border-start border-4 border-success">
+                      <small class="text-muted fw-bold">Tuntas (>= 75)</small>
+                      <h3 class="fw-bold m-0 text-success mt-2" id="stat-leger-tuntas">0</h3>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="stat-card border-start border-4 border-danger">
+                      <small class="text-muted fw-bold">Perlu Bimbingan (< 75)</small>
+                      <h3 class="fw-bold m-0 text-danger mt-2" id="stat-leger-remed">0</h3>
+                  </div>
+              </div>
+          </div>
+
+          <div class="card border-0 shadow-sm rounded-4">
+              <div class="card-body p-0">
+                  <div class="table-responsive">
+                      <table class="table table-hover table-bordered align-middle m-0 text-center" style="font-size: 0.85rem;">
+                          <thead class="table-light align-middle text-muted">
+                              <tr>
+                                  <th>Tanggal</th>
+                                  <th>NISN</th>
+                                  <th class="text-start">Nama Siswa</th>
+                                  <th>Kelas</th>
+                                  <th>Mata Pelajaran</th>
+                                  <th class="text-start">Kompetensi Dasar / Materi</th>
+                                  <th>Benar / Salah</th>
+                                  <th>Nilai</th>
+                                  <th>Aksi</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tb-leger"></tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+        </div>
+
         <!-- 9. MENU SUPERVISI KEPSEK -->
         <div id="view-supervisi" class="view-section hidden">
             <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light">
@@ -1018,6 +1082,81 @@
   
 
   <!-- ================= KUMPULAN SEMUA MODAL POP-UP ================= -->
+  
+  <!-- MODAL IMPORT LEGER EXCEL -->
+    <div class="modal fade" id="modalImportLeger" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header border-0 pb-0 pt-4 px-4 bg-warning bg-opacity-10 rounded-top">
+                    <h5 class="modal-title fw-bold text-dark"><i class="bi bi-file-earmark-excel text-warning me-2"></i>Impor Nilai Manual</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="alert alert-info small border-info mb-4">
+                        <i class="bi bi-info-circle-fill me-1"></i> Gunakan template Excel ini untuk memasukkan nilai tugas/kertas (offline) sekaligus banyak.
+                    </div>
+                    <button type="button" class="btn btn-outline-warning text-dark mb-3 rounded-pill fw-bold w-100 shadow-sm" onclick="downloadTemplateLeger()">
+                        <i class="bi bi-download me-2"></i> Download Template Excel
+                    </button>
+                    <form onsubmit="prosesImportLeger(event)">
+                        <input type="file" id="file-import-leger" class="form-control mb-3 border-warning" accept=".xlsx" required>
+                        <button type="submit" id="btn-prosesImportLeger" class="btn btn-warning w-100 rounded-pill fw-bold shadow-sm">Proses & Simpan Data</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INPUT LEGER MANUAL (SATUAN) -->
+    <div class="modal fade" id="modalAddLeger" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header border-0 pb-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold text-warning-emphasis"><i class="bi bi-pencil-square me-2"></i>Input Nilai Manual</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formAddLeger" onsubmit="simpanLegerManual(event)">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Pilih Siswa <span class="text-danger">*</span></label>
+                                <select id="leg-siswa" class="form-select border-warning" required></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Tanggal <span class="text-danger">*</span></label>
+                                <input type="date" id="leg-tanggal" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Mata Pelajaran <span class="text-danger">*</span></label>
+                                <input type="text" id="leg-mapel" class="form-control" placeholder="Contoh: Matematika" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Kompetensi Dasar / Materi <span class="text-danger">*</span></label>
+                                <input type="text" id="leg-kd" class="form-control" placeholder="Contoh: Pecahan Campuran" required>
+                            </div>
+                            
+                            <div class="col-12 mt-3 border-top pt-3"><h6 class="fw-bold text-dark mb-2">Statistik Pengerjaan Kertas (Opsional)</h6></div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-success">Jumlah Benar</label>
+                                <input type="number" id="leg-benar" class="form-control border-success" placeholder="0">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-danger">Jumlah Salah</label>
+                                <input type="number" id="leg-salah" class="form-control border-danger" placeholder="0">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-primary">Nilai Akhir (0-100) <span class="text-danger">*</span></label>
+                                <input type="number" id="leg-nilai" class="form-control border-primary fw-bold text-primary" required>
+                            </div>
+                        </div>
+                        <div class="text-end mt-4 pt-3 border-top">
+                            <button type="submit" id="btn-simpan-leger" class="btn btn-warning px-5 py-2 fw-bold rounded-pill shadow-sm">Simpan Nilai</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
   
   <!-- MODAL BANTUAN AKSARA, ARAB & MATEMATIKA -->
 <div class="modal fade" id="modalAksaraArab" tabindex="-1" aria-hidden="true">
@@ -2227,6 +2366,7 @@ function mulaiTimerCBT() {
             document.getElementById('menu-kartu').style.display = 'flex';
             document.getElementById('menu-analisis').style.display = 'flex';
             document.getElementById('menu-laporan').style.display = 'flex';
+			document.getElementById('menu-leger').style.display = 'flex'; // TAMBAHKAN INI
             document.getElementById('menu-pengaturan').style.display = 'flex';
             document.getElementById('menu-guru').style.display = 'flex';
             
@@ -2266,6 +2406,12 @@ function mulaiTimerCBT() {
           document.getElementById('panel-konfigurasi-rapor').style.display='none'; 
           document.getElementById('panel-konfigurasi-kosong').style.display='flex'; 
           renderTabelLaporanSiswa(); 
+      }
+      
+      // TAMBAHKAN BARIS INI
+      if(menu === 'leger') {
+          inisiatifDropdownKelasLangsung('filter-leger-kelas');
+          renderTabelLeger();
       }
     }
 
@@ -6398,6 +6544,165 @@ function copyLinkEksternal(namaAsli, platform, url) {
             icon.classList.replace('bi-eye', 'bi-eye-slash');
             icon.classList.replace('text-primary', 'text-muted'); // Ikon kembali abu-abu
         }
+    }
+
+// ==========================================
+    // SISTEM LEGER SISWA (NILAI MANUAL / OFFLINE)
+    // ==========================================
+    let activeLegerData = JSON.parse(localStorage.getItem('cbt_leger_manual') || '[]');
+
+    // Memodifikasi fungsi Inisiatif agar bisa mengisi dropdown Leger juga
+    function inisiatifDropdownKelasLangsung(targetId = null) {
+        let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== '-'))].sort();
+        let classOptions = '<option value="">-- Pilih Kelas --</option>'; 
+        classes.forEach(c => classOptions += `<option value="${c}">Kelas ${c}</option>`);
+        
+        if (targetId) {
+            let tEl = document.getElementById(targetId);
+            if(tEl) tEl.innerHTML = classOptions;
+        } else {
+            if(document.getElementById('filter-kartu-kelas-mandiri')) document.getElementById('filter-kartu-kelas-mandiri').innerHTML = classOptions;
+            if(document.getElementById('filter-laporan-kelas')) document.getElementById('filter-laporan-kelas').innerHTML = classOptions;
+        }
+    }
+
+    function renderTabelLeger() {
+        let fKelas = document.getElementById('filter-leger-kelas').value;
+        let isGuru = (currentUser && currentUser.role === 'guru');
+        let allowedClasses = isGuru && currentUser.kelasAjar ? currentUser.kelasAjar.split(',').map(x=>x.trim()) : [];
+
+        let filtered = activeLegerData;
+        if(isGuru && allowedClasses.length > 0) {
+            filtered = filtered.filter(x => allowedClasses.includes(x.kelas));
+        }
+        if(fKelas) {
+            filtered = filtered.filter(x => x.kelas === fKelas);
+        }
+
+        let html = '';
+        let tuntas = 0, remed = 0;
+
+        filtered.reverse().forEach((d, i) => {
+            let isTuntas = Number(d.nilai) >= 75;
+            if(isTuntas) tuntas++; else remed++;
+            let badge = isTuntas ? '<span class="badge bg-success">Tuntas</span>' : '<span class="badge bg-danger">Remedial</span>';
+
+            html += `<tr>
+                <td class="small text-muted">${d.tanggal}</td>
+                <td><code>${d.nisn}</code></td>
+                <td class="text-start fw-bold text-primary">${d.nama}</td>
+                <td><span class="badge border text-dark">Kls ${d.kelas}</span></td>
+                <td>${d.mapel}</td>
+                <td class="text-start text-dark">${d.kd}</td>
+                <td><span class="text-success fw-bold">${d.benar}</span> / <span class="text-danger fw-bold">${d.salah}</span></td>
+                <td><h5 class="fw-bold m-0 ${isTuntas ? 'text-success' : 'text-danger'}">${d.nilai}</h5>${badge}</td>
+                <td><button class="btn btn-sm btn-light text-danger rounded-circle" onclick="hapusLeger(${activeLegerData.indexOf(d)})"><i class="bi bi-trash3"></i></button></td>
+            </tr>`;
+        });
+
+        document.getElementById('tb-leger').innerHTML = html || '<tr><td colspan="9" class="text-center py-5 text-muted"><i class="bi bi-journal-x display-4 d-block mb-3 text-secondary opacity-50"></i>Belum ada data nilai manual.</td></tr>';
+        document.getElementById('stat-leger-total').innerText = filtered.length;
+        document.getElementById('stat-leger-tuntas').innerText = tuntas;
+        document.getElementById('stat-leger-remed').innerText = remed;
+    }
+
+    function bukaModalAddLeger() {
+        document.getElementById('formAddLeger').reset();
+        
+        let isGuru = (currentUser && currentUser.role === 'guru');
+        let allowedClasses = isGuru && currentUser.kelasAjar ? currentUser.kelasAjar.split(',').map(x=>x.trim()) : [];
+        let sw = activeSiswaData;
+        if(isGuru && allowedClasses.length > 0) sw = sw.filter(s => allowedClasses.includes(String(s.kelas).trim()));
+
+        let opt = '<option value="">-- Cari & Pilih Siswa --</option>';
+        sw.forEach(s => opt += `<option value="${s.user}|${s.nama}|${s.kelas}">${s.nama} (Kelas ${s.kelas})</option>`);
+        document.getElementById('leg-siswa').innerHTML = opt;
+        
+        let tgl = new Date();
+        document.getElementById('leg-tanggal').value = tgl.toISOString().split('T')[0];
+        
+        bukaModal('modalAddLeger');
+    }
+
+    function simpanLegerManual(e) {
+        e.preventDefault();
+        let sData = document.getElementById('leg-siswa').value.split('|');
+        if(sData.length < 3) { alert("Pilih siswa terlebih dahulu!"); return; }
+        
+        let data = {
+            nisn: sData[0], nama: sData[1], kelas: sData[2],
+            tanggal: document.getElementById('leg-tanggal').value,
+            mapel: document.getElementById('leg-mapel').value,
+            kd: document.getElementById('leg-kd').value,
+            benar: document.getElementById('leg-benar').value || 0,
+            salah: document.getElementById('leg-salah').value || 0,
+            nilai: document.getElementById('leg-nilai').value
+        };
+        
+        activeLegerData.push(data);
+        localStorage.setItem('cbt_leger_manual', JSON.stringify(activeLegerData));
+        tutupModal('modalAddLeger');
+        renderTabelLeger();
+        if(typeof tampilkanNotif === 'function') tampilkanNotif("✅ Data nilai manual berhasil ditambahkan!");
+    }
+
+    function hapusLeger(idx) {
+        if(confirm('Hapus data nilai ini dari Leger?')) {
+            activeLegerData.splice(idx, 1);
+            localStorage.setItem('cbt_leger_manual', JSON.stringify(activeLegerData));
+            renderTabelLeger();
+        }
+    }
+
+    // FUNGSI TEMPLATE & UPLOAD EXCEL LEGER
+    function downloadTemplateLeger() {
+        const ws_data = [
+            ["NISN", "Nama_Siswa", "Kelas", "Mata_Pelajaran", "Kompetensi_Dasar", "Jawaban_Benar", "Jawaban_Salah", "Nilai_Akhir"],
+            ["123456", "Ahmad Fulan", "6", "Matematika", "Pecahan Campuran", 8, 2, 80]
+        ];
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(ws_data), "Template_Leger");
+        XLSX.writeFile(wb, "Template_Import_Nilai_Manual.xlsx");
+    }
+
+    function prosesImportLeger(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btn-prosesImportLeger');
+        const fileInput = document.getElementById('file-import-leger');
+        const file = fileInput.files[0]; if(!file) return;
+        
+        btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Membaca Excel...';
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            try {
+                const data = ev.target.result;
+                const wb = XLSX.read(data, {type: 'binary'});
+                const jA = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                if(jA.length === 0) throw new Error();
+                
+                let tgl = new Date().toISOString().split('T')[0];
+                let count = 0;
+                jA.forEach(r => {
+                    if(r.NISN && r.Nilai_Akhir !== undefined) {
+                        activeLegerData.push({
+                            nisn: r.NISN, nama: r.Nama_Siswa || 'Siswa', kelas: String(r.Kelas||''),
+                            tanggal: tgl, mapel: r.Mata_Pelajaran || '-', kd: r.Kompetensi_Dasar || '-',
+                            benar: r.Jawaban_Benar || 0, salah: r.Jawaban_Salah || 0, nilai: r.Nilai_Akhir
+                        });
+                        count++;
+                    }
+                });
+                localStorage.setItem('cbt_leger_manual', JSON.stringify(activeLegerData));
+                tutupModal('modalImportLeger');
+                fileInput.value = '';
+                renderTabelLeger();
+                if(typeof tampilkanNotif === 'function') tampilkanNotif(`✅ Berhasil mengimpor ${count} data nilai manual!`);
+            } catch(err) {
+                alert('Format Excel tidak sesuai. Pastikan Anda menggunakan Template yang diunduh.');
+            }
+            btn.disabled = false; btn.innerHTML = 'Proses & Simpan Data';
+        };
+        reader.readAsBinaryString(file);
     }
 
 </script>
