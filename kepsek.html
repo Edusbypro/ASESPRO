@@ -157,6 +157,7 @@
         <div class="nav-item" data-menu="laporan" onclick="navigasiKepsek('laporan', this)"><i class="bi bi-file-earmark-bar-graph"></i> Laporan Nilai</div>
         <div class="nav-item" data-menu="generator" onclick="navigasiKepsek('generator', this)"><i class="bi bi-magic"></i> Generator Soal AI</div>
         <div class="nav-item" data-menu="rpp" onclick="navigasiKepsek('rpp', this)"><i class="bi bi-journal-text"></i> Generator RPP AI</div>
+		<div class="nav-item" data-menu="organizer" onclick="navigasiKepsek('organizer', this)"><i class="bi bi-list-task text-primary"></i> Learning Organizer</div>
         <hr class="mx-3 my-2 text-secondary opacity-25">
         
         <div class="nav-item" data-menu="guru" onclick="navigasiKepsek('guru', this)"><i class="bi bi-person-workspace"></i> Manajemen Guru</div>
@@ -591,6 +592,38 @@
               <iframe id="iframe-rpp" src="https://edusbypro.github.io/GENRPPSBY26/" width="100%" style="height: calc(100vh - 180px); min-height: 600px; border: none; background-color: #f8fafc; display: block;"></iframe>
           </div>
         </div>
+<!-- ======================================================= -->
+        <!-- 11.5 LEARNING ORGANIZER (MODE BINGKAI / IFRAME)         -->
+        <!-- ======================================================= -->
+        <div id="view-organizer" class="view-section hidden">
+          
+          <!-- Header Kustom di Atas Bingkai -->
+          <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-3 rounded-4 shadow-sm border border-light">
+            <div>
+               <h5 class="fw-bold m-0 text-primary"><i class="bi bi-list-task me-2"></i>Learning Organizer</h5>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-primary fw-bold rounded-pill" onclick="bukaFullscreenOrganizer(event)">
+                  <i class="bi bi-arrows-fullscreen me-1"></i> Layar Penuh
+                </button>
+                <button class="btn btn-sm btn-outline-secondary fw-bold rounded-pill" onclick="document.getElementById('iframe-organizer').src = document.getElementById('iframe-organizer').src">
+                  <i class="bi bi-arrow-clockwise me-1"></i> Muat Ulang
+                </button>
+            </div>
+          </div>
+
+          <!-- Jendela Iframe Organizer -->
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+              <iframe 
+                id="iframe-organizer"
+                src="https://edusbypro.github.io/losby/supervisi" 
+                width="100%" 
+                style="height: calc(100vh - 180px); min-height: 600px; border: none; background-color: #f8fafc; display: block;">
+              </iframe>
+          </div>
+        </div>
+        <!-- ======================================================= -->
 
         <!-- ========================================== -->
         <!-- 12. MANAJEMEN GURU (DENGAN EXCEL) -->
@@ -1972,6 +2005,26 @@
         .catch(err => {
             tbody.innerHTML = `<tr><td colspan="5" class="py-5 text-center text-danger">Gagal menarik data: ${err.message}</td></tr>`;
         });
+    }
+	
+	// ==========================================
+    // FUNGSI LAYAR PENUH LEARNING ORGANIZER
+    // ==========================================
+    function bukaFullscreenOrganizer(event) {
+      const container = document.getElementById("view-organizer");
+      
+      // Tambahkan atau hapus class layar penuh
+      container.classList.toggle("pseudo-fullscreen");
+      
+      // Ubah gaya tombol saat layar penuh
+      const btn = event.currentTarget;
+      if (container.classList.contains("pseudo-fullscreen")) {
+        btn.innerHTML = '<i class="bi bi-fullscreen-exit me-1"></i> Tutup Layar Penuh';
+        btn.classList.replace('btn-outline-primary', 'btn-danger');
+      } else {
+        btn.innerHTML = '<i class="bi bi-arrows-fullscreen me-1"></i> Layar Penuh';
+        btn.classList.replace('btn-danger', 'btn-outline-primary');
+      }
     }
 	
   </script>
