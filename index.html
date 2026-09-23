@@ -255,6 +255,7 @@
         <div class="nav-item" id="menu-supervisi" data-menu="supervisi" onclick="navigasi('supervisi', this)" style="display:none;"><i class="bi bi-shield-check"></i> Supervisi Kepsek</div>
         <div class="nav-item" id="menu-generator" data-menu="generator" onclick="navigasi('generator', this)"><i class="bi bi-magic"></i> Generator Soal AI</div>
         <div class="nav-item" id="menu-rpp" data-menu="rpp" onclick="navigasi('rpp', this)"><i class="bi bi-journal-text"></i> Generator RPP AI</div>
+		<div class="nav-item" id="menu-organizer" data-menu="organizer" onclick="navigasi('organizer', this)"><i class="bi bi-list-task text-primary"></i> Learning Organizer</div>
 		<div class="nav-item" id="menu-kinerja" data-menu="kinerja" onclick="navigasi('kinerja', this)"><i class="bi bi-cloud-arrow-up text-success"></i> Kinerja Guru</div>
         <div class="nav-item" id="menu-pengaturan" data-menu="pengaturan" onclick="navigasi('pengaturan', this)"><i class="bi bi-gear"></i> Pengaturan</div>
         <div class="nav-item" id="menu-guru" data-menu="guru" onclick="navigasi('guru', this)"><i class="bi bi-person-workspace"></i> Manajemen Guru</div>
@@ -819,6 +820,40 @@
           </div>
         </div>
         <!-- ======================================================= -->
+		
+		<!-- ======================================================= -->
+        <!-- 11.5 LEARNING ORGANIZER (MODE BINGKAI / IFRAME)         -->
+        <!-- ======================================================= -->
+        <div id="view-organizer" class="view-section hidden">
+          
+          <!-- Header Kustom di Atas Bingkai -->
+          <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-3 rounded-4 shadow-sm border border-light">
+            <div>
+               <h5 class="fw-bold m-0 text-primary"><i class="bi bi-list-task me-2"></i>Learning Organizer</h5>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-primary fw-bold rounded-pill" onclick="bukaFullscreenOrganizer(event)">
+                  <i class="bi bi-arrows-fullscreen me-1"></i> Layar Penuh
+                </button>
+                <button class="btn btn-sm btn-outline-secondary fw-bold rounded-pill" onclick="document.getElementById('iframe-organizer').src = document.getElementById('iframe-organizer').src">
+                  <i class="bi bi-arrow-clockwise me-1"></i> Muat Ulang
+                </button>
+            </div>
+          </div>
+
+          <!-- Jendela Iframe Organizer -->
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+              <iframe 
+                id="iframe-organizer"
+                src="https://edusbypro.github.io/losby/" 
+                width="100%" 
+                style="height: calc(100vh - 180px); min-height: 600px; border: none; background-color: #f8fafc; display: block;">
+              </iframe>
+          </div>
+        </div>
+        <!-- ======================================================= -->
+		
 
 <!-- FOOTER ADMIN -->
         <div class="text-center mt-5 pt-4 pb-2 border-top text-muted small d-print-none">
@@ -2199,6 +2234,7 @@ function mulaiTimerCBT() {
 			
             // Pastikan menu generator juga tampil untuk guru/admin:
             if(document.getElementById('menu-generator')) document.getElementById('menu-generator').style.display = 'flex';
+            if(document.getElementById('menu-organizer')) document.getElementById('menu-organizer').style.display = 'flex';
         }
     }
 
@@ -5289,6 +5325,23 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
 
 function bukaFullscreenRPP(event) {
   const container = document.getElementById("view-rpp");
+  
+  // Tambahkan atau hapus class layar penuh
+  container.classList.toggle("pseudo-fullscreen");
+  
+  // Ubah gaya tombol saat layar penuh
+  const btn = event.currentTarget;
+  if (container.classList.contains("pseudo-fullscreen")) {
+    btn.innerHTML = '<i class="bi bi-fullscreen-exit me-1"></i> Tutup Layar Penuh';
+    btn.classList.replace('btn-outline-primary', 'btn-danger');
+  } else {
+    btn.innerHTML = '<i class="bi bi-arrows-fullscreen me-1"></i> Layar Penuh';
+    btn.classList.replace('btn-danger', 'btn-outline-primary');
+  }
+}
+
+function bukaFullscreenOrganizer(event) {
+  const container = document.getElementById("view-organizer");
   
   // Tambahkan atau hapus class layar penuh
   container.classList.toggle("pseudo-fullscreen");
