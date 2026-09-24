@@ -17,12 +17,47 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
-    /* CBT FULLSCREEN & ANTI BOCOR */
-    body.cbt-mode .sidebar, body.cbt-mode .topbar { display: none !important; }
-    body.cbt-mode #screen-siswa { display: block !important; } /* Solusi layar putih! */
-    body.cbt-mode .main-content { padding: 0 !important; width: 100vw !important; height: 100vh !important; margin: 0 !important; overflow: hidden !important; }
-    body.cbt-mode .content-body { padding: 15px !important; margin: 0 !important; height: 100vh !important; background: #f1f5f9; overflow-y: auto !important; }
-    #view-siswa-ruang-ujian { min-height: 100vh; padding: 0; margin: 0; }
+    /* =================================================== */
+    /* PERBAIKAN FATAL LAYOUT CBT SISWA (DESKTOP & MOBILE) */
+    /* =================================================== */
+    body.cbt-mode {
+        background: #f1f5f9 !important; /* Mematikan animasi background saat ujian agar tidak berat/bocor */
+    }
+    body.cbt-mode .sidebar, 
+    body.cbt-mode .topbar { 
+        display: none !important; /* Menghilangkan menu secara paksa */
+    }
+    body.cbt-mode #screen-siswa,
+    body.cbt-mode .main-content,
+    body.cbt-mode .content-body {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        background: #f1f5f9 !important;
+        overflow: hidden !important;
+    }
+    
+    .cbt-container { 
+        padding: 15px !important; 
+        width: 100%;
+        height: 100%;
+    }
+    
+    @media (min-width: 992px) {
+        .cbt-container .row { height: calc(100vh - 30px); margin: 0 auto; }
+        .h-lg-100 { height: 100% !important; }
+        #cbt-area-soal { overflow-y: auto !important; }
+        #cbt-navigasi-nomor { max-height: calc(100vh - 200px); overflow-y: auto; }
+    }
+    @media (max-width: 991px) {
+        body.cbt-mode .main-content,
+        body.cbt-mode .content-body { overflow-y: auto !important; height: auto !important; min-height: 100vh !important; }
+        .cbt-container { padding: 10px !important; }
+        #cbt-area-soal { min-height: 40vh; }
+        #cbt-navigasi-nomor { max-height: 40vh; overflow-y: auto; }
+    }
     
     /* SOLUSI KOTAK JAWABAN (Otomatis Mewarnai Kotak Saat Radio Diklik) */
     .cbt-opsi-wrapper { border: 2px solid transparent; transition: 0.2s; }
@@ -1105,47 +1140,52 @@
             <div class="row g-4" id="container-link-siswa"></div>
         </div>
 
-        <!-- 4. RUANG UJIAN (CBT PLAYER) -->
-        <div id="view-siswa-ruang-ujian" class="view-section-siswa hidden">
-            <div class="row g-4">
-                <!-- Kiri: Lembar Soal -->
-                <div class="col-lg-8">
-                    <div class="card border border-primary-subtle shadow-sm rounded-4 h-100">
-                        <div class="card-body p-4 d-flex justify-content-between align-items-center bg-primary bg-opacity-10 rounded-top-4 border-bottom">
-                            <div><h5 class="fw-bold m-0 text-primary" id="cbt-judul-ujian">Memuat Asesmen...</h5></div>
-                            <div class="d-flex align-items-center gap-3">
-                                <!-- Kontainer Kamera Pengawas (Disembunyikan secara default) -->
-                                <div id="pengawas-kamera-container" class="rounded overflow-hidden border border-2 border-danger shadow-sm d-none" style="width: 120px; height: 90px; background: #000; position: relative;">
-                                    <video id="pengawas-video" autoplay playsinline muted disablePictureInPicture disableRemotePlayback width="120" height="90" style="object-fit: cover;"></video>
-                                    <div class="position-absolute bottom-0 w-100 text-center bg-danger bg-opacity-75 text-white" style="font-size: 0.6rem; padding: 2px 0;"><i class="bi bi-record-circle me-1"></i>PENGAWASAN AKTIF</div>
+        <!-- 4. RUANG UJIAN (CBT PLAYER RESPONSIVE & RAGU-RAGU) -->
+        <div id="view-siswa-ruang-ujian" class="view-section-siswa hidden cbt-container">
+            <div class="row g-3 h-100" style="max-width: 1400px; margin: 0 auto;">
+                <!-- KIRI: Lembar Soal -->
+                <div class="col-lg-8 col-12 d-flex flex-column h-lg-100">
+                    <div class="card border border-primary-subtle shadow-sm rounded-4 flex-grow-1 d-flex flex-column overflow-hidden">
+                        <div class="card-body p-3 d-flex justify-content-between align-items-center bg-primary bg-opacity-10 border-bottom flex-shrink-0">
+                            <h5 class="fw-bold m-0 text-primary text-truncate fs-6 fs-md-5" id="cbt-judul-ujian" style="max-width: 60%;"><i class="bi bi-laptop me-2"></i>Memuat...</h5>
+                            <div class="d-flex align-items-center gap-2 gap-md-3">
+                                <div id="pengawas-kamera-container" class="rounded overflow-hidden border border-2 border-danger shadow-sm d-none" style="width: 100px; height: 75px; background: #000; position: relative;">
+                                    <video id="pengawas-video" autoplay playsinline muted disablePictureInPicture disableRemotePlayback width="100" height="75" style="object-fit: cover;"></video>
+                                    <div class="position-absolute bottom-0 w-100 text-center bg-danger bg-opacity-75 text-white" style="font-size: 0.5rem; padding: 2px 0;"><i class="bi bi-record-circle me-1"></i>PENGAWASAN</div>
                                 </div>
-                                <div class="badge bg-white text-danger fs-5 px-3 py-2 rounded-pill shadow-sm border"><i class="bi bi-clock-history me-2"></i><span id="cbt-timer" class="fw-bold">00:00:00</span></div>
+                                <div class="badge bg-white text-danger fs-6 fs-md-5 border border-danger rounded-pill px-3 py-2 flex-shrink-0">
+                                    <i class="bi bi-clock-history me-1"></i><span id="cbt-timer" class="fw-bold">00:00:00</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-body p-4 fs-5" id="cbt-area-soal" style="min-height: 45vh;">
+                        
+                        <div class="card-body p-3 p-md-4 fs-6 fs-md-5 overflow-auto flex-grow-1" id="cbt-area-soal">
                             <!-- Konten Soal Akan Muncul di Sini -->
                         </div>
-                        <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center rounded-bottom-4 flex-wrap gap-3">
-                            <button id="btn-cbt-prev" class="btn btn-outline-secondary fw-bold px-4 rounded-pill" onclick="cbtNavigasi(-1)"><i class="bi bi-arrow-left me-2"></i>Sebelumnya</button>
+                        
+                        <div class="card-footer bg-white border-top p-2 p-md-3 d-flex justify-content-between align-items-center flex-wrap gap-2 flex-shrink-0">
+                            <button id="btn-cbt-prev" class="btn btn-outline-secondary fw-bold rounded-pill px-3 px-md-4" onclick="cbtNavigasi(-1)"><i class="bi bi-arrow-left"></i> <span class="d-none d-sm-inline ms-1">Sebelumnya</span></button>
                             
-                            <!-- FITUR TOMBOL RAGU-RAGU -->
-                            <div class="form-check form-switch m-0 fs-5 d-flex align-items-center gap-2 bg-warning bg-opacity-10 border border-warning rounded-pill px-3 py-1">
-                                <input class="form-check-input m-0 border-warning" type="checkbox" id="chk-ragu" onchange="toggleRagu()" style="cursor:pointer; width: 40px; height: 20px;">
-                                <label class="form-check-label fw-bold text-warning small m-0" for="chk-ragu" style="cursor:pointer; padding-top:2px;">Ragu-Ragu</label>
+                            <!-- FITUR RAGU-RAGU -->
+                            <div class="form-check form-switch m-0 d-flex align-items-center gap-2 bg-warning bg-opacity-10 border border-warning rounded-pill px-3 py-1 cursor-pointer">
+                                <input class="form-check-input m-0 border-warning" type="checkbox" id="chk-ragu" onchange="toggleRagu()" style="cursor:pointer; width: 35px; height: 18px;">
+                                <label class="form-check-label fw-bold text-warning small m-0 pt-1" for="chk-ragu" style="cursor:pointer;">Ragu-ragu</label>
                             </div>
 
-                            <button id="btn-cbt-next" class="btn btn-primary fw-bold px-4 rounded-pill" onclick="cbtNavigasi(1)">Selanjutnya<i class="bi bi-arrow-right ms-2"></i></button>
+                            <button id="btn-cbt-next" class="btn btn-primary fw-bold rounded-pill px-3 px-md-4" onclick="cbtNavigasi(1)"><span class="d-none d-sm-inline me-1">Selanjutnya</span> <i class="bi bi-arrow-right"></i></button>
                         </div>
                     </div>
                 </div>
-                <!-- Kanan: Peta Navigasi & Tombol Kumpul -->
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm rounded-4 h-100">
-                        <div class="card-body p-4 d-flex flex-column">
-                            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i>Navigasi Soal</h6>
-                            <div class="d-flex flex-wrap gap-2 mb-4" id="cbt-navigasi-nomor"></div>
-                            <hr class="mt-auto mb-4">
-                            <button class="btn btn-success w-100 fw-bold py-3 rounded-pill shadow-sm fs-5" onclick="kumpulkanUjian()"><i class="bi bi-check-circle-fill me-2"></i>SELESAI & KUMPULKAN</button>
+
+                <!-- KANAN: Peta Navigasi & Kumpul -->
+                <div class="col-lg-4 col-12 d-flex flex-column h-lg-100 mt-3 mt-lg-0">
+                    <div class="card border-0 shadow-sm rounded-4 flex-grow-1 d-flex flex-column overflow-hidden">
+                        <div class="card-body p-3 p-md-4 d-flex flex-column flex-grow-1">
+                            <h6 class="fw-bold text-dark mb-3 flex-shrink-0"><i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i>Navigasi Soal</h6>
+                            <div class="d-flex flex-wrap gap-2 mb-3 overflow-auto align-content-start flex-grow-1" id="cbt-navigasi-nomor"></div>
+                            <div class="mt-auto pt-3 border-top flex-shrink-0">
+                                <button class="btn btn-success w-100 fw-bold py-2 py-md-3 rounded-pill shadow-sm fs-6 fs-md-5" onclick="kumpulkanUjian()"><i class="bi bi-check-circle-fill me-2"></i>SELESAI & KUMPULKAN</button>
+                            </div>
                         </div>
                     </div>
                 </div>
