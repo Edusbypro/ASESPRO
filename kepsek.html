@@ -85,6 +85,15 @@
     /* Efek Layar Penuh Buatan */
     .pseudo-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9999 !important; background-color: #f8fafc !important; padding: 1.5rem !important; margin: 0 !important; }
     .pseudo-fullscreen iframe { height: calc(100vh - 100px) !important; }
+	
+	/* SOLUSI BADGE UNGU AGAR KODE SOAL TERBACA */
+    .bg-primary.bg-opacity-10 {
+        background-color: rgba(107, 33, 168, 0.15) !important;
+    }
+    .text-primary {
+        color: var(--bs-primary) !important;
+    }
+	
   </style>
 </head>
 <body>
@@ -127,7 +136,15 @@
       <form onsubmit="handleLoginKepsek(event)">
         <div class="mb-3"><label class="form-label small fw-bold">Kode Sekolah</label><input type="text" id="in-kode" class="form-control" required value="KA07SBY"></div>
         <div class="mb-3"><label class="form-label small fw-bold">Username</label><input type="text" id="in-user" class="form-control" required></div>
-        <div class="mb-4"><label class="form-label small fw-bold">Password</label><input type="password" id="in-pass" class="form-control" required></div>
+        <div class="mb-4">
+            <label class="form-label small fw-bold">Password</label>
+            <div class="input-group">
+                <input type="password" id="in-pass" class="form-control border-end-0" required>
+                <button class="btn btn-outline-secondary bg-white border border-start-0" type="button" onclick="togglePasswordLogin()" tabindex="-1">
+                    <i class="bi bi-eye-slash text-muted" id="icon-pass-login"></i>
+                </button>
+            </div>
+        </div>
         <button type="submit" id="btn-login" class="btn btn-primary w-100 fw-bold py-2 shadow-sm">MASUK DASHBOARD</button>
       </form>
     </div>
@@ -975,7 +992,44 @@
     function bukaDashboardKepsek() {
         document.getElementById('screen-login').classList.add('hidden'); document.getElementById('screen-kepsek').classList.remove('hidden'); 
         document.getElementById('welcome-kepsek').innerText = currentUser.nama; document.getElementById('kepsek-display-initial').innerText = currentUser.nama.charAt(0).toUpperCase();
-        document.getElementById('sidebar-school-name').innerHTML = '<i class="bi bi-shield-check text-primary me-2"></i> <span class="fw-bold">' + (currentUser.nama_sekolah.split(':')[0]||'Sekolah') + '</span>';
+        
+        // Inject Logo EduSbyPro dan Nama Sekolah ke Sidebar Kiri Atas
+        let cleanSchool = currentUser.nama_sekolah.split(':')[0] || currentUser.nama_sekolah || 'Sekolah';
+        let logoEduSbyPro = `
+            <div class="w-100 text-center mt-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 80" style="max-height: 40px; margin-bottom: 10px;">
+                    <defs>
+                        <linearGradient id="gradBlueSide" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="gradRedSide" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 50 75 L 20 45 L 20 15 Q 50 0 80 15 L 80 45 Z" fill="url(#gradBlueSide)"/>
+                    <path d="M 40 55 L 60 55 L 55 15 L 45 15 Z" fill="url(#gradRedSide)"/>
+                    <path d="M 43 15 L 57 15 L 50 5 Z" fill="#fbbf24"/>
+                    <line x1="50" y1="35" x2="50" y2="60" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="50" cy="32" r="3" fill="#ffffff"/>
+                    <text x="100" y="45" font-family="'Segoe UI', Tahoma, sans-serif" font-size="30" font-weight="900" fill="#1e293b" letter-spacing="-0.5">
+                        EDU<tspan fill="#ff9a9e">SBY</tspan><tspan fill="#764ba2">PRO</tspan>
+                    </text>
+                    <text x="103" y="65" font-family="'Segoe UI', Tahoma, sans-serif" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2.5">
+                        PORTAL EKSEKUTIF
+                    </text>
+                </svg>
+                
+                <!-- AREA NAMA SEKOLAH -->
+                <div style="border-top: 1px dashed #cbd5e1; margin-top: 5px; padding-top: 10px;">
+                    <span class="badge bg-light text-primary border shadow-sm px-2 py-1 w-100 text-truncate" style="font-size: 0.75rem;">
+                        <i class="bi bi-building me-1"></i> ${cleanSchool}
+                    </span>
+                </div>
+            </div>`;
+        document.getElementById('sidebar-school-name').innerHTML = logoEduSbyPro;
+        document.getElementById('sidebar-school-name').classList.remove('pb-3'); // Merapikan jarak bawah
         loadDataAwalKepsek();
 
         // TAMBAHKAN BLOK INI: Baca menu terakhir yang dibuka
@@ -2025,6 +2079,22 @@
         btn.innerHTML = '<i class="bi bi-arrows-fullscreen me-1"></i> Layar Penuh';
         btn.classList.replace('btn-danger', 'btn-outline-primary');
       }
+    }
+	
+	// FUNGSI UNTUK MENGINTIP PASSWORD DI HALAMAN LOGIN
+    function togglePasswordLogin() {
+        let pwdInput = document.getElementById('in-pass');
+        let icon = document.getElementById('icon-pass-login');
+        
+        if (pwdInput.type === 'password') {
+            pwdInput.type = 'text'; // Tampilkan teks
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
+            icon.classList.replace('text-muted', 'text-primary'); // Ikon menyala
+        } else {
+            pwdInput.type = 'password'; // Sembunyikan teks
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+            icon.classList.replace('text-primary', 'text-muted'); // Ikon kembali abu-abu
+        }
     }
 	
   </script>
