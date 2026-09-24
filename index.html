@@ -49,8 +49,25 @@
         overflow-x: hidden !important; 
         max-width: 100vw !important;
     }
-    :root { --bs-primary: #764ba2; --sidebar-bg: #f8fafc; }
-    body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f1f5f9; overflow-x: hidden; }
+    /* TEMA DASAR DAN ANIMASI BACKGROUND LEARNING ORGANIZER */
+    :root { 
+        --bs-primary: #764ba2; 
+        --sidebar-bg: rgba(248, 250, 252, 0.85); /* Sidebar dibuat agak transparan (Glass) */
+    }
+    
+    @keyframes gradientBG { 
+        0% { background-position: 0% 50%; } 
+        50% { background-position: 100% 50%; } 
+        100% { background-position: 0% 50%; } 
+    }
+    
+    body { 
+        font-family: 'Segoe UI', Tahoma, sans-serif; 
+        overflow-x: hidden; 
+        background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb) !important;
+        background-size: 400% 400% !important; 
+        animation: gradientBG 15s ease infinite !important;
+    }
     .hidden { display: none !important; }
     .card-login { max-width: 420px; margin: 80px auto; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: none; }
     #screen-admin { display: flex; height: 100vh; overflow: hidden; }
@@ -61,7 +78,22 @@
     .nav-item:hover, .nav-item.active { background-color: #f3e8ff; color: #764ba2; font-weight: 700; }
     .main-content { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; }
     .topbar { background-color: #fff; padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+    /* MENERAPKAN EFEK GLASSMORPHISM PADA AREA UTAMA */
     .content-body { padding: 25px; }
+    .main-content { 
+        background-color: transparent !important; /* Membuat area kanan transparan */
+    }
+    .topbar {
+        background: rgba(255, 255, 255, 0.7) !important; /* Topbar efek kaca */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+    }
+    .sidebar {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
+    }
     .banner-welcome { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3); }
     .quick-card { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 25px 20px; text-align: center; transition: 0.2s; cursor: pointer; }
     .quick-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1); border-color: var(--bs-primary); }
@@ -163,6 +195,26 @@
 .pseudo-fullscreen iframe {
   height: calc(100vh - 100px) !important;
 }
+
+/* Opsi Ekstra: Mengubah Card menjadi Glassmorphism */
+    .card, .quick-card, .stat-card, .table-container, .bg-white {
+        background: rgba(255, 255, 255, 0.75) !important;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    }
+	
+	/* KEMBALIKAN GARIS ATAS WARNA-WARNI PADA KARTU UJIAN */
+    .card.border-top.border-4 {
+        border-top-width: 5px !important; /* Dipertebal sedikit agar lebih estetik */
+        border-top-style: solid !important;
+    }
+    .card.border-primary { border-top-color: var(--bs-primary, #764ba2) !important; }
+    .card.border-success { border-top-color: #198754 !important; }
+    .card.border-danger  { border-top-color: #dc3545 !important; }
+    .card.border-warning { border-top-color: #ffc107 !important; }
+    .card.border-info    { border-top-color: #0dcaf0 !important; }
+    .card.border-dark    { border-top-color: #212529 !important; }
 
   </style>
 </head>
