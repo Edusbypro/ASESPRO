@@ -49,7 +49,7 @@
         overflow-x: hidden !important; 
         max-width: 100vw !important;
     }
-    :root { --bs-primary: #2563eb; --sidebar-bg: #f8fafc; }
+    :root { --bs-primary: #764ba2; --sidebar-bg: #f8fafc; }
     body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f1f5f9; overflow-x: hidden; }
     .hidden { display: none !important; }
     .card-login { max-width: 420px; margin: 80px auto; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: none; }
@@ -58,14 +58,14 @@
     .sidebar-header { padding: 20px; font-weight: bold; font-size: 1.1rem; color: #1e293b; border-bottom: 1px solid #f1f5f9;}
     .sidebar-nav { flex-grow: 1; padding: 10px 0; overflow-y: auto; }
     .nav-item { padding: 12px 20px; color: #475569; font-weight: 500; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; margin: 4px 12px; border-radius: 8px;}
-    .nav-item:hover, .nav-item.active { background-color: #e0e7ff; color: #1d4ed8; font-weight: 700; }
+    .nav-item:hover, .nav-item.active { background-color: #f3e8ff; color: #764ba2; font-weight: 700; }
     .main-content { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; }
     .topbar { background-color: #fff; padding: 15px 25px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
     .content-body { padding: 25px; }
-    .banner-welcome { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); color: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 4px 15px rgba(225, 29, 72, 0.2); }
+    .banner-welcome { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3); }
     .quick-card { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 25px 20px; text-align: center; transition: 0.2s; cursor: pointer; }
     .quick-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1); border-color: var(--bs-primary); }
-    .quick-card i { font-size: 2rem; color: #e11d48; margin-bottom: 10px; display: inline-block; }
+    .quick-card i { font-size: 2rem; color: #667eea; margin-bottom: 10px; display: inline-block; }
     .stat-card { background: #fff; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
     .table-container { background: #fff; border-radius: 16px; padding: 25px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
     .tox-tinymce { border-radius: 8px !important; border-color: #dee2e6 !important; }
@@ -177,12 +177,12 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 80" style="max-height: 85px; margin-bottom: 10px;">
             <defs>
                 <linearGradient id="gradBlue" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
                 </linearGradient>
                 <linearGradient id="gradRed" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:#be123c;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#e11d48;stop-opacity:1" />
+                    <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
                 </linearGradient>
             </defs>
             <!-- Bentuk Mata Pena (Pendidikan) -->
@@ -195,7 +195,7 @@
             <circle cx="50" cy="32" r="3" fill="#ffffff"/>
             <!-- Tipografi Teks -->
             <text x="100" y="45" font-family="'Segoe UI', Tahoma, sans-serif" font-size="30" font-weight="900" fill="#1e293b" letter-spacing="-0.5">
-                EDU<tspan fill="#e11d48">SBY</tspan><tspan fill="#2563eb">PRO</tspan>
+                EDU<tspan fill="#ff9a9e">SBY</tspan><tspan fill="#764ba2">PRO</tspan>
             </text>
             <text x="103" y="65" font-family="'Segoe UI', Tahoma, sans-serif" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2.5">
                 PORTAL ASESMEN
@@ -931,7 +931,38 @@
   <!-- SCREEN KHUSUS SISWA (TERPISAH TOTAL DARI ADMIN) -->
   <div id="screen-siswa" class="hidden" style="display: flex; height: 100vh; overflow: hidden;">
     <div class="sidebar">
-      <div class="sidebar-header"><i class="bi bi-mortarboard-fill text-primary me-2"></i> Portal Siswa</div>
+      <div class="sidebar-header pb-3 pt-4 text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 80" style="max-height: 40px; margin-bottom: 10px;">
+              <defs>
+                  <linearGradient id="gradBlueSiswa" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                  </linearGradient>
+                  <linearGradient id="gradRedSiswa" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+                      <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+                  </linearGradient>
+              </defs>
+              <path d="M 50 75 L 20 45 L 20 15 Q 50 0 80 15 L 80 45 Z" fill="url(#gradBlueSiswa)"/>
+              <path d="M 40 55 L 60 55 L 55 15 L 45 15 Z" fill="url(#gradRedSiswa)"/>
+              <path d="M 43 15 L 57 15 L 50 5 Z" fill="#fbbf24"/>
+              <line x1="50" y1="35" x2="50" y2="60" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="50" cy="32" r="3" fill="#ffffff"/>
+              <text x="100" y="45" font-family="'Segoe UI', Tahoma, sans-serif" font-size="30" font-weight="900" fill="#1e293b" letter-spacing="-0.5">
+                  EDU<tspan fill="#ff9a9e">SBY</tspan><tspan fill="#764ba2">PRO</tspan>
+              </text>
+              <text x="103" y="65" font-family="'Segoe UI', Tahoma, sans-serif" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2.5">
+                  PORTAL SISWA
+              </text>
+          </svg>
+
+          <!-- AREA NAMA SEKOLAH -->
+          <div style="border-top: 1px dashed #cbd5e1; margin-top: 5px; padding-top: 10px;">
+              <span class="badge bg-light text-primary border shadow-sm px-2 py-1 w-100 text-truncate" style="font-size: 0.75rem;">
+                  <i class="bi bi-building me-1"></i> SDN Kaliasin VII/287
+              </span>
+          </div>
+      </div>
       <div class="sidebar-nav">
         <div class="nav-item active" data-menusiswa="beranda" onclick="navigasiSiswa('beranda', this)"><i class="bi bi-house-door"></i> Beranda</div>
         <div class="nav-item" data-menusiswa="profil" onclick="navigasiSiswa('profil', this)"><i class="bi bi-person-badge"></i> Profil Saya</div>
@@ -2324,8 +2355,43 @@ function mulaiTimerCBT() {
             document.getElementById('admin-display-initial').innerText = (user.nama || 'U').charAt(0).toUpperCase(); 
             let displaySchool = user.nama_sekolah || '';
             document.getElementById('welcome-school').innerText = displaySchool + ' - TP 2026/2027'; 
+            // Inject Logo EduSbyPro dan Nama Sekolah ke Sidebar Kiri Atas
             let cleanSchool = displaySchool.split(':')[0] || displaySchool;
-            document.getElementById('sidebar-school-name').innerHTML = '<i class="bi bi-mortarboard-fill text-primary me-2"></i> <span class="fw-bold">' + cleanSchool + '</span>'; 
+            let logoEduSbyPro = `
+                <div class="w-100 text-center mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 80" style="max-height: 40px; margin-bottom: 10px;">
+                        <defs>
+                            <linearGradient id="gradBlueSide" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="gradRedSide" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M 50 75 L 20 45 L 20 15 Q 50 0 80 15 L 80 45 Z" fill="url(#gradBlueSide)"/>
+                        <path d="M 40 55 L 60 55 L 55 15 L 45 15 Z" fill="url(#gradRedSide)"/>
+                        <path d="M 43 15 L 57 15 L 50 5 Z" fill="#fbbf24"/>
+                        <line x1="50" y1="35" x2="50" y2="60" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="50" cy="32" r="3" fill="#ffffff"/>
+                        <text x="100" y="45" font-family="'Segoe UI', Tahoma, sans-serif" font-size="30" font-weight="900" fill="#1e293b" letter-spacing="-0.5">
+                            EDU<tspan fill="#ff9a9e">SBY</tspan><tspan fill="#764ba2">PRO</tspan>
+                        </text>
+                        <text x="103" y="65" font-family="'Segoe UI', Tahoma, sans-serif" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2.5">
+                            PORTAL ASESMEN
+                        </text>
+                    </svg>
+                    
+                    <!-- AREA NAMA SEKOLAH -->
+                    <div style="border-top: 1px dashed #cbd5e1; margin-top: 5px; padding-top: 10px;">
+                        <span class="badge bg-light text-primary border shadow-sm px-2 py-1 w-100 text-truncate" style="font-size: 0.75rem;">
+                            <i class="bi bi-building me-1"></i> ${cleanSchool}
+                        </span>
+                    </div>
+                </div>`;
+            document.getElementById('sidebar-school-name').innerHTML = logoEduSbyPro;
+            document.getElementById('sidebar-school-name').classList.remove('pb-3'); // Merapikan jarak bawah 
             
             // ==========================================
             // ISOLASI ROLE GURU
