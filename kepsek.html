@@ -16,12 +16,26 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
-    /* TEMA KEPALA SEKOLAH (UNGU) */
+    /* TEMA KEPALA SEKOLAH (UNGU) DENGAN EFEK GLASSMORPHISM */
     :root { 
-        --bs-primary: #6b21a8; 
-        --sidebar-bg: #f8fafc; 
+        --bs-primary: #764ba2; 
+        --sidebar-bg: rgba(248, 250, 252, 0.85); /* Sidebar transparan */
     }
-    body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f1f5f9; overflow-x: hidden; }
+    
+    @keyframes gradientBG { 
+        0% { background-position: 0% 50%; } 
+        50% { background-position: 100% 50%; } 
+        100% { background-position: 0% 50%; } 
+    }
+
+    body { 
+        font-family: 'Segoe UI', Tahoma, sans-serif; 
+        overflow-x: hidden; 
+        /* Gradasi animasi bernuansa Ungu/Indigo untuk Kepsek */
+        background: linear-gradient(-45deg, #e0c3fc, #8ec5fc, #a18cd1, #fbc2eb) !important;
+        background-size: 400% 400% !important; 
+        animation: gradientBG 15s ease infinite !important;
+    }
     .hidden { display: none !important; }
     .card-login { max-width: 420px; margin: 80px auto; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: none; }
     
@@ -33,8 +47,23 @@
     .nav-item { padding: 12px 20px; color: #475569; font-weight: 500; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; margin: 4px 12px; border-radius: 8px;}
     .nav-item:hover, .nav-item.active { background-color: #f3e8ff; color: #6b21a8; font-weight: 700; }
     
-    .main-content { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; }
-    .topbar { background-color: #fff; padding: 15px 25px; border-bottom: 3px solid var(--bs-primary); display: flex; justify-content: space-between; align-items: center; }
+    .main-content { 
+        flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; 
+        background-color: transparent !important; /* Biarkan animasi background terlihat */
+    }
+    .topbar { 
+        background: rgba(255, 255, 255, 0.7) !important; /* Efek kaca di bilah atas */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 15px 25px; 
+        border-bottom: 3px solid var(--bs-primary); 
+        display: flex; justify-content: space-between; align-items: center; 
+    }
+    .sidebar {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
+    }
     .content-body { padding: 25px; }
     
     /* Komponen Card */
@@ -93,6 +122,26 @@
     .text-primary {
         color: var(--bs-primary) !important;
     }
+	
+	/* EFEK GLASS PADA CARD & TABEL */
+    .card, .stat-card, .table-container, .bg-white {
+        background: rgba(255, 255, 255, 0.75) !important;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    }
+
+    /* KEMBALIKAN GARIS ATAS WARNA-WARNI PADA KARTU UJIAN */
+    .card.border-top.border-4 {
+        border-top-width: 5px !important; 
+        border-top-style: solid !important;
+    }
+    .card.border-primary { border-top-color: var(--bs-primary) !important; }
+    .card.border-success { border-top-color: #198754 !important; }
+    .card.border-danger  { border-top-color: #dc3545 !important; }
+    .card.border-warning { border-top-color: #ffc107 !important; }
+    .card.border-info    { border-top-color: #0dcaf0 !important; }
+    .card.border-dark    { border-top-color: #212529 !important; }
 	
   </style>
 </head>
