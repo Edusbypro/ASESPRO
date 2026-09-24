@@ -1652,8 +1652,7 @@
             <!-- 1. INFORMASI DASAR -->
             <div class="row g-3 mb-4 border-bottom pb-4">
                 <div class="col-md-4">
-                    <label class="form-label small fw-bold">Kode Asesmen <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="uj-kode" placeholder="Misal: MAT6P1" required>
+                    <label class="form-label small fw-bold">Kode Asesmen <span class="text-danger">*</span></label><input type="text" class="form-control" id="uj-kode" placeholder="Misal: MAT6P1 (Gunakan awalan PUB- untuk soal publik)" required>
                 </div>
                 <div class="col-md-8">
                     <label class="form-label small fw-bold">Nama Asesmen <span class="text-danger">*</span></label>
@@ -6351,16 +6350,26 @@ function copyLinkEksternal(namaAsli, platform, url) {
     // FUNGSI DUPLIKAT ASESMEN LOKAL (ANTAR GURU)
     // ==========================================
     function duplikatUjianLokal(kodeLama, namaLama) {
-        let namaBaru = prompt("Masukkan NAMA BARU untuk asesmen salinan ini:", namaLama + " (Salinan)");
+        // Langkah 1: Minta Nama Baru
+        let namaBaru = prompt("Langkah 1/2: Masukkan NAMA BARU untuk asesmen salinan ini:", namaLama + " (Salinan)");
         if (!namaBaru) return; // Batal jika kosong
 
-        let randomKode = "COPY" + Math.floor(Math.random() * 10000);
-        let kodeBaru = randomKode;
+        // Langkah 2: Minta Kode Baru Sejak Awal
+        let rekomendasiKode = "COPY" + Math.floor(Math.random() * 10000);
+        let inputKode = prompt("Langkah 2/2: Masukkan KODE ASESMEN BARU.\n\n⚠️ TIPS: Jika untuk Try Out Umum, WAJIB ubah menjadi awalan PUB- (Contoh: PUB-MAT01)", rekomendasiKode);
+        if (!inputKode) return;
+
+        // Bersihkan spasi pada kode
+        let kodeBaru = inputKode.trim().replace(/\s+/g, '').toUpperCase();
+        
+        // Tagger khusus guru
         if (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru') {
-            kodeBaru += "_#" + currentUser.username;
+            if (!kodeBaru.includes('_#')) {
+                kodeBaru += "_#" + currentUser.username;
+            }
         }
 
-        let isConfirm = confirm(`Asesmen akan disalin ke akun Anda dengan identitas:\n\nNama: "${namaBaru}"\nKode Baru: ${randomKode}\n\nLanjutkan proses duplikasi?`);
+        let isConfirm = confirm(`Asesmen akan disalin ke akun Anda dengan identitas:\n\nNama: "${namaBaru}"\nKode Baru: ${kodeBaru}\n\nLanjutkan proses duplikasi?`);
         if (!isConfirm) return;
 
         let oriHeader = document.getElementById('page-title').innerText;
@@ -6379,7 +6388,8 @@ function copyLinkEksternal(namaAsli, platform, url) {
                 else alert("✅ " + res.message);
                 
                 localStorage.removeItem("cbt_dash_" + currentUser.kode_sekolah);
-                loadDashboardData(); 
+                if (typeof loadDashboardData === "function") loadDashboardData(); 
+                else if (typeof loadDataAwalKepsek === "function") loadDataAwalKepsek();
             } else {
                 alert("Gagal menduplikat: " + res.message);
             }
