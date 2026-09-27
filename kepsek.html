@@ -223,6 +223,7 @@
         <div class="nav-item" data-menu="laporan" onclick="navigasiKepsek('laporan', this)"><i class="bi bi-file-earmark-bar-graph"></i> Laporan Nilai</div>
         <div class="nav-item" data-menu="generator" onclick="navigasiKepsek('generator', this)"><i class="bi bi-magic"></i> Generator Soal AI</div>
         <div class="nav-item" data-menu="rpp" onclick="navigasiKepsek('rpp', this)"><i class="bi bi-journal-text"></i> Generator RPP AI</div>
+		<div class="nav-item" data-menu="media" onclick="navigasiKepsek('media', this)"><i class="bi bi-display text-info"></i> Media Interaktif AI</div>
 		<div class="nav-item" data-menu="organizer" onclick="navigasiKepsek('organizer', this)"><i class="bi bi-list-task text-primary"></i> Learning Organizer</div>
         <hr class="mx-3 my-2 text-secondary opacity-25">
         
@@ -690,6 +691,126 @@
           </div>
         </div>
         <!-- ======================================================= -->
+
+<!-- ======================================================= -->
+        <!-- 11.6 MEDIA PEMBELAJARAN INTERAKTIF (MPI)                  -->
+        <!-- ======================================================= -->
+        <div id="view-media" class="view-section hidden">
+          
+          <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
+            <div>
+               <h5 class="fw-bold m-0 text-info"><i class="bi bi-display me-2"></i>Studio Media Pembelajaran Interaktif</h5>
+               <small class="text-muted">Gunakan AI untuk membuat media presentasi/kuis, lalu bagikan link-nya ke siswa.</small>
+            </div>
+            <button class="btn btn-info text-white px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModalMpiLink()"><i class="bi bi-share-fill me-2"></i>Bagikan Link MPI ke Siswa</button>
+          </div>
+
+          <div class="row g-4 mb-4">
+              <!-- Kartu AI Tools -->
+              <div class="col-md-3">
+                  <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-3 hover-lift">
+                      <i class="bi bi-palette-fill display-4 text-primary mb-2"></i>
+                      <h6 class="fw-bold">Canva Education</h6>
+                      <p class="small text-muted mb-3">Buat presentasi, video, dan media interaktif gratis untuk guru.</p>
+                      <button class="btn btn-sm btn-outline-primary rounded-pill w-100 mt-auto fw-bold" onclick="window.open('https://www.canva.com/education/', '_blank')">Buka Canva</button>
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-3 hover-lift">
+                      <i class="bi bi-google display-4 text-success mb-2"></i>
+                      <h6 class="fw-bold">Google Gemini AI</h6>
+                      <p class="small text-muted mb-3">Tulis script narasi video atau ide game pembelajaran edukatif.</p>
+                      <button class="btn btn-sm btn-outline-success rounded-pill w-100 mt-auto fw-bold" onclick="window.open('https://gemini.google.com/', '_blank')">Buka Gemini</button>
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-3 hover-lift">
+                      <i class="bi bi-lightning-charge-fill display-4 text-warning mb-2"></i>
+                      <h6 class="fw-bold">Gamma App AI</h6>
+                      <p class="small text-muted mb-3">Ketik topik, AI akan membuatkan slide presentasi dalam hitungan detik.</p>
+                      <button class="btn btn-sm btn-outline-warning rounded-pill w-100 mt-auto fw-bold text-dark" onclick="window.open('https://gamma.app/', '_blank')">Buka Gamma</button>
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-3 hover-lift">
+                      <i class="bi bi-globe display-4 text-info mb-2"></i>
+                      <h6 class="fw-bold">DeepSeek / ChatGPT</h6>
+                      <p class="small text-muted mb-3">Minta AI untuk menulis kode HTML Game edukatif yang siap dimainkan.</p>
+                      <button class="btn btn-sm btn-outline-info rounded-pill w-100 mt-auto fw-bold" onclick="window.open('https://chat.deepseek.com/', '_blank')">Buka DeepSeek</button>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Area Generator Prompt Otomatis -->
+          <div class="card border border-info-subtle shadow-sm rounded-4 bg-info bg-opacity-10 mb-4">
+              <div class="card-body p-4">
+                  <h5 class="fw-bold text-info-emphasis mb-4"><i class="bi bi-chat-square-quote me-2"></i>Generator Prompt AI Siap Pakai</h5>
+                  
+                  <!-- Form Input Cepat -->
+                  <div class="row g-3 mb-4 p-3 bg-white rounded-3 shadow-sm border border-info">
+                      <div class="col-md-3">
+                          <label class="form-label small fw-bold text-dark">Fase Pendidikan</label>
+                          <select id="mpi-fase" class="form-select border-info fw-bold text-info" onchange="ubahPromptMPI()">
+                              <option value="paud">PAUD (4-5 Tahun)</option>
+                              <option value="fase_a">Fase A (Kelas 1 - 2)</option>
+                              <option value="fase_b">Fase B (Kelas 3 - 4)</option>
+                              <option value="fase_c">Fase C (Kelas 5 - 6)</option>
+                              <option value="fase_d">Fase D (SMP Kelas 7 - 9)</option>
+                              <option value="fase_e">Fase E (SMA Kelas 10)</option>
+                              <option value="fase_f">Fase F (SMA Kelas 11 - 12)</option>
+                          </select>
+                      </div>
+                      <div class="col-md-2">
+                          <label class="form-label small fw-bold text-dark">Kelas</label>
+                          <input type="text" id="mpi-kelas" class="form-control border-secondary" placeholder="Cth: 6" onkeyup="ubahPromptMPI()">
+                      </div>
+                      <div class="col-md-7">
+                          <label class="form-label small fw-bold text-dark">Topik / Materi Pembelajaran</label>
+                          <input type="text" id="mpi-topik" class="form-control border-secondary" placeholder="Cth: Teks Prosedur / Tata Surya..." onkeyup="ubahPromptMPI()">
+                      </div>
+                  </div>
+
+                  <!-- Hasil Prompt -->
+                  <label class="form-label fw-bold text-dark"><i class="bi bi-robot me-1"></i> Teks Perintah (Copy & Paste ke AI):</label>
+                  <textarea id="mpi-prompt-text" class="form-control border-info bg-white shadow-sm mb-3" rows="8" readonly style="font-size: 0.9rem; resize: none;"></textarea>
+                  
+                  <div class="text-end">
+                      <button class="btn btn-info text-white fw-bold shadow-sm px-5 py-2 rounded-pill" onclick="copyPromptMPI()"><i class="bi bi-clipboard-check me-2"></i>Copy Prompt ke AI</button>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Panduan Publikasi ke Google Sites -->
+          <div class="card border border-success-subtle shadow-sm rounded-4 bg-success bg-opacity-10 mb-5">
+              <div class="card-body p-4">
+                  <h6 class="fw-bold text-success mb-3"><i class="bi bi-book-half me-2"></i>Tutorial Mengubah Hasil AI (HTML) Menjadi Link Web</h6>
+                  <div class="row">
+                      <div class="col-md-6 small text-dark">
+                          <ol class="ps-3 mb-0" style="line-height: 1.6;">
+                              <li>Buka <b>Gemini AI</b>, klik alat (icon kuas) lalu pilih <b>Canvas</b>.</li>
+                              <li><b>Paste</b> prompt yang sudah disalin ke kolom chat Gemini, lalu kirim.</li>
+                              <li>Setelah kode jadi, klik tombol <b>Bagikan/Share</b> dan pilih <b>Salin Konten</b>.</li>
+                              <li>Buka tab baru, buka <a href="https://sites.google.com" target="_blank" class="text-success fw-bold">Google Sites</a>, pilih situs <b>Kosong (Blank)</b>.</li>
+                              <li>Beri judul file Anda (Contoh: <i>Media Pembelajaran Interaktif MI</i>).</li>
+                              <li>Di menu sebelah kanan, pilih tab <b>Halaman (Pages)</b> > Tambahkan Sub Halaman.</li>
+                              <li>Pilih halaman Muka/Beranda pada titik 3, lalu pilih <b>Hapus</b> agar tersisa halaman media Anda saja.</li>
+                          </ol>
+                      </div>
+                      <div class="col-md-6 small text-dark">
+                          <ol class="ps-3 mb-0" style="line-height: 1.6;" start="8">
+                              <li>Kembali ke tab <b>Sisipkan (Insert)</b> di kanan, pilih <b>Sematkan (Embed)</b> > pilih tab <b>Sematkan Kode</b>.</li>
+                              <li><b>Paste</b> kode dari Gemini ke kotak tersebut, klik <b>Berikutnya</b> lalu <b>Sisipkan</b>.</li>
+                              <li>Tarik kotak media tersebut agar melebar memenuhi halaman.</li>
+                              <li>Klik tombol biru <b>Publikasikan</b> di pojok kanan atas.</li>
+                              <li>Isi Alamat Web (Contoh: <i>mediainteraktif-mi-fase-c</i>), klik <b>Publikasikan</b>.</li>
+                              <li>Klik ikon rantai (Salin link situs yang dipublikasikan) di menu atas.</li>
+                              <li>Selesai! <b>Paste link tersebut</b> ke menu "Tambah Link Asesmen" di aplikasi ini untuk dikirim ke siswa.</li>
+                          </ol>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
 
         <!-- ========================================== -->
         <!-- 12. MANAJEMEN GURU (DENGAN EXCEL) -->
@@ -2145,6 +2266,165 @@
             icon.classList.replace('text-primary', 'text-muted'); // Ikon kembali abu-abu
         }
     }
+	
+	// ==========================================
+// FITUR MPI (MEDIA PEMBELAJARAN INTERAKTIF)
+// ==========================================
+function ubahPromptMPI() {
+    let fase = document.getElementById('mpi-fase').value;
+    let kelas = document.getElementById('mpi-kelas').value || "[ISI KELAS]";
+    let topik = document.getElementById('mpi-topik').value || "[ISI MATERI]";
+    let teks = "";
+
+    if (fase === "paud") {
+        teks = `Buatlah Media Pembelajaran Interaktif untuk:
+Topik: ${topik}
+Usia: 4-5 tahun (Kelompok B PAUD)
+Fase: Pembelajaran Inklusif Berbasis Bermain, berfokus pada eksplorasi visual dan auditori.
+
+Buat dengan format HTML5 (desain responsif untuk penggunaan tablet/ponsel) dalam satu file lengkap (HTML, CSS, JS menyatu).
+Sertakan elemen interaktif yang dirancang khusus untuk motorik halus dan rentang perhatian pendek anak usia 4-5 tahun, yaitu:
+
+1. Aktivitas Mencocokkan/Mengelompokkan: Terapkan mekanisme Drag-and-Drop sederhana (Contoh: Menarik gambar ke tempat yang sesuai).
+2. Aktivitas Identifikasi: Terapkan mekanisme Tap/Sentuh sederhana untuk memunculkan efek suara/animasi.
+
+Fitur pendukung krusial:
+1. Navigasi: Sangat sederhana dengan ikon visual besar dan jelas.
+2. Audio: Buat sistem web speech API sederhana untuk membacakan instruksi saat tombol ditekan.
+3. Umpan Balik: Instan, positif, dan berupa animasi ceria untuk setiap jawaban yang benar.
+4. Visual: Warna cerah, kontras tinggi, dan elemen yang menarik.`;
+
+    } else if (fase === "fase_a") {
+        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase A (usia 6-8 tahun).
+Materi: ${topik}
+
+Struktur Media (Singkat, Padat, dan Berbasis Permainan):
+1. Halaman Pembuka: Judul, warna ceria, dan tombol "Mulai" berukuran sangat besar.
+2. Pendahuluan (Aktivasi Visual): Pengenalan konsep melalui animasi CSS sederhana atau cerita bergambar. Teks disajikan singkat dengan font besar.
+3. Materi Inti: Penyampaian materi melalui skenario visual dan contoh konkret sehari-hari.
+4. Aktivitas Siswa: WAJIB menyertakan minimal 3 interaksi permainan:
+   a. Aktivitas Motorik Dasar: Drag-and-Drop gambar. Area target harus besar.
+   b. Aktivitas Kuis Visual: Kuis dengan Pilihan Jawaban HANYA Berbentuk Gambar/Ikon. Umpan balik langsung ceria.
+   c. Permainan Edukatif: Aktivitas mengetuk (Tap/Touch) objek atau Memory Game sederhana.
+5. Evaluasi Akhir: Tes singkat (3-5 soal). Tampilkan skor dengan hadiah visual menarik (bintang/badge).
+
+Desain Visual & Interaktivitas:
+- Warna cerah kontras tinggi. Font tebal, sans-serif ukuran sangat besar.
+- Interaktivitas: Tombol besar. Umpan balik segera dengan selebrasi visual. Buat kodenya komplit dalam 1 file HTML.`;
+
+    } else if (fase === "fase_b") {
+        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase B (usia 9-10 tahun).
+Materi: ${topik}
+
+Struktur Media (Terstruktur, Berbasis Eksplorasi Mandiri):
+1. Halaman Pembuka: Judul, informasi level/skor, dan tombol mulai.
+2. Pendahuluan: Pengenalan materi pemantik rasa ingin tahu.
+3. Materi Inti: Konten terstruktur per sub-topik. Kombinasi teks padat namun ringkas.
+4. Aktivitas Siswa: WAJIB menyertakan 3 interaksi konsep:
+   a. Aktivitas Hubungan (Matching line): Menghubungkan teks/gambar dengan fungsinya.
+   b. Kuis Pilihan Ganda: 3-4 opsi dengan umpan balik yang menjelaskan mengapa jawaban benar/salah.
+   c. Permainan Logika: Simulasi drag-and-drop untuk menyusun rantai urutan/diagram.
+5. Evaluasi Akhir: Tes (5-8 soal). Tampilkan persentase benar/salah dan sistem level.
+
+Desain Visual:
+- Menarik namun lebih rapi dari Fase A. Font sans-serif standar.
+- Navigasi jelas, umpan balik memberi pujian dan skor edukatif. Tulis semua kode dalam satu file HTML yang langsung bisa dijalankan.`;
+
+    } else if (fase === "fase_c") {
+        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase C (usia 11-12 tahun).
+Materi: ${topik}
+
+Tujuan: Pemahaman mendalam, kemampuan menyusun urutan, dan problem solving.
+Struktur Media (Gamifikasi dan Berbasis Proyek Mini):
+1. Halaman Pembuka: Judul, progress bar belajar, tombol mulai.
+2. Pendahuluan (Orientasi Masalah): Sajikan data/grafik sederhana atau studi kasus relevan kehidupan.
+3. Materi Inti: Konten dalam tab/accordion. Fokus pada infografis detail.
+4. Aktivitas Siswa: WAJIB menyertakan interaksi analisis:
+   a. Klasifikasi Kompleks: Drag-and-drop elemen ke beberapa kategori analisis.
+   b. Kuis Tipe AKM: Soal kompleks / True-False berdasarkan narasi bacaan. Umpan balik logis.
+   c. Penyelesaian Masalah: Fill-in-the-blanks terstruktur atau Puzzle logika.
+5. Evaluasi Akhir: Tes (6-10 soal) berfokus pada analisis, bukan hafalan. Tampilkan leaderboard virtual atau achievement badge.
+
+Gaya Visual: Modern, profesional, berbasis data. Hindari kartun kekanak-kanakan. Kode HTML/JS/CSS disatukan dalam satu file responsif.`;
+
+    } else if (fase === "fase_d") {
+        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase D (SMP usia 13-15 tahun).
+Materi: ${topik}
+
+Struktur Media (Modular dan Berbasis Tugas):
+1. Halaman Pembuka: Judul, info kompetensi, tombol mulai elegan.
+2. Pendahuluan: Polling interaktif flashcard (True/False) untuk mengaitkan materi dengan fenomena nyata.
+3. Materi Inti: Skema modular. Teks singkat padat dengan visualisasi.
+4. Aktivitas Siswa: WAJIB 3 interaksi kognitif:
+   a. Pengorganisasian Konsep: Drag-and-drop istilah ke definisi yang akurat.
+   b. Pengujian Pemahaman: Kuis Pilihan Ganda Kompleks berbasis studi kasus dengan feedback rasional.
+   c. Pemecahan Masalah: Hotspot gambar (klik area tertentu untuk mengidentifikasi bagian) atau simulasi.
+5. Evaluasi Akhir (Sumatif): Tes (5-10 soal) yang mengukur pencapaian. Berikan saran tindak lanjut pengayaan.
+6. Kesimpulan: Kolom interaktif refleksi diri (Self-assessment).
+
+Gaya Visual: Bersih, minimalis, kontras nyaman. UI/UX mirip aplikasi belajar modern. Kode HTML disatukan seluruhnya.`;
+
+    } else if (fase === "fase_e") {
+        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase E (SMA/SMK usia 14-15 tahun).
+Materi: ${topik}
+
+Struktur Media (Berbasis Masalah dan Eksplorasi Data):
+1. Halaman Pembuka: Tampilan dashboard progres, profesional.
+2. Perumusan Masalah: Sajikan skenario karir nyata atau dilema saintifik.
+3. Materi Inti: Konstruksi pengetahuan dengan simulasi data, atau tabulasi.
+4. Aktivitas Kritis:
+   a. Analisis Diagram: Mengatur ulang urutan formula/proses kompleks via Drag-Drop.
+   b. Simulasi Virtual: Siswa dapat mengubah variabel input angka via slider untuk melihat hasil output (contoh simulasi fisika/ekonomi sederhana).
+   c. Kuis HOTS: Interpretasi data/tabel. Umpan balik merujuk pada konsep akademis.
+5. Evaluasi Akhir: Analisis performa berdasarkan dimensi kognitif.
+
+Gaya Visual: Corporate, akademik, monokromatik dengan warna aksen. Format HTML5 tunggal yang canggih secara JavaScript.`;
+
+    } else if (fase === "fase_f") {
+        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase F (SMA/SMK usia 16-18 tahun).
+Materi: ${topik}
+
+Struktur Media (Studi Kasus Level Universitas):
+1. Halaman Pembuka: Elegan, dilengkapi Progress Tracker.
+2. Simulasi Dunia Nyata: Pre-assessment cepat berbasis jurnal/artikel/data.
+3. Materi Inti: Konstruksi pengetahuan mendalam.
+4. Aktivitas Pemikiran Kritis (HOTS):
+   a. Pengambilan Keputusan: Menganalisis tabel/grafik untuk menentukan opsi kebijakan via interaksi.
+   b. Argumentasi: Kuis perspektif ganda. Siswa harus merangkai alasan.
+   c. Laboratorium Keputusan: Memasukkan variabel numerik dan melihat prediksi hasil.
+5. Asesmen Komprehensif: 10-15 soal pemecahan masalah terintegrasi dengan Skill Mastery analysis.
+
+Gaya Visual: UI/UX setara e-course profesional/universitas. Bersih, sans-serif, navigasi bebas. Tulis kodenya secara komplit (HTML, CSS, JS) dalam satu output file.`;
+    }
+
+    document.getElementById('mpi-prompt-text').value = teks;
+}
+
+function copyPromptMPI() {
+    let textarea = document.getElementById('mpi-prompt-text');
+    let topik = document.getElementById('mpi-topik').value;
+    
+    if (!topik) {
+        alert("Peringatan: Anda belum mengisi 'Topik / Materi Pembelajaran'. Namun teks tetap disalin.");
+    }
+
+    textarea.select();
+    document.execCommand('copy');
+    alert("✅ Teks Perintah (Prompt) berhasil disalin!\nSilakan Paste di web AI (Gemini/DeepSeek/Canva).");
+}
+
+function bukaModalMpiLink() {
+    bukaModal('modalAddLink');
+    let topik = document.getElementById('mpi-topik').value || "";
+    document.getElementById('lnk-nama').value = "Media Interaktif: " + topik;
+    document.getElementById('lnk-platform').value = "Lainnya";
+    document.getElementById('lnk-url').value = "";
+}
+
+// Inisialisasi awal saat pertama dibuka
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(ubahPromptMPI, 500); 
+});
 	
   </script>
 </body>
