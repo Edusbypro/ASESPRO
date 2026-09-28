@@ -1852,13 +1852,13 @@
   <!-- MODAL DAFTAR HASIL UJIAN (REKAP KELAS) -->
   <!-- ========================================== -->
   <div class="modal fade" id="modalDaftarHasil" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered modal-xl">
-          <div class="modal-content shadow-lg border-0">
+      <!-- Ditambahkan modal-dialog-scrollable -->
+      <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+          <!-- Dipaksa tinggi 90vh agar memenuhi layar -->
+          <div class="modal-content shadow-lg border-0" style="height: 90vh;">
               <div class="modal-header bg-primary text-white border-0 pb-3 pt-4 px-4 d-flex justify-content-between align-items-center">
                   <h5 class="modal-title fw-bold"><i class="bi bi-clipboard-data me-2"></i>Rekap Hasil Ujian: <span id="title-hasil-ujian">Memuat...</span></h5>
                   
-                  <!-- TOMBOL AKSI EKSPOR EXCEL -->
-                  <!-- TOMBOL AKSI EKSPOR EXCEL & ANALISIS -->
                   <div class="d-flex gap-2">
                       <button class="btn btn-info btn-sm fw-bold text-dark px-3 rounded-pill shadow-sm" onclick="eksporAnalisisKDSemua()">
                           <i class="bi bi-bar-chart-fill me-1"></i> Analisis KD (Excel)
@@ -1872,20 +1872,30 @@
                       <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="modal"></button>
                   </div>
               </div>
-              <div class="modal-body p-4 bg-light">
-                  <div class="table-responsive bg-white p-3 rounded-4 shadow-sm border">
+              
+              <div class="modal-body p-4 bg-light d-flex flex-column">
+                  <!-- Tombol Segarkan dipindah ke HTML agar statis dan rapi -->
+                  <div class="d-flex justify-content-end mb-3 flex-shrink-0">
+                      <button class="btn btn-sm btn-outline-primary rounded-pill fw-bold bg-white shadow-sm px-4" onclick="bukaDaftarHasil(currentUjianKodeAktif, currentUjianNamaAktif)">
+                          <i class="bi bi-arrow-clockwise me-1"></i> Segarkan Pemantauan
+                      </button>
+                  </div>
+                  
+                  <!-- Wadah Tabel dengan ID Khusus -->
+                  <div class="table-responsive bg-white p-0 rounded-4 shadow-sm border flex-grow-1" id="wadah-scroll-hasil" style="height: 100%; overflow-y: auto;">
                       <table class="table table-hover align-middle m-0 text-nowrap">
-                          <thead class="table-light">
+                          <!-- Thead dibuat Sticky (Melayang di atas) -->
+                          <thead class="table-light" style="position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                               <tr>
-                                  <th style="width: 40px;" class="text-center">
-                                      <input type="form-check-input" class="form-check-input" id="select-all-hasil" onclick="togglePilihSemuaHasil(this)">
+                                  <th style="width: 40px;" class="text-center py-3">
+                                      <input type="checkbox" class="form-check-input" id="select-all-hasil" onclick="togglePilihSemuaHasil(this)">
                                   </th>
-                                  <th>Nama Siswa</th>
-                                  <th>Kelas</th>
-                                  <th>Waktu Kumpul</th>
-                                  <th>Status</th>
-                                  <th>Nilai Akhir</th>
-                                  <th>Aksi</th>
+                                  <th class="py-3">Nama Siswa</th>
+                                  <th class="py-3">Kelas</th>
+                                  <th class="py-3">Waktu Kumpul</th>
+                                  <th class="py-3">Status</th>
+                                  <th class="text-center py-3">Nilai Akhir</th>
+                                  <th class="py-3">Aksi</th>
                               </tr>
                           </thead>
                           <tbody id="tb-daftar-hasil">
@@ -2198,6 +2208,29 @@
   
   <script>
     let currentUser = null; let currentUjianId = null; let currentJmlSoal = 0; let activeUjianData = []; let bankSoalAktif = []; let globalBankUjianData = []; let activeKisiData = []; let activeSiswaData = []; let activeGuruData = []; let activeHasilData = []; let currentSoalNomor = 1; let progressChartInstance = null; let supervisiSoalData = []; let aktifNisnLaporan = null;
+
+    // ==============================================================
+    // FUNGSI KONVERSI TANGGAL AMAN (ANTI INVALID DATE)
+    // ==============================================================
+    function parseSafeDate(str) { 
+        let d = new Date(str); 
+        if(!isNaN(d.getTime())) return d; 
+        
+        // Memecah format Indonesia (DD/MM/YYYY HH:mm:ss)
+        let p = String(str).split(' '); 
+        if(p.length >= 2) { 
+            let dP = p[0].split('/'); 
+            let tP = p[1].split(':'); 
+            
+            // Format pakai / (Garis miring)
+            if(dP.length === 3) return new Date(dP[2], dP[1]-1, dP[0], tP[0]||0, tP[1]||0, tP[2]||0); 
+            
+            // Format pakai - (Strip)
+            dP = p[0].split('-'); 
+            if(dP.length === 3) return new Date(dP[0], dP[1]-1, dP[2], tP[0]||0, tP[1]||0, tP[2]||0); 
+        } 
+        return new Date(); 
+    }
 
     document.addEventListener("DOMContentLoaded", function() {
         // --- 1. SCRIPT JAM & TANGGAL HIDUP ---
@@ -2744,7 +2777,7 @@ function mulaiTimerCBT() {
             let arrJawab = Array.isArray(jwbSiswa) ? jwbSiswa : [];
             html += `<div class="alert alert-info small mb-3"><i class="bi bi-info-circle-fill me-2"></i>Anda dapat memilih lebih dari satu jawaban (ceklis).</div>`;
             (s.urutanOpsi || ['A','B','C','D']).forEach(opsi => {
-                let teksOpsi = formatTeksBahasaDaerah(s['opsi'+opt]); if(!teksOpsi) return;
+                let teksOpsi = formatTeksBahasaDaerah(s['opsi'+opsi]); if(!teksOpsi) return;
                 let isChecked = arrJawab.includes(opsi) ? "checked" : "";
                 html += `
                 <label class="form-check border rounded-4 p-3 mb-3 shadow-sm d-flex align-items-center bg-white cbt-opsi-wrapper" style="cursor:pointer; width: 100%;">
@@ -3596,24 +3629,32 @@ function mulaiTimerCBT() {
 function renderTabelUjianAdmin(paksaTampilKode = null) {
         const keyword = document.getElementById('input-cari-ujian') ? document.getElementById('input-cari-ujian').value.toLowerCase() : "";
         
-        // [TAMBAHAN 1] Mengambil nilai dari dropdown filter kepemilikan
+        // Mengambil nilai dari dropdown filter kepemilikan
         let selectFilter = document.getElementById('filter-kepemilikan-ujian');
         const filterKepemilikan = selectFilter ? selectFilter.value : "SAYA";
 
         let htmlUjian = '';
-        
         let semuaUjianRev = [...activeUjianData].reverse();
         let ujianTersedia = semuaUjianRev.filter(u => !String(u.status).startsWith('SAMPAH_'));
         let ujianSampah = semuaUjianRev.filter(u => String(u.status).startsWith('SAMPAH_'));
         
-        // --- FILTER KHUSUS GURU ---
-        // Jika yang login guru, SEMBUNYIKAN soal yang bukan miliknya (Berdasarkan Pilihan Dropdown)
+        // --- FILTER KHUSUS GURU (DIREVISI: KEBAL HURUF BESAR/KECIL & SPASI) ---
         let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
         
-        // [TAMBAHAN 2] Filter diperbarui: Hanya saring jika memilih "SAYA"
         if (isGuru && filterKepemilikan === "SAYA") {
-            ujianTersedia = ujianTersedia.filter(u => String(u.kode).includes('_#' + currentUser.username));
-            ujianSampah = ujianSampah.filter(u => String(u.kode).includes('_#' + currentUser.username));
+            // Ubah username menjadi huruf kecil semua dan hapus spasi
+            let myTag = '_#' + String(currentUser.username).toLowerCase().trim();
+            
+            ujianTersedia = ujianTersedia.filter(u => {
+                let kodeAman = String(u.kode).toLowerCase();
+                // Munculkan jika ada tag namanya, ATAU jika tidak ada tag sama sekali (Soal buatan Admin)
+                return kodeAman.includes(myTag) || !kodeAman.includes('_#');
+            });
+            
+            ujianSampah = ujianSampah.filter(u => {
+                let kodeAman = String(u.kode).toLowerCase();
+                return kodeAman.includes(myTag) || !kodeAman.includes('_#');
+            });
         }
 
         if(keyword) {
@@ -3654,10 +3695,16 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
             // Membersihkan tagger _#username agar tampilan badge rapi
             let kodeTampil = String(u.kode).split('_#')[0];
             
-            // [TAMBAHAN 3] PROTEKSI HAK AKSES GURU
+            // PROTEKSI HAK AKSES GURU DILONGGARKAN & DIBUAT KEBAL HURUF KECIL/BESAR
             let isMilikSaya = true;
-            if (isGuru && !String(u.kode).includes('_#' + currentUser.username)) {
-                isMilikSaya = false;
+            if (isGuru) {
+                let myTag = '_#' + String(currentUser.username).toLowerCase().trim();
+                let kodeAman = String(u.kode).toLowerCase();
+                
+                // Hanya dilarang mengedit jika soal itu JELAS MILIK GURU LAIN (Ada tag _#, tapi tagnya bukan miliknya)
+                if (kodeAman.includes('_#') && !kodeAman.includes(myTag)) {
+                    isMilikSaya = false;
+                }
             }
 
             // Tombol Edit
@@ -3683,7 +3730,6 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                         <div class="d-flex justify-content-between mb-3">
                             <span class="badge bg-${style.color} bg-opacity-10 text-${style.color} rounded-pill px-3 py-2 border border-${style.color}-subtle"><i class="${style.icon} me-1"></i> ${kodeTampil}</span>
                             <div class="d-flex align-items-center">
-                                <!-- [TAMBAHAN 4] Sisipkan tombol copy di sini -->
                                 ${btnCopy}
                                 ${btnEdit}
                                 <span class="badge bg-body-secondary text-body border rounded-pill px-3 py-2">${u.status}</span>
@@ -3697,7 +3743,6 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                             <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
                                 <span class="small fw-bold">Aktifkan asesmen</span>
                                 <div class="form-check form-switch m-0 fs-5">
-                                    <!-- [TAMBAHAN 5] Sisipkan proteksi saklar di sini -->
                                     <input class="form-check-input border-secondary" type="checkbox" ${isAktif} ${disableSwitch} onchange="toggleStatusUjianClient('${u.kode}', this)">
                                 </div>
                             </div>
@@ -3710,7 +3755,6 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                         </div>
 
                         <div class="d-flex gap-2">
-                            <!-- [TAMBAHAN 6] Sisipkan label dan class kelola di sini -->
                             <button class="btn ${classKelola} btn-sm fw-bold text-white rounded-pill px-4 py-2" onclick="kelolaSoal('${u.kode}', '${u.nama}', ${u.jmlSoal})">${labelKelola}</button>
                             <button class="btn btn-success btn-sm fw-bold text-white rounded-pill px-3 py-2" onclick="bukaDaftarHasil('${u.kode}', '${u.nama}')"><i class="bi bi-clipboard-data me-1"></i> Hasil</button>
                             ${btnHapus}
@@ -3720,7 +3764,7 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
             </div>`; 
         });
 
-        // --- RENDER TABEL ARSIR ---
+        // --- RENDER TABEL ARSIP ---
         let htmlTable = '';
         if (tableData.length > 0) {
             let isCollapsed = paksaTampilKode ? '' : 'show';
@@ -3794,8 +3838,12 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                 if (sisaHari < 0) sisaHari = 0;
                 let kodeTampil = String(u.kode).split('_#')[0];
                 
-                // [TAMBAHAN 7] Proteksi agar guru tidak melihat sampah orang lain
-                if (isGuru && filterKepemilikan === "SAYA" && !String(u.kode).includes('_#' + currentUser.username)) return;
+                // Proteksi Sampah (Case Insensitive)
+                if (isGuru && filterKepemilikan === "SAYA") {
+                    let myTag = '_#' + String(currentUser.username).toLowerCase().trim();
+                    let kodeAman = String(u.kode).toLowerCase();
+                    if (!kodeAman.includes(myTag) && kodeAman.includes('_#')) return;
+                }
 
                 htmlSampah += `
                             <tr>
@@ -5340,38 +5388,41 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
     }
 
     // ==============================================================
-    // MESIN KOREKSI GURU & DASHBOARD HASIL
+    // MESIN KOREKSI GURU & DASHBOARD HASIL (UPDATE FIX FINAL)
     // ==============================================================
     let dataHasilAktif = [];
     let soalUntukKoreksi = [];
     let koreksiSiswaAktif = null;
-    let currentUjianKodeAktif = null; // Menambahkan variabel penyimpan state
-    let currentUjianNamaAktif = null; // Menambahkan variabel penyimpan state
+    let currentUjianKodeAktif = null; 
+    let currentUjianNamaAktif = null; 
 
     function bukaDaftarHasil(kodeUjian, namaUjian) {
         currentUjianKodeAktif = kodeUjian;
         currentUjianNamaAktif = namaUjian;
         document.getElementById('title-hasil-ujian').innerText = namaUjian;
-        document.getElementById('tb-daftar-hasil').innerHTML = '<tr><td colspan="7" class="text-center py-5"><span class="spinner-border text-primary"></span><br>Menarik rekap data...</td></tr>';
+        document.getElementById('tb-daftar-hasil').innerHTML = '<tr><td colspan="7" class="text-center py-5"><span class="spinner-border text-primary"></span><br>Menarik rekap data spesifik...</td></tr>';
         bukaModal('modalDaftarHasil');
         
-        // --- MENGGUNAKAN JEMBATAN API HYBRID ---
+        // MENGGUNAKAN getRekapHasilDanSoal AGAR 100% AKURAT DAN CEPAT TANPA DELAY
         panggilAPI("getRekapHasilDanSoal", { kodeSekolah: currentUser.kode_sekolah, kodeUjian: kodeUjian })
-            .then(res => {
-                dataHasilAktif = res.hasil;
-                soalUntukKoreksi = res.soal;
-                renderTabelDaftarHasil();
-            })
-            .catch(err => {
-                alert("Gagal menarik rekap hasil: " + err.message);
-                document.getElementById('tb-daftar-hasil').innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted">Gagal memuat data dari server.</td></tr>';
-            });
+        .then(res => {
+            // Data langsung terjamin akurat karena difilter spesifik per-ujian langsung dari Google Server
+            dataHasilAktif = res.hasil || [];
+            soalUntukKoreksi = res.soal || [];
+            
+            renderTabelDaftarHasil();
+        })
+        .catch(err => {
+            alert("Gagal menarik rekap hasil: " + err.message);
+            document.getElementById('tb-daftar-hasil').innerHTML = '<tr><td colspan="7" class="text-center py-5 text-danger">Gagal memuat data dari server.</td></tr>';
+        });
     }
 
     function renderTabelDaftarHasil() {
         let ujianAktif = activeUjianData.find(u => u.kode === currentUjianKodeAktif);
         if(!ujianAktif) return;
 
+        // Mencari daftar siswa yang ditargetkan untuk ujian ini
         let targetSiswa = activeSiswaData.filter(s => {
             const checkMatch = (targetStr, studentProfile) => {
                 if (!targetStr || String(targetStr).trim() === '' || String(targetStr).trim().toLowerCase() === 'undefined') return true; 
@@ -5385,87 +5436,137 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
         let html = '';
         let waktuSekarang = new Date().getTime();
 
-        targetSiswa.forEach((siswa, idx) => {
-            // PERBAIKAN 1: Ambil data PERCOBAAN TERAKHIR (agar tidak mengambil status yang Terputus jika siswa sudah mengulang)
-            let historySiswa = dataHasilAktif.filter(h => String(h.userSiswa).trim() === String(siswa.user).trim());
-            let hasilSiswa = historySiswa.length > 0 ? historySiswa[historySiswa.length - 1] : null;
+        targetSiswa.forEach((siswa) => {
+            // FILTER TANGGUH: Ambil SEMUA riwayat siswa berdasarkan Nama atau NISN
+            let historySiswa = dataHasilAktif.filter(h => {
+                let hUser = String(h.userSiswa || h.nisn || h.username || "").trim().toLowerCase();
+                let sUser = String(siswa.user).trim().toLowerCase();
+                let hNama = String(h.namaSiswa || "").trim().toLowerCase();
+                let sNama = String(siswa.nama).trim().toLowerCase();
+                return (hUser === sUser && sUser !== "") || (hNama === sNama && sNama !== "");
+            });
             
-            let statusLabel = ""; let nilaiTampil = "-"; let aksiTampil = "-"; let tgl = "-";
-            let checkboxHtml = `<input class="form-check-input check-hasil-siswa" type="checkbox" value="${siswa.user}" disabled title="Belum ada data untuk diekspor">`;
+            // JIKA BELUM PERNAH MENGERJAKAN SAMA SEKALI
+            if (historySiswa.length === 0) {
+                let checkboxHtml = `<input class="form-check-input check-hasil-siswa" type="checkbox" disabled>`;
+                let statusLabel = `<span class="badge bg-secondary px-3 py-2"><i class="bi bi-person-x me-1"></i>Belum Mulai</span>`;
+                html += `<tr>
+                    <td class="text-center">${checkboxHtml}</td>
+                    <td class="fw-bold">${siswa.nama}<br><small class="text-muted">${siswa.user}</small></td>
+                    <td>${siswa.kelas}</td>
+                    <td class="small text-muted">-</td>
+                    <td>${statusLabel}</td>
+                    <td class="text-center">-</td>
+                    <td>-</td>
+                </tr>`;
+            } 
+            // JIKA SUDAH MENGERJAKAN (Tampilkan Semuanya Termasuk yang Error)
+            else {
+                historySiswa.forEach((hasil, i) => {
+                    let labelPercobaan = historySiswa.length > 1 ? `<span class="badge bg-primary ms-2 rounded-pill small">Coba Ke-${i+1}</span>` : '';
+                    let tgl = hasil.tanggal || "-"; 
+                    let checkboxHtml = `<input class="form-check-input check-hasil-siswa" type="checkbox" value="${hasil.idHasil}">`; 
 
-            if (!hasilSiswa) {
-                statusLabel = `<span class="badge bg-secondary px-3 py-2"><i class="bi bi-person-x me-1"></i>Belum Mulai</span>`;
-            } else {
-                tgl = hasilSiswa.tanggal; 
-                checkboxHtml = `<input class="form-check-input check-hasil-siswa" type="checkbox" value="${hasilSiswa.idHasil}">`; 
-
-                let isCurang = false;
-                if (hasilSiswa.status && (hasilSiswa.status.includes('Curang') || hasilSiswa.status.includes('Paksa') || hasilSiswa.status.includes('Terkunci'))) {
-                    isCurang = true;
-                }
-
-                if (hasilSiswa.status === "Sedang Mengerjakan") {
-                    // PERBAIKAN 2: Gunakan parseSafeDate agar tanggal format DD/MM/YYYY dari Excel terbaca dengan benar
-                    let dtPing = parseSafeDate(tgl);
-                    let lastPing = dtPing.getTime();
-                    
-                    if (waktuSekarang - lastPing < 120000) {
-                        statusLabel = `<span class="badge bg-primary px-3 py-2 placeholder-glow"><i class="bi bi-activity me-1"></i>Sedang Mengerjakan...</span>`;
-                        aksiTampil = `<button class="btn btn-warning btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasilSiswa.idHasil}')"><i class="bi bi-x-circle me-1"></i>Hentikan Paksa</button>`;
-                    } else {
-                        statusLabel = `<span class="badge bg-danger px-3 py-2"><i class="bi bi-wifi-off me-1"></i>Terputus / Keluar</span>`;
-                        aksiTampil = `<button class="btn btn-danger btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasilSiswa.idHasil}')"><i class="bi bi-arrow-clockwise me-1"></i>Ulang (Reset)</button>`;
+                    let isCurang = false;
+                    if (hasil.status && (hasil.status.includes('Curang') || hasil.status.includes('Paksa') || hasil.status.includes('Terkunci'))) {
+                        isCurang = true;
                     }
-                } else if (isCurang) {
-                    statusLabel = `<span class="badge bg-danger text-white px-3 py-2"><i class="bi bi-slash-circle me-1"></i>Terkunci (Cheating)</span>`;
-                    nilaiTampil = `<h4 class="fw-bold text-danger m-0">${hasilSiswa.nilaiAkhir}</h4>`;
-                    aksiTampil = `
-                        <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-2 me-1" onclick="bukaKoreksiDetailSiswa('${hasilSiswa.userSiswa}')"><i class="bi bi-search"></i> Cek Pekerjaan</button>
-                        <button class="btn btn-success btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasilSiswa.idHasil}')" title="Buka gembok agar siswa bisa mengulang"><i class="bi bi-unlock-fill"></i> Buka Kunci</button>
-                    `;
-                } else {
-                    statusLabel = hasilSiswa.status.includes('Menunggu') ? `<span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-hourglass-split me-1"></i>${hasilSiswa.status}</span>` : `<span class="badge bg-success px-3 py-2"><i class="bi bi-check-all me-1"></i>${hasilSiswa.status}</span>`;
-                    nilaiTampil = `<h4 class="fw-bold text-primary m-0">${hasilSiswa.nilaiAkhir}</h4>`;
-                    aksiTampil = `
-                        <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-2 me-1" onclick="bukaKoreksiDetailSiswa('${hasilSiswa.userSiswa}')"><i class="bi bi-search"></i> Analisis</button>
-                        <button class="btn btn-danger btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasilSiswa.idHasil}')" title="Hapus total riwayat ujian siswa ini"><i class="bi bi-trash3"></i> Reset</button>
-                    `;
-                }
-            }
 
-            // PERBAIKAN 3: Menerapkan parseSafeDate() pada tabel UI agar tidak muncul Invalid Date
-            let waktuTampil = "-";
-            if (tgl !== "-") {
-                try {
-                    let parsedDate = parseSafeDate(tgl);
-                    waktuTampil = parsedDate.toLocaleTimeString('id-ID');
-                } catch(e) { waktuTampil = tgl; }
-            }
+                    let statusLabel = ""; let nilaiTampil = "-"; let aksiTampil = "-";
 
-            html += `<tr>
-                <td class="text-center">${checkboxHtml}</td>
-                <td class="fw-bold">${siswa.nama}<br><small class="text-muted">${siswa.user}</small></td>
-                <td>${siswa.kelas}</td>
-                <td class="small text-muted">${waktuTampil}</td>
-                <td>${statusLabel}</td>
-                <td class="text-center">${nilaiTampil}</td>
-                <td>${aksiTampil}</td>
-            </tr>`;
+                    if (hasil.status === "Sedang Mengerjakan") {
+                        let dtPing = parseSafeDate(tgl);
+                        let lastPing = dtPing.getTime();
+                        
+                        // Toleransi 2 menit, lebih dari itu dianggap koneksi terputus
+                        if (waktuSekarang - lastPing < 120000) {
+                            statusLabel = `<span class="badge bg-primary px-3 py-2 placeholder-glow"><i class="bi bi-activity me-1"></i>Sedang Mengerjakan</span>`;
+                            aksiTampil = `<button class="btn btn-warning btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasil.idHasil}')"><i class="bi bi-x-circle me-1"></i>Hentikan Paksa</button>`;
+                        } else {
+                            statusLabel = `<span class="badge bg-danger px-3 py-2"><i class="bi bi-wifi-off me-1"></i>Terputus / Keluar</span>`;
+                            aksiTampil = `<button class="btn btn-danger btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasil.idHasil}')"><i class="bi bi-trash3 me-1"></i>Hapus Data Ini</button>`;
+                        }
+                    } else if (isCurang) {
+                        statusLabel = `<span class="badge bg-danger text-white px-3 py-2"><i class="bi bi-slash-circle me-1"></i>Terkunci (Cheating)</span>`;
+                        nilaiTampil = `<h4 class="fw-bold text-danger m-0">${hasil.nilaiAkhir || hasil.nilai || 0}</h4>`;
+                        aksiTampil = `
+                            <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-2 me-1" onclick="bukaKoreksiDetailByHasilId('${hasil.idHasil}')"><i class="bi bi-search"></i> Cek</button>
+                            <button class="btn btn-danger btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasil.idHasil}')"><i class="bi bi-trash3"></i> Hapus</button>
+                        `;
+                    } else {
+                        statusLabel = hasil.status.includes('Menunggu') ? `<span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-hourglass-split me-1"></i>${hasil.status}</span>` : `<span class="badge bg-success px-3 py-2"><i class="bi bi-check-all me-1"></i>${hasil.status}</span>`;
+                        nilaiTampil = `<h4 class="fw-bold text-primary m-0">${hasil.nilaiAkhir || hasil.nilai || 0}</h4>`;
+                        aksiTampil = `
+                            <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-2 me-1" onclick="bukaKoreksiDetailByHasilId('${hasil.idHasil}')"><i class="bi bi-search"></i> Analisis</button>
+                            <button class="btn btn-danger btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasil.idHasil}')" title="Hapus riwayat percobaan ini"><i class="bi bi-trash3"></i> Hapus</button>
+                        `;
+                    }
+
+                    let waktuTampil = "-";
+                    if (tgl !== "-") {
+                        try {
+                            let parsedDate = parseSafeDate(tgl);
+                            waktuTampil = parsedDate.toLocaleTimeString('id-ID');
+                        } catch(e) { waktuTampil = tgl; }
+                    }
+
+                    html += `<tr>
+                        <td class="text-center">${checkboxHtml}</td>
+                        <td class="fw-bold">${siswa.nama} ${labelPercobaan}<br><small class="text-muted">${siswa.user}</small></td>
+                        <td>${siswa.kelas}</td>
+                        <td class="small text-muted">${waktuTampil}</td>
+                        <td>${statusLabel}</td>
+                        <td class="text-center">${nilaiTampil}</td>
+                        <td>${aksiTampil}</td>
+                    </tr>`;
+                });
+            }
         });
 
-        let headerTabel = `<div class="d-flex justify-content-end mb-2"><button class="btn btn-sm btn-outline-primary rounded-pill fw-bold" onclick="bukaDaftarHasil(currentUjianKodeAktif, currentUjianNamaAktif)"><i class="bi bi-arrow-clockwise me-1"></i> Segarkan Pemantauan</button></div>`;
-        document.getElementById('tb-daftar-hasil').innerHTML = html || '<tr><td colspan="7" class="text-center py-5 text-muted">Tidak ada target siswa untuk ujian ini.</td></tr>';
+        // TAMBAHAN: Memunculkan siswa "Penyusup" (Pindah kelas / data di DB tapi tidak ada di target list)
+        let arraySiswaTarget = targetSiswa.map(s => String(s.user).trim().toLowerCase());
         
-        let tblParent = document.getElementById('tb-daftar-hasil').parentElement;
-        if(tblParent.previousElementSibling && tblParent.previousElementSibling.innerHTML.includes('Segarkan Pemantauan')) {
-            tblParent.previousElementSibling.remove();
+        dataHasilAktif.forEach((hasil) => {
+            let hUser = String(hasil.userSiswa || hasil.nisn || hasil.username || "").trim().toLowerCase();
+            
+            if (!arraySiswaTarget.includes(hUser)) {
+                let isCurang = false;
+                if (hasil.status && (hasil.status.includes('Curang') || hasil.status.includes('Paksa') || hasil.status.includes('Terkunci'))) isCurang = true;
+                
+                let statusLabel = hasil.status === "Sedang Mengerjakan" ? `<span class="badge bg-primary px-3 py-2">Sedang Mengerjakan</span>` : 
+                                  (isCurang ? `<span class="badge bg-danger px-3 py-2">Terkunci</span>` : `<span class="badge bg-success px-3 py-2">${hasil.status}</span>`);
+                
+                let nilaiTampil = `<h4 class="fw-bold text-secondary m-0">${hasil.nilaiAkhir || hasil.nilai || 0}</h4>`;
+                let aksiTampil = `<button class="btn btn-danger btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasil.idHasil}')"><i class="bi bi-trash3"></i> Hapus</button>`;
+                let checkboxHtml = `<input class="form-check-input check-hasil-siswa" type="checkbox" value="${hasil.idHasil}">`; 
+                let tgl = hasil.tanggal || "-";
+                let waktuTampil = "-";
+                if (tgl !== "-") { try { waktuTampil = parseSafeDate(tgl).toLocaleTimeString('id-ID'); } catch(e) { waktuTampil = tgl; } }
+
+                html += `<tr class="bg-light">
+                    <td class="text-center">${checkboxHtml}</td>
+                    <td class="fw-bold text-secondary">${hasil.namaSiswa} <span class="badge bg-secondary ms-1">Diluar Target</span><br><small class="text-muted">${hasil.userSiswa}</small></td>
+                    <td class="text-secondary">${hasil.kelas}</td>
+                    <td class="small text-muted">${waktuTampil}</td>
+                    <td>${statusLabel}</td>
+                    <td class="text-center">${nilaiTampil}</td>
+                    <td>${aksiTampil}</td>
+                </tr>`;
+            }
+        });
+
+        document.getElementById('tb-daftar-hasil').innerHTML = html || '<tr><td colspan="7" class="text-center py-5 text-muted">Belum ada data untuk ditampilkan.</td></tr>';
+        
+        // MENGEMBALIKAN SCROLLBAR KE PALING ATAS
+        let wadahScroll = document.getElementById('wadah-scroll-hasil');
+        if (wadahScroll) {
+            wadahScroll.scrollTop = 0;
         }
-        tblParent.insertAdjacentHTML('beforebegin', headerTabel);
     }
 
     // FUNGSI RESET DENGAN TABEL TETAP TERBUKA
     function resetUjianSiswa(btnElement, idHasil) {
-        if(!confirm("YAKIN INGIN MERESET UJIAN INI?\n\nSeluruh jawaban siswa akan Dihapus Permanen. Tombol di portal siswa akan kembali biru dan siswa harus mengulang ujian dari awal!")) return;
+        if(!confirm("YAKIN INGIN MENGHAPUS DATA INI?\n\nJawaban siswa pada percobaan ini akan dihapus permanen. Siswa dapat mengulang ujian kembali!")) return;
         
         let oriHtml = btnElement.innerHTML;
         btnElement.innerHTML = '<span class="spinner-border spinner-border-sm"></span>'; 
@@ -5474,15 +5575,11 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
         panggilAPI("hapusHasilUjianBackend", { idHasil: idHasil })
         .then(res => {
             if(res.success) {
-                alert(res.message);
-                
-                // TABEL TIDAK DITUTUP, melainkan langsung menarik ulang data terbaru
                 if (currentUjianKodeAktif && currentUjianNamaAktif) {
                     bukaDaftarHasil(currentUjianKodeAktif, currentUjianNamaAktif);
                 }
-                loadDashboardData();
             } else {
-                alert("Gagal mereset: " + res.message);
+                alert("Gagal menghapus: " + res.message);
                 btnElement.innerHTML = oriHtml; 
                 btnElement.disabled = false;
             }
@@ -5494,9 +5591,9 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
         });
     }
 
-    // FUNGSI BANTUAN UNTUK MEMBUKA ANALISIS BERDASARKAN NISN
-    function bukaKoreksiDetailSiswa(nisn) {
-        let idx = dataHasilAktif.findIndex(h => h.userSiswa === nisn);
+    // PENCARIAN DETAIL BERDASARKAN ID HASIL UNTUK MENGHINDARI TABRAKAN
+    function bukaKoreksiDetailByHasilId(idHasil) {
+        let idx = dataHasilAktif.findIndex(h => h.idHasil === idHasil);
         if(idx !== -1) bukaKoreksiDetail(idx);
     }
 
