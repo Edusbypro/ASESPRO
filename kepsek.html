@@ -693,10 +693,11 @@
         <!-- ======================================================= -->
 
 <!-- ======================================================= -->
-        <!-- 11.6 MEDIA PEMBELAJARAN INTERAKTIF (MPI)                  -->
+        <!-- MEDIA PEMBELAJARAN INTERAKTIF (MPI)                       -->
         <!-- ======================================================= -->
         <div id="view-media" class="view-section hidden">
           
+          <!-- HEADER -->
           <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
             <div>
                <h5 class="fw-bold m-0 text-info"><i class="bi bi-display me-2"></i>Studio Media Pembelajaran Interaktif</h5>
@@ -705,8 +706,8 @@
             <button class="btn btn-info text-white px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModalMpiLink()"><i class="bi bi-share-fill me-2"></i>Bagikan Link MPI ke Siswa</button>
           </div>
 
+          <!-- KARTU SHORTCUT AI -->
           <div class="row g-4 mb-4">
-              <!-- Kartu AI Tools -->
               <div class="col-md-3">
                   <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-3 hover-lift">
                       <i class="bi bi-palette-fill display-4 text-primary mb-2"></i>
@@ -741,16 +742,22 @@
               </div>
           </div>
 
-          <!-- Area Generator Prompt Otomatis -->
+          <!-- GENERATOR 1: MODE CEPAT -->
           <div class="card border border-info-subtle shadow-sm rounded-4 bg-info bg-opacity-10 mb-4">
               <div class="card-body p-4">
-                  <h5 class="fw-bold text-info-emphasis mb-4"><i class="bi bi-chat-square-quote me-2"></i>Generator Prompt AI Siap Pakai</h5>
+                  <h5 class="fw-bold text-info-emphasis mb-4"><i class="bi bi-chat-square-quote me-2"></i>Generator Prompt Cepat (Standar)</h5>
                   
-                  <!-- Form Input Cepat -->
-                  <div class="row g-3 mb-4 p-3 bg-white rounded-3 shadow-sm border border-info">
-                      <div class="col-md-3">
+                  <div class="row g-3 mb-4 p-3 bg-white rounded-3 shadow-sm border border-info align-items-end">
+                      <div class="col-md-4">
+                          <label class="form-label small fw-bold text-dark">Jenis Output AI</label>
+                          <select id="mpi-jenis" class="form-select border-primary fw-bold text-primary shadow-sm" onchange="ubahPromptMPI()">
+                              <option value="html">1. Kode Web HTML (Satu File Jadi)</option>
+                              <option value="storyboard">2. Rancangan Storyboard / Canva (Tabel)</option>
+                          </select>
+                      </div>
+                      <div class="col-md-4">
                           <label class="form-label small fw-bold text-dark">Fase Pendidikan</label>
-                          <select id="mpi-fase" class="form-select border-info fw-bold text-info" onchange="ubahPromptMPI()">
+                          <select id="mpi-fase" class="form-select border-info fw-bold text-info shadow-sm" onchange="ubahPromptMPI()">
                               <option value="paud">PAUD (4-5 Tahun)</option>
                               <option value="fase_a">Fase A (Kelas 1 - 2)</option>
                               <option value="fase_b">Fase B (Kelas 3 - 4)</option>
@@ -762,17 +769,25 @@
                       </div>
                       <div class="col-md-2">
                           <label class="form-label small fw-bold text-dark">Kelas</label>
-                          <input type="text" id="mpi-kelas" class="form-control border-secondary" placeholder="Cth: 6" onkeyup="ubahPromptMPI()">
+                          <input type="text" id="mpi-kelas" class="form-control border-secondary shadow-sm" placeholder="Cth: 3" onkeyup="ubahPromptMPI()">
                       </div>
-                      <div class="col-md-7">
+                      <div class="col-md-2">
+                          <label class="form-label small fw-bold text-dark">Mapel</label>
+                          <input type="text" id="mpi-mapel" class="form-control border-secondary shadow-sm" placeholder="Cth: IPAS" onkeyup="ubahPromptMPI()">
+                      </div>
+                      
+                      <div class="col-md-12">
                           <label class="form-label small fw-bold text-dark">Topik / Materi Pembelajaran</label>
-                          <input type="text" id="mpi-topik" class="form-control border-secondary" placeholder="Cth: Teks Prosedur / Tata Surya..." onkeyup="ubahPromptMPI()">
+                          <input type="text" id="mpi-topik" class="form-control border-secondary shadow-sm" placeholder="Cth: Siklus Air" onkeyup="ubahPromptMPI()">
+                      </div>
+                      <div class="col-md-12">
+                          <label class="form-label small fw-bold text-dark">Tujuan Pembelajaran (Opsional)</label>
+                          <textarea id="mpi-tujuan" class="form-control border-secondary shadow-sm" rows="2" placeholder="1. Mengidentifikasi keanekaragaman..." onkeyup="ubahPromptMPI()"></textarea>
                       </div>
                   </div>
 
-                  <!-- Hasil Prompt -->
                   <label class="form-label fw-bold text-dark"><i class="bi bi-robot me-1"></i> Teks Perintah (Copy & Paste ke AI):</label>
-                  <textarea id="mpi-prompt-text" class="form-control border-info bg-white shadow-sm mb-3" rows="8" readonly style="font-size: 0.9rem; resize: none;"></textarea>
+                  <textarea id="mpi-prompt-text" class="form-control border-info bg-white shadow-sm mb-3" rows="12" readonly style="font-size: 0.95rem; min-height: 250px; resize: vertical;"></textarea>
                   
                   <div class="text-end">
                       <button class="btn btn-info text-white fw-bold shadow-sm px-5 py-2 rounded-pill" onclick="copyPromptMPI()"><i class="bi bi-clipboard-check me-2"></i>Copy Prompt ke AI</button>
@@ -780,7 +795,143 @@
               </div>
           </div>
 
-          <!-- Panduan Publikasi ke Google Sites -->
+          <!-- GENERATOR 2: MODE PROFESIONAL (B-I-S-A) -->
+          <div class="card border border-primary-subtle shadow-sm rounded-4 bg-primary bg-opacity-10 mb-4">
+              <div class="card-body p-4">
+                  <h4 class="fw-bold text-primary mb-4"><i class="bi bi-magic me-2"></i>Isi Formula B-I-S-A (Mode Profesional)</h4>
+                  
+                  <!-- [B] BERTINDAK SEBAGAI -->
+                  <div class="card border-0 shadow-sm rounded-4 mb-3">
+                      <div class="card-body p-4">
+                          <h5 class="fw-bold text-primary"><span class="badge bg-primary me-2">B</span> Bertindak Sebagai</h5>
+                          <p class="small text-muted mb-2">Pilih peran profesional AI untuk hasil yang maksimal.</p>
+                          <select id="mpi-role" class="form-select border-primary fw-bold text-dark">
+                              <option value="Ahli Desain Pembelajaran Interaktif">Ahli Desain Pembelajaran Interaktif</option>
+                              <option value="Guru Berpengalaman & Kreatif">Guru Berpengalaman & Kreatif</option>
+                              <option value="Kreator Game Edukasi">Kreator Game Edukasi</option>
+                              <option value="Pakar Psikologi Pendidikan">Pakar Psikologi Pendidikan</option>
+                              <option value="Pengembang Laboratorium Virtual">Pengembang Laboratorium Virtual</option>
+                          </select>
+                      </div>
+                  </div>
+
+                  <!-- [I] INFORMASI TOPIK -->
+                  <div class="card border-0 shadow-sm rounded-4 mb-3">
+                      <div class="card-body p-4">
+                          <h5 class="fw-bold text-primary"><span class="badge bg-primary me-2" style="background-color: #6366f1 !important;">I</span> Informasi Topik <span class="text-danger">*</span></h5>
+                          <p class="small text-muted mb-2">Materi atau konteks apa yang ingin diajarkan?</p>
+                          <div class="row g-2 mb-2">
+                              <div class="col-md-3">
+                                  <input type="text" id="mpi-bisa-mapel" class="form-control border-secondary" placeholder="Mapel (Cth: IPAS)">
+                              </div>
+                              <div class="col-md-9">
+                                  <textarea id="mpi-bisa-topik" class="form-control border-secondary" rows="2" placeholder="Contoh: Siklus air (evaporasi, kondensasi, presipitasi) dan pentingnya menghemat air."></textarea>
+                              </div>
+                          </div>
+                          
+                          <p class="small fw-bold text-warning-emphasis mt-3 mb-2"><i class="bi bi-lightbulb-fill text-warning me-1"></i> Ide Cepat (Klik untuk mengisi):</p>
+                          <div class="d-flex flex-wrap gap-2">
+                              <button class="btn btn-sm btn-outline-primary rounded-pill bg-white" onclick="setTopikMpi('IPAS', 'Evolusi teknologi komunikasi dari masa ke masa')">Evolusi teknologi komunikasi</button>
+                              <button class="btn btn-sm btn-outline-primary rounded-pill bg-white" onclick="setTopikMpi('Matematika', 'Mengenal bangun ruang lewat arsitektur dunia')">Bangun ruang arsitektur</button>
+                              <button class="btn btn-sm btn-outline-primary rounded-pill bg-white" onclick="setTopikMpi('Fisika', 'Penerapan Hukum Newton pada permainan olahraga')">Hukum Newton olahraga</button>
+                              <button class="btn btn-sm btn-outline-primary rounded-pill bg-white" onclick="setTopikMpi('IPA', 'Cara kerja gunung berapi dan mitigasi bencana')">Gunung berapi & mitigasi</button>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- [S] SISWA / SASARAN -->
+                  <div class="card border-0 shadow-sm rounded-4 mb-3">
+                      <div class="card-body p-4">
+                          <h5 class="fw-bold text-success"><span class="badge bg-success me-2">S</span> Siswa / Sasaran</h5>
+                          <p class="small text-muted mb-2">Siapa murid Anda? (Pilih kelas dan karakteristik)</p>
+                          <div class="row g-3">
+                              <div class="col-md-6">
+                                  <select id="mpi-bisa-kelas" class="form-select border-success fw-bold text-success">
+                                      <option value="PAUD / TK">PAUD / TK</option>
+                                      <option value="Kelas 1 SD">Kelas 1 SD</option>
+                                      <option value="Kelas 2 SD">Kelas 2 SD</option>
+                                      <option value="Kelas 3 SD" selected>Kelas 3 SD</option>
+                                      <option value="Kelas 4 SD">Kelas 4 SD</option>
+                                      <option value="Kelas 5 SD">Kelas 5 SD</option>
+                                      <option value="Kelas 6 SD">Kelas 6 SD</option>
+                                      <option value="Kelas 7 SMP">Kelas 7 SMP</option>
+                                      <option value="Kelas 8 SMP">Kelas 8 SMP</option>
+                                      <option value="Kelas 9 SMP">Kelas 9 SMP</option>
+                                      <option value="Kelas 10 SMA/SMK">Kelas 10 SMA / SMK</option>
+                                      <option value="Kelas 11 SMA/SMK">Kelas 11 SMA / SMK</option>
+                                      <option value="Kelas 12 SMA/SMK">Kelas 12 SMA / SMK</option>
+                                  </select>
+                              </div>
+                              <div class="col-md-6">
+                                  <select id="mpi-karakter" class="form-select border-success">
+                                      <option value="Sangat aktif & kinestetik">Sangat aktif & kinestetik</option>
+                                      <option value="Visual (suka gambar & warna)" selected>Visual (suka gambar & warna)</option>
+                                      <option value="Auditori (suka mendengar)">Auditori (suka mendengar)</option>
+                                      <option value="Mudah bosan & butuh interaksi">Mudah bosan & butuh interaksi</option>
+                                      <option value="Kritis & suka tantangan">Kritis & suka tantangan</option>
+                                      <option value="Campuran / Beragam">Campuran / Beragam</option>
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- [A] ARAHAN HASIL & FITUR EKSTRA -->
+                  <div class="card border-0 shadow-sm rounded-4 mb-4">
+                      <div class="card-body p-4">
+                          <h5 class="fw-bold" style="color: #d97706;"><span class="badge me-2" style="background-color: #d97706;">A</span> Arahan Hasil</h5>
+                          <p class="small text-muted mb-2">Bentuk media interaktif apa yang Anda inginkan?</p>
+                          <select id="mpi-format" class="form-select border-warning mb-4 fw-bold" style="color: #d97706;">
+                              <option value="Konsep Media Pembelajaran Interaktif (Articulate/HTML5)">Konsep Media Pembelajaran Interaktif (Articulate/HTML5)</option>
+                              <option value="Skenario Kuis Interaktif (Kahoot/Quizizz)">Skenario Kuis Interaktif (Kahoot/Quizizz)</option>
+                              <option value="Ide Simulasi & Laboratorium Maya (PhET/dll)">Ide Simulasi & Laboratorium Maya (PhET/dll)</option>
+                              <option value="Rancangan Game Edukasi (Wordwall/Educandy/dll)">Rancangan Game Edukasi (Wordwall/Educandy/dll)</option>
+                              <option value="Struktur Presentasi Interaktif (Canva/PPT)">Struktur Presentasi Interaktif (Canva/PPT)</option>
+                              <option value="Modul Belajar Interaktif Terpandu">Modul Belajar Interaktif Terpandu</option>
+                          </select>
+
+                          <h6 class="small text-muted mb-2">Fitur Ekstra (Opsional)</h6>
+                          <div class="card border-warning bg-warning bg-opacity-10 mb-3 p-3 rounded-3">
+                              <div class="form-check m-0">
+                                  <input class="form-check-input border-primary" type="checkbox" id="chk-mpi-html" checked>
+                                  <label class="form-check-label fw-bold text-dark" for="chk-mpi-html">Hasilkan output berupa <b>Kode HTML Tunggal</b> (Termasuk CSS & JS)</label>
+                              </div>
+                          </div>
+                          
+                          <div class="d-flex flex-column gap-2 mb-4">
+                              <div class="form-check"><input class="form-check-input border-secondary" type="checkbox" id="chk-mpi-gami"><label class="form-check-label small text-dark" for="chk-mpi-gami">Sertakan elemen <b>Gamifikasi</b> (Poin, Level, dll)</label></div>
+                              <div class="form-check"><input class="form-check-input border-secondary" type="checkbox" id="chk-mpi-feed"><label class="form-check-label small text-dark" for="chk-mpi-feed">Buatkan skenario <b>Umpan Balik (Feedback)</b> per jawaban</label></div>
+                              <div class="form-check"><input class="form-check-input border-secondary" type="checkbox" id="chk-mpi-kasus"><label class="form-check-label small text-dark" for="chk-mpi-kasus">Kaitkan dengan <b>Studi Kasus / Dunia Nyata</b></label></div>
+                              <div class="form-check"><input class="form-check-input border-secondary" type="checkbox" id="chk-mpi-hots"><label class="form-check-label small text-dark" for="chk-mpi-hots">Fokus pada <b>Berpikir Tingkat Tinggi (HOTS)</b></label></div>
+                              <div class="form-check"><input class="form-check-input border-secondary" type="checkbox" id="chk-mpi-dif"><label class="form-check-label small text-dark" for="chk-mpi-dif">Sediakan opsi <b>Diferensiasi</b> (variasi kesulitan)</label></div>
+                          </div>
+
+                          <div class="bg-light p-3 rounded-3 border">
+                              <label class="small fw-bold text-secondary mb-2"><i class="bi bi-paperclip me-1"></i> Detail Tambahan (Opsional)</label>
+                              <textarea id="mpi-detail" class="form-control border-secondary-subtle" rows="2" placeholder="Contoh: Gunakan gaya bahasa yang ceria dan penuh analogi. Kuis terdiri dari 10 soal pilihan ganda."></textarea>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- TOMBOL GENERATE -->
+                  <div class="d-flex gap-2">
+                      <button class="btn btn-primary fw-bold px-4 py-3 rounded-3 shadow flex-grow-1" onclick="generatePromptBisa()"><i class="bi bi-stars me-2"></i>Generate Prompt (B-I-S-A)</button>
+                      <button class="btn btn-outline-secondary fw-bold px-4 py-3 rounded-3 bg-white" onclick="document.getElementById('mpi-bisa-topik').value=''; document.getElementById('mpi-detail').value='';"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset</button>
+                  </div>
+                  
+                  <!-- WADAH HASIL PROMPT B-I-S-A -->
+                  <div id="area-hasil-prompt" class="mt-4 hidden">
+                      <label class="form-label fw-bold text-dark"><i class="bi bi-robot me-1"></i> Teks Perintah (Copy & Paste ke AI):</label>
+                      <textarea id="mpi-prompt-final" class="form-control border-primary bg-white shadow-sm mb-3" rows="15" readonly style="font-size: 0.95rem; min-height: 300px; resize: vertical;"></textarea>
+                      <div class="text-end">
+                          <button class="btn btn-success text-white fw-bold shadow-sm px-5 py-2 rounded-pill" onclick="copyPromptBisa()"><i class="bi bi-clipboard-check me-2"></i>Copy Prompt ke AI</button>
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+          
+          <!-- PANDUAN GOOGLE SITES (Dibiarkan persis seperti sebelumnya) -->
           <div class="card border border-success-subtle shadow-sm rounded-4 bg-success bg-opacity-10 mb-5">
               <div class="card-body p-4">
                   <h6 class="fw-bold text-success mb-3"><i class="bi bi-book-half me-2"></i>Tutorial Mengubah Hasil AI (HTML) Menjadi Link Web</h6>
@@ -810,7 +961,9 @@
                   </div>
               </div>
           </div>
+          
         </div>
+        <!-- ======================================================= -->
 
         <!-- ========================================== -->
         <!-- 12. MANAJEMEN GURU (DENGAN EXCEL) -->
@@ -2270,161 +2423,189 @@
 	// ==========================================
 // FITUR MPI (MEDIA PEMBELAJARAN INTERAKTIF)
 // ==========================================
+
+// ------------------------------------------
+// MODE 1: GENERATOR CEPAT (STANDAR)
+// ------------------------------------------
 function ubahPromptMPI() {
+    let jenis = document.getElementById('mpi-jenis') ? document.getElementById('mpi-jenis').value : "html";
     let fase = document.getElementById('mpi-fase').value;
     let kelas = document.getElementById('mpi-kelas').value || "[ISI KELAS]";
-    let topik = document.getElementById('mpi-topik').value || "[ISI MATERI]";
-    let teks = "";
-
-    if (fase === "paud") {
-        teks = `Buatlah Media Pembelajaran Interaktif untuk:
-Topik: ${topik}
-Usia: 4-5 tahun (Kelompok B PAUD)
-Fase: Pembelajaran Inklusif Berbasis Bermain, berfokus pada eksplorasi visual dan auditori.
-
-Buat dengan format HTML5 (desain responsif untuk penggunaan tablet/ponsel) dalam satu file lengkap (HTML, CSS, JS menyatu).
-Sertakan elemen interaktif yang dirancang khusus untuk motorik halus dan rentang perhatian pendek anak usia 4-5 tahun, yaitu:
-
-1. Aktivitas Mencocokkan/Mengelompokkan: Terapkan mekanisme Drag-and-Drop sederhana (Contoh: Menarik gambar ke tempat yang sesuai).
-2. Aktivitas Identifikasi: Terapkan mekanisme Tap/Sentuh sederhana untuk memunculkan efek suara/animasi.
-
-Fitur pendukung krusial:
-1. Navigasi: Sangat sederhana dengan ikon visual besar dan jelas.
-2. Audio: Buat sistem web speech API sederhana untuk membacakan instruksi saat tombol ditekan.
-3. Umpan Balik: Instan, positif, dan berupa animasi ceria untuk setiap jawaban yang benar.
-4. Visual: Warna cerah, kontras tinggi, dan elemen yang menarik.`;
-
-    } else if (fase === "fase_a") {
-        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase A (usia 6-8 tahun).
-Materi: ${topik}
-
-Struktur Media (Singkat, Padat, dan Berbasis Permainan):
-1. Halaman Pembuka: Judul, warna ceria, dan tombol "Mulai" berukuran sangat besar.
-2. Pendahuluan (Aktivasi Visual): Pengenalan konsep melalui animasi CSS sederhana atau cerita bergambar. Teks disajikan singkat dengan font besar.
-3. Materi Inti: Penyampaian materi melalui skenario visual dan contoh konkret sehari-hari.
-4. Aktivitas Siswa: WAJIB menyertakan minimal 3 interaksi permainan:
-   a. Aktivitas Motorik Dasar: Drag-and-Drop gambar. Area target harus besar.
-   b. Aktivitas Kuis Visual: Kuis dengan Pilihan Jawaban HANYA Berbentuk Gambar/Ikon. Umpan balik langsung ceria.
-   c. Permainan Edukatif: Aktivitas mengetuk (Tap/Touch) objek atau Memory Game sederhana.
-5. Evaluasi Akhir: Tes singkat (3-5 soal). Tampilkan skor dengan hadiah visual menarik (bintang/badge).
-
-Desain Visual & Interaktivitas:
-- Warna cerah kontras tinggi. Font tebal, sans-serif ukuran sangat besar.
-- Interaktivitas: Tombol besar. Umpan balik segera dengan selebrasi visual. Buat kodenya komplit dalam 1 file HTML.`;
-
-    } else if (fase === "fase_b") {
-        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase B (usia 9-10 tahun).
-Materi: ${topik}
-
-Struktur Media (Terstruktur, Berbasis Eksplorasi Mandiri):
-1. Halaman Pembuka: Judul, informasi level/skor, dan tombol mulai.
-2. Pendahuluan: Pengenalan materi pemantik rasa ingin tahu.
-3. Materi Inti: Konten terstruktur per sub-topik. Kombinasi teks padat namun ringkas.
-4. Aktivitas Siswa: WAJIB menyertakan 3 interaksi konsep:
-   a. Aktivitas Hubungan (Matching line): Menghubungkan teks/gambar dengan fungsinya.
-   b. Kuis Pilihan Ganda: 3-4 opsi dengan umpan balik yang menjelaskan mengapa jawaban benar/salah.
-   c. Permainan Logika: Simulasi drag-and-drop untuk menyusun rantai urutan/diagram.
-5. Evaluasi Akhir: Tes (5-8 soal). Tampilkan persentase benar/salah dan sistem level.
-
-Desain Visual:
-- Menarik namun lebih rapi dari Fase A. Font sans-serif standar.
-- Navigasi jelas, umpan balik memberi pujian dan skor edukatif. Tulis semua kode dalam satu file HTML yang langsung bisa dijalankan.`;
-
-    } else if (fase === "fase_c") {
-        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase C (usia 11-12 tahun).
-Materi: ${topik}
-
-Tujuan: Pemahaman mendalam, kemampuan menyusun urutan, dan problem solving.
-Struktur Media (Gamifikasi dan Berbasis Proyek Mini):
-1. Halaman Pembuka: Judul, progress bar belajar, tombol mulai.
-2. Pendahuluan (Orientasi Masalah): Sajikan data/grafik sederhana atau studi kasus relevan kehidupan.
-3. Materi Inti: Konten dalam tab/accordion. Fokus pada infografis detail.
-4. Aktivitas Siswa: WAJIB menyertakan interaksi analisis:
-   a. Klasifikasi Kompleks: Drag-and-drop elemen ke beberapa kategori analisis.
-   b. Kuis Tipe AKM: Soal kompleks / True-False berdasarkan narasi bacaan. Umpan balik logis.
-   c. Penyelesaian Masalah: Fill-in-the-blanks terstruktur atau Puzzle logika.
-5. Evaluasi Akhir: Tes (6-10 soal) berfokus pada analisis, bukan hafalan. Tampilkan leaderboard virtual atau achievement badge.
-
-Gaya Visual: Modern, profesional, berbasis data. Hindari kartun kekanak-kanakan. Kode HTML/JS/CSS disatukan dalam satu file responsif.`;
-
-    } else if (fase === "fase_d") {
-        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase D (SMP usia 13-15 tahun).
-Materi: ${topik}
-
-Struktur Media (Modular dan Berbasis Tugas):
-1. Halaman Pembuka: Judul, info kompetensi, tombol mulai elegan.
-2. Pendahuluan: Polling interaktif flashcard (True/False) untuk mengaitkan materi dengan fenomena nyata.
-3. Materi Inti: Skema modular. Teks singkat padat dengan visualisasi.
-4. Aktivitas Siswa: WAJIB 3 interaksi kognitif:
-   a. Pengorganisasian Konsep: Drag-and-drop istilah ke definisi yang akurat.
-   b. Pengujian Pemahaman: Kuis Pilihan Ganda Kompleks berbasis studi kasus dengan feedback rasional.
-   c. Pemecahan Masalah: Hotspot gambar (klik area tertentu untuk mengidentifikasi bagian) atau simulasi.
-5. Evaluasi Akhir (Sumatif): Tes (5-10 soal) yang mengukur pencapaian. Berikan saran tindak lanjut pengayaan.
-6. Kesimpulan: Kolom interaktif refleksi diri (Self-assessment).
-
-Gaya Visual: Bersih, minimalis, kontras nyaman. UI/UX mirip aplikasi belajar modern. Kode HTML disatukan seluruhnya.`;
-
-    } else if (fase === "fase_e") {
-        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase E (SMA/SMK usia 14-15 tahun).
-Materi: ${topik}
-
-Struktur Media (Berbasis Masalah dan Eksplorasi Data):
-1. Halaman Pembuka: Tampilan dashboard progres, profesional.
-2. Perumusan Masalah: Sajikan skenario karir nyata atau dilema saintifik.
-3. Materi Inti: Konstruksi pengetahuan dengan simulasi data, atau tabulasi.
-4. Aktivitas Kritis:
-   a. Analisis Diagram: Mengatur ulang urutan formula/proses kompleks via Drag-Drop.
-   b. Simulasi Virtual: Siswa dapat mengubah variabel input angka via slider untuk melihat hasil output (contoh simulasi fisika/ekonomi sederhana).
-   c. Kuis HOTS: Interpretasi data/tabel. Umpan balik merujuk pada konsep akademis.
-5. Evaluasi Akhir: Analisis performa berdasarkan dimensi kognitif.
-
-Gaya Visual: Corporate, akademik, monokromatik dengan warna aksen. Format HTML5 tunggal yang canggih secara JavaScript.`;
-
-    } else if (fase === "fase_f") {
-        teks = `Buatlah Media Pembelajaran Interaktif berbasis HTML5 untuk Siswa Kelas ${kelas} Fase F (SMA/SMK usia 16-18 tahun).
-Materi: ${topik}
-
-Struktur Media (Studi Kasus Level Universitas):
-1. Halaman Pembuka: Elegan, dilengkapi Progress Tracker.
-2. Simulasi Dunia Nyata: Pre-assessment cepat berbasis jurnal/artikel/data.
-3. Materi Inti: Konstruksi pengetahuan mendalam.
-4. Aktivitas Pemikiran Kritis (HOTS):
-   a. Pengambilan Keputusan: Menganalisis tabel/grafik untuk menentukan opsi kebijakan via interaksi.
-   b. Argumentasi: Kuis perspektif ganda. Siswa harus merangkai alasan.
-   c. Laboratorium Keputusan: Memasukkan variabel numerik dan melihat prediksi hasil.
-5. Asesmen Komprehensif: 10-15 soal pemecahan masalah terintegrasi dengan Skill Mastery analysis.
-
-Gaya Visual: UI/UX setara e-course profesional/universitas. Bersih, sans-serif, navigasi bebas. Tulis kodenya secara komplit (HTML, CSS, JS) dalam satu output file.`;
+    let mapel = document.getElementById('mpi-mapel') ? document.getElementById('mpi-mapel').value : "[ISI MAPEL]";
+    let topik = document.getElementById('mpi-topik').value || "[ISI MATERI/TOPIK]";
+    let tujuanRaw = document.getElementById('mpi-tujuan') ? document.getElementById('mpi-tujuan').value : "";
+    
+    let namaSekolah = "[NAMA SEKOLAH]";
+    if (typeof currentUser !== 'undefined' && currentUser && currentUser.nama_sekolah) {
+        namaSekolah = currentUser.nama_sekolah.split(':')[0].trim();
     }
 
-    document.getElementById('mpi-prompt-text').value = teks;
+    let infoFase = "", infoUsia = "";
+    if (fase === 'paud') { infoFase = "PAUD"; infoUsia = "4-5 Tahun"; }
+    else if (fase === 'fase_a') { infoFase = "SD Fase A"; infoUsia = "6-8 Tahun"; }
+    else if (fase === 'fase_b') { infoFase = "SD Fase B"; infoUsia = "9-10 Tahun"; }
+    else if (fase === 'fase_c') { infoFase = "SD Fase C"; infoUsia = "11-12 Tahun"; }
+    else if (fase === 'fase_d') { infoFase = "SMP Fase D"; infoUsia = "13-15 Tahun"; }
+    else if (fase === 'fase_e') { infoFase = "SMA/SMK Fase E"; infoUsia = "15-16 Tahun"; }
+    else if (fase === 'fase_f') { infoFase = "SMA/SMK Fase F"; infoUsia = "16-18 Tahun"; }
+
+    let tujuan = tujuanRaw.trim() === "" ? "1. Memahami konsep utama materi.\n2. Menganalisis dan menerapkan materi tersebut dalam kehidupan." : tujuanRaw.trim();
+
+    let outputInstruksi = jenis === "html" 
+        ? `Buatlah media pembelajaran ini dalam KODE LENGKAP berbasis HTML5, CSS, dan JavaScript murni dalam SATU FILE utuh yang langsung bisa dijalankan. Desain harus responsif.` 
+        : `Buatkan RANCANGAN STORYBOARD dan konten media. Buat dalam bentuk TABEL (1. Nomor Slide, 2. Judul Bagian, 3. Narasi Materi, 4. Ide Visual, 5. Bentuk Interaksi).`;
+
+    let gayaDesain = "";
+    if (fase === "paud" || fase === "fase_a") {
+        gayaDesain = `- Visual: Warna cerah, kontras tinggi, ilustrasi ramah anak. Font besar tebal.\n- Interaksi: Drag-and-Drop besar, sentuh gambar (Tap), dan kuis visual.\n- Umpan Balik: Instan, positif, dengan animasi ceria.`;
+    } else if (fase === "fase_b" || fase === "fase_c") {
+        gayaDesain = `- Visual: Menarik namun lebih rapi dari kelas rendah. Gunakan infografis.\n- Interaksi: Klasifikasi kategori, kuis dengan umpan balik penjelasan, teka-teki logika.\n- Umpan Balik: Gamifikasi (skor akhir/persentase).`;
+    } else {
+        gayaDesain = `- Visual: Modern, clean, profesional, berbasis fakta/data. Hindari kartun.\n- Interaksi: Analitis tinggi (HOTS), studi kasus, slider simulasi.\n- Umpan Balik: Penjelasan rasional.`;
+    }
+
+    let teksFinal = `Kamu adalah ahli EdTech dan pembuat Media Pembelajaran Interaktif (MPI). ${outputInstruksi}
+
+## A. IDENTITAS MEDIA
+- Satuan Pendidikan : ${namaSekolah}
+- Mata Pelajaran    : ${mapel}
+- Kelas / Fase      : Kelas ${kelas} (${infoFase})
+- Usia Target       : ${infoUsia}
+- Materi Pokok      : ${topik}
+
+## B. TUJUAN PEMBELAJARAN
+Setelah menggunakan media pembelajaran ini, siswa diharapkan dapat:
+${tujuan}
+
+## C. KONSEP DAN DESAIN MEDIA LENGKAP
+Spesifikasi Gaya Visual & Interaktivitas:
+${gayaDesain}
+Sertakan juga 3 pertanyaan pemantik di halaman pendahuluan.`;
+
+    // Cukup tempel ke layar (tanpa auto-resize yang menyebabkan error ketinggian)
+    let ta = document.getElementById('mpi-prompt-text');
+    if (ta) ta.value = teksFinal;
 }
 
 function copyPromptMPI() {
     let textarea = document.getElementById('mpi-prompt-text');
-    let topik = document.getElementById('mpi-topik').value;
-    
-    if (!topik) {
-        alert("Peringatan: Anda belum mengisi 'Topik / Materi Pembelajaran'. Namun teks tetap disalin.");
-    }
-
-    textarea.select();
-    document.execCommand('copy');
-    alert("✅ Teks Perintah (Prompt) berhasil disalin!\nSilakan Paste di web AI (Gemini/DeepSeek/Canva).");
+    textarea.select(); document.execCommand('copy');
+    alert("✅ Prompt Mode Cepat berhasil disalin! Silakan Paste di web AI.");
 }
 
+// ------------------------------------------
+// MODE 2: GENERATOR PRO (FORMULA B-I-S-A)
+// ------------------------------------------
+function setTopikMpi(mapel, topik) {
+    document.getElementById('mpi-bisa-mapel').value = mapel;
+    document.getElementById('mpi-bisa-topik').value = topik;
+}
+
+function generatePromptBisa() {
+    let role = document.getElementById('mpi-role').value;
+    let mapel = document.getElementById('mpi-bisa-mapel').value || "[ISI MAPEL]";
+    let topik = document.getElementById('mpi-bisa-topik').value;
+    let kelasRaw = document.getElementById('mpi-bisa-kelas').value;
+    let karakter = document.getElementById('mpi-karakter').value;
+    let format = document.getElementById('mpi-format').value;
+    let detail = document.getElementById('mpi-detail').value;
+
+    if (!topik.trim()) {
+        alert("Mohon isi 'Informasi Topik' terlebih dahulu!");
+        document.getElementById('mpi-bisa-topik').focus();
+        return;
+    }
+
+    let namaSekolah = "[NAMA SEKOLAH ANDA]";
+    if (typeof currentUser !== 'undefined' && currentUser && currentUser.nama_sekolah) {
+        namaSekolah = currentUser.nama_sekolah.split(':')[0].trim();
+    }
+
+    let infoFase = "", pedomanDesain = "";
+    let kl = kelasRaw.toLowerCase();
+    if (kl.includes('paud') || kl.includes('tk')) { 
+        infoFase = "Fase: Bermain Inklusif";
+        pedomanDesain = `Navigasi sangat sederhana dengan ikon besar. Wajib ada narasi suara. Aktivitas Drag-and-Drop sederhana. Animasi ceria.`;
+    } 
+    else if (kl.includes('1 sd') || kl.includes('2 sd')) { 
+        infoFase = "Fase A (Usia 6-8 Tahun)";
+        pedomanDesain = `Font sans-serif sangat besar. Aktivitas kuis dominan gambar. Umpan balik segera dengan selebrasi visual.`;
+    }
+    else if (kl.includes('3 sd') || kl.includes('4 sd')) { 
+        infoFase = "Fase B (Usia 9-10 Tahun)";
+        pedomanDesain = `Kaitkan dengan masalah nyata. Aktivitas mencocokkan garis dan puzzle logika. Umpan balik yang menjelaskan alasan salah/benar.`;
+    }
+    else if (kl.includes('5 sd') || kl.includes('6 sd')) { 
+        infoFase = "Fase C (Usia 11-12 Tahun)";
+        pedomanDesain = `Berbasis proyek mini. Aktivitas klasifikasi kompleks dan Kuis tipe AKM. Desain modern, hindari kartun anak.`;
+    }
+    else if (kl.includes('smp')) { 
+        infoFase = "Fase D (Usia 13-15 Tahun)";
+        pedomanDesain = `Skema modular. Aktivasi lewat polling. Kuis pilihan ganda kompleks berbasis kasus. Clean UI.`;
+    }
+    else { 
+        infoFase = "Fase E/F (Usia 15-18 Tahun)";
+        pedomanDesain = `Studi Kasus Universitas. Simulasi ubah variabel (slider). Desain corporate/akademik.`;
+    }
+
+    let fiturExtra = [];
+    if (document.getElementById('chk-mpi-html').checked) fiturExtra.push("Output WAJIB berupa KODE HTML TUNGGAL (gabungan HTML, CSS, JS) yang siap dijalankan.");
+    if (document.getElementById('chk-mpi-gami').checked) fiturExtra.push("Terapkan Gamifikasi (Poin/Level).");
+    if (document.getElementById('chk-mpi-feed').checked) fiturExtra.push("Berikan Umpan Balik (Feedback) setiap jawaban.");
+    if (document.getElementById('chk-mpi-kasus').checked) fiturExtra.push("Gunakan studi kasus nyata.");
+    if (document.getElementById('chk-mpi-hots').checked) fiturExtra.push("Fokuskan pada soal HOTS (High-Order Thinking).");
+    if (document.getElementById('chk-mpi-dif').checked) fiturExtra.push("Sediakan variasi tingkat kesulitan (Diferensiasi).");
+
+    let stringExtra = fiturExtra.length > 0 ? "\n## D. FITUR TAMBAHAN SPESIFIK\n" + fiturExtra.map((f, i) => `${i+1}. ${f}`).join("\n") : "";
+    let stringDetail = detail.trim() !== "" ? `\n## E. CATATAN KHUSUS DARI GURU\n${detail}` : "";
+
+    let teksFinal = `Halo! Bertindaklah sebagai ${role}. Saya membutuhkan bantuanmu membuat media edukasi.
+
+## A. IDENTITAS MEDIA
+- Satuan Pendidikan: ${namaSekolah}
+- Sasaran Siswa    : ${kelasRaw} (${infoFase})
+- Karakteristik    : ${karakter}
+- Mata Pelajaran   : ${mapel}
+- Materi Pokok     : ${topik}
+- Arahan Format    : ${format}
+
+## B. TUJUAN PEMBELAJARAN
+Tolong rumuskan 3 Tujuan Pembelajaran yang paling esensial dari materi tersebut.
+
+## C. KONSEP DAN DESAIN LENGKAP
+Pedoman Wajib:
+${pedomanDesain}
+${stringExtra}${stringDetail}
+
+Berikan respons yang komprehensif dan siap digunakan!`;
+
+    document.getElementById('area-hasil-prompt').classList.remove('hidden');
+    let ta = document.getElementById('mpi-prompt-final');
+    if (ta) ta.value = teksFinal;
+    
+    // Hapus kalkulasi tinggi otomatis, biarkan CSS min-height yang bekerja
+    ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function copyPromptBisa() {
+    let textarea = document.getElementById('mpi-prompt-final');
+    textarea.select(); document.execCommand('copy');
+    alert("✅ Formula Prompt B-I-S-A berhasil disalin!\nSilakan Paste di ChatGPT / Gemini AI.");
+}
+
+// ------------------------------------------
+// FUNGSI UMUM MPI
+// ------------------------------------------
 function bukaModalMpiLink() {
     bukaModal('modalAddLink');
-    let topik = document.getElementById('mpi-topik').value || "";
+    let topik = document.getElementById('mpi-topik').value || document.getElementById('mpi-bisa-topik').value || "";
     document.getElementById('lnk-nama').value = "Media Interaktif: " + topik;
     document.getElementById('lnk-platform').value = "Lainnya";
     document.getElementById('lnk-url').value = "";
 }
 
-// Inisialisasi awal saat pertama dibuka
-document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(ubahPromptMPI, 500); 
-});
+// Timeout dinaikkan sedikit agar HTML ter-render sempurna
+document.addEventListener("DOMContentLoaded", function() { setTimeout(ubahPromptMPI, 800); });
 	
   </script>
 </body>
