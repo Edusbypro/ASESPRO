@@ -5386,7 +5386,9 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
         let waktuSekarang = new Date().getTime();
 
         targetSiswa.forEach((siswa, idx) => {
-            let hasilSiswa = dataHasilAktif.find(h => String(h.userSiswa).trim() === String(siswa.user).trim());
+            // PERBAIKAN 1: Ambil data PERCOBAAN TERAKHIR (agar tidak mengambil status yang Terputus jika siswa sudah mengulang)
+            let historySiswa = dataHasilAktif.filter(h => String(h.userSiswa).trim() === String(siswa.user).trim());
+            let hasilSiswa = historySiswa.length > 0 ? historySiswa[historySiswa.length - 1] : null;
             
             let statusLabel = ""; let nilaiTampil = "-"; let aksiTampil = "-"; let tgl = "-";
             let checkboxHtml = `<input class="form-check-input check-hasil-siswa" type="checkbox" value="${siswa.user}" disabled title="Belum ada data untuk diekspor">`;
@@ -5403,7 +5405,10 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                 }
 
                 if (hasilSiswa.status === "Sedang Mengerjakan") {
-                    let lastPing = new Date(tgl).getTime();
+                    // PERBAIKAN 2: Gunakan parseSafeDate agar tanggal format DD/MM/YYYY dari Excel terbaca dengan benar
+                    let dtPing = parseSafeDate(tgl);
+                    let lastPing = dtPing.getTime();
+                    
                     if (waktuSekarang - lastPing < 120000) {
                         statusLabel = `<span class="badge bg-primary px-3 py-2 placeholder-glow"><i class="bi bi-activity me-1"></i>Sedang Mengerjakan...</span>`;
                         aksiTampil = `<button class="btn btn-warning btn-sm rounded-pill fw-bold px-3 py-2" onclick="resetUjianSiswa(this, '${hasilSiswa.idHasil}')"><i class="bi bi-x-circle me-1"></i>Hentikan Paksa</button>`;
@@ -5428,11 +5433,20 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
                 }
             }
 
+            // PERBAIKAN 3: Menerapkan parseSafeDate() pada tabel UI agar tidak muncul Invalid Date
+            let waktuTampil = "-";
+            if (tgl !== "-") {
+                try {
+                    let parsedDate = parseSafeDate(tgl);
+                    waktuTampil = parsedDate.toLocaleTimeString('id-ID');
+                } catch(e) { waktuTampil = tgl; }
+            }
+
             html += `<tr>
                 <td class="text-center">${checkboxHtml}</td>
                 <td class="fw-bold">${siswa.nama}<br><small class="text-muted">${siswa.user}</small></td>
                 <td>${siswa.kelas}</td>
-                <td class="small text-muted">${tgl === "-" ? "-" : new Date(tgl).toLocaleTimeString('id-ID')}</td>
+                <td class="small text-muted">${waktuTampil}</td>
                 <td>${statusLabel}</td>
                 <td class="text-center">${nilaiTampil}</td>
                 <td>${aksiTampil}</td>
