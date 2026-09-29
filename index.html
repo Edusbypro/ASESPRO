@@ -8699,6 +8699,327 @@ function ambilSiswaSesuaiKelas() {
     return filtered.sort((a,b) => a.nama.localeCompare(b.nama));
 }
 
+// VARIABEL PENYIMPAN SEMENTARA DATA DARI DATABASE
+let dataRaporTersimpan = [];
+
+// Fungsi ini dipanggil saat Dropdown Kelas dipilih
+function renderTabelGeneratorRapor() {
+    let elKelas = document.getElementById('filter-kelas-rapor');
+    if (!elKelas) return;
+    
+    let fKelas = elKelas.value;
+    if (!fKelas || fKelas === "") {
+        dataRaporTersimpan = [];
+        renderSemuaTabelRapor();
+        return;
+    }
+
+    // Ubah teks tombol menjadi loading
+    let btnSimpan = document.querySelectorAll('.btn-simpan-rapor');
+    btnSimpan.forEach(b => { b.disabled = true; b.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Menarik Data...'; });
+
+    // Tarik data rapor milik kelas tersebut dari database Google Sheets
+    panggilAPI("getDeskripsiRapor", { kodeSekolah: currentUser.kode_sekolah, kelas: fKelas })
+    .then(res => {
+        dataRaporTersimpan = res || [];
+        renderSemuaTabelRapor();
+        btnSimpan.forEach(b => { b.disabled = false; b.innerHTML = '<i class="bi bi-cloud-arrow-up-fill me-1"></i> Simpan ke Database'; });
+    })
+    .catch(err => {
+        console.error("Gagal menarik data rapor dari database:", err);
+        dataRaporTersimpan = []; // Fallback agar tetap bisa dipakai meskipun tanpa database
+        renderSemuaTabelRapor();
+        btnSimpan.forEach(b => { b.disabled = false; b.innerHTML = '<i class="bi bi-cloud-arrow-up-fill me-1"></i> Simpan ke Database'; });
+    });
+}
+
+function renderSemuaTabelRapor() {
+    renderTabelRaporAkademik();
+    renderTabelRaporCatatan();
+    renderTabelRaporKokurikuler();
+}
+
+// ---------------------------------------------------------
+// TAB 1: RENDER AKADEMIK (TERINTEGRASI DB)
+// ---------------------------------------------------------
+function renderTabelRaporAkademik() {
+    let siswaList = ambilSiswaSesuaiKelas();
+    let tb = document.getElementById('tb-rapor-akademik');
+    if (siswaList.length === 0) {
+        tb.innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted">Pilih kelas di atas untuk memuat daftar siswa.</td></tr>';
+        return;
+    }
+
+    let mapelAktif = document.getElementById('rapor-mapel').value || "-";
+    let html = '';
+    
+    siswaList.forEach((s, i) => {
+        let dbData = dataRaporTersimpan.find(d => d.nisn === s.user && d.jenis === 'AKADEMIK' && d.mapelTema === mapelAktif);
+        let teksTersimpan = dbData ? dbData.deskripsi : '';
+        let badgeTersimpan = dbData ? `<br><span class="badge bg-success mt-1" style="font-size: 0.6rem;"><i class="bi bi-check-circle-fill"></i> Tersimpan</span>` : '';
+
+        html += `
+        <tr>
+            <td class="text-center">${i+1}</td>
+            <td class="fw-bold text-dark" style="max-width: 150px; font-size: 0.8rem;">
+                ${s.nama} ${badgeTersimpan}
+                <div class="text-muted small">NISN: ${s.user}</div>
+            </td>
+            <td><select class="form-select form-select-sm" id="akad-tp1-${s.user}" onchange="generateTeksAkademik('${s.user}', '${s.nama.replace(/'/g, "\\'")}')">${OPSI_CAPAIAN}</select></td>
+            <td><select class="form-select form-select-sm" id="akad-tp2-${s.user}" onchange="generateTeksAkademik('${s.user}', '${s.nama.replace(/'/g, "\\'")}')">${OPSI_CAPAIAN}</select></td>
+            <td><select class="form-select form-select-sm" id="akad-tp3-${s.user}" onchange="generateTeksAkademik('${s.user}', '${s.nama.replace(/'/g, "\\'")}')">${OPSI_CAPAIAN}</select></td>
+            <td><select class="form-select form-select-sm" id="akad-tp4-${s.user}" onchange="generateTeksAkademik('${s.user}', '${s.nama.replace(/'/g, "\\'")}')">${OPSI_CAPAIAN}</select></td>
+            <td><textarea id="res-akad-${s.user}" class="form-control bg-light border-primary-subtle" rows="3" placeholder="Pilih capaian di samping untuk memunculkan teks otomatis...">${teksTersimpan}</textarea></td>
+            <td class="text-center"><button class="btn btn-sm btn-primary rounded-pill shadow-sm w-100" onclick="copyTeksRapor('res-akad-${s.user}')"><i class="bi bi-clipboard-check"></i> Copy</button></td>
+        </tr>`;
+    });
+    tb.innerHTML = html;
+}
+
+function generateTeksAkademik(userSiswa, namaSiswa) {
+    let mapel = document.getElementById('rapor-mapel').value || "mata pelajaran ini";
+    let tp1 = document.getElementById('rapor-tp1').value.trim();
+    let tp2 = document.getElementById('rapor-tp2').value.trim();
+    let tp3 = document.getElementById('rapor-tp3').value.trim();
+    let tp4 = document.getElementById('rapor-tp4').value.trim();
+
+    let c1 = document.getElementById(`akad-tp1-${userSiswa}`).value;
+    let c2 = document.getElementById(`akad-tp2-${userSiswa}`).value;
+    let c3 = document.getElementById(`akad-tp3-${userSiswa}`).value;
+    let c4 = document.getElementById(`akad-tp4-${userSiswa}`).value;
+
+    let pencapaianTinggi = [];
+    let pencapaianRendah = [];
+
+    const fraseBaik = {
+        "Sangat Berkembang": "sangat berkembang dan sangat menguasai",
+        "Berkembang Sesuai Harapan": "berkembang sesuai harapan dalam menguasai"
+    };
+    const fraseKurang = {
+        "Mulai Berkembang": "mulai berkembang dan masih perlu bimbingan dalam",
+        "Belum Berkembang": "belum berkembang dan sangat membutuhkan pendampingan khusus dalam"
+    };
+
+    const evaluasi = (tp, capaian) => {
+        if (!tp || !capaian) return;
+        if (capaian === "Sangat Berkembang" || capaian === "Berkembang Sesuai Harapan") {
+            pencapaianTinggi.push(`${fraseBaik[capaian]} materi ${tp}`);
+        } else {
+            pencapaianRendah.push(`${fraseKurang[capaian]} materi ${tp}`);
+        }
+    };
+
+    evaluasi(tp1, c1);
+    evaluasi(tp2, c2);
+    evaluasi(tp3, c3);
+    evaluasi(tp4, c4);
+
+    let narasi = "";
+    if (pencapaianTinggi.length === 0 && pencapaianRendah.length === 0) {
+        document.getElementById(`res-akad-${userSiswa}`).value = "";
+        return;
+    }
+
+    narasi += `Ananda ${namaSiswa} telah menunjukkan upaya dalam ${mapel}. `;
+    
+    if (pencapaianTinggi.length > 0) {
+        narasi += `Ia menunjukkan kemampuan yang ${pencapaianTinggi.join(', serta ')}. `;
+    }
+    if (pencapaianRendah.length > 0) {
+        let penghubung = pencapaianTinggi.length > 0 ? "Namun demikian, ia " : "Saat ini, ia ";
+        narasi += `${penghubung}${pencapaianRendah.join(', dan ')}.`;
+    }
+
+    document.getElementById(`res-akad-${userSiswa}`).value = narasi;
+}
+
+// ---------------------------------------------------------
+// TAB 2: RENDER CATATAN WALI KELAS (TERINTEGRASI DB)
+// ---------------------------------------------------------
+function renderTabelRaporCatatan() {
+    let siswaList = ambilSiswaSesuaiKelas();
+    let tb = document.getElementById('tb-rapor-catatan');
+    if (siswaList.length === 0) { tb.innerHTML = '<tr><td colspan="5" class="text-center py-5 text-muted">Pilih kelas di atas untuk memuat daftar siswa.</td></tr>'; return; }
+
+    let optCatatan = `<option value="RANDOM">🎲 Acak Otomatis (Random)</option>`;
+    DB_CATATAN_WALI.forEach((c, idx) => {
+        optCatatan += `<option value="${idx}">Teks ${idx+1}: ${c.substring(0,40)}...</option>`;
+    });
+
+    let html = '';
+    siswaList.forEach((s, i) => {
+        let dbData = dataRaporTersimpan.find(d => d.nisn === s.user && d.jenis === 'CATATAN');
+        let teksTersimpan = dbData ? dbData.deskripsi : '';
+        let badgeTersimpan = dbData ? `<span class="badge bg-success ms-2" style="font-size: 0.6rem;">Tersimpan</span>` : '';
+
+        html += `
+        <tr>
+            <td class="text-center">${i+1}</td>
+            <td class="fw-bold text-dark">${s.nama} ${badgeTersimpan}</td>
+            <td>
+                <select class="form-select form-select-sm mb-2" id="cat-mode-${s.user}">${optCatatan}</select>
+                <button class="btn btn-sm btn-outline-info w-100 rounded-pill" onclick="generateTeksCatatan('${s.user}')"><i class="bi bi-magic"></i> Generate Catatan</button>
+            </td>
+            <td><textarea id="res-cat-${s.user}" class="form-control bg-light" rows="2">${teksTersimpan}</textarea></td>
+            <td class="text-center"><button class="btn btn-sm btn-primary rounded-pill shadow-sm" onclick="copyTeksRapor('res-cat-${s.user}')"><i class="bi bi-clipboard-check"></i> Copy</button></td>
+        </tr>`;
+    });
+    tb.innerHTML = html;
+}
+
+function generateTeksCatatan(userSiswa) {
+    let mode = document.getElementById(`cat-mode-${userSiswa}`).value;
+    let hasil = "";
+    if (mode === "RANDOM") {
+        let randomIdx = Math.floor(Math.random() * DB_CATATAN_WALI.length);
+        hasil = DB_CATATAN_WALI[randomIdx];
+    } else {
+        hasil = DB_CATATAN_WALI[parseInt(mode)];
+    }
+    document.getElementById(`res-cat-${userSiswa}`).value = hasil;
+}
+
+// ---------------------------------------------------------
+// TAB 3: RENDER KO-KURIKULER (TERINTEGRASI DB)
+// ---------------------------------------------------------
+function renderTabelRaporKokurikuler() {
+    let siswaList = ambilSiswaSesuaiKelas();
+    let tb = document.getElementById('tb-rapor-kokurikuler');
+    if (siswaList.length === 0) { tb.innerHTML = '<tr><td colspan="5" class="text-center py-5 text-muted">Pilih kelas di atas untuk memuat daftar siswa.</td></tr>'; return; }
+
+    let temaAktif = document.getElementById('rapor-ko-tema').value || "-";
+    const opsiNilai = `
+        <option value="">- Pilih Nilai -</option>
+        <option value="Sangat Mahir">Sangat Mahir</option>
+        <option value="Cakap">Cakap / Berkembang</option>
+        <option value="Mulai Berkembang">Mulai Berkembang</option>
+    `;
+
+    let html = '';
+    siswaList.forEach((s, i) => {
+        let dbData = dataRaporTersimpan.find(d => d.nisn === s.user && d.jenis === 'KOKURIKULER' && d.mapelTema === temaAktif);
+        let teksTersimpan = dbData ? dbData.deskripsi : '';
+        let badgeTersimpan = dbData ? `<span class="badge bg-success ms-2" style="font-size: 0.6rem;">Tersimpan</span>` : '';
+
+        html += `
+        <tr>
+            <td class="text-center">${i+1}</td>
+            <td class="fw-bold text-dark">${s.nama} ${badgeTersimpan}</td>
+            <td><select class="form-select form-select-sm" id="ko-nilai-${s.user}" onchange="generateTeksKokurikuler('${s.user}', '${s.nama.replace(/'/g, "\\'")}')">${opsiNilai}</select></td>
+            <td><textarea id="res-ko-${s.user}" class="form-control bg-light" rows="3">${teksTersimpan}</textarea></td>
+            <td class="text-center"><button class="btn btn-sm btn-primary rounded-pill shadow-sm" onclick="copyTeksRapor('res-ko-${s.user}')"><i class="bi bi-clipboard-check"></i> Copy</button></td>
+        </tr>`;
+    });
+    tb.innerHTML = html;
+}
+
+function generateTeksKokurikuler(userSiswa, namaSiswa) {
+    let tema = document.getElementById('rapor-ko-tema').value || "kegiatan ini";
+    let dimensi = document.getElementById('rapor-ko-dimensi').value;
+    let sub = document.getElementById('rapor-ko-subdimensi').value;
+    let nilai = document.getElementById(`ko-nilai-${userSiswa}`).value;
+
+    if (!dimensi || !sub || !nilai) {
+        document.getElementById(`res-ko-${userSiswa}`).value = "";
+        return;
+    }
+
+    let cleanDimensi = dimensi.replace(/[0-9.]/g, '').trim();
+    let cleanSub = sub.split(':')[0].trim(); 
+    let penjelasanSub = sub.split(':')[1] ? sub.split(':')[1].trim() : cleanSub;
+
+    let tingkat = "";
+    if(nilai === "Sangat Mahir") tingkat = "sangat mahir dan konsisten";
+    else if(nilai === "Cakap") tingkat = "cukup cakap dan berkembang dengan baik";
+    else tingkat = "mulai berkembang dan masih membutuhkan bimbingan";
+
+    let narasi = `Dalam projek Profil Pelajar Pancasila tema ${tema}, Ananda ${namaSiswa} menunjukkan kemampuan yang ${tingkat} pada dimensi ${cleanDimensi}. Hal ini terlihat dari kemampuannya dalam hal ${cleanSub}, yaitu ${penjelasanSub.charAt(0).toLowerCase() + penjelasanSub.slice(1)}`;
+
+    document.getElementById(`res-ko-${userSiswa}`).value = narasi;
+}
+
+// ---------------------------------------------------------
+// FUNGSI AKSI: SIMPAN MASSAL KE DATABASE GOOGLE SHEETS
+// ---------------------------------------------------------
+function simpanRaporMassal(jenisTarget) {
+    let fKelas = document.getElementById('filter-kelas-rapor').value;
+    if (!fKelas) { alert("Pilih kelas terlebih dahulu!"); return; }
+
+    let mapelAtauTema = "-";
+    if (jenisTarget === 'AKADEMIK') mapelAtauTema = document.getElementById('rapor-mapel').value || "Mata Pelajaran";
+    if (jenisTarget === 'KOKURIKULER') mapelAtauTema = document.getElementById('rapor-ko-tema').value || "Tema Kokurikuler";
+    if (jenisTarget === 'CATATAN') mapelAtauTema = "Catatan Wali Kelas";
+
+    let siswaList = ambilSiswaSesuaiKelas();
+    let dataSiswaKirim = [];
+
+    siswaList.forEach(s => {
+        let prefixTextarea = "";
+        if (jenisTarget === 'AKADEMIK') prefixTextarea = `res-akad-${s.user}`;
+        if (jenisTarget === 'CATATAN') prefixTextarea = `res-cat-${s.user}`;
+        if (jenisTarget === 'KOKURIKULER') prefixTextarea = `res-ko-${s.user}`;
+
+        let textEl = document.getElementById(prefixTextarea);
+        let isiTeks = textEl ? textEl.value.trim() : "";
+        
+        if (isiTeks !== "") {
+            dataSiswaKirim.push({
+                nisn: s.user,
+                nama: s.nama,
+                deskripsi: isiTeks
+            });
+        }
+    });
+
+    if (dataSiswaKirim.length === 0) {
+        alert("Tidak ada teks deskripsi yang bisa disimpan. Silakan Generate terlebih dahulu!");
+        return;
+    }
+
+    if (!confirm(`Simpan ${dataSiswaKirim.length} data deskripsi ${jenisTarget} ini ke Database Server?`)) return;
+
+    let btnTrigger = event.currentTarget;
+    let oriHTML = btnTrigger.innerHTML;
+    btnTrigger.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
+    btnTrigger.disabled = true;
+
+    const payload = {
+        kodeSekolah: currentUser.kode_sekolah,
+        kelas: fKelas,
+        jenis: jenisTarget,
+        mapelTema: mapelAtauTema,
+        dataSiswa: dataSiswaKirim
+    };
+
+    panggilAPI("simpanDeskripsiRapor", payload)
+    .then(res => {
+        btnTrigger.innerHTML = oriHTML;
+        btnTrigger.disabled = false;
+        if (res.success) {
+            if(typeof tampilkanNotif === "function") tampilkanNotif("✅ " + res.message);
+            else alert(res.message);
+            renderTabelGeneratorRapor(); 
+        } else {
+            alert("Gagal menyimpan: " + res.message);
+        }
+    })
+    .catch(err => {
+        btnTrigger.innerHTML = oriHTML;
+        btnTrigger.disabled = false;
+        alert("Koneksi Server Gagal. Pastikan Anda sudah mendeploy ulang Google Apps Script.");
+    });
+}
+
+function copyTeksRapor(idTextarea) {
+    let copyText = document.getElementById(idTextarea);
+    if (!copyText.value) { alert("Teks masih kosong!"); return; }
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    if(typeof tampilkanNotif === "function") tampilkanNotif("✅ Deskripsi berhasil disalin ke Clipboard!");
+    else alert("Deskripsi disalin!");
+}
+
 // Tambahkan pengaman ganda untuk memuat data dimensi tepat saat halaman dibuka
 document.addEventListener("DOMContentLoaded", function() {
     setTimeout(initDataMasterRapor, 1500); 
