@@ -7865,12 +7865,16 @@ function loadMasterInstrumenABK() {
 document.addEventListener("DOMContentLoaded", function() { setTimeout(loadMasterInstrumenABK, 2000); });
 
 function initDropdownSiswaABK() {
-    let isGuru = (currentUser && currentUser.role === 'guru');
+    // PERBAIKAN: Kebal huruf besar/kecil
+    let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
     let allowedClasses = isGuru && currentUser.kelasAjar ? currentUser.kelasAjar.split(',').map(x=>x.trim()) : [];
+    
     let sw = activeSiswaData;
-    if(isGuru && allowedClasses.length > 0) sw = sw.filter(s => allowedClasses.includes(String(s.kelas).trim()));
+    // Potong daftar siswa hanya untuk kelas yang diajar guru tersebut
+    if(isGuru && allowedClasses.length > 0) {
+        sw = sw.filter(s => allowedClasses.includes(String(s.kelas).trim()));
+    }
 
-    // Mengelompokkan berdasarkan Kelas
     let grouped = {};
     sw.forEach(s => {
         let k = String(s.kelas).trim();
@@ -7883,7 +7887,6 @@ function initDropdownSiswaABK() {
     
     classes.forEach(c => {
         opt += `<optgroup label="====== KELAS ${c} ======">`;
-        // Mengurutkan nama sesuai abjad A-Z
         grouped[c].sort((a,b) => a.nama.localeCompare(b.nama)).forEach(s => {
             opt += `<option value="${s.user}|${s.nama}|${s.kelas}">${s.nama}</option>`;
         });
@@ -7892,8 +7895,8 @@ function initDropdownSiswaABK() {
     
     let elSiswa = document.getElementById('abk-siswa');
     if(elSiswa) {
-        elSiswa.innerHTML = opt;
-        document.getElementById('abk-cari-siswa').value = ""; // Reset kotak pencarian
+        elSiswa.innerHTML = opt || '<option value="">(Tidak ada siswa di kelas Anda)</option>';
+        document.getElementById('abk-cari-siswa').value = ""; 
     }
 }
 
@@ -7902,13 +7905,16 @@ function filterDropdownSiswaABK() {
     let search = document.getElementById('abk-cari-siswa').value.toLowerCase();
     let select = document.getElementById('abk-siswa');
     
-    // Tarik ulang data sesuai hak akses
-    let isGuru = (currentUser && currentUser.role === 'guru');
+    // PERBAIKAN: Kebal huruf besar/kecil
+    let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
     let allowedClasses = isGuru && currentUser.kelasAjar ? currentUser.kelasAjar.split(',').map(x=>x.trim()) : [];
-    let sw = activeSiswaData;
-    if(isGuru && allowedClasses.length > 0) sw = sw.filter(s => allowedClasses.includes(String(s.kelas).trim()));
     
-    // Saring berdasarkan nama yang diketik
+    let sw = activeSiswaData;
+    // Saring siswa khusus kelas guru tersebut
+    if(isGuru && allowedClasses.length > 0) {
+        sw = sw.filter(s => allowedClasses.includes(String(s.kelas).trim()));
+    }
+    
     if (search !== "") {
         sw = sw.filter(s => s.nama.toLowerCase().includes(search) || s.user.toLowerCase().includes(search));
     }
@@ -7945,19 +7951,25 @@ function navigasiABK() {
 
 function renderTabelRiwayatABK() {
     let fKelas = document.getElementById('filter-abk-kelas').value;
-    let isGuru = (currentUser && currentUser.role === 'guru');
+    
+    // PERBAIKAN: Kebal huruf besar/kecil
+    let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
     let allowedClasses = isGuru && currentUser.kelasAjar ? currentUser.kelasAjar.split(',').map(x=>x.trim()) : [];
 
     let filtered = riwayatABKData;
+    
+    // Sembunyikan riwayat kelas lain jika yang login adalah guru
     if(isGuru && allowedClasses.length > 0) {
-        filtered = filtered.filter(x => allowedClasses.includes(x.kelas));
+        filtered = filtered.filter(x => allowedClasses.includes(String(x.kelas).trim()));
     }
-    if(fKelas) filtered = filtered.filter(x => x.kelas === fKelas);
+    
+    if(fKelas) {
+        filtered = filtered.filter(x => String(x.kelas).trim() === String(fKelas).trim());
+    }
 
     let html = '';
     filtered.reverse().forEach((d) => {
-        // Tampilkan Edit Button HANYA untuk Portal Guru/Admin
-        let isViewSaja = window.location.pathname.includes("kepsek"); // Asumsi jika url ada kepsek
+        let isViewSaja = window.location.pathname.includes("kepsek"); 
         let btnEdit = !isViewSaja ? `<button class="btn btn-sm btn-outline-primary rounded-pill me-1" onclick="editLaporanABK('${d.id_identifikasi}')"><i class="bi bi-pencil"></i></button>` : '';
 
         html += `<tr>
