@@ -403,6 +403,8 @@
         <div class="nav-item" id="menu-kartu" data-menu="kartu" onclick="navigasi('kartu', this)"><i class="bi bi-person-vcard"></i> Kartu Peserta</div>
         <div class="nav-item" id="menu-laporan" data-menu="laporan" onclick="navigasi('laporan', this)"><i class="bi bi-file-earmark-bar-graph"></i> Laporan Nilai</div>
 		<div class="nav-item" id="menu-leger" data-menu="leger" onclick="navigasi('leger', this)"><i class="bi bi-journal-plus text-warning"></i> Leger Siswa (Manual)</div>
+		<!-- TAMBAHAN BARU: MENU GENERATE RAPOR -->
+		<div class="nav-item" id="menu-rapor" data-menu="rapor" onclick="navigasi('rapor', this)"><i class="bi bi-card-checklist text-primary"></i> Generator Deskripsi Rapor</div>
         <div class="nav-item" id="menu-supervisi" data-menu="supervisi" onclick="navigasi('supervisi', this)" style="display:none;"><i class="bi bi-shield-check"></i> Supervisi Kepsek</div>
         <div class="nav-item" id="menu-generator" data-menu="generator" onclick="navigasi('generator', this)"><i class="bi bi-magic"></i> Generator Soal AI</div>
         <div class="nav-item" id="menu-rpp" data-menu="rpp" onclick="navigasi('rpp', this)"><i class="bi bi-journal-text"></i> Generator RPP AI</div>
@@ -526,6 +528,183 @@
             <div class="table-responsive"><table class="table table-hover align-middle table-borderless border-top"><thead class="table-light text-muted small"><tr><th>Foto</th><th>NISN</th><th>Nama Lengkap</th><th>Password</th><th>L/P</th><th>Jenjang</th><th>Kls/Rombel</th><th>TTL</th><th>Asal Sekolah</th><th>Aksi</th></tr></thead><tbody id="tb-siswa"></tbody></table></div>
           </div>
         </div>
+		
+		<!-- ======================================================= -->
+        <!-- 14. GENERATOR DESKRIPSI RAPOR (AKADEMIK, CATATAN, P5)   -->
+        <!-- ======================================================= -->
+        <div id="view-rapor" class="view-section hidden">
+            <!-- BAGIAN HEADER INI SEBELUMNYA HILANG DI KODE ANDA -->
+            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
+                <div>
+                    <h5 class="fw-bold m-0 text-primary"><i class="bi bi-card-checklist me-2"></i>Generator Deskripsi Rapor</h5>
+                    <small class="text-muted">Buat narasi rapor otomatis untuk di-copy ke E-Rapor (Akademik, Catatan Wali, & Ko-Kurikuler).</small>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="fw-bold small text-muted">Pilih Kelas:</label>
+                    <select id="filter-kelas-rapor" class="form-select border-primary text-primary fw-bold rounded-pill px-4" style="width: auto;" onchange="renderTabelGeneratorRapor()">
+                        <option value="">-- Pilih Kelas --</option>
+                    </select>
+                </div>
+            </div>
+            <!-- AKHIR BAGIAN HEADER -->
+
+            <!-- TABS NAVIGASI FITUR RAPOR -->
+            <ul class="nav nav-pills mb-4 gap-2" id="pills-tab-rapor" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active rounded-pill fw-bold px-4 shadow-sm" data-bs-toggle="pill" data-bs-target="#tab-rapor-akademik" type="button" role="tab"><i class="bi bi-book-half me-2"></i>Deskripsi Mapel</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-pill fw-bold px-4 shadow-sm" data-bs-toggle="pill" data-bs-target="#tab-rapor-catatan" type="button" role="tab"><i class="bi bi-chat-quote-fill me-2"></i>Catatan Wali Kelas</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-pill fw-bold px-4 shadow-sm" data-bs-toggle="pill" data-bs-target="#tab-rapor-kokurikuler" type="button" role="tab"><i class="bi bi-tree-fill me-2"></i>Ko-Kurikuler / P5</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="pills-tabContentRapor">
+                
+                <!-- TAB 1: DESKRIPSI AKADEMIK -->
+                <div class="tab-pane fade show active" id="tab-rapor-akademik" role="tabpanel">
+                    <div class="card border-0 shadow-sm rounded-4 mb-4 bg-primary bg-opacity-10 border-primary-subtle">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold text-primary m-0"><i class="bi bi-gear-fill me-2"></i>Pengaturan Tujuan Pembelajaran</h6>
+                                <button class="btn btn-success fw-bold rounded-pill shadow-sm btn-simpan-rapor" onclick="simpanRaporMassal('AKADEMIK')"><i class="bi bi-cloud-arrow-up-fill me-1"></i> Simpan ke Database</button>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-bold">Mata Pelajaran</label>
+                                    <input type="text" id="rapor-mapel" class="form-control border-primary" placeholder="Contoh: Matematika" oninput="renderTabelGeneratorRapor()">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Tujuan Pembelajaran 1</label>
+                                    <textarea id="rapor-tp1" class="form-control border-secondary-subtle" rows="2" placeholder="Contoh: Menghitung luas bangun datar..."></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Tujuan Pembelajaran 2</label>
+                                    <textarea id="rapor-tp2" class="form-control border-secondary-subtle" rows="2" placeholder="Contoh: Mengenal pecahan senilai..."></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Tujuan Pembelajaran 3 (Opsional)</label>
+                                    <textarea id="rapor-tp3" class="form-control border-secondary-subtle" rows="2" placeholder="Tujuan 3..."></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Tujuan Pembelajaran 4 (Opsional)</label>
+                                    <textarea id="rapor-tp4" class="form-control border-secondary-subtle" rows="2" placeholder="Tujuan 4..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered align-middle m-0" style="font-size: 0.85rem;">
+                                    <thead class="table-light text-center align-middle">
+                                        <tr>
+                                            <th style="width: 50px;">No</th>
+                                            <th style="width: 150px;">Nama Siswa</th>
+                                            <th style="width: 100px;">Capaian TP 1</th>
+                                            <th style="width: 100px;">Capaian TP 2</th>
+                                            <th style="width: 100px;">Capaian TP 3</th>
+                                            <th style="width: 100px;">Capaian TP 4</th>
+                                            <th>Hasil Deskripsi (Bisa Diedit Manual)</th>
+                                            <th style="width: 80px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tb-rapor-akademik">
+                                        <tr><td colspan="8" class="text-center py-5 text-muted">Pilih kelas di atas untuk memuat daftar siswa.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: CATATAN WALI KELAS -->
+                <div class="tab-pane fade" id="tab-rapor-catatan" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="alert alert-info small shadow-sm border-info rounded-4 m-0 flex-grow-1 me-3">
+                            <i class="bi bi-info-circle-fill me-2"></i> Pilih mode <b>Acak Otomatis</b> atau pilih teks manual.
+                        </div>
+                        <button class="btn btn-success fw-bold rounded-pill shadow-sm btn-simpan-rapor flex-shrink-0" onclick="simpanRaporMassal('CATATAN')"><i class="bi bi-cloud-arrow-up-fill me-1"></i> Simpan ke Database</button>
+                    </div>
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered align-middle m-0" style="font-size: 0.85rem;">
+                                    <thead class="table-light text-center align-middle">
+                                        <tr>
+                                            <th style="width: 50px;">No</th>
+                                            <th style="width: 200px;">Nama Siswa</th>
+                                            <th style="width: 250px;">Mode Catatan Wali</th>
+                                            <th>Hasil Catatan (Bisa Diedit Manual)</th>
+                                            <th style="width: 80px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tb-rapor-catatan">
+                                        <tr><td colspan="5" class="text-center py-5 text-muted">Pilih kelas di atas untuk memuat daftar siswa.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: KO-KURIKULER (P5) -->
+                <div class="tab-pane fade" id="tab-rapor-kokurikuler" role="tabpanel">
+                    <div class="card border-0 shadow-sm rounded-4 mb-4 bg-success bg-opacity-10 border-success-subtle">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold text-success m-0"><i class="bi bi-gear-fill me-2"></i>Pengaturan Dimensi Profil Lulusan</h6>
+                                <button class="btn btn-primary fw-bold rounded-pill shadow-sm btn-simpan-rapor" onclick="simpanRaporMassal('KOKURIKULER')"><i class="bi bi-cloud-arrow-up-fill me-1"></i> Simpan ke Database</button>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Tema Kegiatan</label>
+                                    <input type="text" id="rapor-ko-tema" class="form-control border-success" placeholder="Contoh: Kewirausahaan" oninput="renderTabelRaporKokurikuler()">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Pilih Dimensi Utama</label>
+                                    <select id="rapor-ko-dimensi" class="form-select border-success text-success fw-bold" onchange="updateSubDimensiKokurikuler()">
+                                        <option value="">-- Pilih Dimensi --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Pilih Sub-Dimensi Terkait</label>
+                                    <select id="rapor-ko-subdimensi" class="form-select border-success">
+                                        <option value="">-- Pilih Dimensi Dulu --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered align-middle m-0" style="font-size: 0.85rem;">
+                                    <thead class="table-light text-center align-middle">
+                                        <tr>
+                                            <th style="width: 50px;">No</th>
+                                            <th style="width: 200px;">Nama Siswa</th>
+                                            <th style="width: 200px;">Nilai / Predikat</th>
+                                            <th>Hasil Deskripsi (Bisa Diedit Manual)</th>
+                                            <th style="width: 80px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tb-rapor-kokurikuler">
+                                        <tr><td colspan="5" class="text-center py-5 text-muted">Pilih kelas di atas untuk memuat daftar siswa.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>div>
+        </div>
+		
 		
 		<!-- ========================================== -->
 <!-- MENU IDENTIFIKASI ABK -->
@@ -3154,7 +3333,6 @@ function mulaiTimerCBT() {
       if(menu === 'guru') loadDataGuru();
       if(menu === 'supervisi') loadDashboardSupervisi();
       
-      // TAMBAHAN: Otomatis isi dropdown kelas saat menu Kartu Peserta dibuka
       if(menu === 'kartu') { 
           inisiatifDropdownKelasLangsung(); 
       }
@@ -3165,19 +3343,21 @@ function mulaiTimerCBT() {
           renderTabelLaporanSiswa(); 
       }
       
-      // TAMBAHKAN BARIS INI
       if(menu === 'leger') {
           inisiatifDropdownKelasLangsung('filter-leger-kelas');
           renderTabelLeger();
       }
-      // === TAMBAHKAN BARIS INI ===
       if(menu === 'abk') {
           navigasiABK();
           inisiatifDropdownKelasLangsung('filter-abk-kelas');
       }
+      // === SUNTIKAN: MENU GENERATOR RAPOR ===
+      if(menu === 'rapor') {
+          inisiatifDropdownKelasLangsung('filter-kelas-rapor');
+          initDataMasterRapor(); 
+          renderTabelGeneratorRapor(); 
+      }
     }
-	
-	
 
     // Fungsi pengisi dropdown kelas secara langsung dari data siswa yang aktif
     function inisiatifDropdownKelasLangsung() {
@@ -8340,6 +8520,189 @@ function cetakLaporanABKPDF() {
         editables.forEach(el => { el.classList.add('text-primary', 'text-decoration-underline'); });
     });
 }
+
+// =====================================================================
+// MODUL GENERATOR DESKRIPSI RAPOR (AKADEMIK, CATATAN WALI, KOKURIKULER)
+// =====================================================================
+
+// 1. DATA MASTER
+const DB_CATATAN_WALI = [
+    "Terus semangat belajar, Ananda memiliki potensi besar yang perlu diasah.",
+    "Jangan takut salah, dari kesalahan kita belajar lebih kuat.",
+    "Ananda menunjukkan kemajuan yang baik, terus lanjutkan ya!",
+    "Proses belajar itu bertahap, yang penting tidak berhenti mencoba.",
+    "Jadikan kegagalan sebagai bahan bakar untuk berusaha lebih baik.",
+    "Ananda punya kemampuan, tinggal ditingkatkan dengan konsistensi belajar.",
+    "Saat kamu berani mencoba, kamu sudah selangkah lebih maju.",
+    "Belajar bukan hanya soal nilai, tapi juga tentang tumbuh sebagai pribadi tangguh.",
+    "Terima kasih sudah berusaha, lanjutkan semangat belajar Ananda.",
+    "Hasil belajar bisa diperbaiki, asalkan terus semangat dan tidak mudah menyerah.",
+    "Ananda sudah menunjukkan usaha yang luar biasa dalam belajar.",
+    "Terima kasih telah berusaha dengan tekun meski belum sempurna.",
+    "Usahamu sudah sangat baik, terus pertahankan dan tingkatkan ya!",
+    "Guru bangga atas semangatmu yang tidak mudah menyerah.",
+    "Ananda menunjukkan ketekunan belajar yang patut diapresiasi.",
+    "Tidak semua hasil harus sempurna, yang penting Ananda terus berproses.",
+    "Terus berusaha, karena kerja kerasmu adalah langkah menuju keberhasilan.",
+    "Ananda telah berusaha dengan baik meskipun tantangan datang silih berganti.",
+    "Semangat belajarmu menjadi inspirasi bagi teman-temanmu.",
+    "Ketekunanmu dalam belajar menjadi modal penting untuk masa depan.",
+    "Selamat atas prestasimu, semoga tetap rendah hati dan semangat belajar.",
+    "Ananda menunjukkan hasil belajar yang sangat baik, pertahankan ya!",
+    "Prestasi yang kamu raih adalah hasil kerja keras yang luar biasa.",
+    "Terima kasih sudah menjadi contoh positif di kelas.",
+    "Prestasi Ananda menjadi kebanggaan guru dan sekolah.",
+    "Ananda menunjukkan kemampuan berpikir yang kritis dan kreatif.",
+    "Terus asah potensi dirimu dan jangan cepat puas, ya.",
+    "Semoga semangat belajarmu terus menginspirasi teman-teman di kelas.",
+    "Keberhasilan ini menunjukkan Ananda mampu dan siap menghadapi tantangan baru.",
+    "Prestasi bukan akhir, tapi langkah awal menuju pencapaian yang lebih tinggi.",
+    "Tetap semangat, prosesmu sangat berarti.",
+    "Terus tumbuh dan belajar setiap harinya.",
+    "Ananda sudah berada di jalur yang tepat.",
+    "Belajar hari ini, sukses di masa depan.",
+    "Kamu hebat karena tidak menyerah.",
+    "Tantangan membuatmu lebih kuat.",
+    "Terima kasih sudah berusaha sebaik mungkin.",
+    "Jangan takut gagal, terus coba lagi.",
+    "Konsistensi akan membawamu lebih jauh.",
+    "Semangatmu membuat perbedaan besar.",
+    "Teruslah belajar dengan niat karena Allah, ilmu itu cahaya.",
+    "Semoga Ananda menjadi pribadi yang berilmu dan berakhlak mulia.",
+    "Allah menyukai hamba-Nya yang tekun dan sabar dalam menuntut ilmu.",
+    "Belajar itu bagian dari ibadah, teruslah semangat ya.",
+    "Kejujuran dan ketekunanmu adalah cermin akhlak yang baik.",
+    "Ilmu yang bermanfaat akan menjadi bekalmu kelak.",
+    "Jangan lelah menuntut ilmu, karena itu jalan menuju kemuliaan.",
+    "Ananda menunjukkan akhlak terpuji dalam keseharian, semoga istikamah.",
+    "Semoga setiap langkah belajarmu membawa berkah.",
+    "Ilmu dan karakter harus berjalan seiring, terus semangat dalam keduanya.",
+    "Selamat telah menyelesaikan perjalanan belajar di kelas ini dengan baik.",
+    "Semoga Ananda selalu membawa semangat belajar ke jenjang berikutnya.",
+    "Perjalananmu masih panjang, tetap rendah hati dan terus berusaha.",
+    "Terima kasih atas semangat dan kontribusimu selama di kelas ini.",
+    "Semoga ilmu yang didapat menjadi bekal menapaki masa depan.",
+    "Jadilah pribadi yang terus belajar dan memberi manfaat di manapun berada.",
+    "Doa terbaik untuk perjalananmu selanjutnya, semoga selalu sukses.",
+    "Ananda telah menunjukkan perkembangan yang baik, pertahankan terus.",
+    "Kenaikan kelas adalah awal untuk belajar lebih giat dan mandiri.",
+    "Semoga di tingkat baru, Ananda lebih percaya diri dan aktif.",
+    "Tingkatkan semangat belajar dan jadilah pribadi yang lebih baik lagi.",
+    "Ananda masih perlu meningkatkan fokus saat belajar di kelas.",
+    "Terus belajar dan jangan ragu bertanya jika belum paham.",
+    "Guru yakin Ananda bisa lebih baik dengan bimbingan dan latihan rutin.",
+    "Tingkatkan kedisiplinan belajar agar hasilnya lebih optimal.",
+    "Semangat belajar Ananda perlu terus diasah agar berkembang maksimal.",
+    "Ananda selalu menunjukkan kedisiplinan yang patut dicontoh.",
+    "Ketekunanmu dalam belajar menjadi inspirasi bagi teman-teman di kelas.",
+    "Terima kasih atas kerapian dan semangatmu dalam menyelesaikan tugas.",
+    "Ananda selalu hadir tepat waktu dan mengikuti pelajaran dengan baik.",
+    "Kedisiplinanmu mencerminkan sikap tanggung jawab yang luar biasa.",
+    "Rajin, sopan, dan tangguh, itulah ciri khas Ananda selama ini.",
+    "Konsistensimu dalam menyelesaikan tugas membuatmu layak diapresiasi.",
+    "Terus jaga kedisiplinan dan semangatmu, Ananda berada di jalur yang benar.",
+    "Ananda menunjukkan perkembangan belajar yang baik dan konsisten."
+];
+
+const DB_DIMENSI_PROFIL = {
+    "1. Keimanan dan Ketakwaan Terhadap Tuhan Yang Maha Esa": [
+        "Hubungan dengan Tuhan Yang Maha Esa: Memahami dan mengamalkan nilai spiritual serta ajaran agama.",
+        "Sesama Manusia: Menunjukkan akhlak mulia, kasih sayang, dan keadilan dalam berinteraksi.",
+        "Lingkungan Alam: Menjaga dan merawat kelestarian alam sebagai ciptaan Tuhan."
+    ],
+    "2. Kewargaan": [
+        "Kewargaan Lokal: Peduli dan berperan aktif di lingkungan sekitar atau masyarakat lokal.",
+        "Kewargaan Nasional: Memiliki rasa cinta tanah air dan menjunjung nilai Pancasila.",
+        "Kewargaan Global: Menghargai keberagaman budaya serta isu-isu kemanusiaan dunia."
+    ],
+    "3. Penalaran Kritis": [
+        "Penyampaian Argumentasi: Menyusun alasan logis berdasarkan fakta yang sahih.",
+        "Pengambilan Keputusan: Memilih solusi secara objektif dan sistematis.",
+        "Penyelesaian Masalah: Menganalisis hambatan dan mencari jalan keluar efektif."
+    ],
+    "4. Kreativitas": [
+        "Gagasan Baru: Menciptakan ide atau konsep yang orisinal.",
+        "Fleksibilitas Berpikir: Menyesuaikan cara pandang dalam menghadapi situasi dinamis.",
+        "Karya Inovatif: Mewujudkan gagasan menjadi produk atau tindakan yang bermanfaat."
+    ],
+    "5. Kolaborasi": [
+        "Kerja Sama: Bekerja secara sinergis dalam kelompok.",
+        "Berbagi Peran: Menjalankan tugas dan tanggung jawab bersama secara gotong royong.",
+        "Saling Mendukung: Membangun komunikasi positif dan apresiasi antarteman."
+    ],
+    "6. Kemandirian": [
+        "Bertanggung Jawab: Mengatur diri atas proses dan hasil kerja sendiri.",
+        "Pengembangan Diri: Berinisiatif meningkatkan kapasitas pribadi tanpa dorongan berlebih.",
+        "Ketangguhan: Mengatasi tantangan dan hambatan secara mandiri."
+    ],
+    "7. Kesehatan": [
+        "Hidup Bersih dan Sehat: Menjaga kebersihan diri dan pola hidup sehat.",
+        "Kebugaran Fisik: Memelihara stamina dan daya tahan tubuh.",
+        "Keseimbangan Mental: Mengelola emosi dan kesejahteraan batin (well-being)."
+    ],
+    "8. Komunikasi": [
+        "Komunikasi Lisan: Menyampaikan gagasan secara jelas dan santun lewat berbicara.",
+        "Komunikasi Tertulis: Menuangkan ide dan informasi dalam bentuk tulisan.",
+        "Interaksi Efektif: Menjadi pendengar yang baik serta berinteraksi secara empatik."
+    ]
+};
+
+const OPSI_CAPAIAN = `
+    <option value="">-</option>
+    <option value="Sangat Berkembang">SB (Sangat Berkembang)</option>
+    <option value="Berkembang Sesuai Harapan">BSH (Berkembang Sesuai Harapan)</option>
+    <option value="Mulai Berkembang">MB (Mulai Berkembang)</option>
+    <option value="Belum Berkembang">BB (Belum Berkembang)</option>
+`;
+
+function initDataMasterRapor() {
+    // Isi Dropdown Dimensi
+    let dimSelect = document.getElementById('rapor-ko-dimensi');
+    if (dimSelect && dimSelect.options.length <= 1) {
+        Object.keys(DB_DIMENSI_PROFIL).forEach(dim => {
+            dimSelect.innerHTML += `<option value="${dim}">${dim}</option>`;
+        });
+    }
+}
+
+function updateSubDimensiKokurikuler() {
+    let dimSelect = document.getElementById('rapor-ko-dimensi').value;
+    let subSelect = document.getElementById('rapor-ko-subdimensi');
+    subSelect.innerHTML = '<option value="">-- Pilih Sub-Dimensi --</option>';
+    if (dimSelect && DB_DIMENSI_PROFIL[dimSelect]) {
+        DB_DIMENSI_PROFIL[dimSelect].forEach(sub => {
+            subSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
+        });
+    }
+    renderTabelRaporKokurikuler();
+}
+
+function renderSemuaTabelRapor() {
+    renderTabelRaporAkademik();
+    renderTabelRaporCatatan();
+    renderTabelRaporKokurikuler();
+}
+
+function ambilSiswaSesuaiKelas() {
+    let elKelas = document.getElementById('filter-kelas-rapor');
+    if (!elKelas) return []; // Pengaman: jika elemen HTML belum ter-load, jangan error!
+    let fKelas = elKelas.value;
+    if (!fKelas) return [];
+    
+    let isGuru = (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'guru');
+    let allowedClasses = isGuru && currentUser.kelasAjar ? currentUser.kelasAjar.split(',').map(x=>x.trim()) : [];
+    
+    let filtered = activeSiswaData.filter(s => String(s.kelas).trim() === String(fKelas).trim());
+    if (isGuru && allowedClasses.length > 0) {
+        filtered = filtered.filter(x => allowedClasses.includes(String(x.kelas).trim()));
+    }
+    return filtered.sort((a,b) => a.nama.localeCompare(b.nama));
+}
+
+// Tambahkan pengaman ganda untuk memuat data dimensi tepat saat halaman dibuka
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(initDataMasterRapor, 1500); 
+});
 
 </script>
 
