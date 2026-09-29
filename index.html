@@ -395,6 +395,9 @@
         <div class="nav-item active" id="menu-beranda" data-menu="beranda" onclick="navigasi('beranda', this)"><i class="bi bi-house-door"></i> Beranda</div>
         <div class="nav-item" id="menu-siswa" data-menu="siswa" onclick="navigasi('siswa', this)"><i class="bi bi-people"></i> Data Siswa</div>
         <div class="nav-item" id="menu-ujian" data-menu="ujian" onclick="navigasi('ujian', this)"><i class="bi bi-journal-check"></i> Ujian / Asesmen</div>
+		<div class="nav-item" id="menu-abk" data-menu="abk" onclick="navigasi('abk', this)">
+    <i class="bi bi-person-hearts text-danger"></i> Identifikasi ABK
+</div>
 		<div class="nav-item" id="menu-link" data-menu="link" onclick="navigasi('link', this)"><i class="bi bi-link-45deg"></i> Link Eksternal</div>
         <div class="nav-item" id="menu-kisi" data-menu="kisi" onclick="navigasi('kisi', this)"><i class="bi bi-file-earmark-ruled"></i> Kisi-Kisi Soal</div>
         <div class="nav-item" id="menu-kartu" data-menu="kartu" onclick="navigasi('kartu', this)"><i class="bi bi-person-vcard"></i> Kartu Peserta</div>
@@ -523,6 +526,50 @@
             <div class="table-responsive"><table class="table table-hover align-middle table-borderless border-top"><thead class="table-light text-muted small"><tr><th>Foto</th><th>NISN</th><th>Nama Lengkap</th><th>Password</th><th>L/P</th><th>Jenjang</th><th>Kls/Rombel</th><th>TTL</th><th>Asal Sekolah</th><th>Aksi</th></tr></thead><tbody id="tb-siswa"></tbody></table></div>
           </div>
         </div>
+		
+		<!-- ========================================== -->
+<!-- MENU IDENTIFIKASI ABK -->
+<!-- ========================================== -->
+<div id="view-abk" class="view-section hidden">
+    <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
+        <div>
+            <h5 class="fw-bold m-0"><i class="bi bi-person-hearts text-danger me-2"></i>Instrumen Identifikasi ABK</h5>
+            <small class="text-muted">Ceklis deteksi dini kebutuhan khusus pada siswa.</small>
+        </div>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+            <select id="filter-abk-kelas" class="form-select border-danger text-dark fw-bold rounded-pill px-4" style="width: auto;" onchange="renderTabelRiwayatABK()">
+                <option value="">-- Semua Kelas --</option>
+            </select>
+            <button class="btn btn-danger px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModalAddABK()">
+                <i class="bi bi-file-earmark-medical me-1"></i> Mulai Identifikasi
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabel Riwayat ABK -->
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle m-0 text-center" style="font-size: 0.85rem;">
+                    <thead class="table-light align-middle text-muted">
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>NISN</th>
+                            <th class="text-start">Nama Siswa</th>
+                            <th>Kelas</th>
+                            <th>Kategori Indikasi</th>
+                            <th>Guru Pengisi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb-riwayat-abk">
+                        <!-- Data riwayat akan muncul di sini -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- 4. UJIAN / ASESMEN ONLINE -->
         <div id="view-ujian" class="view-section hidden">
@@ -945,6 +992,8 @@
                   <div class="col-md-6"><label class="form-label small fw-bold">Nama Sekolah</label><input type="text" id="set-nama" class="form-control" required></div>
                   <div class="col-md-6"><label class="form-label small fw-bold">NPSN</label><input type="text" id="set-npsn" class="form-control" required></div>
                   <div class="col-md-6"><label class="form-label small fw-bold">Nama Admin</label><input type="text" id="set-admin" class="form-control" required></div>
+                  <div class="col-md-6"><label class="form-label small fw-bold">Nama Kepala Sekolah</label><input type="text" id="set-kepsek" class="form-control" placeholder="Nama Lengkap & Gelar"></div>
+                  <div class="col-md-6"><label class="form-label small fw-bold">NIP Kepala Sekolah</label><input type="text" id="set-nip-kepsek" class="form-control" placeholder="Kosongkan jika tidak ada"></div>
                   
                   <div class="col-md-6">
                       <label class="form-label small fw-bold">Upload Logo Sekolah</label>
@@ -1786,6 +1835,100 @@
       </div>
   </div>
   
+  <!-- MODAL FORM IDENTIFIKASI ABK -->
+<div class="modal fade" id="modalAddABK" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header border-0 pb-2 pt-4 px-4 bg-danger bg-opacity-10 rounded-top">
+                <h5 class="modal-title fw-bold text-danger"><i class="bi bi-clipboard2-pulse me-2"></i>Pengisian Instrumen ABK</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 bg-light">
+                <form id="formAddABK" onsubmit="simpanIdentifikasiABKClient(event)">
+                    
+                    <!-- HIDDEN INPUT UNTUK MODE EDIT/UPDATE -->
+                    <input type="hidden" id="abk-id-identifikasi">
+                    
+                    <div class="row g-3 mb-4 bg-white p-3 rounded-4 shadow-sm border">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Pilih Siswa <span class="text-danger">*</span></label>
+                            <select id="abk-siswa" class="form-select border-danger" required></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Tanggal Identifikasi <span class="text-danger">*</span></label>
+                            <input type="date" id="abk-tanggal" class="form-control" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold">Pilih Kategori Instrumen Uji <span class="text-danger">*</span></label>
+                            <select id="abk-kategori-pilih" class="form-select border-primary fw-bold text-primary" onchange="renderInstrumenPilihanABK()" required>
+                                <option value="">-- Pilih Jenis Hambatan yang Dicurigai --</option>
+                                <option value="H. Penglihatan">1. Hambatan Penglihatan (Buta / Low Vision)</option>
+                                <option value="H. Pendengaran">2. Hambatan Pendengaran</option>
+                                <option value="H. Intelektual">3. Hambatan Intelektual (Tunagrahita)</option>
+                                <option value="H. Fisik Motorik">4. Hambatan Fisik Motorik</option>
+                                <option value="H. Emosional">5. Hambatan Emosional (Tunalaras)</option>
+                                <option value="AUTISM">6. Autism</option>
+                                <option value="ADHD">7. ADHD (Hiperaktif & Kurang Perhatian)</option>
+                                <option value="Slow Learner">8. Slow Learner (Lamban Belajar)</option>
+                                <option value="Kesulitan Belajar">9. Kesulitan Belajar (Disleksia, Disgrafia, Diskalkulia)</option>
+                                <option value="CIBI">10. CIBI (Cerdas Istimewa / Bakat Istimewa)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="wadah-pertanyaan-abk" class="d-none">
+                        <div class="alert alert-warning small border-warning text-dark mb-3">
+                            <i class="bi bi-info-circle-fill me-1"></i> Beri tanda <b>(Ya)</b> jika gejala tampak pada siswa.
+                        </div>
+                        <!-- Daftar pertanyaan akan di-render di sini oleh JavaScript -->
+                        <div id="area-tabel-abk"></div>
+                    </div>
+
+                    <div class="mt-4 bg-white p-3 rounded-4 shadow-sm border">
+                        <label class="form-label fw-bold text-dark mb-2">Kesimpulan / Catatan Guru:</label>
+                        <textarea id="abk-kesimpulan" class="form-control border-secondary-subtle" rows="3" placeholder="Tuliskan kesimpulan observasi Anda..."></textarea>
+                    </div>
+
+                    <!-- TOMBOL AKSI BAWAH YANG SUDAH DILENGKAPI TOMBOL TAMBAH LAINNYA -->
+                    <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                        <button type="button" class="btn btn-outline-danger fw-bold rounded-pill shadow-sm" onclick="isiIdentifikasiLain()">
+                            <i class="bi bi-plus-circle me-1"></i> Isi Identifikasi Lain
+                        </button>
+                        <button type="submit" id="btn-simpan-abk" class="btn btn-danger px-5 py-2 fw-bold rounded-pill shadow-sm">
+                            Simpan Identifikasi
+                        </button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CETAK HASIL ABK -->
+<div class="modal fade" id="modalCetakABK" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header border-0 pb-2 pt-4 px-4 d-flex justify-content-between align-items-center">
+                <h5 class="modal-title fw-bold text-primary mb-1"><i class="bi bi-printer-fill me-2"></i>Hasil Identifikasi ABK</h5>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-danger btn-sm fw-bold rounded-pill px-3 shadow-sm" onclick="cetakLaporanABKPDF()">
+                        <i class="bi bi-file-pdf me-1"></i> Cetak PDF
+                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+            </div>
+            <div class="modal-body p-4 bg-light" style="max-height: 70vh; overflow-y: auto;">
+                <div id="print-area-abk" class="bg-white p-5 border shadow-sm" style="font-family: 'Times New Roman', serif; color: black;">
+                    <!-- Dokumen untuk dicetak akan di-inject ke sini -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+  
+  
   <!-- MODAL IMPORT WORD -->
   <div class="modal fade" id="modalImportWord" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
@@ -1852,11 +1995,9 @@
   <!-- MODAL DAFTAR HASIL UJIAN (REKAP KELAS) -->
   <!-- ========================================== -->
   <div class="modal fade" id="modalDaftarHasil" tabindex="-1">
-      <!-- Ditambahkan modal-dialog-scrollable -->
       <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
-          <!-- Dipaksa tinggi 90vh agar memenuhi layar -->
           <div class="modal-content shadow-lg border-0" style="height: 90vh;">
-              <div class="modal-header bg-primary text-white border-0 pb-3 pt-4 px-4 d-flex justify-content-between align-items-center">
+              <div class="modal-header bg-primary text-white border-0 pb-3 pt-4 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
                   <h5 class="modal-title fw-bold"><i class="bi bi-clipboard-data me-2"></i>Rekap Hasil Ujian: <span id="title-hasil-ujian">Memuat...</span></h5>
                   
                   <div class="d-flex gap-2">
@@ -1874,17 +2015,14 @@
               </div>
               
               <div class="modal-body p-4 bg-light d-flex flex-column">
-                  <!-- Tombol Segarkan dipindah ke HTML agar statis dan rapi -->
                   <div class="d-flex justify-content-end mb-3 flex-shrink-0">
                       <button class="btn btn-sm btn-outline-primary rounded-pill fw-bold bg-white shadow-sm px-4" onclick="bukaDaftarHasil(currentUjianKodeAktif, currentUjianNamaAktif)">
                           <i class="bi bi-arrow-clockwise me-1"></i> Segarkan Pemantauan
                       </button>
                   </div>
                   
-                  <!-- Wadah Tabel dengan ID Khusus -->
                   <div class="table-responsive bg-white p-0 rounded-4 shadow-sm border flex-grow-1" id="wadah-scroll-hasil" style="height: 100%; overflow-y: auto;">
                       <table class="table table-hover align-middle m-0 text-nowrap">
-                          <!-- Thead dibuat Sticky (Melayang di atas) -->
                           <thead class="table-light" style="position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                               <tr>
                                   <th style="width: 40px;" class="text-center py-3">
@@ -3029,7 +3167,14 @@ function mulaiTimerCBT() {
           inisiatifDropdownKelasLangsung('filter-leger-kelas');
           renderTabelLeger();
       }
+      // === TAMBAHKAN BARIS INI ===
+      if(menu === 'abk') {
+          navigasiABK();
+          inisiatifDropdownKelasLangsung('filter-abk-kelas');
+      }
     }
+	
+	
 
     // Fungsi pengisi dropdown kelas secara langsung dari data siswa yang aktif
     function inisiatifDropdownKelasLangsung() {
@@ -3149,8 +3294,9 @@ function mulaiTimerCBT() {
                 if(document.getElementById('set-nama')) document.getElementById('set-nama').value = data.setting.nama || '';
                 if(document.getElementById('set-npsn')) document.getElementById('set-npsn').value = data.setting.npsn || '';
                 if(document.getElementById('set-admin')) document.getElementById('set-admin').value = data.setting.adminName || '';
-                if(document.getElementById('set-logo')) document.getElementById('set-logo').value = data.setting.logo || ''; 
-                if(data.setting.logo && data.setting.logo.length > 20 && document.getElementById('preview-logo')) { document.getElementById('preview-logo').src = data.setting.logo; }
+                if(document.getElementById('set-kepsek')) document.getElementById('set-kepsek').value = data.setting.namaKepsek || '';
+                if(document.getElementById('set-nip-kepsek')) document.getElementById('set-nip-kepsek').value = data.setting.nipKepsek || '';
+                if(document.getElementById('set-logo')) document.getElementById('set-logo').value = data.setting.logo || '';
 
                 if(document.getElementById('set-apikey')) {
                     let currentApiKey = data.setting.apiKey || '';
@@ -4806,22 +4952,39 @@ function renderTabelUjianAdmin(paksaTampilKode = null) {
     // 2. GANTI FUNGSI SIMPAN PENGATURAN
     function handleSimpanSetting(e) { 
         e.preventDefault(); 
+        
+        let elNama = document.getElementById('set-nama');
+        let elNpsn = document.getElementById('set-npsn');
+        let elAdmin = document.getElementById('set-admin');
+        let elKepsek = document.getElementById('set-kepsek'); // Diambil dari ID yang baru
+        let elNip = document.getElementById('set-nip-kepsek');
+        let elLogo = document.getElementById('set-logo');
+        let elApiKey = document.getElementById('set-apikey');
+        
         const p = { 
-            kodeSekolah: currentUser.kode_sekolah, // Menambahkan identitas sekolah yang login
-            namaSekolah: document.getElementById('set-nama').value, 
-            npsn: document.getElementById('set-npsn').value, 
-            namaAdmin: document.getElementById('set-admin').value, 
-            logo: document.getElementById('set-logo').value, 
-            apiKey: document.getElementById('set-apikey').value 
+            kodeSekolah: currentUser.kode_sekolah, 
+            namaSekolah: elNama ? elNama.value : "", 
+            npsn: elNpsn ? elNpsn.value : "", 
+            namaAdmin: elAdmin ? elAdmin.value : "", 
+            namaKepsek: elKepsek ? elKepsek.value : "", // Ditambahkan ke payload
+            nipKepsek: elNip ? elNip.value : "", 
+            logo: elLogo ? elLogo.value : "", 
+            apiKey: elApiKey ? elApiKey.value : "" 
         }; 
-        panggilAPI("updatePengaturanSekolah", p)
-        .then(res => { 
+        
+        panggilAPI("updatePengaturanSekolah", p).then(res => { 
             alert(res.message); 
             currentUser.logo = p.logo; 
-            localStorage.setItem('cbt_admin_session', JSON.stringify(currentUser)); 
-            loadDashboardData(); 
-        })
-        .catch(err => alert("Gagal menyimpan: " + err.message));
+            
+            // Reload layar agar terupdate
+            if (window.location.pathname.includes("kepsek")) {
+                localStorage.setItem('cbt_kepsek_session', JSON.stringify(currentUser)); 
+                loadDataAwalKepsek(); 
+            } else {
+                localStorage.setItem('cbt_admin_session', JSON.stringify(currentUser)); 
+                loadDashboardData(); 
+            }
+        });
     }
 
     // FUNGSI TOMBOL PELENGKAP AGAR TIDAK ERROR
@@ -7686,6 +7849,424 @@ let teksOpsi = formatTeksBahasaDaerah(teksOpsiMentah);
         };
         reader.readAsBinaryString(file);
     }
+
+// ==========================================
+// SISTEM IDENTIFIKASI ABK (JAVASCRIPT) - VERSI UPDATE
+// ==========================================
+let dataInstrumenABK = {};
+let riwayatABKData = [];
+
+function loadMasterInstrumenABK() {
+    panggilAPI("getInstrumenABK", {}).then(res => { dataInstrumenABK = res; });
+}
+document.addEventListener("DOMContentLoaded", function() { setTimeout(loadMasterInstrumenABK, 2000); });
+
+function initDropdownSiswaABK() {
+    let isGuru = (currentUser && currentUser.role === 'guru');
+    let allowedClasses = isGuru && currentUser.kelasAjar ? currentUser.kelasAjar.split(',').map(x=>x.trim()) : [];
+    let sw = activeSiswaData;
+    if(isGuru && allowedClasses.length > 0) sw = sw.filter(s => allowedClasses.includes(String(s.kelas).trim()));
+
+    let opt = '<option value="">-- Cari & Pilih Siswa --</option>';
+    sw.forEach(s => opt += `<option value="${s.user}|${s.nama}|${s.kelas}">${s.nama} (Kelas ${s.kelas})</option>`);
+    let elSiswa = document.getElementById('abk-siswa');
+    if(elSiswa) elSiswa.innerHTML = opt;
+}
+
+function navigasiABK() {
+    initDropdownSiswaABK();
+    document.getElementById('tb-riwayat-abk').innerHTML = '<tr><td colspan="7" class="text-center py-5"><span class="spinner-border text-danger"></span></td></tr>';
+    panggilAPI("getRiwayatABK", { kodeSekolah: currentUser.kode_sekolah }).then(res => {
+        riwayatABKData = res;
+        renderTabelRiwayatABK();
+    });
+}
+
+function renderTabelRiwayatABK() {
+    let fKelas = document.getElementById('filter-abk-kelas').value;
+    let isGuru = (currentUser && currentUser.role === 'guru');
+    let allowedClasses = isGuru && currentUser.kelasAjar ? currentUser.kelasAjar.split(',').map(x=>x.trim()) : [];
+
+    let filtered = riwayatABKData;
+    if(isGuru && allowedClasses.length > 0) {
+        filtered = filtered.filter(x => allowedClasses.includes(x.kelas));
+    }
+    if(fKelas) filtered = filtered.filter(x => x.kelas === fKelas);
+
+    let html = '';
+    filtered.reverse().forEach((d) => {
+        // Tampilkan Edit Button HANYA untuk Portal Guru/Admin
+        let isViewSaja = window.location.pathname.includes("kepsek"); // Asumsi jika url ada kepsek
+        let btnEdit = !isViewSaja ? `<button class="btn btn-sm btn-outline-primary rounded-pill me-1" onclick="editLaporanABK('${d.id_identifikasi}')"><i class="bi bi-pencil"></i></button>` : '';
+
+        html += `<tr>
+            <td class="small text-muted">${d.tanggal}</td>
+            <td><code>${d.nisn}</code></td>
+            <td class="text-start fw-bold text-dark">${d.nama_siswa}</td>
+            <td><span class="badge border text-dark">Kls ${d.kelas}</span></td>
+            <td><span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle px-2 py-1">${d.kategori_abk}</span></td>
+            <td class="small text-muted">${d.nama_guru}</td>
+            <td class="text-nowrap">
+                ${btnEdit}
+                <button class="btn btn-sm btn-danger rounded-pill shadow-sm" onclick="bukaLaporanABK('${d.id_identifikasi}')"><i class="bi bi-printer"></i></button>
+            </td>
+        </tr>`;
+    });
+
+    document.getElementById('tb-riwayat-abk').innerHTML = html || '<tr><td colspan="7" class="text-center py-5 text-muted">Belum ada data identifikasi.</td></tr>';
+}
+
+function bukaModalAddABK() {
+    document.getElementById('formAddABK').reset();
+    document.getElementById('abk-id-identifikasi').value = ""; // Mode Baru
+    initDropdownSiswaABK();
+    
+    // Aktifkan kembali input siswa dan dropdown kategori
+    document.getElementById('abk-siswa').disabled = false;
+    document.getElementById('abk-kategori-pilih').disabled = false;
+    
+    document.getElementById('abk-tanggal').value = new Date().toISOString().split('T')[0];
+    document.getElementById('wadah-pertanyaan-abk').classList.add('d-none');
+    
+    bukaModal('modalAddABK');
+}
+
+// Fungsi Edit (Update)
+function editLaporanABK(id) {
+    let d = riwayatABKData.find(x => x.id_identifikasi === id);
+    if (!d) return;
+
+    document.getElementById('formAddABK').reset();
+    initDropdownSiswaABK();
+
+    // Set Value
+    document.getElementById('abk-id-identifikasi').value = d.id_identifikasi;
+    document.getElementById('abk-siswa').value = `${d.nisn}|${d.nama_siswa}|${d.kelas}`;
+    document.getElementById('abk-tanggal').value = d.tanggal;
+    
+    // Kunci Pilihan Siswa agar tidak diubah saat edit
+    document.getElementById('abk-siswa').disabled = true;
+
+    // Mapping ulang nama kategori dari database ke dropdown
+    let namaKategoriSistem = d.kategori_abk;
+    let katMap = {
+        "Buta": "H. Penglihatan", "Low Vision": "H. Penglihatan",
+        "Tunarungu": "H. Pendengaran", "Tunagrahita": "H. Intelektual",
+        "Tunadaksa": "H. Fisik Motorik", "Tunalaras": "H. Emosional",
+        "Autis": "AUTISM", "ADHD": "ADHD", "Lamban": "Slow Learner",
+        "Disleksia": "Kesulitan Belajar", "Disgrafia": "Kesulitan Belajar", "Diskalkulia": "Kesulitan Belajar",
+        "Cerdas": "CIBI"
+    };
+
+    let dropdownValue = "";
+    for (let key in katMap) {
+        if (namaKategoriSistem.includes(key)) { dropdownValue = katMap[key]; break; }
+    }
+    
+    document.getElementById('abk-kategori-pilih').value = dropdownValue;
+    // Kunci Pilihan Kategori agar tidak salah edit
+    document.getElementById('abk-kategori-pilih').disabled = true;
+
+    renderInstrumenPilihanABK(); // Render tabel
+
+    // Kembalikan status centang dari JSON
+    setTimeout(() => {
+        try {
+            let jwbJSON = JSON.parse(d.hasil_json);
+            let checkboxes = document.querySelectorAll('.chk-abk-item');
+            
+            jwbJSON.forEach(j => {
+                checkboxes.forEach(chk => {
+                    let sNo = dataInstrumenABK[dropdownValue][chk.getAttribute('data-id')].no;
+                    let sKat = dataInstrumenABK[dropdownValue][chk.getAttribute('data-id')].kategori;
+                    if (sNo === j.no && sKat === j.kategori) {
+                        chk.checked = true;
+                    }
+                });
+            });
+            kalkulasiOtomatisABK(); // Hitung ulang skor
+        } catch(e) {}
+        
+        // Pulihkan Kesimpulan Guru
+        if(d.kesimpulan.includes("Catatan Tambahan Guru:")) {
+            document.getElementById('abk-kesimpulan').value = d.kesimpulan.split("Catatan Tambahan Guru:<br>")[1].replace(/<br>/g, "\n");
+        } else if (!d.kesimpulan.startsWith("Berdasarkan")) {
+            document.getElementById('abk-kesimpulan').value = d.kesimpulan.replace(/<br>/g, "\n");
+        }
+    }, 500);
+
+    bukaModal('modalAddABK');
+}
+
+// Fungsi Tombol "Isi Identifikasi Lain"
+function isiIdentifikasiLain() {
+    let currSiswa = document.getElementById('abk-siswa').value;
+    if (!currSiswa) { alert("Pilih siswa terlebih dahulu!"); return; }
+
+    // Hapus Mode Edit (Beralih ke Simpan Baru untuk Siswa yang sama)
+    document.getElementById('abk-id-identifikasi').value = "";
+    
+    // Reset bagian bawah
+    document.getElementById('abk-kategori-pilih').disabled = false;
+    document.getElementById('abk-kategori-pilih').value = "";
+    document.getElementById('wadah-pertanyaan-abk').classList.add('d-none');
+    document.getElementById('area-tabel-abk').innerHTML = "";
+    document.getElementById('abk-kesimpulan').value = "";
+}
+
+function renderInstrumenPilihanABK() {
+    let kategori = document.getElementById('abk-kategori-pilih').value;
+    let wadah = document.getElementById('wadah-pertanyaan-abk');
+    let areaTabel = document.getElementById('area-tabel-abk');
+    if (!kategori || !dataInstrumenABK[kategori]) { wadah.classList.add('d-none'); return; }
+
+    let arrSoal = dataInstrumenABK[kategori];
+    let html = `<div class="card border border-danger-subtle shadow-sm rounded-4 mb-3">`;
+    let currentSubKat = "";
+    
+    arrSoal.forEach((s, index) => {
+        if (s.kategori && s.kategori !== currentSubKat) {
+            currentSubKat = s.kategori;
+            html += `<div class="card-header bg-danger bg-opacity-10 text-danger fw-bold py-3"><i class="bi bi-tag-fill me-2"></i>Kategori: ${currentSubKat}</div>`;
+        }
+        let garisBawah = (index === arrSoal.length - 1 || arrSoal[index+1].kategori !== currentSubKat) ? "" : "border-bottom";
+        html += `
+        <div class="card-body p-3 d-flex justify-content-between align-items-center ${garisBawah}">
+            <div class="pe-3"><span class="fw-bold me-2">${s.no}.</span><span class="text-dark">${s.pertanyaan}</span></div>
+            <div class="form-check form-switch fs-4 m-0 d-flex align-items-center">
+                <input class="form-check-input chk-abk-item m-0 border-danger" type="checkbox" role="switch" style="cursor: pointer; width: 45px; height: 25px;" 
+                data-id="${index}" data-kategori="${s.kategori}" data-bobot="${s.bobot}" onchange="kalkulasiOtomatisABK()">
+            </div>
+        </div>`;
+    });
+    
+    html += `</div>
+    <div id="panel-kalkulasi-abk" class="alert alert-secondary border-secondary shadow-sm rounded-4 mb-4">
+        <h6 class="fw-bold m-0"><i class="bi bi-cpu-fill text-secondary me-2"></i>Status Identifikasi: <span class="fw-normal">Menunggu...</span></h6>
+    </div>`;
+
+    areaTabel.innerHTML = html;
+    wadah.classList.remove('d-none');
+    document.getElementById('abk-kesimpulan').value = "";
+}
+
+function kalkulasiOtomatisABK() {
+    let panelKalkulasi = document.getElementById('panel-kalkulasi-abk');
+    let textAreaKesimpulan = document.getElementById('abk-kesimpulan');
+    let skorPerKategori = {};
+    let checkboxes = document.querySelectorAll('.chk-abk-item');
+    
+    checkboxes.forEach(chk => {
+        if (chk.checked) {
+            let kat = chk.getAttribute('data-kategori');
+            let bobot = parseFloat(chk.getAttribute('data-bobot')) || 0;
+            if (!skorPerKategori[kat]) skorPerKategori[kat] = 0;
+            skorPerKategori[kat] += bobot;
+        }
+    });
+
+    let hasilDiagnosis = [];
+    for (const [kategori, skor] of Object.entries(skorPerKategori)) {
+        if (skor >= 100) hasilDiagnosis.push(kategori);
+    }
+
+    // Jangan timpa kesimpulan guru saat mode edit
+    let isModeEdit = document.getElementById('abk-id-identifikasi').value !== "";
+
+    if (hasilDiagnosis.length > 0) {
+        let textTerindikasi = hasilDiagnosis.join(' & ');
+        panelKalkulasi.className = "alert alert-danger border-danger shadow-sm rounded-4 mb-4";
+        panelKalkulasi.innerHTML = `<div class="d-flex align-items-center"><i class="bi bi-exclamation-triangle-fill display-6 text-danger me-3"></i><div><h6 class="fw-bold text-danger m-0">Teridentifikasi: ${textTerindikasi}</h6><small class="text-dark">Sistem mendeteksi skor >= 100 pada kategori tersebut.</small></div></div>`;
+        if(!isModeEdit) textAreaKesimpulan.value = `Berdasarkan instrumen deteksi dini, siswa diduga kuat teridentifikasi mengalami hambatan ${textTerindikasi}. Perlu tindak lanjut atau rujukan ahli.`;
+    } else {
+        panelKalkulasi.className = "alert alert-success border-success shadow-sm rounded-4 mb-4";
+        panelKalkulasi.innerHTML = `<div class="d-flex align-items-center"><i class="bi bi-check-circle-fill display-6 text-success me-3"></i><div><h6 class="fw-bold text-success m-0">Tidak Teridentifikasi / Normal</h6><small class="text-dark">Skor di bawah batas minimal identifikasi.</small></div></div>`;
+        if(!isModeEdit) textAreaKesimpulan.value = `Berdasarkan instrumen, saat ini siswa tidak menunjukkan kecenderungan kuat ke arah kebutuhan khusus pada instrumen ini.`;
+    }
+}
+
+function simpanIdentifikasiABKClient(e) {
+    e.preventDefault();
+    let sData = document.getElementById('abk-siswa').value.split('|');
+    if(sData.length < 3) { alert("Pilih siswa terlebih dahulu!"); return; }
+    
+    let kategoriUtama = document.getElementById('abk-kategori-pilih').value;
+    if (!kategoriUtama) { alert("Pilih kategori instrumen terlebih dahulu!"); return; }
+
+    const btn = document.getElementById('btn-simpan-abk');
+    let oriText = btn.innerHTML;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
+    btn.disabled = true;
+
+    let hasilJawab = [];
+    document.querySelectorAll('.chk-abk-item:checked').forEach(chk => {
+        hasilJawab.push(dataInstrumenABK[kategoriUtama][chk.getAttribute('data-id')]);
+    });
+
+    let statusKalkulasi = document.querySelector('#panel-kalkulasi-abk h6').innerText.replace('Status Identifikasi: ', '').replace('Teridentifikasi: ', '');
+    if (statusKalkulasi.includes("Menunggu")) statusKalkulasi = "Tidak Teridentifikasi";
+
+    const payload = {
+        idIdentifikasi: document.getElementById('abk-id-identifikasi').value, // Jika kosong = Baru, Jika ada = Update
+        kodeSekolah: currentUser.kode_sekolah,
+        nisn: sData[0],
+        namaSiswa: sData[1],
+        kelas: sData[2],
+        tanggal: document.getElementById('abk-tanggal').value,
+        namaGuru: currentUser.nama,
+        hasilJSON: JSON.stringify(hasilJawab),
+        kategoriABK: statusKalkulasi,
+        kesimpulan: document.getElementById('abk-kesimpulan').value.replace(/\n/g, '<br>')
+    };
+
+    let apiTarget = payload.idIdentifikasi === "" ? "simpanIdentifikasiABK" : "updateIdentifikasiABK";
+
+    panggilAPI(apiTarget, payload).then(res => {
+        btn.innerHTML = oriText; btn.disabled = false;
+        if(res.success) {
+            tutupModal('modalAddABK');
+            alert("✅ Berhasil!");
+            navigasiABK();
+        } else alert(res.message);
+    }).catch(err => {
+        btn.innerHTML = oriText; btn.disabled = false; alert("Gagal koneksi: " + err.message);
+    });
+}
+
+function bukaLaporanABK(id) {
+    let dAwal = riwayatABKData.find(x => x.id_identifikasi === id);
+    if (!dAwal) return;
+    
+    let nisnTarget = dAwal.nisn;
+    let semuaRiwayatSiswa = riwayatABKData.filter(x => x.nisn === nisnTarget);
+    
+    let arrKategori = []; let arrSemuaGejala = []; let narasiKesimpulan = [];
+    let tanggalTerakhir = dAwal.tanggal; 
+
+    semuaRiwayatSiswa.forEach(riwayat => {
+        if (riwayat.kategori_abk && !riwayat.kategori_abk.includes("Tidak Teridentifikasi")) {
+            if (!arrKategori.includes(riwayat.kategori_abk)) arrKategori.push(riwayat.kategori_abk);
+        }
+        try { arrSemuaGejala = arrSemuaGejala.concat(JSON.parse(riwayat.hasil_json)); } catch(e){}
+        if (riwayat.kesimpulan && riwayat.kesimpulan.trim() !== "" && !riwayat.kesimpulan.startsWith("Berdasarkan instrumen deteksi dini, siswa diduga kuat")) {
+            narasiKesimpulan.push(riwayat.kesimpulan);
+        }
+    });
+
+    let dataSiswaDetail = activeSiswaData.find(s => s.user === nisnTarget) || {};
+    let ttlSiswa = dataSiswaDetail.ttl && dataSiswaDetail.ttl !== "-" ? dataSiswaDetail.ttl : ".............................................";
+    let jkSiswa = dataSiswaDetail.jk === "L" ? "Laki-laki" : (dataSiswaDetail.jk === "P" ? "Perempuan" : ".............................................");
+    let alamatSiswa = ".............................................";
+
+    // MENARIK NAMA DAN NIP KEPSEK DARI PENGATURAN
+    let namaSekolah = document.getElementById('set-nama') ? document.getElementById('set-nama').value : (currentUser.nama_sekolah || 'SEKOLAH DASAR');
+    let namaKepsek = document.getElementById('set-kepsek') ? document.getElementById('set-kepsek').value : 'Kepala Sekolah';
+    let nipKepsek = document.getElementById('set-nip-kepsek') ? document.getElementById('set-nip-kepsek').value : '';
+    let teksNipKepsek = nipKepsek ? `<br>NIP. ${nipKepsek}` : '';
+
+    let logoBase64 = document.getElementById('set-logo') ? document.getElementById('set-logo').value : '';
+    let logoSrc = (logoBase64 && logoBase64.length > 20) ? logoBase64 : 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Pendidikan_Nasional_logo.png/120px-Pendidikan_Nasional_logo.png';
+
+    let tabelGejalaHtml = ''; let rincianGejalaTeks = []; 
+    if (arrSemuaGejala.length === 0) {
+        tabelGejalaHtml += `<tr><td colspan="3" style="border: 1px solid black; padding: 10px; text-align: center; color: gray;">Tidak ada gejala signifikan yang dilaporkan.</td></tr>`;
+    } else {
+        arrSemuaGejala.forEach((j, idx) => {
+            tabelGejalaHtml += `<tr><td style="border: 1px solid black; padding: 5px; text-align: center;">${idx + 1}</td><td style="border: 1px solid black; padding: 5px;">${j.kategori || '-'}</td><td style="border: 1px solid black; padding: 5px;">${j.pertanyaan}</td></tr>`;
+            rincianGejalaTeks.push(j.pertanyaan.charAt(0).toLowerCase() + j.pertanyaan.slice(1));
+        });
+    }
+
+    let kesimpulanSpesifik = "";
+    let teksKategoriGabungan = arrKategori.length > 0 ? arrKategori.join(" dan ") : "Tidak Teridentifikasi";
+    let judulLaporan = arrKategori.length > 0 ? arrKategori.join(" & ").toUpperCase() : "HASIL OBSERVASI AWAL";
+    
+    if (arrKategori.length > 0) {
+        let teksGejalaGabungan = rincianGejalaTeks.length === 1 ? rincianGejalaTeks[0] : (rincianGejalaTeks.length > 1 ? rincianGejalaTeks.slice(0, -1).join(", ") + ", serta " + rincianGejalaTeks.slice(-1) : "");
+        let teksOtomatis = `Berdasarkan instrumen deteksi dini, Ananda <b>${dAwal.nama_siswa}</b> menunjukkan gejala seperti ${teksGejalaGabungan}. Oleh karena itu, siswa diduga kuat teridentifikasi mengalami hambatan <b>${teksKategoriGabungan}</b>. Perlu tindak lanjut atau rujukan ahli.`;
+        kesimpulanSpesifik = narasiKesimpulan.length > 0 ? `${teksOtomatis}<br><br><b>Catatan Tambahan Guru:</b><br>${narasiKesimpulan.join("<br><br>")}` : teksOtomatis;
+    } else if (arrSemuaGejala.length > 0) {
+         kesimpulanSpesifik = `Ananda <b>${dAwal.nama_siswa}</b> menunjukkan beberapa gejala seperti ${rincianGejalaTeks.join(", ")}, namun belum memenuhi batas skor minimal indikasi. Saat ini belum dapat disimpulkan adanya kebutuhan khusus yang spesifik.`;
+    } else {
+         kesimpulanSpesifik = `Siswa tidak menunjukkan gejala kebutuhan khusus pada instrumen ini.`;
+    }
+
+    let htmlPdf = `
+        <div class="alert alert-warning small d-print-none mb-4 shadow-sm border-warning">
+            <i class="bi bi-info-circle-fill me-1"></i> <b>TIPS SEBELUM CETAK:</b> Anda dapat mengklik teks yang diberi warna <b>biru (titik-titik)</b> di bawah ini untuk mengetik/melengkapi identitas siswa atau NIP Asesor secara manual.
+        </div>
+        
+        <div style="display: flex; align-items: center; border-bottom: 3px solid black; padding-bottom: 10px; margin-bottom: 20px;">
+            <img src="${logoSrc}" style="width: 80px; height: 80px; object-fit: contain; margin-right: 20px;">
+            <div style="flex-grow: 1; text-align: center;">
+                <h3 style="margin: 0; font-family: 'Times New Roman', serif; font-size: 14pt; font-weight: bold;">LAPORAN IDENTIFIKASI ${judulLaporan}</h3>
+                <h4 style="margin: 5px 0 0 0; font-family: 'Times New Roman', serif; font-size: 12pt; font-weight: normal;">Peserta Didik Berkebutuhan Khusus (PDBK)</h4>
+                <h4 style="margin: 5px 0 0 0; font-family: 'Times New Roman', serif; font-size: 14pt; font-weight: bold;">${namaSekolah}</h4>
+            </div>
+            <div style="width: 80px;"></div>
+        </div>
+        
+        <table style="width: 100%; margin-bottom: 20px; font-size: 11pt; line-height: 1.5; font-family: 'Times New Roman', serif;">
+            <tr><td style="width: 170px;">Nama Siswa</td><td>: <b>${dAwal.nama_siswa}</b></td></tr>
+            <tr><td>NISN</td><td>: ${dAwal.nisn}</td></tr>
+            <tr><td>Tempat, Tanggal Lahir</td><td>: <span contenteditable="true" class="text-primary text-decoration-underline" style="outline: none;">${ttlSiswa}</span></td></tr>
+            <tr><td>Jenis Kelamin</td><td>: <span contenteditable="true" class="text-primary text-decoration-underline" style="outline: none;">${jkSiswa}</span></td></tr>
+            <tr><td>Alamat Rumah</td><td>: <span contenteditable="true" class="text-primary text-decoration-underline" style="outline: none;">${alamatSiswa}</span></td></tr>
+            <tr><td>Kelas</td><td>: ${dAwal.kelas}</td></tr>
+            <tr><td>Tanggal Laporan</td><td>: ${tanggalTerakhir}</td></tr>
+            <tr><td>Kategori Indikasi Akhir</td><td>: <b>${teksKategoriGabungan}</b></td></tr>
+        </table>
+        
+        <h4 style="margin-bottom: 10px; font-family: 'Times New Roman', serif; font-size: 12pt;">A. Gejala yang Ditemukan:</h4>
+        <table style="width: 100%; border-collapse: collapse; font-size: 11pt; margin-bottom: 20px; font-family: 'Times New Roman', serif;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid black; padding: 5px; width: 30px;">No</th>
+                    <th style="border: 1px solid black; padding: 5px; width: 150px;">Sub-Kategori</th>
+                    <th style="border: 1px solid black; padding: 5px;">Gejala yang tampak (Ya)</th>
+                </tr>
+            </thead>
+            <tbody>${tabelGejalaHtml}</tbody>
+        </table>
+        
+        <h4 style="margin-bottom: 10px; font-family: 'Times New Roman', serif; font-size: 12pt;">B. Kesimpulan Asesor:</h4>
+        <div style="border: 1px solid black; padding: 15px; min-height: 80px; font-size: 11pt; text-align: justify; line-height: 1.5; font-family: 'Times New Roman', serif;" contenteditable="true">
+            ${kesimpulanSpesifik}
+        </div>
+        
+        <table style="width: 100%; margin-top: 40px; font-size: 11pt; font-family: 'Times New Roman', serif;">
+            <tr>
+                <td style="width: 60%; text-align: center;">Mengetahui,<br>Kepala Sekolah<br><br><br><br><br><b>${namaKepsek}</b>${teksNipKepsek}</td>
+                <td style="width: 40%; text-align: center;">Surabaya, ${tanggalTerakhir.split('-').reverse().join('-')}<br>Guru Kelas / Asesor<br><br><br><br><br><b>${dAwal.nama_guru}</b><br><span contenteditable="true" class="text-primary text-decoration-underline" style="outline: none;">NIP. .........................................</span></td>
+            </tr>
+        </table>
+    `;
+
+    document.getElementById('print-area-abk').innerHTML = htmlPdf;
+    bukaModal('modalCetakABK');
+}
+
+function cetakLaporanABKPDF() {
+    const element = document.getElementById('print-area-abk');
+    
+    // Hapus warna biru dan garis bawah sebelum dicetak
+    let editables = element.querySelectorAll('span[contenteditable="true"]');
+    editables.forEach(el => {
+        el.classList.remove('text-primary', 'text-decoration-underline');
+        el.style.color = 'black';
+        el.style.textDecoration = 'none';
+        // Hapus tulisan titik-titik jika belum diisi agar bersih
+        if(el.innerText.includes("......")) el.innerText = "";
+    });
+
+    let namaSiswa = element.querySelector('b').innerText || 'Siswa';
+    const opt = { margin: 0.5, filename: `Laporan_ABK_${namaSiswa.replace(/\s+/g,'_')}.pdf`, image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
+    
+    html2pdf().set(opt).from(element).save().then(() => {
+        // Kembalikan warna biru setelah selesai mencetak
+        editables.forEach(el => { el.classList.add('text-primary', 'text-decoration-underline'); });
+    });
+}
 
 </script>
 
