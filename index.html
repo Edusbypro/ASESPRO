@@ -1851,7 +1851,10 @@
                     
                     <div class="row g-3 mb-4 bg-white p-3 rounded-4 shadow-sm border">
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Pilih Siswa <span class="text-danger">*</span></label>
+                            <label class="form-label small fw-bold">Ketik & Pilih Siswa <span class="text-danger">*</span></label>
+                            <!-- KOTAK PENCARIAN BARU -->
+                            <input type="text" id="abk-cari-siswa" class="form-control mb-1 border-danger text-danger fw-bold shadow-sm" placeholder="🔍 Ketik nama untuk mencari..." onkeyup="filterDropdownSiswaABK()">
+                            <!-- DROPDOWN HASIL -->
                             <select id="abk-siswa" class="form-select border-danger" required></select>
                         </div>
                         <div class="col-md-6">
@@ -7867,10 +7870,68 @@ function initDropdownSiswaABK() {
     let sw = activeSiswaData;
     if(isGuru && allowedClasses.length > 0) sw = sw.filter(s => allowedClasses.includes(String(s.kelas).trim()));
 
-    let opt = '<option value="">-- Cari & Pilih Siswa --</option>';
-    sw.forEach(s => opt += `<option value="${s.user}|${s.nama}|${s.kelas}">${s.nama} (Kelas ${s.kelas})</option>`);
+    // Mengelompokkan berdasarkan Kelas
+    let grouped = {};
+    sw.forEach(s => {
+        let k = String(s.kelas).trim();
+        if (!grouped[k]) grouped[k] = [];
+        grouped[k].push(s);
+    });
+    
+    let classes = Object.keys(grouped).sort();
+    let opt = '<option value="">-- Pilih Siswa di Bawah --</option>';
+    
+    classes.forEach(c => {
+        opt += `<optgroup label="====== KELAS ${c} ======">`;
+        // Mengurutkan nama sesuai abjad A-Z
+        grouped[c].sort((a,b) => a.nama.localeCompare(b.nama)).forEach(s => {
+            opt += `<option value="${s.user}|${s.nama}|${s.kelas}">${s.nama}</option>`;
+        });
+        opt += `</optgroup>`;
+    });
+    
     let elSiswa = document.getElementById('abk-siswa');
-    if(elSiswa) elSiswa.innerHTML = opt;
+    if(elSiswa) {
+        elSiswa.innerHTML = opt;
+        document.getElementById('abk-cari-siswa').value = ""; // Reset kotak pencarian
+    }
+}
+
+// FUNGSI BARU: Pencarian Cerdas (Filter) Siswa
+function filterDropdownSiswaABK() {
+    let search = document.getElementById('abk-cari-siswa').value.toLowerCase();
+    let select = document.getElementById('abk-siswa');
+    
+    // Tarik ulang data sesuai hak akses
+    let isGuru = (currentUser && currentUser.role === 'guru');
+    let allowedClasses = isGuru && currentUser.kelasAjar ? currentUser.kelasAjar.split(',').map(x=>x.trim()) : [];
+    let sw = activeSiswaData;
+    if(isGuru && allowedClasses.length > 0) sw = sw.filter(s => allowedClasses.includes(String(s.kelas).trim()));
+    
+    // Saring berdasarkan nama yang diketik
+    if (search !== "") {
+        sw = sw.filter(s => s.nama.toLowerCase().includes(search) || s.user.toLowerCase().includes(search));
+    }
+    
+    let grouped = {};
+    sw.forEach(s => {
+        let k = String(s.kelas).trim();
+        if (!grouped[k]) grouped[k] = [];
+        grouped[k].push(s);
+    });
+    
+    let classes = Object.keys(grouped).sort();
+    let opt = search !== "" ? '<option value="">-- Hasil Pencarian... --</option>' : '<option value="">-- Pilih Siswa di Bawah --</option>';
+    
+    classes.forEach(c => {
+        opt += `<optgroup label="====== KELAS ${c} ======">`;
+        grouped[c].sort((a,b) => a.nama.localeCompare(b.nama)).forEach(s => {
+            opt += `<option value="${s.user}|${s.nama}|${s.kelas}">${s.nama}</option>`;
+        });
+        opt += `</optgroup>`;
+    });
+    
+    select.innerHTML = opt || '<option value="">❌ Siswa tidak ditemukan</option>';
 }
 
 function navigasiABK() {
