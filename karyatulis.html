@@ -128,6 +128,7 @@
     </div>
 
     <div class="btn-group">
+	<button onclick="buatKaryaBaru()" style="background: #ff5722; color: white;">➕ Buat Karya Baru</button>
         <button class="btn-preview" onclick="previewKarya()">👁️ Preview</button>
         <button onclick="bukaPustaka()">📚 Buka / Edit Karya</button>
         <button onclick="bukaMajas()">🎭 Bantuan Majas</button>
@@ -567,6 +568,29 @@
         let respon = ["Cakep!", "Keren nulisnya!", "Ayo teruskan!", "Semangat!", "Wow!"];
         let bubble = document.getElementById('gz-bubble');
         if(Math.random() < 0.1) { bubble.innerText = respon[Math.floor(Math.random() * respon.length)]; bubble.style.display = 'block'; setTimeout(() => bubble.style.display = 'none', 2000); }
+    }
+	
+	// ==========================================
+    // FUNGSI BUAT KARYA BARU
+    // ==========================================
+    function buatKaryaBaru() {
+        let konfirmasi = confirm("Apakah Anda ingin membuat lembar kerja baru?\n\nKarya Anda yang sebelumnya sudah tersimpan aman di database dan tidak akan terhapus.");
+        
+        if(konfirmasi) {
+            // 1. Buat ID unik yang baru (agar saat disave masuk ke baris baru di Excel)
+            currentId = 'KRY-' + new Date().getTime();
+            localStorage.setItem('karya_id', currentId);
+            
+            // 2. Kosongkan memori tulisan sebelumnya (Nama & Jabatan tidak dikosongkan agar praktis)
+            localStorage.removeItem('karya_konten');
+            
+            // 3. Bersihkan kanvas layar TinyMCE
+            tinymce.get('editor').setContent('');
+            
+            // 4. Perbarui status layar
+            updateCounters();
+            document.getElementById('save-status').innerText = 'Status: Lembar kerja baru siap digunakan!';
+        }
     }
 </script>
 </body>
