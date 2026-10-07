@@ -515,21 +515,30 @@
         let btn = e.target; btn.innerText = "Merakit... Mohon tunggu!";
         let incNama = document.getElementById('incNama').checked, incJabatan = document.getElementById('incJabatan').checked, incImg = document.getElementById('incImg').checked;
         let cbs = document.querySelectorAll('.cb-karya:checked');
-        let gabunganHTML = "<h1>Kumpulan Karya Tulis Edukasi</h1><hr><br>";
         
-        cbs.forEach(cb => {
+        // Buat Judul Utama Dokumen
+        let gabunganHTML = "<h1 style='text-align: center;'>Kumpulan Karya Tulis Edukasi</h1><hr><br>";
+        
+        cbs.forEach((cb, index) => {
             let id = cb.value;
             let kontenRow = document.getElementById('konten-'+id).innerHTML;
             if(!incImg) kontenRow = kontenRow.replace(/<img[^>]*>/g, "");
-            gabunganHTML += `<div style="page-break-after: always;">`;
+            
+            // Pemisah halaman resmi HTML jika bukan karya pertama
+            if (index > 0) {
+                gabunganHTML += `<div style="page-break-before: always;"></div>`;
+            }
+            
+            gabunganHTML += `<div style="margin-bottom: 20px;">`;
+            
             if(incNama || incJabatan) {
-                // MANTRA PINDAH HALAMAN DITARUH DI SINI JUGA
-                gabunganHTML += `<h2 style="page-break-before: always;">`; 
-                
+                // Menggunakan H2 agar otomatis masuk ke Navigation Pane (Panel Kiri Google Docs)
+                gabunganHTML += `<h2>`; 
                 if(incNama) gabunganHTML += `Penulis: ${cb.getAttribute('data-nama')} `;
                 if(incJabatan) gabunganHTML += `(${cb.getAttribute('data-jabatan')})`;
                 gabunganHTML += `</h2>`;
             }
+            
             gabunganHTML += `<div>${kontenRow}</div></div>`;
         });
 
@@ -539,7 +548,7 @@
             body: JSON.stringify({ action: 'rakitDoc', html: gabunganHTML })
         }).then(r => r.json()).then(res => {
             if(res.status === 'success') {
-                document.getElementById('modal-body').innerHTML = `<div style="text-align:center; padding: 20px;"><h3>🎉 Berhasil Dirakit!</h3><a href="${res.url}" target="_blank" style="font-size:20px; color:blue;">Buka Google Doc Disini</a></div>`;
+                document.getElementById('modal-body').innerHTML = `<div style="text-align:center; padding: 20px;"><h3>🎉 Berhasil Dirakit Sempurna!</h3><p>Navigation Pane aktif dan setiap karya berada di halaman terpisah.</p><a href="${res.url}" target="_blank" style="font-size:20px; color:blue;">Buka Google Doc Disini</a></div>`;
             } else {
                 alert("Gagal merakit: " + res.message); btn.innerText = "Coba Lagi";
             }
