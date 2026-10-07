@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Karya Tulis</title>
+    <!-- TinyMCE CDN -->
+    <script src="https://cdn.tiny.cloud/1/ripfrnln4jr03avj26nn0b5s7i5z861k52q5tgx72vudok1v/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <style>
+        /* TEMA GLASSMORPHISM & WARNA WARNI */
+        body {
+            margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: #333;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .glass-container {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+        h1 { text-align: center; color: #fff; text-shadow: 1px 1px 4px rgba(0,0,0,0.3); }
+        .form-group { margin-bottom: 15px; display: flex; gap: 10px; }
+        .form-group input, .form-group select {
+            padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.5); width: 100%; font-size: 16px;
+        }
+        
+        /* TINYMCE WRAPPER TEMA KERTAS PUTIH TRANSPARAN */
+        .editor-wrapper {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 10px; padding: 10px; margin-bottom: 15px;
+        }
+        
+        /* TOMBOL */
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        button {
+            padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold;
+            background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.6); transition: 0.3s;
+        }
+        button:hover { background: rgba(255, 255, 255, 0.7); transform: translateY(-2px); }
+        .btn-primary { background: rgba(76, 175, 80, 0.6); color: white; }
+        .btn-export { background: rgba(33, 150, 243, 0.6); color: white; }
+        .btn-preview { background: rgba(156, 39, 176, 0.6); color: white; }
+        .btn-koreksi { background: #ffeb3b; color: #333; padding: 5px 10px; border-radius: 5px; border: 1px solid #c8b900; margin-right: 5px; font-size: 12px;}
+        .btn-koreksi:hover { background: #fff59d; }
+        
+        /* Tampilan Kertas Simulasi Google Doc */
+        .doc-preview-page {
+            background: white; padding: 40px; border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2); color: black;
+            min-height: 400px; font-family: Arial, sans-serif;
+        }
+
+        /* COUNTER & STATUS */
+        .status-bar { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; color: #444; }
+        .saran-box { background: rgba(255,255,255,0.8); padding: 15px; border-radius: 10px; margin-top: 10px; display: none; border: 2px solid #ff9a9e;}
+
+        /* POPUP MODAL */
+        .modal {
+            display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+            margin: 5% auto; padding: 20px; border-radius: 15px; width: 80%; max-height: 80vh; overflow-y: auto;
+        }
+        .close { float: right; font-size: 28px; cursor: pointer; font-weight: bold; }
+        .karya-item { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+
+        /* 3D GODZILLA COMPANION */
+        #godzilla {
+            position: fixed; bottom: 20px; right: 20px; width: 140px; height: 140px; cursor: grab; z-index: 9999; user-select: none;
+        }
+        #gz-img {
+            width: 100%; height: 100%; filter: drop-shadow(5px 15px 10px rgba(0,0,0,0.4));
+            animation: float 3s ease-in-out infinite; pointer-events: none; 
+        }
+        .bubble {
+            position: absolute; top: -40px; left: -50px; background: white; padding: 5px 10px;
+            border-radius: 10px; font-size: 12px; font-weight: bold; display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); width: max-content; z-index: 2;
+        }
+        .godzilla-jump #gz-img { animation: jump 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
+        @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(4deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        @keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-40px) scale(1.1); } }
+        
+        /* Dropdown Majas */
+        .majas-select { width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #ccc; font-size: 16px; }
+        .majas-card { background: #e3f2fd; padding: 15px; border-radius: 10px; border-left: 5px solid #2196f3; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div id="godzilla">
+    <div class="bubble" id="gz-bubble">Halo! Ayo menulis!</div>
+    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/T-Rex.png" alt="Godzilla 3D" id="gz-img">
+</div>
+
+<div class="glass-container">
+    <h1>📝 Studio Karya Tulis Edukasi</h1>
+    
+    <div class="form-group">
+        <input type="text" id="nama" placeholder="Nama Lengkap Penulis" required>
+        <select id="jabatan">
+            <option value="Guru">Guru</option>
+            <option value="Kepala Sekolah">Kepala Sekolah</option>
+            <option value="Murid">Murid</option>
+            <option value="Wali Murid">Wali Murid</option>
+            <option value="Masyarakat">Masyarakat</option>
+        </select>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-preview" onclick="previewKarya()">👁️ Preview</button>
+        <button onclick="bukaPustaka()">📚 Buka / Edit Karya</button>
+        <button onclick="bukaMajas()">🎭 Bantuan Majas</button>
+        <button onclick="cekBahasa()">🔍 Cek EYD Otomatis</button>
+        <button class="btn-export" onclick="bukaRakitDoc()">📄 Rakit ke Google Doc</button>
+    </div>
+
+    <div class="editor-wrapper">
+        <textarea id="editor"></textarea>
+    </div>
+
+    <div class="status-bar">
+        <span id="save-status">Status: Belum disimpan</span>
+        <span id="counter">0 Kata | 0 Kalimat | 0 Baris</span>
+    </div>
+
+    <div class="saran-box" id="saran-box">
+        <h4 style="margin-top:0;">Daftar Koreksi Ditemukan:</h4>
+        <ul id="list-saran" style="line-height: 2;"></ul>
+        <small style="color:gray;"><i>*Garis merah di bawah teks adalah deteksi otomatis browser. Klik tombol kuning di atas untuk memperbaiki secara otomatis.</i></small>
+    </div>
+</div>
+
+<!-- Modal Serbaguna -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="tutupModal()">&times;</span>
+        <h2 id="modal-title">Judul</h2>
+        <div id="modal-body">Memuat...</div>
+    </div>
+</div>
+
+<script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ1ggFsgfoW0rdnBD_x5KnSnFW0gxOis-6JqRCo4m8JeXqva9vvgN6-iXR2u8HwOqKVw/exec';
+    let currentId = localStorage.getItem('karya_id') || 'KRY-' + new Date().getTime();
+    localStorage.setItem('karya_id', currentId);
+    let autoSaveTimer;
+
+    // ==========================================
+    // DATABASE MAJAS LENGKAP
+    // ==========================================
+    const databaseMajas = {
+        "Perbandingan": [
+            {nama: "Alegori", def: "Menyatakan dengan ungkapan kiasan atau penggambaran.", cth: "Hidup itu seperti roda berputar, kadang di atas, kadang pula di bawah."},
+            {nama: "Personifikasi", def: "Membandingkan manusia dengan benda mati, seolah-olah memiliki sifat manusia.", cth: "Deburan ombak memecah karang."},
+            {nama: "Metafora", def: "Memakai analogi atau perumpamaan terhadap dua hal yang berbeda.", cth: "Anak itu dikenal sebagai kutu buku di kelasnya."},
+            {nama: "Metonimia", def: "Menyatakan suatu hal dengan kata lain yang punya keterkaitan (misal merek).", cth: "Jamaah haji Indonesia pergi ke Makkah menggunakan Garuda."},
+            {nama: "Asosiasi", def: "Membandingkan perasaan atau emosi dengan suatu objek/situasi.", cth: "Suara hujan mengingatkanku pada kesegaran dan ketenangan."},
+            {nama: "Hiperbola", def: "Ungkapan yang berlebihan dan tidak masuk akal.", cth: "Dentuman itu menggelegar membelah angkasa."},
+            {nama: "Simile", def: "Membandingkan dua hal berbeda menggunakan kata 'seperti' atau 'sebagai'.", cth: "Kulitnya putih seperti salju."},
+            {nama: "Antonomasia", def: "Menggunakan nama/gelar yang mewakili orang secara spesifik.", cth: "“Bapak Proklamator” mengacu pada Soekarno."},
+            {nama: "Pars Pro Toto", def: "Menggunakan sebagian unsur untuk menunjukkan keseluruhan.", cth: "Dari tadi pagi, ia tak menampakkan batang hidungnya."},
+            {nama: "Totem Pro Parte", def: "Mengungkapkan keseluruhan objek padahal hanya sebagian.", cth: "Indonesia mengalahkan Malaysia dalam pertandingan sepakbola tadi malam."},
+            {nama: "Eufimisme", def: "Ungkapan lebih halus terhadap ungkapan kasar/merugikan.", cth: "Saat ini sedang dibahas penyesuaian tarif tol."}
+        ],
+        "Sindiran": [
+            {nama: "Ironi", def: "Menyembunyikan fakta dan mengatakan hal yang sebaliknya.", cth: "Suaranya sangat merdu sekali seperti kaset kusut."},
+            {nama: "Sarkasme", def: "Majas sindiran yang kasar.", cth: "Putih benar wajah kamu, sampai bisa aku sendoki bedaknya."},
+            {nama: "Sinisme", def: "Lebih bersifat mencemooh atas ide atau pemikiran.", cth: "Kamu sudah pintar ‘kan? Kenapa masih bertanya kepada aku?"},
+            {nama: "Satire", def: "Kritik/sindiran yang dibalut dengan komedi atau candaan.", cth: "Ya Tuhan, soal semudah ini saja kamu tidak bisa menyelesaikannya?"},
+            {nama: "Innuendo", def: "Menyindir dengan cara mengecilkan fakta yang ada.", cth: "Tak perlu takut, disuntik rasanya hanya seperti digigit semut kecil."}
+        ],
+        "Penegasan": [
+            {nama: "Pleonasme", def: "Menambahkan keterangan pada kalimat yang sudah jelas.", cth: "Dia sudah turun ke bawah."},
+            {nama: "Repetisi", def: "Pengulangan kata, frasa, atau klausa untuk mempertegas.", cth: "Awas, tunggu kedatanganku besok! Tunggu!"},
+            {nama: "Retorika", def: "Kalimat tanya yang tidak memerlukan jawaban.", cth: "Siapa yang tidak ingin terlahir kaya raya?"},
+            {nama: "Aliterasi", def: "Pengulangan huruf konsonan pada awal kata.", cth: "Beli baju biru bersama Budi."},
+            {nama: "Simbolik", def: "Menggunakan simbol/lambang untuk mengekspresikan ide.", cth: "Mawar merah simbol dari cinta yang romantis."},
+            {nama: "Paralelisme", def: "Pengulangan kata dengan struktur/ritme yang sama.", cth: "Siang hari adalah untuk bekerja, malam hari adalah untuk beristirahat."},
+            {nama: "Tautologi", def: "Pengulangan gagasan secara berlebihan dan tidak perlu.", cth: "Saya percaya, yakin, dan mengimani kalau Tuhan selalu bersama kita."},
+            {nama: "Kiasmus", def: "Pengulangan sekaligus kebalikan susunan kata.", cth: "Orang pandai merasa bodoh, namun orang bodoh merasa dirinya pandai."}
+        ],
+        "Pertentangan": [
+            {nama: "Litotes", def: "Penurunan kualitas untuk merendahkan diri.", cth: "Silakan datang ke gubukku yang kumuh."},
+            {nama: "Antitesis", def: "Menggunakan dua kata berlawanan untuk pertentangan.", cth: "Dia adalah cahaya dalam kegelapan, juga bayangan dalam cahaya."},
+            {nama: "Paradoks", def: "Pertentangan kenyataan dengan fakta, namun mengandung kebenaran.", cth: "Daerah ini tandus, tetapi penduduknya makmur."},
+            {nama: "Anakronisme", def: "Ketidaksesuaian antara peristiwa dengan waktu seharusnya.", cth: "Di zaman sekarang, bayi baru lahir sudah bisa mencari uang."},
+            {nama: "Sinekdoke", def: "Menyebutkan sebagian untuk seluruh, atau sebaliknya.", cth: "Semua mata tertuju padaku."},
+            {nama: "Oksimoron", def: "Kata-kata berlawanan dalam satu kalimat.", cth: "Kini, di hatiku bercampur baur antara perasaan cinta dan benci."},
+            {nama: "Kontradiksi Interminus", def: "Sangkalan dari pernyataan yang sudah dijelaskan sebelumnya.", cth: "Semua peserta lomba sudah siap, kecuali perempuan itu."}
+        ]
+    };
+
+    // ==========================================
+    // INISIALISASI TINYMCE
+    // ==========================================
+    tinymce.init({
+        selector: '#editor',
+        height: 400,
+        menubar: true,
+        browser_spellcheck: true, // MENGAKTIFKAN GARIS MERAH OTOMATIS DARI BROWSER
+        contextmenu: false, // Membiarkan klik kanan asli browser untuk saran kata bekerja
+        plugins: 'lists link image table code charmap emoticon wordcount searchreplace',
+        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | searchreplace image table charmap emoticon',
+        init_instance_callback: function (editor) { muatUlangSesi(); },
+        setup: function (editor) {
+            editor.on('keyup NodeChange', function () {
+                updateCounters(); triggerGodzilla();
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(simpanData, 2000);
+            });
+        },
+        content_style: "body { font-family: 'Segoe UI', sans-serif; font-size: 16px; background-color: transparent; }"
+    });
+
+    // ==========================================
+    // PEMULIHAN SESI OTOMATIS
+    // ==========================================
+    function muatUlangSesi() {
+        if(localStorage.getItem('karya_nama')) document.getElementById('nama').value = localStorage.getItem('karya_nama');
+        if(localStorage.getItem('karya_jabatan')) document.getElementById('jabatan').value = localStorage.getItem('karya_jabatan');
+        if(localStorage.getItem('karya_konten')) {
+            tinymce.get('editor').setContent(localStorage.getItem('karya_konten'));
+            updateCounters(); document.getElementById('save-status').innerText = 'Status: Sesi sebelumnya berhasil dipulihkan!';
+        }
+    }
+
+    function simpanData() {
+        document.getElementById('save-status').innerText = 'Status: Menyimpan...';
+        localStorage.setItem('karya_nama', document.getElementById('nama').value);
+        localStorage.setItem('karya_jabatan', document.getElementById('jabatan').value);
+        localStorage.setItem('karya_konten', tinymce.get('editor').getContent());
+        
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'},
+            body: JSON.stringify({
+                action: 'simpan',
+                data: { id: currentId, nama: document.getElementById('nama').value || 'Tanpa Nama', jabatan: document.getElementById('jabatan').value, konten: tinymce.get('editor').getContent() }
+            })
+        }).then(r => r.json()).then(res => {
+            if(res.status === 'success') document.getElementById('save-status').innerText = 'Status: Tersimpan Otomatis ' + new Date().toLocaleTimeString();
+        });
+    }
+
+    // ==========================================
+    // CEK EYD & KOREKSI OTOMATIS
+    // ==========================================
+    async function cekBahasa() {
+        const text = tinymce.get('editor').getContent({format: 'text'});
+        const box = document.getElementById('saran-box');
+        const list = document.getElementById('list-saran');
+        box.style.display = 'block'; list.innerHTML = "<li>Memeriksa ejaan dan tata bahasa...</li>";
+        
+        try {
+            let respon = await fetch('https://api.languagetool.org/v2/check', {
+                method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({ text: text, language: 'id-ID' })
+            });
+            let data = await respon.json();
+            list.innerHTML = "";
+            
+            if(data.matches.length === 0) {
+                list.innerHTML = "<li>✅ Penulisan sudah sangat baik! Tidak ada salah eja yang terdeteksi.</li>";
+            } else {
+                data.matches.forEach(m => {
+                    let salah = text.substring(m.offset, m.offset + m.length);
+                    let saranList = m.replacements.slice(0, 3);
+                    let tombolHTML = saranList.map(s => `<button class="btn-koreksi" onclick="terapkanKoreksi('${salah}', '${s.value}')">Ubah jadi: <b>${s.value}</b></button>`).join("");
+                    
+                    if(saranList.length > 0) {
+                        list.innerHTML += `<li>Terdeteksi kata: <del style="color:red;">${salah}</del> <br> ${tombolHTML}</li>`;
+                    }
+                });
+            }
+        } catch (e) {
+            list.innerHTML = "<li>⚠️ Gagal menghubungi server pemeriksa ejaan. Namun, Anda masih bisa melihat garis merah di bawah kata yang salah langsung di kanvas. Klik kanan kata tersebut untuk melihat saran aslinya.</li>";
+        }
+    }
+
+    function terapkanKoreksi(salah, benar) {
+        const editor = tinymce.get('editor');
+        let content = editor.getContent();
+        // Mengganti teks di editor secara otomatis
+        let regex = new RegExp(`\\b${salah}\\b`, 'g');
+        editor.setContent(content.replace(regex, `<span style="background-color: yellow;">${benar}</span>`));
+        updateCounters();
+        alert(`Kata "${salah}" berhasil diubah menjadi "${benar}"!`);
+        document.getElementById('saran-box').style.display = 'none'; // Sembunyikan box setelah koreksi
+    }
+
+    // ==========================================
+    // MENU MAJAS INTERAKTIF
+    // ==========================================
+    function bukaMajas() {
+        document.getElementById('modal-title').innerText = "🎭 Bantuan Macam-Macam Majas";
+        
+        let html = `
+            <label><b>Pilih Kategori Majas:</b></label>
+            <select id="kategori-majas" class="majas-select" onchange="updateDropdownMajas()">
+                <option value="Perbandingan">1. Majas Perbandingan</option>
+                <option value="Sindiran">2. Majas Sindiran</option>
+                <option value="Penegasan">3. Majas Penegasan</option>
+                <option value="Pertentangan">4. Majas Pertentangan</option>
+            </select>
+            
+            <label><b>Pilih Jenis Majas:</b></label>
+            <select id="pilihan-majas" class="majas-select" onchange="tampilkanDetailMajas()"></select>
+            
+            <div id="detail-majas" class="majas-card"></div>
+        `;
+        document.getElementById('modal-body').innerHTML = html;
+        document.getElementById('myModal').style.display = 'block';
+        updateDropdownMajas(); // Load isi pertama
+    }
+
+    function updateDropdownMajas() {
+        let kategori = document.getElementById('kategori-majas').value;
+        let pilihanHtml = "";
+        databaseMajas[kategori].forEach((m, index) => {
+            pilihanHtml += `<option value="${index}">${m.nama}</option>`;
+        });
+        document.getElementById('pilihan-majas').innerHTML = pilihanHtml;
+        tampilkanDetailMajas(); // Load penjelasan pertama
+    }
+
+    function tampilkanDetailMajas() {
+        let kategori = document.getElementById('kategori-majas').value;
+        let index = document.getElementById('pilihan-majas').value;
+        let data = databaseMajas[kategori][index];
+        
+        document.getElementById('detail-majas').innerHTML = `
+            <h3 style="margin-top:0; color:#1976d2;">Majas ${data.nama}</h3>
+            <p><b>Arti:</b> ${data.def}</p>
+            <p style="font-style:italic; color:#555;"><b>Contoh:</b> "${data.cth}"</p>
+        `;
+    }
+
+    // ==========================================
+    // BUKA & EDIT KARYA LAMA/TEMAN
+    // ==========================================
+    function bukaPustaka() {
+        tampilkanLoaderModal("📚 Pustaka Karya (Buka & Edit)");
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST', body: JSON.stringify({action: 'ambilSemua'})
+        }).then(r => r.json()).then(data => {
+            let html = "<p><i>Pilih karya yang ingin Anda edit atau lanjutkan. Jika Anda mengedit milik orang lain, pastikan sudah meminta izin.</i></p>";
+            data.reverse().forEach(d => {
+                html += `
+                <div class="karya-item">
+                    <h4>${d.nama} (${d.jabatan})</h4>
+                    <p style="font-size: 12px; color: gray;">Diperbarui: ${d.waktu}</p>
+                    <div style="background:#f9f9f9; padding:10px; border-radius:5px; max-height:80px; overflow:hidden; font-size:12px;">${d.konten}</div>
+                    <button class="btn-primary" style="margin-top:10px; font-size:13px;" onclick="muatKeEditor('${d.id}', '${d.nama.replace(/'/g, "\\'")}', '${d.jabatan}')">✏️ Buka & Edit Karya Ini</button>
+                    <div id="raw-${d.id}" style="display:none;">${d.konten}</div>
+                </div>`;
+            });
+            document.getElementById('modal-body').innerHTML = html;
+        });
+    }
+
+    function muatKeEditor(id, nama, jabatan) {
+        currentId = id; // Mengatur ID database agar menimpa file lama (bukan buat baru)
+        localStorage.setItem('karya_id', id);
+        document.getElementById('nama').value = nama;
+        document.getElementById('jabatan').value = jabatan;
+        tinymce.get('editor').setContent(document.getElementById('raw-' + id).innerHTML);
+        updateCounters(); tutupModal();
+        document.getElementById('save-status').innerText = 'Status: Karya berhasil dimuat. Siap diedit!';
+        alert(`Karya milik ${nama} berhasil dibuka! Setiap pengetikan akan disimpan dan menimpa karya aslinya di database.`);
+    }
+
+    // ==========================================
+    // PREVIEW & EXPORT DOC
+    // ==========================================
+    function previewKarya() {
+        let nama = document.getElementById('nama').value || 'Tanpa Nama';
+        let jabatan = document.getElementById('jabatan').value;
+        let konten = tinymce.get('editor').getContent();
+        document.getElementById('modal-title').innerText = "👁️ Preview Google Doc";
+        document.getElementById('modal-body').innerHTML = `
+            <div class="doc-preview-page">
+                <h1 style="text-align:center; font-size: 24px;">Karya Tulis Edukasi</h1><hr><br>
+                <h3 style="margin-bottom: 20px;">Penulis: ${nama} (${jabatan})</h3>
+                <div style="line-height: 1.6; text-align: justify; font-size: 12pt;">${konten || '<p style="color:gray;"><i>Belum ada tulisan...</i></p>'}</div>
+            </div>`;
+        document.getElementById('myModal').style.display = 'block';
+    }
+
+    function bukaRakitDoc() {
+        tampilkanLoaderModal("📄 Pilih Karya untuk di-Export ke Google Doc");
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST', body: JSON.stringify({action: 'ambilSemua'})
+        }).then(r => r.json()).then(data => {
+            let html = `
+                <div style="margin-bottom:15px; background:#e0f7fa; padding:10px; border-radius:10px;">
+                    <b>Opsi Perakitan:</b><br>
+                    <input type="checkbox" id="incNama" checked> Nama &nbsp;
+                    <input type="checkbox" id="incJabatan" checked> Jabatan &nbsp;
+                    <input type="checkbox" id="incImg" checked> Gambar
+                </div><hr><div id="listCheckboxKarya">
+            `;
+            data.forEach(d => {
+                html += `<div class="karya-item">
+                    <input type="checkbox" class="cb-karya" value="${d.id}" data-nama="${d.nama}" data-jabatan="${d.jabatan}" checked> 
+                    <b>${d.nama}</b> - ${d.jabatan} <br><div style="display:none;" id="konten-${d.id}">${d.konten}</div>
+                </div>`;
+            });
+            html += `</div><button class="btn-primary" style="width:100%; margin-top:15px;" onclick="prosesExport(event)">🚀 RAKIT MENJADI 1 GOOGLE DOC</button>`;
+            document.getElementById('modal-body').innerHTML = html;
+        });
+    }
+
+    function prosesExport(e) {
+        let btn = e.target; btn.innerText = "Merakit... Mohon tunggu!";
+        let incNama = document.getElementById('incNama').checked, incJabatan = document.getElementById('incJabatan').checked, incImg = document.getElementById('incImg').checked;
+        let cbs = document.querySelectorAll('.cb-karya:checked');
+        let gabunganHTML = "<h1>Kumpulan Karya Tulis Edukasi</h1><hr><br>";
+        
+        cbs.forEach(cb => {
+            let id = cb.value;
+            let kontenRow = document.getElementById('konten-'+id).innerHTML;
+            if(!incImg) kontenRow = kontenRow.replace(/<img[^>]*>/g, "");
+            gabunganHTML += `<div style="margin-bottom: 40px;">`;
+            if(incNama || incJabatan) {
+                gabunganHTML += `<h3>`;
+                if(incNama) gabunganHTML += `Penulis: ${cb.getAttribute('data-nama')} `;
+                if(incJabatan) gabunganHTML += `(${cb.getAttribute('data-jabatan')})`;
+                gabunganHTML += `</h3>`;
+            }
+            gabunganHTML += `<div>${kontenRow}</div></div>`;
+        });
+
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST', body: JSON.stringify({ action: 'rakitDoc', html: gabunganHTML })
+        }).then(r => r.json()).then(res => {
+            if(res.status === 'success') {
+                document.getElementById('modal-body').innerHTML = `<div style="text-align:center; padding: 20px;"><h3>🎉 Berhasil Dirakit!</h3><a href="${res.url}" target="_blank" style="font-size:20px; color:blue;">Buka Google Doc Disini</a></div>`;
+            } else {
+                alert("Gagal merakit: " + res.message); btn.innerText = "Coba Lagi";
+            }
+        });
+    }
+
+    // ==========================================
+    // UTILITAS & GODZILLA
+    // ==========================================
+    function tampilkanLoaderModal(judul) { document.getElementById('modal-title').innerText = judul; document.getElementById('modal-body').innerHTML = "<center>Memuat data...</center>"; document.getElementById('myModal').style.display = 'block'; }
+    function tutupModal() { document.getElementById('myModal').style.display = 'none'; }
+    
+    function updateCounters() {
+        let content = tinymce.get('editor').getContent({format: 'text'});
+        let words = content.trim().split(/\s+/).filter(w => w.length > 0).length;
+        let lines = content.split(/\r\n|\r|\n/).length;
+        document.getElementById('counter').innerText = `${words} Kata | ${lines} Baris`;
+    }
+
+    const godz = document.getElementById('godzilla');
+    let isDragging = false, offsetX, offsetY;
+    godz.addEventListener('mousedown', function(e) { isDragging = true; offsetX = e.clientX - godz.getBoundingClientRect().left; offsetY = e.clientY - godz.getBoundingClientRect().top; godz.style.cursor = 'grabbing'; });
+    document.addEventListener('mousemove', function(e) { if (!isDragging) return; godz.style.left = (e.clientX - offsetX) + 'px'; godz.style.top = (e.clientY - offsetY) + 'px'; godz.style.bottom = 'auto'; godz.style.right = 'auto'; });
+    document.addEventListener('mouseup', function() { isDragging = false; godz.style.cursor = 'grab'; });
+
+    function triggerGodzilla() {
+        godz.classList.remove('godzilla-jump'); void godz.offsetWidth; godz.classList.add('godzilla-jump');
+        let respon = ["Cakep!", "Keren nulisnya!", "Ayo teruskan!", "Semangat!", "Wow!"];
+        let bubble = document.getElementById('gz-bubble');
+        if(Math.random() < 0.1) { bubble.innerText = respon[Math.floor(Math.random() * respon.length)]; bubble.style.display = 'block'; setTimeout(() => bubble.style.display = 'none', 2000); }
+    }
+</script>
+</body>
+</html>
