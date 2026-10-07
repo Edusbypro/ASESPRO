@@ -218,8 +218,8 @@
         selector: '#editor',
         height: 400,
         menubar: true,
-        browser_spellcheck: true, // MENGAKTIFKAN GARIS MERAH OTOMATIS DARI BROWSER
-        contextmenu: false, // Membiarkan klik kanan asli browser untuk saran kata bekerja
+        browser_spellcheck: true,
+        contextmenu: false,
         plugins: 'lists link image table code charmap emoticon wordcount searchreplace',
         toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | searchreplace image table charmap emoticon',
         init_instance_callback: function (editor) { muatUlangSesi(); },
@@ -252,7 +252,8 @@
         localStorage.setItem('karya_konten', tinymce.get('editor').getContent());
         
         fetch(APPS_SCRIPT_URL, {
-            method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'},
+            method: 'POST', 
+            headers: {'Content-Type': 'text/plain;charset=utf-8'}, // HEADER WAJIB
             body: JSON.stringify({
                 action: 'simpan',
                 data: { id: currentId, nama: document.getElementById('nama').value || 'Tanpa Nama', jabatan: document.getElementById('jabatan').value, konten: tinymce.get('editor').getContent() }
@@ -280,7 +281,6 @@
         list.innerHTML = "<li>⏳ Memeriksa tata bahasa...</li>";
         
         try {
-            // JALUR 1: Direct GET Request (Sangat ringan, menghindari blokir CORS Preflight)
             const url = 'https://api.languagetool.org/v2/check?language=id-ID&text=' + encodeURIComponent(text);
             let respon = await fetch(url);
             if (!respon.ok) throw new Error("Diblokir");
@@ -289,40 +289,23 @@
             tampilkanHasilCek(data, text, list);
 
         } catch (e) {
-            // JALUR 2: SISTEM OFFLINE (Kamus Lokal) - Aktif jika server luar diblokir
             list.innerHTML = "<li><i>⚠️ Server luar diblokir jaringan. Beralih ke sistem Kamus Lokal Offline...</i></li><br>";
             
-            // Database Mini Kata Tidak Baku vs Baku (Bisa Anda tambah sendiri nanti)
             const kamusLokal = {
-                "aktifitas": "aktivitas",
-                "analisa": "analisis",
-                "apotik": "apotek",
-                "cuman": "cuma",
-                "dimana": "di mana",
-                "disana": "di sana",
-                "ijin": "izin",
-                "praktek": "praktik",
-                "resiko": "risiko",
-                "silahkan": "silakan",
-                "sistim": "sistem",
-                "sekedar": "sekadar",
-                "sekali-kali": "sesekali",
-                "berkali-kali": "berulang kali",
-                "merubah": "mengubah",
-                "nafas": "napas",
+                "aktifitas": "aktivitas", "analisa": "analisis", "apotik": "apotek",
+                "cuman": "cuma", "dimana": "di mana", "disana": "di sana", "ijin": "izin",
+                "praktek": "praktik", "resiko": "risiko", "silahkan": "silakan",
+                "sistim": "sistem", "sekedar": "sekadar", "sekali-kali": "sesekali",
+                "berkali-kali": "berulang kali", "merubah": "mengubah", "nafas": "napas",
                 "jaman": "zaman"
             };
 
-            let adaKesalahan = false;
-            let listHtml = list.innerHTML;
-            
-            // Mencari kata dalam teks yang cocok dengan kamus lokal
+            let adaKesalahan = false; let listHtml = list.innerHTML;
             let kataDalamTeks = text.toLowerCase().match(/\b[\w-]+\b/g) || [];
 
             kataDalamTeks.forEach(kata => {
                 if(kamusLokal[kata]) {
-                    adaKesalahan = true;
-                    let benar = kamusLokal[kata];
+                    adaKesalahan = true; let benar = kamusLokal[kata];
                     listHtml += `<li style="margin-bottom: 10px;">Terdeteksi kata tidak baku: <del style="color:red;">${kata}</del> <br> 
                     <button class="btn-koreksi" onclick="terapkanKoreksi('${kata}', '${benar}')">Ubah jadi: <b>${benar}</b></button></li>`;
                 }
@@ -336,22 +319,41 @@
         }
     }
 
-    // Fungsi tambahan untuk menerapkan koreksi dari Kamus Lokal tanpa error huruf besar/kecil
+    function tampilkanHasilCek(data, textAsli, listElement) {
+        listElement.innerHTML = "";
+        if(data.matches && data.matches.length === 0) {
+            listElement.innerHTML = "<li>✅ Penulisan sudah sangat baik! Tidak ada salah eja yang terdeteksi.</li>";
+        } else if(data.matches) {
+            data.matches.forEach(m => {
+                let salah = textAsli.substring(m.offset, m.offset + m.length);
+                let saranList = m.replacements.slice(0, 3);
+                let salahAman = salah.replace(/'/g, "\\'");
+                
+                let tombolHTML = saranList.map(s => {
+                    let saranAman = s.value.replace(/'/g, "\\'");
+                    return `<button class="btn-koreksi" onclick="terapkanKoreksi('${salahAman}', '${saranAman}')">Ubah jadi: <b>${s.value}</b></button>`;
+                }).join("");
+                
+                if(saranList.length > 0) {
+                    listElement.innerHTML += `<li style="margin-bottom: 10px;">Terdeteksi kata: <del style="color:red;">${salah}</del> <br> ${tombolHTML}</li>`;
+                }
+            });
+        }
+    }
+
     function terapkanKoreksi(salah, benar) {
         const editor = tinymce.get('editor');
         let content = editor.getContent();
-        // RegExp 'gi' untuk mendeteksi kata tanpa mempedulikan huruf besar/kecil
         let regex = new RegExp(`\\b${salah}\\b`, 'gi'); 
         editor.setContent(content.replace(regex, `<span style="background-color: #ffeb3b;">${benar}</span>`));
-        updateCounters();
-        document.getElementById('saran-box').style.display = 'none';
+        updateCounters(); document.getElementById('saran-box').style.display = 'none';
     }
+
     // ==========================================
     // MENU MAJAS INTERAKTIF
     // ==========================================
     function bukaMajas() {
         document.getElementById('modal-title').innerText = "🎭 Bantuan Macam-Macam Majas";
-        
         let html = `
             <label><b>Pilih Kategori Majas:</b></label>
             <select id="kategori-majas" class="majas-select" onchange="updateDropdownMajas()">
@@ -360,15 +362,13 @@
                 <option value="Penegasan">3. Majas Penegasan</option>
                 <option value="Pertentangan">4. Majas Pertentangan</option>
             </select>
-            
             <label><b>Pilih Jenis Majas:</b></label>
             <select id="pilihan-majas" class="majas-select" onchange="tampilkanDetailMajas()"></select>
-            
             <div id="detail-majas" class="majas-card"></div>
         `;
         document.getElementById('modal-body').innerHTML = html;
         document.getElementById('myModal').style.display = 'block';
-        updateDropdownMajas(); // Load isi pertama
+        updateDropdownMajas(); 
     }
 
     function updateDropdownMajas() {
@@ -378,14 +378,13 @@
             pilihanHtml += `<option value="${index}">${m.nama}</option>`;
         });
         document.getElementById('pilihan-majas').innerHTML = pilihanHtml;
-        tampilkanDetailMajas(); // Load penjelasan pertama
+        tampilkanDetailMajas(); 
     }
 
     function tampilkanDetailMajas() {
         let kategori = document.getElementById('kategori-majas').value;
         let index = document.getElementById('pilihan-majas').value;
         let data = databaseMajas[kategori][index];
-        
         document.getElementById('detail-majas').innerHTML = `
             <h3 style="margin-top:0; color:#1976d2;">Majas ${data.nama}</h3>
             <p><b>Arti:</b> ${data.def}</p>
@@ -394,41 +393,65 @@
     }
 
     // ==========================================
-    // BUKA & EDIT KARYA LAMA/TEMAN
+    // BUKA & EDIT KARYA LAMA/TEMAN (FIXED)
     // ==========================================
     function bukaPustaka() {
         tampilkanLoaderModal("📚 Pustaka Karya (Buka & Edit)");
         fetch(APPS_SCRIPT_URL, {
-            method: 'POST', body: JSON.stringify({action: 'ambilSemua'})
-        }).then(r => r.json()).then(data => {
+            method: 'POST', 
+            headers: {'Content-Type': 'text/plain;charset=utf-8'}, // HEADER WAJIB (INI FIX-NYA)
+            body: JSON.stringify({action: 'ambilSemua'})
+        })
+        .then(r => r.json())
+        .then(data => {
+            if(!Array.isArray(data)) {
+                document.getElementById('modal-body').innerHTML = "<p style='color:red;'>⚠️ Gagal membaca data dari server. Pastikan URL Apps Script benar.</p>";
+                return;
+            }
+
             let html = "<p><i>Pilih karya yang ingin Anda edit atau lanjutkan. Jika Anda mengedit milik orang lain, pastikan sudah meminta izin.</i></p>";
-            data.reverse().forEach(d => {
-                html += `
-                <div class="karya-item">
-                    <h4>${d.nama} (${d.jabatan})</h4>
-                    <p style="font-size: 12px; color: gray;">Diperbarui: ${d.waktu}</p>
-                    <div style="background:#f9f9f9; padding:10px; border-radius:5px; max-height:80px; overflow:hidden; font-size:12px;">${d.konten}</div>
-                    <button class="btn-primary" style="margin-top:10px; font-size:13px;" onclick="muatKeEditor('${d.id}', '${d.nama.replace(/'/g, "\\'")}', '${d.jabatan}')">✏️ Buka & Edit Karya Ini</button>
-                    <div id="raw-${d.id}" style="display:none;">${d.konten}</div>
-                </div>`;
-            });
+            
+            // Menyaring baris yang benar-benar ada ID-nya (mengabaikan baris kosong di excel)
+            let dataValid = data.filter(d => d && d.id);
+            
+            if(dataValid.length === 0) {
+                html += "<p>Belum ada karya yang tersimpan di database.</p>";
+            } else {
+                dataValid.reverse().forEach(d => {
+                    // Mencegah error jika data nama/jabatan bertipe angka (wajib dikonversi ke String)
+                    let namaAman = String(d.nama || "Tanpa Nama").replace(/'/g, "\\'");
+                    let jabatanAman = String(d.jabatan || "").replace(/'/g, "\\'");
+                    
+                    html += `
+                    <div class="karya-item">
+                        <h4>${d.nama} (${d.jabatan})</h4>
+                        <p style="font-size: 12px; color: gray;">Diperbarui: ${d.waktu}</p>
+                        <div style="background:#f9f9f9; padding:10px; border-radius:5px; max-height:80px; overflow:hidden; font-size:12px;">${d.konten}</div>
+                        <button class="btn-primary" style="margin-top:10px; font-size:13px;" onclick="muatKeEditor('${d.id}', '${namaAman}', '${jabatanAman}')">✏️ Buka & Edit Karya Ini</button>
+                        <div id="raw-${d.id}" style="display:none;">${d.konten}</div>
+                    </div>`;
+                });
+            }
             document.getElementById('modal-body').innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById('modal-body').innerHTML = `<p style="color:red;">❌ Koneksi terputus: ${err.message}. Pastikan internet stabil.</p>`;
         });
     }
 
     function muatKeEditor(id, nama, jabatan) {
-        currentId = id; // Mengatur ID database agar menimpa file lama (bukan buat baru)
+        currentId = id; 
         localStorage.setItem('karya_id', id);
         document.getElementById('nama').value = nama;
         document.getElementById('jabatan').value = jabatan;
         tinymce.get('editor').setContent(document.getElementById('raw-' + id).innerHTML);
         updateCounters(); tutupModal();
         document.getElementById('save-status').innerText = 'Status: Karya berhasil dimuat. Siap diedit!';
-        alert(`Karya milik ${nama} berhasil dibuka! Setiap pengetikan akan disimpan dan menimpa karya aslinya di database.`);
+        alert(`Karya berhasil dibuka! Setiap pengetikan akan disimpan dan menimpa karya aslinya di database.`);
     }
 
     // ==========================================
-    // PREVIEW & EXPORT DOC
+    // PREVIEW & EXPORT DOC (FIXED)
     // ==========================================
     function previewKarya() {
         let nama = document.getElementById('nama').value || 'Tanpa Nama';
@@ -447,8 +470,17 @@
     function bukaRakitDoc() {
         tampilkanLoaderModal("📄 Pilih Karya untuk di-Export ke Google Doc");
         fetch(APPS_SCRIPT_URL, {
-            method: 'POST', body: JSON.stringify({action: 'ambilSemua'})
-        }).then(r => r.json()).then(data => {
+            method: 'POST', 
+            headers: {'Content-Type': 'text/plain;charset=utf-8'}, // HEADER WAJIB (INI FIX-NYA)
+            body: JSON.stringify({action: 'ambilSemua'})
+        })
+        .then(r => r.json())
+        .then(data => {
+            if(!Array.isArray(data)) {
+                document.getElementById('modal-body').innerHTML = "<p style='color:red;'>⚠️ Gagal membaca data dari server.</p>";
+                return;
+            }
+
             let html = `
                 <div style="margin-bottom:15px; background:#e0f7fa; padding:10px; border-radius:10px;">
                     <b>Opsi Perakitan:</b><br>
@@ -457,14 +489,24 @@
                     <input type="checkbox" id="incImg" checked> Gambar
                 </div><hr><div id="listCheckboxKarya">
             `;
-            data.forEach(d => {
+            
+            let dataValid = data.filter(d => d && d.id);
+            if(dataValid.length === 0) html += "<p>Belum ada karya untuk dirakit.</p>";
+
+            dataValid.forEach(d => {
+                let namaAman = String(d.nama || "Tanpa Nama").replace(/'/g, "\\'");
+                let jabatanAman = String(d.jabatan || "").replace(/'/g, "\\'");
+                
                 html += `<div class="karya-item">
-                    <input type="checkbox" class="cb-karya" value="${d.id}" data-nama="${d.nama}" data-jabatan="${d.jabatan}" checked> 
+                    <input type="checkbox" class="cb-karya" value="${d.id}" data-nama="${namaAman}" data-jabatan="${jabatanAman}" checked> 
                     <b>${d.nama}</b> - ${d.jabatan} <br><div style="display:none;" id="konten-${d.id}">${d.konten}</div>
                 </div>`;
             });
             html += `</div><button class="btn-primary" style="width:100%; margin-top:15px;" onclick="prosesExport(event)">🚀 RAKIT MENJADI 1 GOOGLE DOC</button>`;
             document.getElementById('modal-body').innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById('modal-body').innerHTML = `<p style="color:red;">❌ Gagal menghubungi server: ${err.message}</p>`;
         });
     }
 
@@ -489,7 +531,9 @@
         });
 
         fetch(APPS_SCRIPT_URL, {
-            method: 'POST', body: JSON.stringify({ action: 'rakitDoc', html: gabunganHTML })
+            method: 'POST', 
+            headers: {'Content-Type': 'text/plain;charset=utf-8'}, // HEADER WAJIB
+            body: JSON.stringify({ action: 'rakitDoc', html: gabunganHTML })
         }).then(r => r.json()).then(res => {
             if(res.status === 'success') {
                 document.getElementById('modal-body').innerHTML = `<div style="text-align:center; padding: 20px;"><h3>🎉 Berhasil Dirakit!</h3><a href="${res.url}" target="_blank" style="font-size:20px; color:blue;">Buka Google Doc Disini</a></div>`;
@@ -502,7 +546,7 @@
     // ==========================================
     // UTILITAS & GODZILLA
     // ==========================================
-    function tampilkanLoaderModal(judul) { document.getElementById('modal-title').innerText = judul; document.getElementById('modal-body').innerHTML = "<center>Memuat data...</center>"; document.getElementById('myModal').style.display = 'block'; }
+    function tampilkanLoaderModal(judul) { document.getElementById('modal-title').innerText = judul; document.getElementById('modal-body').innerHTML = "<center>Memuat data... Mohon tunggu sejenak.</center>"; document.getElementById('myModal').style.display = 'block'; }
     function tutupModal() { document.getElementById('myModal').style.display = 'none'; }
     
     function updateCounters() {
