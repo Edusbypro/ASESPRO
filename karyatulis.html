@@ -263,7 +263,7 @@
     }
 
     // ==========================================
-    // CEK EYD (DENGAN JALUR ALTERNATIF ANTI-BLOKIR)
+    // CEK EYD (DIRECT API + OFFLINE FALLBACK)
     // ==========================================
     async function cekBahasa() {
         let text = tinymce.get('editor').getContent({format: 'text'}).trim();
@@ -272,78 +272,80 @@
         
         if (!text || text.length < 3) {
             box.style.display = 'block';
-            list.innerHTML = "<li>⚠️ Tulisan masih terlalu pendek atau kosong untuk diperiksa.</li>";
+            list.innerHTML = "<li>⚠️ Tulisan masih terlalu pendek untuk diperiksa.</li>";
             return;
         }
 
         box.style.display = 'block'; 
-        list.innerHTML = "<li>⏳ Memeriksa tata bahasa... mohon tunggu...</li>";
+        list.innerHTML = "<li>⏳ Memeriksa tata bahasa...</li>";
         
         try {
-            // JALUR 1: Menggunakan Proxy Utama
-            const url = 'https://corsproxy.io/?' + encodeURIComponent('https://api.languagetool.org/v2/check');
-            let respon = await fetch(url, {
-                method: 'POST', 
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: new URLSearchParams({ text: text, language: 'id-ID' })
-            });
-            
-            if (!respon.ok) throw new Error("Gagal Jalur 1");
+            // JALUR 1: Direct GET Request (Sangat ringan, menghindari blokir CORS Preflight)
+            const url = 'https://api.languagetool.org/v2/check?language=id-ID&text=' + encodeURIComponent(text);
+            let respon = await fetch(url);
+            if (!respon.ok) throw new Error("Diblokir");
             
             let data = await respon.json();
             tampilkanHasilCek(data, text, list);
 
         } catch (e) {
-            // JALUR 2: Otomatis pindah ke server alternatif jika Jalur 1 diblokir jaringan
-            list.innerHTML = "<li>⏳ Jalur utama terblokir jaringan. Mencoba jalur alternatif...</li>";
-            try {
-                const targetUrl = encodeURIComponent('https://api.languagetool.org/v2/check?language=id-ID&text=' + encodeURIComponent(text));
-                let responAlt = await fetch('https://api.allorigins.win/get?url=' + targetUrl);
-                let dataWrapper = await responAlt.json();
-                let data = JSON.parse(dataWrapper.contents);
-                
-                tampilkanHasilCek(data, text, list);
-            } catch (err) {
-                list.innerHTML = "<li>❌ Gagal memeriksa. Jaringan internet Anda memblokir semua akses ke server pengecekan bahasa asing.</li>";
+            // JALUR 2: SISTEM OFFLINE (Kamus Lokal) - Aktif jika server luar diblokir
+            list.innerHTML = "<li><i>⚠️ Server luar diblokir jaringan. Beralih ke sistem Kamus Lokal Offline...</i></li><br>";
+            
+            // Database Mini Kata Tidak Baku vs Baku (Bisa Anda tambah sendiri nanti)
+            const kamusLokal = {
+                "aktifitas": "aktivitas",
+                "analisa": "analisis",
+                "apotik": "apotek",
+                "cuman": "cuma",
+                "dimana": "di mana",
+                "disana": "di sana",
+                "ijin": "izin",
+                "praktek": "praktik",
+                "resiko": "risiko",
+                "silahkan": "silakan",
+                "sistim": "sistem",
+                "sekedar": "sekadar",
+                "sekali-kali": "sesekali",
+                "berkali-kali": "berulang kali",
+                "merubah": "mengubah",
+                "nafas": "napas",
+                "jaman": "zaman"
+            };
+
+            let adaKesalahan = false;
+            let listHtml = list.innerHTML;
+            
+            // Mencari kata dalam teks yang cocok dengan kamus lokal
+            let kataDalamTeks = text.toLowerCase().match(/\b[\w-]+\b/g) || [];
+
+            kataDalamTeks.forEach(kata => {
+                if(kamusLokal[kata]) {
+                    adaKesalahan = true;
+                    let benar = kamusLokal[kata];
+                    listHtml += `<li style="margin-bottom: 10px;">Terdeteksi kata tidak baku: <del style="color:red;">${kata}</del> <br> 
+                    <button class="btn-koreksi" onclick="terapkanKoreksi('${kata}', '${benar}')">Ubah jadi: <b>${benar}</b></button></li>`;
+                }
+            });
+
+            if(!adaKesalahan) {
+                list.innerHTML += "<li>✅ Berdasarkan Kamus Lokal, penulisan Anda sudah baku! <br><small><i>(Untuk kata lain yang bergaris bawah merah di layar, silakan klik kanan pada kata tersebut untuk melihat saran otomatis dari browser).</i></small></li>";
+            } else {
+                list.innerHTML = listHtml;
             }
         }
     }
 
-    // Fungsi pembantu agar kode lebih rapi dan aman
-    function tampilkanHasilCek(data, textAsli, listElement) {
-        listElement.innerHTML = "";
-        if(data.matches && data.matches.length === 0) {
-            listElement.innerHTML = "<li>✅ Penulisan sudah sangat baik! Tidak ada salah eja yang terdeteksi.</li>";
-        } else if(data.matches) {
-            data.matches.forEach(m => {
-                let salah = textAsli.substring(m.offset, m.offset + m.length);
-                let saranList = m.replacements.slice(0, 3);
-                
-                // Mencegah error jika kata mengandung tanda baca
-                let salahAman = salah.replace(/'/g, "\\'");
-                
-                let tombolHTML = saranList.map(s => {
-                    let saranAman = s.value.replace(/'/g, "\\'");
-                    return `<button class="btn-koreksi" onclick="terapkanKoreksi('${salahAman}', '${saranAman}')">Ubah jadi: <b>${s.value}</b></button>`;
-                }).join("");
-                
-                if(saranList.length > 0) {
-                    listElement.innerHTML += `<li style="margin-bottom: 10px;">Terdeteksi kata: <del style="color:red;">${salah}</del> <br> ${tombolHTML}</li>`;
-                }
-            });
-        }
-    }
+    // Fungsi tambahan untuk menerapkan koreksi dari Kamus Lokal tanpa error huruf besar/kecil
     function terapkanKoreksi(salah, benar) {
         const editor = tinymce.get('editor');
         let content = editor.getContent();
-        // Mengganti teks di editor secara otomatis
-        let regex = new RegExp(`\\b${salah}\\b`, 'g');
-        editor.setContent(content.replace(regex, `<span style="background-color: yellow;">${benar}</span>`));
+        // RegExp 'gi' untuk mendeteksi kata tanpa mempedulikan huruf besar/kecil
+        let regex = new RegExp(`\\b${salah}\\b`, 'gi'); 
+        editor.setContent(content.replace(regex, `<span style="background-color: #ffeb3b;">${benar}</span>`));
         updateCounters();
-        alert(`Kata "${salah}" berhasil diubah menjadi "${benar}"!`);
-        document.getElementById('saran-box').style.display = 'none'; // Sembunyikan box setelah koreksi
+        document.getElementById('saran-box').style.display = 'none';
     }
-
     // ==========================================
     // MENU MAJAS INTERAKTIF
     // ==========================================
