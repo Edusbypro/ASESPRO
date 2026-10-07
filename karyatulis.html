@@ -521,7 +521,7 @@
             let id = cb.value;
             let kontenRow = document.getElementById('konten-'+id).innerHTML;
             if(!incImg) kontenRow = kontenRow.replace(/<img[^>]*>/g, "");
-            gabunganHTML += `<div style="margin-bottom: 40px;">`;
+            gabunganHTML += `<div style="page-break-after: always;">`;
             if(incNama || incJabatan) {
                 gabunganHTML += `<h3>`;
                 if(incNama) gabunganHTML += `Penulis: ${cb.getAttribute('data-nama')} `;
