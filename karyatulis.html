@@ -263,29 +263,24 @@
     }
 
     // ==========================================
-    // CEK EYD (VIA GOOGLE APPS SCRIPT PROXY)
+    // CEK EYD (LANGSUNG DARI BROWSER - LEBIH CEPAT)
     // ==========================================
     async function cekBahasa() {
         const text = tinymce.get('editor').getContent({format: 'text'});
         const box = document.getElementById('saran-box');
         const list = document.getElementById('list-saran');
         box.style.display = 'block'; 
-        list.innerHTML = "<li>Menghubungi Server Google untuk memeriksa tata bahasa...</li>";
+        list.innerHTML = "<li>Memeriksa tata bahasa secara langsung...</li>";
         
         try {
-            // Mengirim data ke Apps Script Anda, bukan langsung ke LanguageTool
-            let respon = await fetch(APPS_SCRIPT_URL, {
+            // Memanggil API LanguageTool langsung tanpa perantara Google
+            let respon = await fetch('https://api.languagetool.org/v2/check', {
                 method: 'POST', 
-                headers: {'Content-Type': 'text/plain;charset=utf-8'},
-                body: JSON.stringify({ action: 'cekBahasa', text: text })
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({ text: text, language: 'id-ID' })
             });
             let data = await respon.json();
             list.innerHTML = "";
-            
-            if(data.error) {
-                list.innerHTML = `<li>⚠️ Terjadi kesalahan pada server: ${data.error}</li>`;
-                return;
-            }
             
             if(data.matches && data.matches.length === 0) {
                 list.innerHTML = "<li>✅ Penulisan sudah sangat baik! Tidak ada salah eja yang terdeteksi.</li>";
@@ -300,10 +295,10 @@
                     }
                 });
             } else {
-                list.innerHTML = "<li>Gagal memproses respons dari server.</li>";
+                list.innerHTML = "<li>Gagal memproses respons dari server bahasa.</li>";
             }
         } catch (e) {
-            list.innerHTML = "<li>⚠️ Gagal menghubungi server Apps Script.</li>";
+            list.innerHTML = "<li>⚠️ Gagal menghubungi server. Pastikan koneksi internet stabil.</li>";
         }
     }
 
