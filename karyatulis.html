@@ -263,45 +263,76 @@
     }
 
     // ==========================================
-    // CEK EYD (LANGSUNG DARI BROWSER - LEBIH CEPAT)
+    // CEK EYD (DENGAN JALUR ALTERNATIF ANTI-BLOKIR)
     // ==========================================
     async function cekBahasa() {
-        const text = tinymce.get('editor').getContent({format: 'text'});
+        let text = tinymce.get('editor').getContent({format: 'text'}).trim();
         const box = document.getElementById('saran-box');
         const list = document.getElementById('list-saran');
+        
+        if (!text || text.length < 3) {
+            box.style.display = 'block';
+            list.innerHTML = "<li>⚠️ Tulisan masih terlalu pendek atau kosong untuk diperiksa.</li>";
+            return;
+        }
+
         box.style.display = 'block'; 
-        list.innerHTML = "<li>Memeriksa tata bahasa secara langsung...</li>";
+        list.innerHTML = "<li>⏳ Memeriksa tata bahasa... mohon tunggu...</li>";
         
         try {
-            // Memanggil API LanguageTool langsung tanpa perantara Google
-            let respon = await fetch('https://api.languagetool.org/v2/check', {
+            // JALUR 1: Menggunakan Proxy Utama
+            const url = 'https://corsproxy.io/?' + encodeURIComponent('https://api.languagetool.org/v2/check');
+            let respon = await fetch(url, {
                 method: 'POST', 
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: new URLSearchParams({ text: text, language: 'id-ID' })
             });
-            let data = await respon.json();
-            list.innerHTML = "";
             
-            if(data.matches && data.matches.length === 0) {
-                list.innerHTML = "<li>✅ Penulisan sudah sangat baik! Tidak ada salah eja yang terdeteksi.</li>";
-            } else if(data.matches) {
-                data.matches.forEach(m => {
-                    let salah = text.substring(m.offset, m.offset + m.length);
-                    let saranList = m.replacements.slice(0, 3);
-                    let tombolHTML = saranList.map(s => `<button class="btn-koreksi" onclick="terapkanKoreksi('${salah}', '${s.value}')">Ubah jadi: <b>${s.value}</b></button>`).join("");
-                    
-                    if(saranList.length > 0) {
-                        list.innerHTML += `<li>Terdeteksi kata: <del style="color:red;">${salah}</del> <br> ${tombolHTML}</li>`;
-                    }
-                });
-            } else {
-                list.innerHTML = "<li>Gagal memproses respons dari server bahasa.</li>";
-            }
+            if (!respon.ok) throw new Error("Gagal Jalur 1");
+            
+            let data = await respon.json();
+            tampilkanHasilCek(data, text, list);
+
         } catch (e) {
-            list.innerHTML = "<li>⚠️ Gagal menghubungi server. Pastikan koneksi internet stabil.</li>";
+            // JALUR 2: Otomatis pindah ke server alternatif jika Jalur 1 diblokir jaringan
+            list.innerHTML = "<li>⏳ Jalur utama terblokir jaringan. Mencoba jalur alternatif...</li>";
+            try {
+                const targetUrl = encodeURIComponent('https://api.languagetool.org/v2/check?language=id-ID&text=' + encodeURIComponent(text));
+                let responAlt = await fetch('https://api.allorigins.win/get?url=' + targetUrl);
+                let dataWrapper = await responAlt.json();
+                let data = JSON.parse(dataWrapper.contents);
+                
+                tampilkanHasilCek(data, text, list);
+            } catch (err) {
+                list.innerHTML = "<li>❌ Gagal memeriksa. Jaringan internet Anda memblokir semua akses ke server pengecekan bahasa asing.</li>";
+            }
         }
     }
 
+    // Fungsi pembantu agar kode lebih rapi dan aman
+    function tampilkanHasilCek(data, textAsli, listElement) {
+        listElement.innerHTML = "";
+        if(data.matches && data.matches.length === 0) {
+            listElement.innerHTML = "<li>✅ Penulisan sudah sangat baik! Tidak ada salah eja yang terdeteksi.</li>";
+        } else if(data.matches) {
+            data.matches.forEach(m => {
+                let salah = textAsli.substring(m.offset, m.offset + m.length);
+                let saranList = m.replacements.slice(0, 3);
+                
+                // Mencegah error jika kata mengandung tanda baca
+                let salahAman = salah.replace(/'/g, "\\'");
+                
+                let tombolHTML = saranList.map(s => {
+                    let saranAman = s.value.replace(/'/g, "\\'");
+                    return `<button class="btn-koreksi" onclick="terapkanKoreksi('${salahAman}', '${saranAman}')">Ubah jadi: <b>${s.value}</b></button>`;
+                }).join("");
+                
+                if(saranList.length > 0) {
+                    listElement.innerHTML += `<li style="margin-bottom: 10px;">Terdeteksi kata: <del style="color:red;">${salah}</del> <br> ${tombolHTML}</li>`;
+                }
+            });
+        }
+    }
     function terapkanKoreksi(salah, benar) {
         const editor = tinymce.get('editor');
         let content = editor.getContent();
