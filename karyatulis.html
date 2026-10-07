@@ -523,11 +523,11 @@
             if(!incImg) kontenRow = kontenRow.replace(/<img[^>]*>/g, "");
             gabunganHTML += `<div style="page-break-after: always;">`;
             if(incNama || incJabatan) {
-                gabunganHTML += `<h3>`;
-                if(incNama) gabunganHTML += `Penulis: ${cb.getAttribute('data-nama')} `;
-                if(incJabatan) gabunganHTML += `(${cb.getAttribute('data-jabatan')})`;
-                gabunganHTML += `</h3>`;
-            }
+             gabunganHTML += `<h2>`; // SUDAH DIGANTI KE H2
+             if(incNama) gabunganHTML += `Penulis: ${cb.getAttribute('data-nama')} `;
+             if(incJabatan) gabunganHTML += `(${cb.getAttribute('data-jabatan')})`;
+             gabunganHTML += `</h2>`; // SUDAH DIGANTI KE H2
+         }
             gabunganHTML += `<div>${kontenRow}</div></div>`;
         });
 
