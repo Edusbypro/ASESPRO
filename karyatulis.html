@@ -263,25 +263,33 @@
     }
 
     // ==========================================
-    // CEK EYD & KOREKSI OTOMATIS
+    // CEK EYD (VIA GOOGLE APPS SCRIPT PROXY)
     // ==========================================
     async function cekBahasa() {
         const text = tinymce.get('editor').getContent({format: 'text'});
         const box = document.getElementById('saran-box');
         const list = document.getElementById('list-saran');
-        box.style.display = 'block'; list.innerHTML = "<li>Memeriksa ejaan dan tata bahasa...</li>";
+        box.style.display = 'block'; 
+        list.innerHTML = "<li>Menghubungi Server Google untuk memeriksa tata bahasa...</li>";
         
         try {
-            let respon = await fetch('https://api.languagetool.org/v2/check', {
-                method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: new URLSearchParams({ text: text, language: 'id-ID' })
+            // Mengirim data ke Apps Script Anda, bukan langsung ke LanguageTool
+            let respon = await fetch(APPS_SCRIPT_URL, {
+                method: 'POST', 
+                headers: {'Content-Type': 'text/plain;charset=utf-8'},
+                body: JSON.stringify({ action: 'cekBahasa', text: text })
             });
             let data = await respon.json();
             list.innerHTML = "";
             
-            if(data.matches.length === 0) {
+            if(data.error) {
+                list.innerHTML = `<li>⚠️ Terjadi kesalahan pada server: ${data.error}</li>`;
+                return;
+            }
+            
+            if(data.matches && data.matches.length === 0) {
                 list.innerHTML = "<li>✅ Penulisan sudah sangat baik! Tidak ada salah eja yang terdeteksi.</li>";
-            } else {
+            } else if(data.matches) {
                 data.matches.forEach(m => {
                     let salah = text.substring(m.offset, m.offset + m.length);
                     let saranList = m.replacements.slice(0, 3);
@@ -291,9 +299,11 @@
                         list.innerHTML += `<li>Terdeteksi kata: <del style="color:red;">${salah}</del> <br> ${tombolHTML}</li>`;
                     }
                 });
+            } else {
+                list.innerHTML = "<li>Gagal memproses respons dari server.</li>";
             }
         } catch (e) {
-            list.innerHTML = "<li>⚠️ Gagal menghubungi server pemeriksa ejaan. Namun, Anda masih bisa melihat garis merah di bawah kata yang salah langsung di kanvas. Klik kanan kata tersebut untuk melihat saran aslinya.</li>";
+            list.innerHTML = "<li>⚠️ Gagal menghubungi server Apps Script.</li>";
         }
     }
 
