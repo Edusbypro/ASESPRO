@@ -128,7 +128,8 @@
     </div>
 
     <div class="btn-group">
-	<button onclick="buatKaryaBaru()" style="background: #ff5722; color: white;">➕ Buat Karya Baru</button>
+        <button onclick="buatKaryaBaru()" style="background: #ff5722; color: white;">➕ Buat Karya Baru</button>
+        <button onclick="simpanManual()" style="background: #4CAF50; color: white;">💾 Simpan ke Database</button>
         <button class="btn-preview" onclick="previewKarya()">👁️ Preview</button>
         <button onclick="bukaPustaka()">📚 Buka / Edit Karya</button>
         <button onclick="bukaMajas()">🎭 Bantuan Majas</button>
@@ -162,7 +163,9 @@
 </div>
 
 <script>
+    // MASUKKAN LINK APPS SCRIPT ANDA DI BAWAH INI
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjdjVxzcqog2R_-1IhmGAVSkjSJHXJBgk5QZvy2qNluox66lJAV-ebaBUzxA-cK5V6SQ/exec';
+    
     let currentId = localStorage.getItem('karya_id') || 'KRY-' + new Date().getTime();
     localStorage.setItem('karya_id', currentId);
     let autoSaveTimer;
@@ -228,14 +231,21 @@
             editor.on('keyup NodeChange', function () {
                 updateCounters(); triggerGodzilla();
                 clearTimeout(autoSaveTimer);
-                autoSaveTimer = setTimeout(simpanData, 2000);
+                // Menjalankan fungsi simpanData dengan status Auto-Save (false)
+                autoSaveTimer = setTimeout(() => simpanData(false), 2000);
             });
         },
         content_style: "body { font-family: 'Segoe UI', sans-serif; font-size: 16px; background-color: transparent; }"
     });
 
+    // Memicu autosave juga saat mengetik di kolom nama (agar konsisten)
+    document.getElementById('nama').addEventListener('keyup', function() {
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => simpanData(false), 2000);
+    });
+
     // ==========================================
-    // PEMULIHAN SESI OTOMATIS
+    // FUNGSI SIMPAN & VALIDASI BARU
     // ==========================================
     function muatUlangSesi() {
         if(localStorage.getItem('karya_nama')) document.getElementById('nama').value = localStorage.getItem('karya_nama');
@@ -246,21 +256,64 @@
         }
     }
 
-    function simpanData() {
-        document.getElementById('save-status').innerText = 'Status: Menyimpan...';
-        localStorage.setItem('karya_nama', document.getElementById('nama').value);
+    // Fungsi jika tombol "Simpan ke Database" ditekan manual
+    function simpanManual() {
+        let namaVal = document.getElementById('nama').value.trim();
+        let textUtuh = tinymce.get('editor').getContent({format: 'text'}).trim();
+
+        if (!namaVal) {
+            alert("⚠️ Peringatan: Nama Penulis masih kosong!\n\nSilakan isi kolom 'Nama Lengkap Penulis' terlebih dahulu sebelum menyimpan karya.");
+            document.getElementById('nama').focus();
+            return;
+        }
+        if (textUtuh.length < 2) {
+            alert("⚠️ Peringatan: Karya Anda masih kosong!\n\nSilakan ketik beberapa kalimat karya tulis Anda terlebih dahulu sebelum menyimpan.");
+            tinymce.get('editor').focus();
+            return;
+        }
+        
+        simpanData(true); // Memanggil simpan dengan parameter manual (true)
+    }
+
+    // Fungsi Utama Penyimpanan
+    function simpanData(isManual = false) {
+        let namaVal = document.getElementById('nama').value.trim();
+        let kontenHtml = tinymce.get('editor').getContent();
+        let textUtuh = tinymce.get('editor').getContent({format: 'text'}).trim();
+
+        // LOGIKA PENAHAN (GUARD CLAUSE): 
+        // Jika nama kosong ATAU isi konten kosong, JANGAN KIRIM KE SPREADSHEET
+        if (!namaVal || textUtuh.length < 2) {
+            if(!isManual) {
+                document.getElementById('save-status').innerText = 'Status: Menunggu Nama & Tulisan diisi...';
+            }
+            return; // Berhenti di sini, tidak ada data yang dikirim ke server.
+        }
+
+        document.getElementById('save-status').innerText = 'Status: Menyimpan ke Database...';
+        
+        // Simpan lokal sebagai backup (Drafting)
+        localStorage.setItem('karya_nama', namaVal);
         localStorage.setItem('karya_jabatan', document.getElementById('jabatan').value);
-        localStorage.setItem('karya_konten', tinymce.get('editor').getContent());
+        localStorage.setItem('karya_konten', kontenHtml);
         
         fetch(APPS_SCRIPT_URL, {
             method: 'POST', 
-            headers: {'Content-Type': 'text/plain;charset=utf-8'}, // HEADER WAJIB
+            headers: {'Content-Type': 'text/plain;charset=utf-8'},
             body: JSON.stringify({
                 action: 'simpan',
-                data: { id: currentId, nama: document.getElementById('nama').value || 'Tanpa Nama', jabatan: document.getElementById('jabatan').value, konten: tinymce.get('editor').getContent() }
+                data: { id: currentId, nama: namaVal, jabatan: document.getElementById('jabatan').value, konten: kontenHtml }
             })
         }).then(r => r.json()).then(res => {
-            if(res.status === 'success') document.getElementById('save-status').innerText = 'Status: Tersimpan Otomatis ' + new Date().toLocaleTimeString();
+            if(res.status === 'success') {
+                document.getElementById('save-status').innerText = 'Status: Tersimpan di Database ' + new Date().toLocaleTimeString();
+                if(isManual) {
+                    alert("✅ Berhasil!\n\nKarya Tulis Anda telah sukses disimpan ke dalam Database Spreadsheet secara resmi.");
+                }
+            }
+        }).catch(err => {
+            document.getElementById('save-status').innerText = 'Status: Gagal terhubung ke server.';
+            if(isManual) alert("❌ Gagal menyimpan. Silakan periksa koneksi internet Anda.");
         });
     }
 
@@ -394,13 +447,13 @@
     }
 
     // ==========================================
-    // BUKA & EDIT KARYA LAMA/TEMAN (FIXED)
+    // BUKA & EDIT KARYA LAMA
     // ==========================================
     function bukaPustaka() {
         tampilkanLoaderModal("📚 Pustaka Karya (Buka & Edit)");
         fetch(APPS_SCRIPT_URL, {
             method: 'POST', 
-            headers: {'Content-Type': 'text/plain;charset=utf-8'}, // HEADER WAJIB (INI FIX-NYA)
+            headers: {'Content-Type': 'text/plain;charset=utf-8'},
             body: JSON.stringify({action: 'ambilSemua'})
         })
         .then(r => r.json())
@@ -411,15 +464,12 @@
             }
 
             let html = "<p><i>Pilih karya yang ingin Anda edit atau lanjutkan. Jika Anda mengedit milik orang lain, pastikan sudah meminta izin.</i></p>";
-            
-            // Menyaring baris yang benar-benar ada ID-nya (mengabaikan baris kosong di excel)
             let dataValid = data.filter(d => d && d.id);
             
             if(dataValid.length === 0) {
                 html += "<p>Belum ada karya yang tersimpan di database.</p>";
             } else {
                 dataValid.reverse().forEach(d => {
-                    // Mencegah error jika data nama/jabatan bertipe angka (wajib dikonversi ke String)
                     let namaAman = String(d.nama || "Tanpa Nama").replace(/'/g, "\\'");
                     let jabatanAman = String(d.jabatan || "").replace(/'/g, "\\'");
                     
@@ -448,11 +498,11 @@
         tinymce.get('editor').setContent(document.getElementById('raw-' + id).innerHTML);
         updateCounters(); tutupModal();
         document.getElementById('save-status').innerText = 'Status: Karya berhasil dimuat. Siap diedit!';
-        alert(`Karya berhasil dibuka! Setiap pengetikan akan disimpan dan menimpa karya aslinya di database.`);
+        alert(`Karya berhasil dibuka! Setiap pengetikan akan disimpan otomatis dan menimpa karya aslinya di database.`);
     }
 
     // ==========================================
-    // PREVIEW & EXPORT DOC (FIXED)
+    // PREVIEW & EXPORT DOC
     // ==========================================
     function previewKarya() {
         let nama = document.getElementById('nama').value || 'Tanpa Nama';
@@ -472,7 +522,7 @@
         tampilkanLoaderModal("📄 Pilih Karya untuk di-Export ke Google Doc");
         fetch(APPS_SCRIPT_URL, {
             method: 'POST', 
-            headers: {'Content-Type': 'text/plain;charset=utf-8'}, // HEADER WAJIB (INI FIX-NYA)
+            headers: {'Content-Type': 'text/plain;charset=utf-8'},
             body: JSON.stringify({action: 'ambilSemua'})
         })
         .then(r => r.json())
@@ -516,7 +566,6 @@
         let incNama = document.getElementById('incNama').checked, incJabatan = document.getElementById('incJabatan').checked, incImg = document.getElementById('incImg').checked;
         let cbs = document.querySelectorAll('.cb-karya:checked');
         
-        // Buat Judul Utama Dokumen
         let gabunganHTML = "<h1 style='text-align: center;'>Kumpulan Karya Tulis Edukasi</h1><hr><br>";
         
         cbs.forEach((cb, index) => {
@@ -524,31 +573,24 @@
             let kontenRow = document.getElementById('konten-'+id).innerHTML;
             if(!incImg) kontenRow = kontenRow.replace(/<img[^>]*>/g, "");
             
-            // Pemisah halaman resmi HTML jika bukan karya pertama
-            if (index > 0) {
-                gabunganHTML += `<div style="page-break-before: always;"></div>`;
-            }
-            
             gabunganHTML += `<div style="margin-bottom: 20px;">`;
             
             if(incNama || incJabatan) {
-                // Menggunakan H2 agar otomatis masuk ke Navigation Pane (Panel Kiri Google Docs)
                 gabunganHTML += `<h2>`; 
                 if(incNama) gabunganHTML += `Penulis: ${cb.getAttribute('data-nama')} `;
                 if(incJabatan) gabunganHTML += `(${cb.getAttribute('data-jabatan')})`;
                 gabunganHTML += `</h2>`;
             }
-            
             gabunganHTML += `<div>${kontenRow}</div></div>`;
         });
 
         fetch(APPS_SCRIPT_URL, {
             method: 'POST', 
-            headers: {'Content-Type': 'text/plain;charset=utf-8'}, // HEADER WAJIB
+            headers: {'Content-Type': 'text/plain;charset=utf-8'},
             body: JSON.stringify({ action: 'rakitDoc', html: gabunganHTML })
         }).then(r => r.json()).then(res => {
             if(res.status === 'success') {
-                document.getElementById('modal-body').innerHTML = `<div style="text-align:center; padding: 20px;"><h3>🎉 Berhasil Dirakit Sempurna!</h3><p>Navigation Pane aktif dan setiap karya berada di halaman terpisah.</p><a href="${res.url}" target="_blank" style="font-size:20px; color:blue;">Buka Google Doc Disini</a></div>`;
+                document.getElementById('modal-body').innerHTML = `<div style="text-align:center; padding: 20px;"><h3>🎉 Berhasil Dirakit Sempurna!</h3><p>Setiap karya berada di halaman terpisah (1 Penulis 1 Halaman).</p><a href="${res.url}" target="_blank" style="font-size:20px; color:blue; font-weight:bold; padding:10px 20px; background:#4CAF50; color:white; border-radius:5px; text-decoration:none; display:inline-block; margin-top:15px;">Buka Google Doc Disini</a></div>`;
             } else {
                 alert("Gagal merakit: " + res.message); btn.innerText = "Coba Lagi";
             }
@@ -580,27 +622,26 @@
         let bubble = document.getElementById('gz-bubble');
         if(Math.random() < 0.1) { bubble.innerText = respon[Math.floor(Math.random() * respon.length)]; bubble.style.display = 'block'; setTimeout(() => bubble.style.display = 'none', 2000); }
     }
-	
-	// ==========================================
+    
+    // ==========================================
     // FUNGSI BUAT KARYA BARU
     // ==========================================
     function buatKaryaBaru() {
-        let konfirmasi = confirm("Apakah Anda ingin membuat lembar kerja baru?\n\nKarya Anda yang sebelumnya sudah tersimpan aman di database dan tidak akan terhapus.");
+        let konfirmasi = confirm("Apakah Anda ingin membuat lembar kerja baru?\n\nJika karya sebelumnya sudah tersimpan di database, karya itu aman dan tidak akan terhapus.");
         
         if(konfirmasi) {
-            // 1. Buat ID unik yang baru (agar saat disave masuk ke baris baru di Excel)
             currentId = 'KRY-' + new Date().getTime();
             localStorage.setItem('karya_id', currentId);
             
-            // 2. Kosongkan memori tulisan sebelumnya (Nama & Jabatan tidak dikosongkan agar praktis)
+            // Mengosongkan kolom teks agar user dipaksa mengisi baru
+            document.getElementById('nama').value = '';
+            localStorage.removeItem('karya_nama');
             localStorage.removeItem('karya_konten');
             
-            // 3. Bersihkan kanvas layar TinyMCE
             tinymce.get('editor').setContent('');
-            
-            // 4. Perbarui status layar
             updateCounters();
-            document.getElementById('save-status').innerText = 'Status: Lembar kerja baru siap digunakan!';
+            
+            document.getElementById('save-status').innerText = 'Status: Menunggu Nama & Tulisan diisi...';
         }
     }
 </script>
