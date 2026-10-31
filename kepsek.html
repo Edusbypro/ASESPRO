@@ -140,8 +140,39 @@
     .card.border-success { border-top-color: #198754 !important; }
     .card.border-danger  { border-top-color: #dc3545 !important; }
     .card.border-warning { border-top-color: #ffc107 !important; }
-    .card.border-info    { border-top-color: #0dcaf0 !important; }
+    .card.border-info    { border-top-color: #0dc<div class="nav-item" id=af0 !important; }
     .card.border-dark    { border-top-color: #212529 !important; }
+	
+	
+	/* =================================================== */
+    /* TEMA BLUE GLASSMORPHIC KHUSUS MENU SUPERVISI        */
+    /* =================================================== */
+    .glass-blue-header {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(14, 165, 233, 0.12)) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border: 1px solid rgba(59, 130, 246, 0.35) !important;
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.1) !important;
+    }
+    .glass-blue-card {
+        background: rgba(239, 246, 255, 0.65) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(96, 165, 250, 0.4) !important;
+        box-shadow: 0 10px 30px rgba(29, 78, 216, 0.12) !important;
+    }
+    .btn-glass-blue {
+        background: rgba(37, 99, 235, 0.12);
+        color: #1d4ed8;
+        border: 1px solid rgba(37, 99, 235, 0.35);
+        backdrop-filter: blur(6px);
+        transition: all 0.2s ease;
+    }
+    .btn-glass-blue:hover {
+        background: #2563eb;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
 	
   </style>
 </head>
@@ -211,6 +242,10 @@
         <div class="nav-item active" data-menu="beranda" onclick="navigasiKepsek('beranda', this)"><i class="bi bi-house-door"></i> Ringkasan Eksekutif</div>
         <div class="nav-item" data-menu="pantau" onclick="navigasiKepsek('pantau', this)"><i class="bi bi-activity"></i> Pantau Ujian (Live)</div>
         <div class="nav-item" data-menu="telaah" onclick="navigasiKepsek('telaah', this)"><i class="bi bi-file-earmark-check"></i> Telaah & Persetujuan Soal</div>
+		<!-- === TAMBAHAN: MENU SUPERVISI KEPSEK === -->
+        <div class="nav-item" data-menu="supervisi-app" onclick="navigasiKepsek('supervisi-app', this)">
+            <i class="bi bi-clipboard2-pulse-fill" style="color: #2563eb !important;"></i> Supervisi Akademik
+        </div>
         <!-- TAMBAHAN: MENU KINERJA -->
         <div class="nav-item" data-menu="kinerja" onclick="navigasiKepsek('kinerja', this)"><i class="bi bi-journal-arrow-up text-success"></i> Pantau Kinerja Guru</div>
         
@@ -361,6 +396,42 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+<!-- ======================================================= -->
+        <!-- 3.4 SUPERVISI (MODE BINGKAI / BLUE GLASSMORPHIC)        -->
+        <!-- ======================================================= -->
+        <div id="view-supervisi-app" class="view-section hidden">
+          <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded-4 glass-blue-header">
+            <div class="d-flex align-items-center">
+               <div class="bg-primary bg-opacity-25 text-primary rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="border: 1px solid rgba(37, 99, 235, 0.3);">
+                 <i class="bi bi-clipboard2-pulse-fill fs-5" style="color: #1d4ed8;"></i>
+               </div>
+               <div>
+                 <h5 class="fw-bold m-0" style="color: #1e3a8a;">Portal Supervisi Akademik</h5>
+                 <small style="color: #3b82f6; font-weight: 500;">Sistem Instrumen & Pemantauan Supervisi Terpadu</small>
+               </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-glass-blue fw-bold rounded-pill px-3" onclick="bukaFullscreenSupervisi(event)">
+                  <i class="bi bi-arrows-fullscreen me-1"></i> Layar Penuh
+                </button>
+                <button class="btn btn-sm btn-glass-blue fw-bold rounded-pill px-3" onclick="document.getElementById('iframe-supervisi-app').src = document.getElementById('iframe-supervisi-app').src">
+                  <i class="bi bi-arrow-clockwise me-1"></i> Muat Ulang
+                </button>
+            </div>
+          </div>
+          
+          <!-- Jendela Iframe -->
+          <div class="card rounded-4 overflow-hidden glass-blue-card p-1 mb-4">
+              <iframe 
+                id="iframe-supervisi-app"
+                src="https://edusbypro.github.io/ASESPRO/supervisi" 
+                width="100%" 
+                class="rounded-3"
+                style="height: calc(100vh - 190px); min-height: 600px; border: none; background-color: #f8fafc; display: block;">
+              </iframe>
+          </div>
         </div>
 
 <!-- ========================================== -->
