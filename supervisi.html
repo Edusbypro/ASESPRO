@@ -154,74 +154,29 @@
     }
 
 
-    /* FORCE ALL TEXT TO BE DARK AND HIGH CONTRAST - NO WHITE, NO PASTEL TEXT */
-    body, p, span, label, strong, h1, h2, h3, h4, h5, h6, th, td, div, a, li, input, select, textarea {
+    
+    /* FORCE ALL TEXT TO BE DARK ON LIGHT CARDS, BUT WHITE ON DARK CONTAINERS */
+    .glass-card p, .glass-card span, .glass-card label, .glass-card strong, .glass-card h1, .glass-card h2, .glass-card h3 {
       color: #0f172a !important;
     }
     
-    /* Exceptions for buttons/badges with solid dark or vibrant backgrounds where white text is necessary */
-    button.bg-cyan-600, button.bg-teal-600, button.bg-indigo-600, button.bg-blue-600, 
-    button.bg-rose-600, button.bg-emerald-600, button[id^="btnMode"], button[id^="tabRole"],
-    .bg-gradient-to-r, .bg-gradient-to-br, table.dual-table thead th {
+    /* EXCEPTIONS: Dark background containers (like Section C slider box, modal headers, etc.) */
+    .bg-slate-900 *, .bg-slate-800 *, .bg-slate-950 *, [class*="bg-slate-900"] *, [class*="bg-slate-800"] * {
       color: #ffffff !important;
-      text-shadow: none !important;
     }
     
-    /* Input and textarea text color */
-    input, select, textarea {
-      color: #0f172a !important;
-      background-color: #ffffff !important;
+    /* Specific overrides for slider box text */
+    #secDualDeepLearning .bg-slate-900 *, #secDualDeepLearning .bg-slate-900 span, #secDualDeepLearning .bg-slate-900 strong {
+      color: #ffffff !important;
     }
 
-    /* Table body text */
-    table.dual-table td, table.dual-table td * {
-      color: #0f172a !important;
+    /* FIX TEXT COLOR INSIDE SECTION C SLIDER BOX TO BE BRIGHT WHITE */
+    #secDualDeepLearning .bg-slate-900, 
+    #secDualDeepLearning .bg-slate-900 * {
+      color: #ffffff !important;
     }
-
-
-    /* GLASSMORPHIC CANDY 3D RAISED EFFECT */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 2.5px solid rgba(255, 255, 255, 0.95);
-      border-radius: 28px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 20px 45px rgba(244, 114, 182, 0.25), 
-                  inset 0 3px 6px rgba(255, 255, 255, 0.95), 
-                  inset 0 -3px 6px rgba(0, 0, 0, 0.08);
-    }
-    
-    .glass-sub {
-      background: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(12px);
-      border: 2px solid rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(192, 132, 252, 0.15),
-                  inset 0 2px 4px rgba(255, 255, 255, 0.9),
-                  inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    /* TABLE HEADER CANDY GRADIENT & 3D RAISED */
-    table.dual-table thead th {
-      background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #818cf8 100%) !important;
-      color: #0f172a !important;
-      font-size: 11.5px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.15);
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
-    }
-
-    /* 3D RAISED BOXES & CARDS INSIDE CONTENT */
-    .table-wrap {
-      border-radius: 20px;
-      border: 2.5px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 0 12px 30px rgba(244, 114, 182, 0.2),
-                  inset 0 2px 4px rgba(255, 255, 255, 0.9);
+    #secDualDeepLearning input[type="range"] {
+      accent-color: #38bdf8 !important;
     }
 
 </style>
@@ -802,7 +757,7 @@
       <p class="text-xs text-slate-700 leading-relaxed">
         Jika di-deploy langsung di dalam Google Apps Script, sistem otomatis terhubung ke Google Sheets tanpa perlu mengisi URL. Jika Anda menghosting file HTML ini di <strong>GitHub Pages / Netlify / Domain Sekolah</strong>, tempelkan URL Web App GAS Anda di bawah ini agar Guru dan Kepala Sekolah dapat berbagi data secara online:
       </p>
-      <input type="url" id="inGasWebAppUrl" placeholder="https://script.google.com/macros/s/AKfycbyiSFhT5LHgr7mrd-oSecrM3daspbmqBVswSBBeELLq2o8xrO3dFqrisliAczJtckMI/exec" class="w-full rounded-xl px-3.5 py-2.5 text-xs glass-input" />
+      <input type="url" id="inGasWebAppUrl" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full rounded-xl px-3.5 py-2.5 text-xs glass-input" />
       <div class="flex justify-end gap-2">
         <button onclick="saveGasWebAppUrl()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white">Simpan URL</button>
       </div>
@@ -2459,7 +2414,7 @@
     // SINKRONISASI CLOUD GOOGLE APPS SCRIPT (GITHUB PAGES <-> GAS <-> SHEETS)
     // =========================================================================
     // Opsional: Tempel URL Web App GAS Anda di sini agar otomatis terhubung di semua perangkat
-    const DEFAULT_GAS_WEBAPP_URL = "";
+    const DEFAULT_GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyiSFhT5LHgr7mrd-oSecrM3daspbmqBVswSBBeELLq2o8xrO3dFqrisliAczJtckMI/exec";
 
     function getActiveGasUrl() {
       const saved = (localStorage.getItem("GAS_DUAL_URL") || "").trim();
