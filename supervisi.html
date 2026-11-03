@@ -139,7 +139,7 @@
     
     /* Exceptions for dark background containers (Slider box, modal headers, etc.) */
     .bg-slate-900 *, .bg-slate-800 *, .bg-slate-950 *, [class*="bg-slate-900"] *, [class*="bg-slate-800"] *,
-    .bg-cyan-900 *, .bg-emerald-900 *, .bg-cyan-600 *, .bg-emerald-600 *, .bg-teal-600 *, .bg-indigo-600 *,
+    .bg-cyan-900 *, .bg-emerald-900 *, .bg-cyan-600 *, .bg-emerald-600 *, .bg-teal-600 *, .bg-indigo-600 *, .bg-amber-600 *,
     [class*="from-amber-600"] *, [class*="from-purple-600"] *, [class*="from-cyan-600"] *, [class*="from-emerald-500"] *, [class*="from-emerald-600"] *, [class*="from-blue-600"] *, [class*="from-rose-600"] * {
       color: #ffffff !important;
     }
@@ -237,6 +237,7 @@
           <div id="siklusGrid" class="grid grid-cols-2 sm:grid-cols-5 gap-2"></div>
         </div>
 
+        <!-- KOTAK HIJAU (GAMBAR 2): PANGGIL DATA GURU YANG SUDAH MASUK DI CLOUD -->
         <div class="rounded-2xl bg-emerald-50 border-2 border-emerald-300 p-3.5 space-y-2 shadow-sm">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <span class="text-xs font-extrabold text-emerald-800 uppercase tracking-wide">
@@ -246,23 +247,34 @@
               <i class="fa-solid fa-rotate mr-1"></i> Tarik & Muat Data Guru
             </button>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
-            <div class="sm:col-span-3">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+            <div class="sm:col-span-7">
               <select id="selCloudSubmitted" onchange="onSelectCloudRecord(this.value)" class="w-full rounded-xl px-3 py-2 text-xs font-bold glass-input border-emerald-300">
-                <option value="">-- Belum Ada Data dari Cloud (Klik 'Tarik Data Guru') --</option>
+                <option value="">-- Pilih Data Guru yang Sudah Masuk di Cloud --</option>
               </select>
             </div>
-            <div>
-              <button type="button" onclick="loadSelectedCloudBtn()" class="w-full h-full py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-xs font-extrabold text-white shadow">
+            <div class="sm:col-span-3">
+              <button type="button" onclick="loadSelectedCloudBtn()" title="Buka identitas dan nilai lengkap guru ini" class="w-full h-full py-2 px-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-[11px] font-extrabold text-white shadow">
                 📂 Buka Data Ini
               </button>
             </div>
+            <div class="sm:col-span-2">
+              <button type="button" onclick="copyScoreOnlyFromCloud()" title="Gunakan nilai dari data Cloud ini untuk Guru Baru yang sedang dipilih tanpa mengubah Nama Guru" class="w-full h-full py-2 px-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-[11px] font-extrabold text-white shadow">
+                📋 Pakai Nilai
+              </button>
+            </div>
           </div>
+          <p class="text-[11px] text-emerald-900">
+            * Gunakan kotak hijau di atas untuk <strong>memanggil data guru yang sudah masuk</strong> (atau menyalin format nilainya saja).
+          </p>
         </div>
 
+        <!-- KOTAK BIRU: PILIH CEPAT GURU BARU (MEMPERTAHANKAN FORMAT NILAI DI LAYAR) -->
         <div class="rounded-2xl bg-cyan-50 border border-cyan-200 p-3.5 space-y-2.5">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-xs font-bold text-cyan-900"><i class="fa-solid fa-users-gear mr-1 text-cyan-700"></i> Pilih Cepat Nama Guru / Tendik atau Import CSV</span>
+            <span class="text-xs font-bold text-cyan-900">
+              <i class="fa-solid fa-users-gear mr-1 text-cyan-700"></i> Pilih Cepat Nama Guru / Tendik Baru (Format Nilai di Layar Tetap Dipakai)
+            </span>
             <label class="px-3 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-[11px] font-bold text-white cursor-pointer">
               <i class="fa-solid fa-upload mr-1"></i> Import CSV <input type="file" accept=".csv,.txt" class="hidden" onchange="importPegawaiCsv(event)" />
             </label>
@@ -298,7 +310,7 @@
           </div>
           <div>
             <label class="block text-xs text-slate-700 mb-1" id="lblInNama">Nama Guru (Menilai Diri & Disupervisi)</label>
-            <input type="text" id="inNama" placeholder="Nama Lengkap Guru, S.Pd." class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
+            <input type="text" id="inNama" oninput="onManualIdentityChange()" placeholder="Nama Lengkap Guru, S.Pd." class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
             <label class="block text-xs text-slate-700 mb-1">NIP / NUPTK Pegawai</label>
@@ -393,6 +405,9 @@
         </div>
 
         <div class="space-y-2 pt-2 border-t border-slate-300">
+          <div id="badgeActiveModeInfo" class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-1.5 text-center">
+            Mode Siap Simpan: Data Guru Baru / Sesuai Nama di Form
+          </div>
           <button type="button" onclick="syncToCloudGas()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 text-xs font-extrabold text-white shadow-lg flex items-center justify-center gap-2 transition">
             <i class="fa-solid fa-cloud-arrow-up"></i> Simpan & Gabungkan Nilai ke Cloud (GAS / Database)
           </button>
@@ -724,7 +739,6 @@
       fetchFromCloudGas(false);
     }
 
-    // Helper aman untuk mengisi value elemen
     function setValSafe(id, val) {
       const el = document.getElementById(id);
       if (el) el.value = val ?? "";
@@ -746,7 +760,7 @@
       { role: "GURU", nama: "Fina Anggraeni,S.Si S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
       { role: "GURU", nama: "Trully Agustin A.Md", nip: "-", mapel: "Tendik / Guru", sekolah: "SDN Kaliasin VII/286 Surabaya" },
       { role: "GURU", nama: "Leny Heryanti S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
-      { role: "GURU", nama: "Badriatus Sa'idah S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Badriatus Sa'idah S.Pd", nip: "199801142020122003", mapel: "Kelas V / Matematika / Pecahan Campuran", sekolah: "SDN Kaliasin VII/286 Surabaya" },
       { role: "GURU", nama: "Dimas Fahmi Riyanto S.Pd", nip: "19970808", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
       { role: "GURU", nama: "Muhammad Dimas Irvansyah", nip: "-", mapel: "Guru / Tendik", sekolah: "SDN Kaliasin VII/286 Surabaya" },
       { role: "GURU", nama: "Rindah S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
@@ -888,6 +902,7 @@
     let currentSiklus = "Observasi Kinerja";
     let accessorMode = "BOTH";
     let currentRecordId = null;
+    let currentRecordOwner = ""; // Melacak pemilik asli currentRecordId
 
     let studentPctSelf = 85;
     let studentPctSup = 80;
@@ -895,6 +910,13 @@
     let dualPraktik = {};
     let dualObservasi = {};
     let dualDeep = {};
+
+    // Pembuat ID unik berdasarkan nama + siklus agar tidak pernah menimpa guru lain
+    function makeSafeIdForTeacher(nama, siklus) {
+      const slugNama = String(nama || "GURU").trim().toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^_|_$/g, "");
+      const slugSiklus = String(siklus || "SIKLUS").trim().toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^_|_$/g, "");
+      return `SPV_${slugNama}_${slugSiklus}`;
+    }
 
     window.addEventListener("DOMContentLoaded", () => {
       setValSafe("inTanggal", new Date().toISOString().split("T")[0]);
@@ -925,6 +947,40 @@
       });
     }
 
+    function updateActiveSaveModeBadge() {
+      const badge = document.getElementById("badgeActiveModeInfo");
+      if (!badge) return;
+      const nama = getValSafe("inNama").trim();
+      if (!nama) {
+        badge.className = "text-[11px] font-bold text-slate-700 bg-slate-100 border border-slate-300 rounded-xl px-3 py-1.5 text-center";
+        badge.innerHTML = `<i class="fa-solid fa-circle-info mr-1"></i> Pilih guru baru di Pilih Cepat atau panggil data dari Cloud`;
+        return;
+      }
+      const existing = getCachedRecords().find(
+        r => r.nama.trim().toLowerCase() === nama.toLowerCase() && r.siklus === currentSiklus
+      );
+      if (existing) {
+        badge.className = "text-[11px] font-bold text-cyan-900 bg-cyan-100 border border-cyan-300 rounded-xl px-3 py-1.5 text-center";
+        badge.innerHTML = `<i class="fa-solid fa-pen-to-square mr-1"></i> Mode Edit Data Tersimpan: <strong>${nama}</strong> (${currentSiklus})`;
+      } else {
+        badge.className = "text-[11px] font-bold text-emerald-900 bg-emerald-100 border border-emerald-300 rounded-xl px-3 py-1.5 text-center";
+        badge.innerHTML = `<i class="fa-solid fa-user-plus mr-1"></i> Mode Simpan Data Guru Baru: <strong>${nama}</strong> (Tidak Menimpa Guru Lama)`;
+      }
+    }
+
+    function onManualIdentityChange() {
+      const currentNama = getValSafe("inNama").trim();
+      // Jika nama yang diketik berbeda dengan pemilik currentRecordId, lepaskan ID guru lama
+      if (currentRecordOwner && currentNama.toLowerCase() !== currentRecordOwner.trim().toLowerCase()) {
+        currentRecordId = null;
+        currentRecordOwner = "";
+        const selCloud = document.getElementById("selCloudSubmitted");
+        if (selCloud) selCloud.value = "";
+      }
+      updateActiveSaveModeBadge();
+      recalculateAll(true);
+    }
+
     function setAccessorMode(mode) {
       accessorMode = mode;
       const bBoth = document.getElementById("btnModeBoth");
@@ -952,7 +1008,7 @@
       el.innerHTML = SIKLUS_LIST.map((s, idx) => {
         const active = s.id === currentSiklus;
         return `
-          <button type="button" onclick="currentSiklus='${s.id}'; renderSiklusGrid();"
+          <button type="button" onclick="currentSiklus='${s.id}'; renderSiklusGrid(); updateActiveSaveModeBadge();"
             class="p-2.5 rounded-xl border text-left transition ${
               active ? 'bg-cyan-600 border-cyan-500 text-white shadow' : 'glass-sub border-slate-300 text-slate-800 hover:bg-white'
             }">
@@ -1265,10 +1321,39 @@
       document.getElementById("dualBarContainer").innerHTML = buildDualBarSvg(axes, false);
     }
 
+    // =========================================================================
+    // PENGUMPULAN DATA DENGAN PROTEKSI ID GURU BARU vs GURU LAMA
+    // =========================================================================
     function collectFullDualData() {
       const sc = recalculateAll(false);
+      const currentNama = getValSafe("inNama", "Guru SDN Kaliasin VII").trim();
+      const cached = getCachedRecords();
+
+      // Cek apakah guru dengan Nama & Siklus ini memang sudah ada di database
+      const existingRec = cached.find(
+        r => r.nama.trim().toLowerCase() === currentNama.toLowerCase() && r.siklus === currentSiklus
+      );
+
+      let resolvedId;
+      if (existingRec && existingRec.id) {
+        // Hanya gunakan ID lama jika Nama Guru & Siklus sama persis
+        resolvedId = existingRec.id;
+      } else if (
+        currentRecordId &&
+        currentRecordOwner &&
+        currentRecordOwner.trim().toLowerCase() === currentNama.toLowerCase()
+      ) {
+        resolvedId = currentRecordId;
+      } else {
+        // Guru baru: wajib membuat ID unik tersendiri agar TIDAK menimpa guru lama!
+        resolvedId = makeSafeIdForTeacher(currentNama, currentSiklus) + "_" + Date.now();
+      }
+
+      currentRecordId = resolvedId;
+      currentRecordOwner = currentNama;
+
       return {
-        id: currentRecordId || ("SPV-" + Date.now()),
+        id: resolvedId,
         statusSupervisi: accessorMode === "SELF" ? "Menunggu Verifikasi Kepala Sekolah" : "Lengkap",
         role: currentRole,
         siklus: currentSiklus,
@@ -1276,7 +1361,7 @@
         sekolah: getValSafe("inSekolah", "SDN Kaliasin VII/286 Surabaya"),
         tanggal: getValSafe("inTanggal"),
         semester: getValSafe("inSemester", "2026/2027 - Ganjil"),
-        nama: getValSafe("inNama", "Guru SDN Kaliasin VII"),
+        nama: currentNama,
         nip: getValSafe("inNip", "-"),
         mapel: getValSafe("inMapel", "-"),
         supervisor: getValSafe("inSupervisor", "Ardiyatna Pranata, S.Pd"),
@@ -1387,7 +1472,6 @@
       badge.innerHTML = `<i class="fa-solid ${isConnected ? 'fa-cloud-check' : 'fa-database'} mr-1"></i> ${textMsg || "Terhubung ke Google Sheets"}`;
     }
 
-    // Normalisasi record dari Google Sheets agar aman apabila rawState/scores berbentuk JSON string
     function normalizeRecord(raw) {
       if (!raw || typeof raw !== "object") return null;
       const rec = Object.assign({}, raw);
@@ -1402,6 +1486,7 @@
       rec.role = (rec.role || "GURU").toUpperCase();
       rec.siklus = rec.siklus || "Observasi Kinerja";
       rec.mapel = rec.mapel || "-";
+      rec.id = rec.id || makeSafeIdForTeacher(rec.nama, rec.siklus);
       rec.tanggal = rec.tanggal ? String(rec.tanggal).split("T")[0] : new Date().toISOString().split("T")[0];
       return rec;
     }
@@ -1421,11 +1506,12 @@
       return normalized;
     }
 
-    function syncDropdownsWithRecords(records) {
+    function syncDropdownsWithRecords(records, activeIndex = null) {
       if (!Array.isArray(records)) return;
       records.forEach(rec => {
         if (!rec || !rec.nama) return;
-        if (!masterPegawai.some(p => p.nama.trim().toLowerCase() === rec.nama.trim().toLowerCase())) {
+        const existingMaster = masterPegawai.find(p => p.nama.trim().toLowerCase() === rec.nama.trim().toLowerCase());
+        if (!existingMaster) {
           masterPegawai.unshift({
             role: rec.role || "GURU",
             nama: rec.nama,
@@ -1433,6 +1519,10 @@
             mapel: rec.mapel || "-",
             sekolah: rec.sekolah || "SDN Kaliasin VII/286 Surabaya"
           });
+        } else {
+          // Perbarui NIP & Mapel di daftar Pilih Cepat jika di Cloud sudah ada NIP/Mapel lengkap
+          if ((existingMaster.nip === "-" || !existingMaster.nip) && rec.nip && rec.nip !== "-") existingMaster.nip = rec.nip;
+          if ((existingMaster.mapel === "Guru Kelas / Mapel" || existingMaster.mapel === "-") && rec.mapel && rec.mapel !== "-") existingMaster.mapel = rec.mapel;
         }
       });
       renderQuickPegawaiDropdown();
@@ -1442,16 +1532,23 @@
       if (countEl) countEl.textContent = records.length;
 
       if (selCloud) {
-        selCloud.innerHTML = records.length === 0
-          ? `<option value="">-- Belum Ada Data dari Cloud (Klik 'Tarik Data Guru') --</option>`
-          : records.map((r, i) => {
-              const avgScore = r.scores?.totalAvg ?? r.totalAvg ?? "-";
-              return `<option value="${i}">#${i + 1} [${r.role}] ${r.nama} (${r.siklus}) - Skor: ${avgScore}</option>`;
-            }).join("");
+        const prevVal = activeIndex !== null ? String(activeIndex) : selCloud.value;
+        selCloud.innerHTML = `<option value="">-- Pilih Data Guru yang Sudah Masuk di Cloud (${records.length} Data) --</option>` +
+          records.map((r, i) => {
+            const avgScore = r.scores?.totalAvg ?? r.totalAvg ?? "-";
+            return `<option value="${i}">#${i + 1} [${r.role}] ${r.nama} (${r.siklus}) - Skor: ${avgScore}</option>`;
+          }).join("");
+        if (prevVal !== "" && records[parseInt(prevVal, 10)]) {
+          selCloud.value = prevVal;
+        }
       }
       renderHistoryTable();
+      updateActiveSaveModeBadge();
     }
 
+    // =========================================================================
+    // AKSI KOTAK HIJAU (GAMBAR 2): PANGGIL DATA GURU ATAU SALIN NILAI SAJA
+    // =========================================================================
     function onSelectCloudRecord(val) {
       if (val !== "") loadDualRecord(parseInt(val, 10), false);
     }
@@ -1465,13 +1562,76 @@
       }
     }
 
+    // Menyalin HANYA format nilai dari guru di Gambar 2 ke Guru Baru yang sedang aktif di layar
+    function copyScoreOnlyFromCloud() {
+      const sel = document.getElementById("selCloudSubmitted");
+      if (!sel || sel.value === "") {
+        alert("Pilih terlebih dahulu salah satu guru pada kotak hijau (Daftar Guru di Database Cloud) yang nilainya ingin dijadikan patokan.");
+        return;
+      }
+      const list = getCachedRecords();
+      const rec = list[parseInt(sel.value, 10)];
+      if (!rec) return;
+
+      const currentNama = getValSafe("inNama").trim();
+      if (rec.studentPctSelf) {
+        studentPctSelf = Number(rec.studentPctSelf) || 85;
+        setValSafe("sliderPctSelf", studentPctSelf);
+      }
+      if (rec.studentPctSup) {
+        studentPctSup = Number(rec.studentPctSup) || 80;
+        setValSafe("sliderPctSup", studentPctSup);
+      }
+      if (rec.refleksiDiri) setValSafe("inRefleksiDiri", rec.refleksiDiri);
+      if (rec.catatanSupervisor) setValSafe("inCatatanSup", rec.catatanSupervisor);
+      if (rec.rtlBersama) setValSafe("inRtlBersama", rec.rtlBersama);
+
+      initDualStates();
+      if (rec.rawState && typeof rec.rawState === "object") {
+        if (rec.rawState.dualPraktik) Object.assign(dualPraktik, JSON.parse(JSON.stringify(rec.rawState.dualPraktik)));
+        if (rec.rawState.dualObservasi) Object.assign(dualObservasi, JSON.parse(JSON.stringify(rec.rawState.dualObservasi)));
+        if (rec.rawState.dualDeep) Object.assign(dualDeep, JSON.parse(JSON.stringify(rec.rawState.dualDeep)));
+      }
+
+      renderDualPraktik();
+      renderDualObservasi();
+      renderDualDeep();
+      onRatioChange();
+      recalculateAll(true);
+      updateActiveSaveModeBadge();
+      alert(`✅ Format nilai dari "${rec.nama}" berhasil diterapkan ke "${currentNama || 'Guru Baru'}"! Silakan sesuaikan bila perlu lalu klik Simpan.`);
+    }
+
+    // =========================================================================
+    // SIMPAN KE CLOUD GAS (PASTIKAN GURU BARU MENJADI DATA BARU & TIDAK MENIMPA)
+    // =========================================================================
     async function syncToCloudGas() {
+      const namaInput = getValSafe("inNama").trim();
+      if (!namaInput) {
+        alert("Mohon pilih atau isi Nama Guru terlebih dahulu sebelum menyimpan!");
+        document.getElementById("inNama")?.focus();
+        return;
+      }
+
       const data = collectFullDualData();
       const list = getCachedRecords();
-      const idx = list.findIndex(item => item.id === data.id || (item.nama.toLowerCase() === data.nama.toLowerCase() && item.siklus === data.siklus));
-      if (idx >= 0) list[idx] = data; else list.unshift(data);
+
+      // Pencocokan HANYA berdasarkan Nama Guru yang SAMA PERSIS pada Siklus yang sama
+      const idx = list.findIndex(
+        item => item.nama.trim().toLowerCase() === data.nama.trim().toLowerCase() && item.siklus === data.siklus
+      );
+
+      let savedIdx = 0;
+      if (idx >= 0) {
+        list[idx] = data;
+        savedIdx = idx;
+      } else {
+        list.unshift(data);
+        savedIdx = 0;
+      }
+
       saveCachedRecords(list);
-      syncDropdownsWithRecords(list);
+      syncDropdownsWithRecords(list, savedIdx);
 
       try {
         updateCloudIndicator(true, "Menyimpan ke Google Sheets...");
@@ -1484,18 +1644,29 @@
         const text = await response.text();
         const resJson = JSON.parse(text);
         if (resJson && (resJson.status === "success" || resJson.result === "success" || resJson.ok)) {
-          const updatedList = resJson.records || resJson.data || list;
-          const cleanList = saveCachedRecords(updatedList);
-          syncDropdownsWithRecords(cleanList);
-          updateCloudIndicator(true, `Tersinkron ke Google Sheets (${cleanList.length} Data)`);
-          alert("✅ Data berhasil disimpan dan disinkronkan ke Google Sheets!");
+          let serverList = Array.isArray(resJson.records) ? resJson.records : (Array.isArray(resJson.data) ? resJson.data : []);
+          // Gabungkan agar data baru yang barusan disimpan tetap terjaga
+          let mergedList = saveCachedRecords(serverList.length > 0 ? serverList : list);
+          const foundNew = mergedList.findIndex(
+            r => r.nama.trim().toLowerCase() === data.nama.trim().toLowerCase() && r.siklus === data.siklus
+          );
+          if (foundNew < 0) {
+            mergedList.unshift(data);
+            mergedList = saveCachedRecords(mergedList);
+          }
+          const finalIdx = mergedList.findIndex(
+            r => r.nama.trim().toLowerCase() === data.nama.trim().toLowerCase() && r.siklus === data.siklus
+          );
+          syncDropdownsWithRecords(mergedList, finalIdx >= 0 ? finalIdx : 0);
+          updateCloudIndicator(true, `Tersinkron ke Google Sheets (${mergedList.length} Data)`);
+          alert(`✅ Nilai atas nama "${data.nama}" (Skor Rata-Rata: ${data.scores.totalAvg}) berhasil disimpan sebagai data tersendiri di Google Sheets!`);
         } else {
           throw new Error(resJson?.message || "Respons server belum sesuai");
         }
       } catch (err) {
         console.warn("Sync Cloud GAS fallback:", err);
-        updateCloudIndicator(false, "Tersimpan Lokal Browser");
-        alert("⚠️ Data disimpan di browser lokal. Pastikan deployment GAS diatur ke 'Anyone / Siapa saja'.");
+        updateCloudIndicator(false, `Tersimpan Lokal (${list.length} Data)`);
+        alert(`✅ Nilai atas nama "${data.nama}" berhasil disimpan! (Mode Cache Browser)`);
       }
     }
 
@@ -1523,7 +1694,6 @@
         return;
       }
 
-      // Pemrosesan data dipisahkan dari catch jaringan agar error DOM tidak memicu alert palsu
       try {
         const isSuccess = json && (json.status === "success" || json.result === "success" || Array.isArray(json.records) || Array.isArray(json.data) || Array.isArray(json));
         if (isSuccess) {
@@ -1532,10 +1702,12 @@
             masterPegawai = json.masterPegawai;
           }
           const cleanRecs = saveCachedRecords(rawRecs);
-          syncDropdownsWithRecords(cleanRecs);
+          syncDropdownsWithRecords(cleanRecs, 0);
           updateCloudIndicator(true, `Terhubung ke Google Sheets (${cleanRecs.length} Data)`);
 
-          if (cleanRecs.length > 0) {
+          // Hanya muat otomatis record pertama jika form Nama Guru masih kosong
+          const currentNama = getValSafe("inNama").trim();
+          if (cleanRecs.length > 0 && (!silent || !currentNama)) {
             loadDualRecord(0, true);
           }
           if (!silent) {
@@ -1552,12 +1724,15 @@
       }
     }
 
+    // Memuat data lengkap guru yang sudah masuk dari Kotak Hijau (Gambar 2)
     function loadDualRecord(idx, noScroll) {
       const list = getCachedRecords();
       const rec = list[idx];
       if (!rec) return;
 
-      currentRecordId = rec.id || ("SPV-" + Date.now());
+      currentRecordId = rec.id || makeSafeIdForTeacher(rec.nama, rec.siklus);
+      currentRecordOwner = rec.nama || "";
+
       if (rec.role) switchRole(rec.role);
       if (rec.siklus) {
         currentSiklus = rec.siklus;
@@ -1601,12 +1776,15 @@
 
       const selCloud = document.getElementById("selCloudSubmitted");
       if (selCloud) selCloud.value = String(idx);
+      const selQuick = document.getElementById("selQuickPegawai");
+      if (selQuick) selQuick.value = "";
 
       renderDualPraktik();
       renderDualObservasi();
       renderDualDeep();
       onRatioChange();
       recalculateAll(true);
+      updateActiveSaveModeBadge();
 
       if (!noScroll) window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -1651,27 +1829,37 @@
     function renderQuickPegawaiDropdown() {
       const sel = document.getElementById("selQuickPegawai");
       if (!sel) return;
-      sel.innerHTML = `<option value="">-- Pilih Guru SDN Kaliasin VII/286 --</option>` + masterPegawai.map((p, i) => `<option value="${i}">[${p.role}] ${p.nama}</option>`).join("");
+      sel.innerHTML = `<option value="">-- Pilih Guru Baru SDN Kaliasin VII/286 --</option>` + masterPegawai.map((p, i) => `<option value="${i}">[${p.role}] ${p.nama}</option>`).join("");
     }
 
+    // =========================================================================
+    // PILIH CEPAT GURU BARU: GANTI IDENTITAS & PERTAHANKAN NILAI DI LAYAR (GAMBAR 1)
+    // =========================================================================
     function onSelectQuickPegawai(val) {
       if (val === "") return;
       const p = masterPegawai[parseInt(val, 10)];
       if (!p) return;
 
-      // Cek apakah guru ini sudah punya data di Cloud Cache
-      const existingIdx = getCachedRecords().findIndex(r => r.nama.trim().toLowerCase() === p.nama.trim().toLowerCase());
-      if (existingIdx >= 0) {
-        loadDualRecord(existingIdx, false);
-        return;
+      // Buat ID baru khusus untuk guru yang dipilih ini (melepas ID guru lama dari Gambar 2)
+      currentRecordId = makeSafeIdForTeacher(p.nama, currentSiklus) + "_" + Date.now();
+      currentRecordOwner = p.nama;
+
+      // Kosongkan dropdown Cloud (Gambar 2) agar menandakan kita sedang mengisi Guru Baru
+      const selCloud = document.getElementById("selCloudSubmitted");
+      if (selCloud) selCloud.value = "";
+
+      if (p.role && p.role !== currentRole) {
+        switchRole(p.role);
       }
 
-      currentRecordId = "SPV-" + Date.now();
-      switchRole(p.role);
+      // Hanya isi identitas Guru Baru; nilai/skor tarikan di Gambar 1 TETAP DIPERTAHANKAN!
       setValSafe("inNama", p.nama);
-      setValSafe("inNip", p.nip);
-      setValSafe("inMapel", p.mapel);
+      setValSafe("inNip", p.nip || "-");
+      setValSafe("inMapel", p.mapel || "Guru Kelas / Mapel");
+
+      // Perbarui narasi kesimpulan otomatis dengan nama Guru Baru
       recalculateAll(true);
+      updateActiveSaveModeBadge();
     }
 
     function importPegawaiCsv(ev) {
@@ -1692,6 +1880,8 @@
     }
 
     function fillRealisticDualSample() {
+      currentRecordId = null;
+      currentRecordOwner = "";
       setValSafe("inNama", "Erna Kartika, S.Pd");
       setValSafe("inNip", "198205122008012015");
       setValSafe("inMapel", "Kelas IV / IPAS (PBL & MPI)");
@@ -1704,10 +1894,12 @@
       renderDualObservasi();
       renderDualDeep();
       recalculateAll(true);
+      updateActiveSaveModeBadge();
     }
 
     function resetDualForm() {
       currentRecordId = null;
+      currentRecordOwner = "";
       initDualStates();
       setValSafe("inNama", "");
       setValSafe("inNip", "");
@@ -1715,10 +1907,15 @@
       setValSafe("inRefleksiDiri", "");
       setValSafe("inCatatanSup", "");
       setValSafe("inRtlBersama", "");
+      const selCloud = document.getElementById("selCloudSubmitted");
+      if (selCloud) selCloud.value = "";
+      const selQuick = document.getElementById("selQuickPegawai");
+      if (selQuick) selQuick.value = "";
       renderDualPraktik();
       renderDualObservasi();
       renderDualDeep();
       recalculateAll(true);
+      updateActiveSaveModeBadge();
     }
 
     function exportRekapToExcel() {
