@@ -18,139 +18,213 @@
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     body {
-      background: radial-gradient(circle at 15% 15%, #0f172a 0%, #1e1b4b 50%, #020617 100%);
-      color: #f8fafc;
+      background: linear-gradient(135deg, #fbcfe8 0%, #fed7aa 25%, #bfdbfe 50%, #e9d5ff 75%, #a7f3d0 100%);
+      background-attachment: fixed;
+      color: #1e293b;
       min-height: 100vh;
     }
     .glass-card {
-      background: rgba(30, 41, 59, 0.68);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 45px rgba(148, 163, 184, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.8);
     }
     .glass-sub {
-      background: rgba(15, 23, 42, 0.72);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
     }
     .glass-input {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #f472b6;
+      border-radius: 14px;
+      color: #0f172a;
+      padding: 10px 14px;
+      font-weight: 600;
       transition: all 0.2s;
     }
     .glass-input:focus {
       outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+      border-color: #ec4899;
+      box-shadow: 0 0 0 4px rgba(244, 114, 182, 0.25);
+      background: #ffffff;
+    }
+    .glass-input option {
+      background: #ffffff;
+      color: #0f172a;
     }
 
-    /* Tabel Rubrik Kolaboratif 2 Arah */
+    /* Tabel Rubrik Kolaboratif Terang & Lucu */
     .table-wrap {
       width: 100%;
       overflow-x: auto;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      border: 2px solid rgba(244, 114, 182, 0.3);
+      box-shadow: 0 8px 25px rgba(244, 114, 182, 0.12);
     }
     table.dual-table {
       width: 100%;
       border-collapse: collapse;
-      background: rgba(15, 23, 42, 0.78);
+      background: rgba(255, 255, 255, 0.85);
       font-size: 12.5px;
+      color: #1e293b;
     }
     table.dual-table th,
     table.dual-table td {
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      padding: 10px 12px;
+      border: 1px solid #fbcfe8;
+      padding: 11px 13px;
       vertical-align: top;
       text-align: left;
     }
     table.dual-table thead th {
-      background: rgba(30, 41, 59, 0.96);
+      background: #0f172a !important;
+      color: #ffffff !important;
       font-size: 11.5px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
+      border: 1px solid #334155;
     }
     table.dual-table tr.group-row td {
-      background: linear-gradient(90deg, rgba(6, 182, 212, 0.28), rgba(30, 41, 59, 0.92));
-      color: #ffffff;
+      background: linear-gradient(135deg, #bae6fd, #e9d5ff);
+      color: #3b0764;
       font-weight: 800;
       font-size: 13px;
-      padding: 10px 14px;
+      padding: 12px 14px;
     }
 
-    /* Pill Score Buttons for Self (Guru) & Supervisor (KS) */
+    /* Candy Pill Buttons */
     .score-btn {
       width: 100%;
       text-align: left;
-      padding: 6px 9px;
-      border-radius: 8px;
+      padding: 7px 10px;
+      border-radius: 12px;
       font-size: 11px;
       font-weight: 700;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(30, 41, 59, 0.75);
-      color: #cbd5e1;
-      transition: all 0.15s;
-      margin-bottom: 4px;
+      border: 2px solid #e2e8f0;
+      background: rgba(255, 255, 255, 0.9);
+      color: #475569;
+      transition: all 0.2s;
+      margin-bottom: 5px;
       display: block;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
     }
     .score-btn:hover:not(:disabled) {
-      filter: brightness(1.15);
+      transform: translateY(-1px);
+      filter: brightness(1.05);
     }
     .score-btn:disabled {
-      opacity: 0.45;
+      opacity: 0.5;
       cursor: not-allowed;
     }
-    .score-btn.self-active-1 { background: rgba(239, 68, 68, 0.3); border-color: #f87171; color: #fecaca; }
-    .score-btn.self-active-2 { background: rgba(245, 158, 11, 0.3); border-color: #fbbf24; color: #fde68a; }
-    .score-btn.self-active-3 { background: rgba(56, 189, 248, 0.32); border-color: #38bdf8; color: #bae6fd; }
+    .score-btn.self-active-1 { background: #fee2e2; border-color: #f87171; color: #991b1b; }
+    .score-btn.self-active-2 { background: #fef3c7; border-color: #fbbf24; color: #92400e; }
+    .score-btn.self-active-3 { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; }
 
-    .score-btn.sup-active-1 { background: rgba(239, 68, 68, 0.35); border-color: #f87171; color: #fecaca; }
-    .score-btn.sup-active-2 { background: rgba(245, 158, 11, 0.35); border-color: #fbbf24; color: #fde68a; }
-    .score-btn.sup-active-3 { background: rgba(16, 185, 129, 0.35); border-color: #34d399; color: #a7f3d0; }
+    .score-btn.sup-active-1 { background: #fee2e2; border-color: #f87171; color: #991b1b; }
+    .score-btn.sup-active-2 { background: #fef3c7; border-color: #fbbf24; color: #92400e; }
+    .score-btn.sup-active-3 { background: #d1fae5; border-color: #34d399; color: #065f46; }
 
-    /* Printable A4 Sheet */
-    #printableArea {
-      background: #ffffff;
-      color: #000000;
-      font-family: 'Times New Roman', Times, serif;
-      line-height: 1.35;
-      padding: 14mm;
-      max-width: 210mm;
-      margin: 0 auto;
+    .glass-card h1, .glass-card h2, .glass-card h3, .glass-card h4, 
+    .glass-card p, .glass-card span, .glass-card label, .glass-card strong {
+      color: #0f172a !important;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
     }
-    #printableArea table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 10px;
+    /* Keep button text white */
+    .glass-card button span, .glass-card button, .glass-card .badge, header button {
+      color: inherit;
     }
-    #printableArea th, #printableArea td {
-      border: 1px solid #000000;
-      padding: 5px 6px;
-      vertical-align: top;
-      font-size: 9.5pt;
-      color: #000000;
+    header h1 span {
+      background: none !important;
+      -webkit-background-clip: initial !important;
+      -webkit-text-fill-color: initial !important;
+      color: #0f172a !important;
     }
-    #printableArea th {
-      background: #e2e8f0;
-      font-weight: bold;
-      text-align: center;
+    header p, header h1 {
+      color: #0f172a !important;
     }
-    @media print {
-      body * { visibility: hidden; }
-      #previewModal, #printableArea, #printableArea * { visibility: visible; }
-      #previewModal {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        background: #ffffff;
-        padding: 0;
-      }
-      .no-print { display: none !important; }
+    .badge-cyan, .badge-emerald, .badge-amber {
+      color: #0f172a !important;
+      font-weight: 800 !important;
     }
-  </style>
+
+
+    /* FORCE ALL TEXT TO BE DARK AND HIGH CONTRAST - NO WHITE, NO PASTEL TEXT */
+    body, p, span, label, strong, h1, h2, h3, h4, h5, h6, th, td, div, a, li, input, select, textarea {
+      color: #0f172a !important;
+    }
+    
+    /* Exceptions for buttons/badges with solid dark or vibrant backgrounds where white text is necessary */
+    button.bg-cyan-600, button.bg-teal-600, button.bg-indigo-600, button.bg-blue-600, 
+    button.bg-rose-600, button.bg-emerald-600, button[id^="btnMode"], button[id^="tabRole"],
+    .bg-gradient-to-r, .bg-gradient-to-br, table.dual-table thead th {
+      color: #ffffff !important;
+      text-shadow: none !important;
+    }
+    
+    /* Input and textarea text color */
+    input, select, textarea {
+      color: #0f172a !important;
+      background-color: #ffffff !important;
+    }
+
+    /* Table body text */
+    table.dual-table td, table.dual-table td * {
+      color: #0f172a !important;
+    }
+
+
+    /* GLASSMORPHIC CANDY 3D RAISED EFFECT */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2.5px solid rgba(255, 255, 255, 0.95);
+      border-radius: 28px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 45px rgba(244, 114, 182, 0.25), 
+                  inset 0 3px 6px rgba(255, 255, 255, 0.95), 
+                  inset 0 -3px 6px rgba(0, 0, 0, 0.08);
+    }
+    
+    .glass-sub {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(192, 132, 252, 0.15),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.9),
+                  inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* TABLE HEADER CANDY GRADIENT & 3D RAISED */
+    table.dual-table thead th {
+      background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #818cf8 100%) !important;
+      color: #0f172a !important;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+    }
+
+    /* 3D RAISED BOXES & CARDS INSIDE CONTENT */
+    .table-wrap {
+      border-radius: 20px;
+      border: 2.5px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 12px 30px rgba(244, 114, 182, 0.2),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.9);
+    }
+
+</style>
 </head>
 <body class="p-4 md:p-6">
 
@@ -165,7 +239,7 @@
         <h1 class="text-2xl md:text-3xl font-extrabold text-white">
           Asesmen Supervisi <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">Penilaian Diri Guru & Kepala Sekolah</span>
         </h1>
-        <p class="text-xs md:text-sm text-slate-300 max-w-4xl">
+        <p class="text-xs md:text-sm text-slate-700 max-w-4xl">
           Guru/Tendik menilai diri sendiri secara online, kemudian dibandingkan dengan penilaian Kepala Sekolah/Supervisor untuk menghasilkan <strong>Nilai Rata-Rata Gabungan</strong>, <strong>Analisis Selisih Persepsi (Gap)</strong>, serta <strong>Kesimpulan Penilaian Gabungan Otomatis</strong>.
         </p>
       </div>
@@ -196,7 +270,7 @@
           <span class="text-xs font-bold uppercase tracking-wider text-cyan-300">
             <i class="fa-solid fa-users-viewfinder mr-1"></i> Mode Akses Pengguna Online Saat Ini:
           </span>
-          <h2 class="text-base font-bold text-white mt-0.5">
+          <h2 class="text-base font-bold text-slate-900 mt-0.5">
             Pilih Peran Pengisian Tabel (Guru Menilai Diri Sendiri / Kepala Sekolah Menilai / Mode Berdampingan)
           </h2>
         </div>
@@ -205,10 +279,10 @@
           <button id="btnModeBoth" onclick="setAccessorMode('BOTH')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 border-purple-300 text-white shadow-lg">
             <i class="fa-solid fa-people-arrows"></i> 1. Mode Kolaborasi (Buka Keduanya)
           </button>
-          <button id="btnModeSelf" onclick="setAccessorMode('SELF')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-white/15 text-slate-300 hover:text-white">
+          <button id="btnModeSelf" onclick="setAccessorMode('SELF')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-white/15 text-slate-700 hover:text-white">
             <i class="fa-solid fa-user-pen text-cyan-400"></i> 2. Mode Guru/Tendik (Nilai Diri Sendiri)
           </button>
-          <button id="btnModeSup" onclick="setAccessorMode('SUPERVISOR')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-white/15 text-slate-300 hover:text-white">
+          <button id="btnModeSup" onclick="setAccessorMode('SUPERVISOR')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-white/15 text-slate-700 hover:text-white">
             <i class="fa-solid fa-user-tie text-emerald-400"></i> 3. Mode Kepala Sekolah (Supervisor)
           </button>
         </div>
@@ -223,13 +297,13 @@
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
           <div>
             <h2 class="text-lg font-bold text-white">Sasaran & Identitas Supervisi</h2>
-            <p class="text-xs text-slate-300">Pilih instrumen Guru atau Tenaga Kependidikan (Tendik)</p>
+            <p class="text-xs text-slate-700">Pilih instrumen Guru atau Tenaga Kependidikan (Tendik)</p>
           </div>
           <div class="inline-flex rounded-2xl p-1 bg-slate-900/90 border border-white/10">
             <button id="tabRoleGuru" onclick="switchRole('GURU')" class="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow">
               <i class="fa-solid fa-chalkboard-user mr-1"></i> Instrumen Guru
             </button>
-            <button id="tabRoleTendik" onclick="switchRole('TENDIK')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white">
+            <button id="tabRoleTendik" onclick="switchRole('TENDIK')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-white">
               <i class="fa-solid fa-building-user mr-1"></i> Instrumen Tendik
             </button>
           </div>
@@ -294,39 +368,39 @@
         <!-- Form Identitas -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label class="block text-xs text-slate-300 mb-1">Satuan Pendidikan / Sekolah</label>
+            <label class="block text-xs text-slate-700 mb-1">Satuan Pendidikan / Sekolah</label>
             <input type="text" id="inSekolah" value="SDN Kaliasin VII/286 Surabaya" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">Tanggal Supervisi</label>
+            <label class="block text-xs text-slate-700 mb-1">Tanggal Supervisi</label>
             <input type="date" id="inTanggal" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">Tahun Ajaran / Semester</label>
+            <label class="block text-xs text-slate-700 mb-1">Tahun Ajaran / Semester</label>
             <input type="text" id="inSemester" value="2026/2027 - Ganjil" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1" id="lblInNama">Nama Guru (Menilai Diri & Disupervisi)</label>
+            <label class="block text-xs text-slate-700 mb-1" id="lblInNama">Nama Guru (Menilai Diri & Disupervisi)</label>
             <input type="text" id="inNama" placeholder="Nama Lengkap Guru, S.Pd." class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">NIP / NUPTK Pegawai</label>
+            <label class="block text-xs text-slate-700 mb-1">NIP / NUPTK Pegawai</label>
             <input type="text" id="inNip" placeholder="19910514 201903 2 008" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1" id="lblInMapel">Kelas / Mapel & Topik</label>
+            <label class="block text-xs text-slate-700 mb-1" id="lblInMapel">Kelas / Mapel & Topik</label>
             <input type="text" id="inMapel" placeholder="Kelas V / IPAS - Ekosistem" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">Nama Kepala Sekolah / Supervisor</label>
+            <label class="block text-xs text-slate-700 mb-1">Nama Kepala Sekolah / Supervisor</label>
             <input type="text" id="inSupervisor" value="" placeholder="Nama Kepala Sekolah" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">NIP Kepala Sekolah / Supervisor</label>
+            <label class="block text-xs text-slate-700 mb-1">NIP Kepala Sekolah / Supervisor</label>
             <input type="text" id="inNipSupervisor" value="" placeholder="NIP Kepala Sekolah" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">Ketua K3S SD / Pengawas Bina</label>
+            <label class="block text-xs text-slate-700 mb-1">Ketua K3S SD / Pengawas Bina</label>
             <input type="text" id="inPejabatKop" value="" placeholder="Nama Pejabat (Opsional)" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
         </div>
@@ -350,14 +424,14 @@
             <div class="rounded-2xl bg-cyan-950/50 border border-cyan-400/30 p-3 text-center">
               <div class="text-[11px] font-bold text-cyan-300 uppercase">1. Nilai Diri Guru</div>
               <div id="valTotalSelf" class="text-2xl md:text-3xl font-extrabold text-white mt-1">0.0</div>
-              <div class="text-[10px] text-slate-300 mt-0.5">Refleksi Pribadi</div>
+              <div class="text-[10px] text-slate-700 mt-0.5">Refleksi Pribadi</div>
             </div>
 
             <!-- Skor Kepala Sekolah -->
             <div class="rounded-2xl bg-emerald-950/50 border border-emerald-400/30 p-3 text-center">
               <div class="text-[11px] font-bold text-emerald-300 uppercase">2. Nilai Kepsek</div>
               <div id="valTotalSup" class="text-2xl md:text-3xl font-extrabold text-white mt-1">0.0</div>
-              <div class="text-[10px] text-slate-300 mt-0.5">Observasi Atasan</div>
+              <div class="text-[10px] text-slate-700 mt-0.5">Observasi Atasan</div>
             </div>
 
             <!-- Rata-Rata Gabungan -->
@@ -380,7 +454,7 @@
 
           <!-- Tabel Mini Rincian Per Bagian (Guru vs KS vs Rata-rata) -->
           <div class="rounded-2xl glass-sub p-3 text-xs space-y-1.5">
-            <div class="grid grid-cols-12 font-bold text-slate-400 border-b border-white/10 pb-1">
+            <div class="grid grid-cols-12 font-bold text-slate-600 border-b border-white/10 pb-1">
               <div class="col-span-5">Komponen Tabel</div>
               <div class="col-span-2 text-center text-cyan-300">Guru</div>
               <div class="col-span-2 text-center text-emerald-300">Kepsek</div>
@@ -431,7 +505,7 @@
           <span class="text-xs font-extrabold uppercase tracking-wider text-amber-300">
             <i class="fa-solid fa-microchip-ai mr-1"></i> Sintesis & Analitik Otomatis Dua Arah
           </span>
-          <h2 class="text-xl font-bold text-white mt-0.5">
+          <h2 class="text-xl font-bold text-slate-900 mt-0.5">
             Kesimpulan Penilaian Gabungan (Pribadi Guru vs Supervisor Kepala Sekolah) & Grafik Komparasi
           </h2>
         </div>
@@ -452,7 +526,7 @@
             <textarea id="txtAutoConclusion" rows="6" class="w-full rounded-xl p-3 text-xs leading-relaxed glass-input"></textarea>
           </div>
 
-          <div class="rounded-2xl glass-sub p-3.5 text-xs text-slate-300 space-y-1">
+          <div class="rounded-2xl glass-sub p-3.5 text-xs text-slate-700 space-y-1">
             <div class="font-bold text-white"><i class="fa-solid fa-circle-info text-cyan-400 mr-1"></i> Cara Kerja Rumus Gabungan:</div>
             <p>• Setiap indikator memiliki <strong>Skor Diri Pegawai ($S_{	ext{diri}}$)</strong> dan <strong>Skor Supervisor Kepala Sekolah ($S_{	ext{KS}}$)</strong> dengan rentang 1 s.d. 3.</p>
             <p>• Nilai Rata-Rata Indikator dihitung dengan rumus: $	ext{Rata-rata} = rac{S_{	ext{diri}} + S_{	ext{KS}}}{2}$.</p>
@@ -483,7 +557,7 @@
         <h2 class="text-lg md:text-xl font-bold text-white">
           Tabel Komparasi Praktik Kinerja (Upaya Refleksi, Upaya Mempelajari & Perubahan Praktik)
         </h2>
-        <p class="text-xs text-slate-300">
+        <p class="text-xs text-slate-700">
           Bandingkan penilaian refleksi mandiri pegawai dengan penilaian Kepala Sekolah/Supervisor pada setiap pertanyaan pemandu.
         </p>
       </div>
@@ -495,9 +569,9 @@
               <th style="width: 40px; text-align: center;">No</th>
               <th style="width: 18%;">Aspek Praktik Kinerja</th>
               <th style="width: 26%;">Pertanyaan Pemandu & Indikator</th>
-              <th style="width: 17%; color: #67e8f9;">👤 Penilaian Diri (Guru/Tendik)</th>
-              <th style="width: 17%; color: #6ee7b7;">👨‍💼 Penilaian Supervisor (Kepala Sekolah)</th>
-              <th style="width: 10%; text-align: center; color: #fcd34d;">★ Rata-Rata & Selisih</th>
+              <th style="width: 17%; color: #38bdf8; font-weight: bold;">👤 Penilaian Diri (Guru/Tendik)</th>
+              <th style="width: 17%; color: #34d399; font-weight: bold;">👨‍💼 Penilaian Supervisor (Kepala Sekolah)</th>
+              <th style="width: 10%; text-align: center; color: #fbbf24; font-weight: bold;">★ Rata-Rata & Selisih</th>
               <th style="width: 12%;">Catatan Bukti & Umpan Balik</th>
             </tr>
           </thead>
@@ -516,13 +590,13 @@
           <h2 class="text-lg md:text-xl font-bold text-white" id="titleSectionB">
             Tabel Komparasi 8 Indikator Rubrik Observasi Kelas (Guru Pribadi vs Kepala Sekolah)
           </h2>
-          <p class="text-xs text-slate-300">
+          <p class="text-xs text-slate-700">
             Dilengkapi daftar centang Perilaku yang Dianjurkan & Perilaku yang Dihindari serta perbandingan skor kedua pihak.
           </p>
         </div>
 
         <div id="filterBoxGuru" class="flex items-center gap-2">
-          <label class="text-xs font-bold text-slate-300">Filter Indikator:</label>
+          <label class="text-xs font-bold text-slate-700">Filter Indikator:</label>
           <select id="selFilterIndikator" onchange="renderDualObservasi(); recalculateAll();" class="rounded-xl px-3 py-2 text-xs font-semibold glass-input">
             <option value="ALL">Tampilkan Semua 8 Indikator Observasi Kelas (Lengkap)</option>
             <option value="0">1. Penerapan Disiplin Positif</option>
@@ -564,7 +638,7 @@
           <h2 class="text-lg md:text-xl font-bold text-white">
             Tabel Komparasi 7 Pilar Pembelajaran Mendalam (Mindful, Meaningful, Joyful), Kelas "Taman" & MPI
           </h2>
-          <p class="text-xs text-slate-300">
+          <p class="text-xs text-slate-700">
             Membandingkan persepsi diri guru dengan hasil pengamatan Kepala Sekolah terkait keaktifan siswa (bukan ceramah guru) dan penggunaan Media Pembelajaran Interaktif (MPI).
           </p>
         </div>
@@ -576,7 +650,7 @@
         <div class="space-y-1.5">
           <div class="flex justify-between text-xs font-bold">
             <span class="text-cyan-300">👤 Klaim Guru (Aktivitas Siswa): <span id="lblPctSelf">85</span>%</span>
-            <span class="text-slate-400">Ceramah: <span id="lblCeramahSelf">15</span>%</span>
+            <span class="text-slate-600">Ceramah: <span id="lblCeramahSelf">15</span>%</span>
           </div>
           <input type="range" id="sliderPctSelf" min="10" max="95" step="5" value="85" oninput="onRatioChange()" class="w-full accent-cyan-400 cursor-pointer" />
         </div>
@@ -585,7 +659,7 @@
         <div class="space-y-1.5">
           <div class="flex justify-between text-xs font-bold">
             <span class="text-emerald-300">👨‍💼 Pengamatan Kepsek (Aktivitas Siswa): <span id="lblPctSup">80</span>%</span>
-            <span class="text-slate-400">Ceramah: <span id="lblCeramahSup">20</span>%</span>
+            <span class="text-slate-600">Ceramah: <span id="lblCeramahSup">20</span>%</span>
           </div>
           <input type="range" id="sliderPctSup" min="10" max="95" step="5" value="80" oninput="onRatioChange()" class="w-full accent-emerald-400 cursor-pointer" />
         </div>
@@ -653,7 +727,7 @@
           <h2 class="text-lg font-bold text-white">
             Tabel Rekapitulasi Perbandingan Nilai (Guru Pribadi vs Kepala Sekolah vs Nilai Gabungan)
           </h2>
-          <p class="text-xs text-slate-300">
+          <p class="text-xs text-slate-700">
             Kepala Sekolah dapat mengklik <strong>"📂 Buka & Nilai"</strong> pada data guru yang telah mengisi penilaian diri untuk langsung memberikan penilaian supervisor.
           </p>
         </div>
@@ -678,7 +752,7 @@
               <th>Kelas/Mapel / Jabatan</th>
               <th style="text-align: center; color: #67e8f9;">Nilai Diri Guru</th>
               <th style="text-align: center; color: #6ee7b7;">Nilai Kepsek</th>
-              <th style="text-align: center; color: #fcd34d;">★ Rata-Rata Gabungan</th>
+              <th style="text-align: center; color: #fbbf24; font-weight: bold;">★ Rata-Rata Gabungan</th>
               <th style="text-align: center;">Selisih (Gap)</th>
               <th>Predikat Gabungan</th>
               <th style="text-align: center;">Aksi Kolaborasi</th>
@@ -723,12 +797,12 @@
     <div class="glass-card rounded-3xl p-6 max-w-lg w-full space-y-4 border border-cyan-400/30">
       <div class="flex items-center justify-between">
         <h3 class="text-base font-bold text-white"><i class="fa-solid fa-cloud text-cyan-400 mr-1.5"></i> Koneksi URL Web App Google Apps Script</h3>
-        <button onclick="closeGasConfigModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="closeGasConfigModal()" class="text-slate-600 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <p class="text-xs text-slate-300 leading-relaxed">
+      <p class="text-xs text-slate-700 leading-relaxed">
         Jika di-deploy langsung di dalam Google Apps Script, sistem otomatis terhubung ke Google Sheets tanpa perlu mengisi URL. Jika Anda menghosting file HTML ini di <strong>GitHub Pages / Netlify / Domain Sekolah</strong>, tempelkan URL Web App GAS Anda di bawah ini agar Guru dan Kepala Sekolah dapat berbagi data secara online:
       </p>
-      <input type="url" id="inGasWebAppUrl" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full rounded-xl px-3.5 py-2.5 text-xs glass-input" />
+      <input type="url" id="inGasWebAppUrl" placeholder="https://script.google.com/macros/s/AKfycbyiSFhT5LHgr7mrd-oSecrM3daspbmqBVswSBBeELLq2o8xrO3dFqrisliAczJtckMI/exec" class="w-full rounded-xl px-3.5 py-2.5 text-xs glass-input" />
       <div class="flex justify-end gap-2">
         <button onclick="saveGasWebAppUrl()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white">Simpan URL</button>
       </div>
@@ -1431,7 +1505,7 @@
       const bSup = document.getElementById("btnModeSup");
 
       const activeCls = "px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-300 text-white shadow-lg";
-      const idleCls = "px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-white/15 text-slate-300 hover:text-white";
+      const idleCls = "px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-white/15 text-slate-700 hover:text-white";
 
       bBoth.className = mode === "BOTH" ? activeCls : idleCls;
       bSelf.className = mode === "SELF" ? activeCls : idleCls;
@@ -1454,7 +1528,7 @@
             class="p-2.5 rounded-xl border text-left transition ${
               active
                 ? 'bg-cyan-500/25 border-cyan-400 text-white shadow'
-                : 'glass-sub border-white/10 text-slate-300 hover:border-white/30'
+                : 'glass-sub border-white/10 text-slate-700 hover:border-white/30'
             }">
             <div class="text-[10px] font-bold text-cyan-300">TAHAP ${idx + 1} (${s.bln})</div>
             <div class="text-xs font-bold text-white truncate">${s.id}</div>
@@ -1467,10 +1541,10 @@
       currentRole = role;
       document.getElementById("tabRoleGuru").className = role === "GURU"
         ? "px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow"
-        : "px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white";
+        : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-white";
       document.getElementById("tabRoleTendik").className = role === "TENDIK"
         ? "px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow"
-        : "px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white";
+        : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-white";
 
       document.getElementById("secDualDeepLearning").style.display = role === "GURU" ? "block" : "none";
       document.getElementById("rowMiniC").style.display = role === "GURU" ? "grid" : "none";
@@ -1517,7 +1591,7 @@
         status = `<span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold">▼ Kepsek +${Math.abs(diff)}</span>`;
       }
       return `
-        <div class="text-base font-black text-amber-300">${avg} <span class="text-[10px] text-slate-400 font-normal">/ 3.0</span></div>
+        <div class="text-base font-black text-amber-300">${avg} <span class="text-[10px] text-slate-600 font-normal">/ 3.0</span></div>
         <div class="mt-1">${status}</div>
       `;
     }
@@ -1532,7 +1606,7 @@
             <td><strong class="text-cyan-300">${item.aspect}</strong></td>
             <td>
               <div class="font-bold text-white mb-1">${item.question}</div>
-              <ul class="list-disc list-inside text-xs text-slate-300 space-y-0.5">
+              <ul class="list-disc list-inside text-xs text-slate-700 space-y-0.5">
                 ${item.points.map(pt => `<li>${pt}</li>`).join("")}
               </ul>
             </td>
@@ -1618,7 +1692,7 @@
           <tr>
             <td>
               <strong class="text-amber-300">${dl.title}</strong>
-              <div class="text-[11px] text-slate-300 mt-1">${dl.sub}</div>
+              <div class="text-[11px] text-slate-700 mt-1">${dl.sub}</div>
             </td>
             <td>
               <div class="space-y-1.5">
@@ -2185,13 +2259,168 @@
           <meta charset='utf-8'>
           <title>Laporan Gabungan Supervisi ${data.nama}</title>
           <style>
-            @page { size: 21cm 29.7cm; margin: 1.4cm; }
-            body { font-family: 'Times New Roman', serif; font-size: 9.5pt; color: #000; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
-            th, td { border: 1px solid #000; padding: 4px 6px; vertical-align: top; font-size: 9pt; }
-            th { background: #e2e8f0; font-weight: bold; }
-            ul { margin: 0; padding-left: 14px; }
-          </style>
+    :root {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #fbcfe8 0%, #fed7aa 25%, #bfdbfe 50%, #e9d5ff 75%, #a7f3d0 100%);
+      background-attachment: fixed;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 45px rgba(148, 163, 184, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    }
+    .glass-sub {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+    }
+    .glass-input {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #f472b6;
+      border-radius: 14px;
+      color: #0f172a;
+      padding: 10px 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .glass-input:focus {
+      outline: none;
+      border-color: #ec4899;
+      box-shadow: 0 0 0 4px rgba(244, 114, 182, 0.25);
+      background: #ffffff;
+    }
+    .glass-input option {
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    /* Tabel Rubrik Kolaboratif Terang & Lucu */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 20px;
+      border: 2px solid rgba(244, 114, 182, 0.3);
+      box-shadow: 0 8px 25px rgba(244, 114, 182, 0.12);
+    }
+    table.dual-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.85);
+      font-size: 12.5px;
+      color: #1e293b;
+    }
+    table.dual-table th,
+    table.dual-table td {
+      border: 1px solid #fbcfe8;
+      padding: 11px 13px;
+      vertical-align: top;
+      text-align: left;
+    }
+    table.dual-table thead th {
+      background: #0f172a !important;
+      color: #ffffff !important;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1px solid #334155;
+    }
+    table.dual-table tr.group-row td {
+      background: linear-gradient(135deg, #bae6fd, #e9d5ff);
+      color: #3b0764;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 12px 14px;
+    }
+
+    /* Candy Pill Buttons */
+    .score-btn {
+      width: 100%;
+      text-align: left;
+      padding: 7px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 2px solid #e2e8f0;
+      background: rgba(255, 255, 255, 0.9);
+      color: #475569;
+      transition: all 0.2s;
+      margin-bottom: 5px;
+      display: block;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    }
+    .score-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+    .score-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .score-btn.self-active-1 { background: #fee2e2; border-color: #f87171; color: #991b1b; }
+    .score-btn.self-active-2 { background: #fef3c7; border-color: #fbbf24; color: #92400e; }
+    .score-btn.self-active-3 { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; }
+
+    .score-btn.sup-active-1 { background: #fee2e2; border-color: #f87171; color: #991b1b; }
+    .score-btn.sup-active-2 { background: #fef3c7; border-color: #fbbf24; color: #92400e; }
+    .score-btn.sup-active-3 { background: #d1fae5; border-color: #34d399; color: #065f46; }
+
+    /* GLASSMORPHIC CANDY 3D RAISED EFFECT */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2.5px solid rgba(255, 255, 255, 0.95);
+      border-radius: 28px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 45px rgba(244, 114, 182, 0.25), 
+                  inset 0 3px 6px rgba(255, 255, 255, 0.95), 
+                  inset 0 -3px 6px rgba(0, 0, 0, 0.08);
+    }
+    
+    .glass-sub {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(192, 132, 252, 0.15),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.9),
+                  inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* TABLE HEADER CANDY GRADIENT & 3D RAISED */
+    table.dual-table thead th {
+      background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #818cf8 100%) !important;
+      color: #0f172a !important;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+    }
+
+    /* 3D RAISED BOXES & CARDS INSIDE CONTENT */
+    .table-wrap {
+      border-radius: 20px;
+      border: 2.5px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 12px 30px rgba(244, 114, 182, 0.2),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.9);
+    }
+
+</style>
         </head>
         <body>${htmlBody}</body>
         </html>
@@ -2230,7 +2459,7 @@
     // SINKRONISASI CLOUD GOOGLE APPS SCRIPT (GITHUB PAGES <-> GAS <-> SHEETS)
     // =========================================================================
     // Opsional: Tempel URL Web App GAS Anda di sini agar otomatis terhubung di semua perangkat
-    const DEFAULT_GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyiSFhT5LHgr7mrd-oSecrM3daspbmqBVswSBBeELLq2o8xrO3dFqrisliAczJtckMI/exec";
+    const DEFAULT_GAS_WEBAPP_URL = "";
 
     function getActiveGasUrl() {
       const saved = (localStorage.getItem("GAS_DUAL_URL") || "").trim();
@@ -2487,7 +2716,7 @@
       if (list.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="11" class="text-center text-slate-400 py-5">
+            <td colspan="11" class="text-center text-slate-600 py-5">
               Belum ada data supervisi di tabel. Klik <strong>"Tarik Data Guru (Cloud)"</strong> atau klik <strong>"Simulasi Beda Nilai Guru & KS"</strong>.
             </td>
           </tr>
@@ -2501,10 +2730,10 @@
           <td>
             <div class="font-bold text-white">${item.tanggal || "-"}</div>
             <div class="text-[11px] text-cyan-300">${item.siklus || "-"}</div>
-            <div class="text-[10px] text-slate-400">${item.statusSupervisi || ""}</div>
+            <div class="text-[10px] text-slate-600">${item.statusSupervisi || ""}</div>
           </td>
           <td><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/20 text-cyan-300">${item.role || "GURU"}</span></td>
-          <td><div class="font-bold text-white">${item.nama || "-"}</div><div class="text-[11px] text-slate-400">NIP. ${item.nip || "-"}</div></td>
+          <td><div class="font-bold text-white">${item.nama || "-"}</div><div class="text-[11px] text-slate-600">NIP. ${item.nip || "-"}</div></td>
           <td>${item.mapel || "-"}</td>
           <td class="text-center font-extrabold text-cyan-300 text-sm">${item.scores ? item.scores.totalSelf : "-"}</td>
           <td class="text-center font-extrabold text-emerald-300 text-sm">${item.scores ? item.scores.totalSup : "-"}</td>
@@ -2619,13 +2848,29 @@
       const p = masterPegawai[parseInt(idxStr, 10)];
       if (!p) return;
 
-      // Cek apakah guru ini sudah punya data penilaian di Cloud yang tersimpan di cache
+      // Tanyakan user: Apakah ingin menggunakan nilai guru sebelumnya (sebagai template penilaian untuk kemampuan yang sama) atau mereset bersih?
+      const useTemplate = confirm(`Ganti ke guru: ${p.nama}\n\nApakah Anda ingin mempertahankan skor & catatan dari guru sebelumnya sebagai template untuk mempercepat penilaian guru baru ini?\n\n[OK] = Pertahankan nilai sebelumnya (Duplikat)\n[Cancel] = Reset bersih untuk guru baru`);
+
+      // Buat ID baru (SPV-...) agar tidak menimpa record guru sebelumnya di database!
+      currentRecordId = "SPV-" + Date.now();
+
+      // Cek apakah guru ini sudah punya data tersimpan di Cloud/Cache
       const cached = getCachedRecords();
       const foundCloudIdx = cached.findIndex(
         r => String(r.nama || "").trim().toLowerCase() === p.nama.trim().toLowerCase()
       );
-      if (foundCloudIdx >= 0) {
+
+      if (!useTemplate) {
+        // Reset bersih
+        initDualStates();
+      } else if (foundCloudIdx >= 0) {
+        // Jika sudah ada di cloud, muat datanya
         loadDualRecord(foundCloudIdx, true);
+        document.getElementById("inNama").value = p.nama;
+        document.getElementById("inNip").value = p.nip;
+        document.getElementById("inMapel").value = p.mapel;
+        currentRecordId = "SPV-" + Date.now(); // Buat ID baru agar menjadi entry tersendiri
+        recalculateAll(true);
         return;
       }
 
@@ -2634,6 +2879,9 @@
       document.getElementById("inNip").value = p.nip;
       document.getElementById("inMapel").value = p.mapel;
       if (p.sekolah) document.getElementById("inSekolah").value = p.sekolah;
+      renderDualPraktik();
+      renderDualObservasi();
+      renderDualDeep();
       recalculateAll(true);
     }
 
