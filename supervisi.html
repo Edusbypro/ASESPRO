@@ -138,7 +138,9 @@
     }
     
     /* Exceptions for dark background containers (Slider box, modal headers, etc.) */
-    .bg-slate-900 *, .bg-slate-800 *, .bg-slate-950 *, [class*="bg-slate-900"] *, [class*="bg-slate-800"] * {
+    .bg-slate-900 *, .bg-slate-800 *, .bg-slate-950 *, [class*="bg-slate-900"] *, [class*="bg-slate-800"] *,
+    .bg-cyan-900 *, .bg-emerald-900 *, .bg-cyan-600 *, .bg-emerald-600 *, .bg-teal-600 *, .bg-indigo-600 *,
+    [class*="from-amber-600"] *, [class*="from-purple-600"] *, [class*="from-cyan-600"] *, [class*="from-emerald-500"] *, [class*="from-emerald-600"] *, [class*="from-blue-600"] *, [class*="from-rose-600"] * {
       color: #ffffff !important;
     }
     
@@ -155,7 +157,7 @@
     <!-- HEADER UTAMA -->
     <header class="glass-card rounded-3xl p-6 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-5">
       <div class="space-y-1.5">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-800 text-xs font-bold uppercase tracking-wider">
           <i class="fa-solid fa-cloud-bolt"></i> Sistem Online Kolaboratif 2 Arah • Self-Assessment Guru vs Supervisor Kepala Sekolah
         </div>
         <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">
@@ -167,19 +169,19 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-2.5">
-        <button onclick="openGasConfigModal()" class="px-3.5 py-2.5 rounded-xl glass-sub hover:bg-slate-100 text-xs font-bold text-slate-700 flex items-center gap-2 border border-slate-300">
+        <button type="button" onclick="openGasConfigModal()" class="px-3.5 py-2.5 rounded-xl glass-sub hover:bg-slate-100 text-xs font-bold text-slate-700 flex items-center gap-2 border border-slate-300">
           <i class="fa-solid fa-link text-cyan-600"></i> URL Cloud GAS
         </button>
-        <button onclick="fetchFromCloudGas()" class="px-3.5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-xs font-bold text-white flex items-center gap-2 shadow">
+        <button type="button" onclick="fetchFromCloudGas(false)" class="px-3.5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-xs font-bold text-white flex items-center gap-2 shadow">
           <i class="fa-solid fa-cloud-arrow-down"></i> Tarik Data Guru (Cloud)
         </button>
-        <button onclick="openPreviewReport()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center gap-2 shadow">
+        <button type="button" onclick="openPreviewReport()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center gap-2 shadow">
           <i class="fa-solid fa-eye"></i> Pratinjau Laporan Gabungan
         </button>
-        <button onclick="downloadCombinedDocx()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-xs font-bold text-white flex items-center gap-2 shadow">
+        <button type="button" onclick="downloadCombinedDocx()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-xs font-bold text-white flex items-center gap-2 shadow">
           <i class="fa-solid fa-file-word"></i> Download DOCX
         </button>
-        <button onclick="downloadCombinedPdf()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-xs font-bold text-white flex items-center gap-2 shadow">
+        <button type="button" onclick="downloadCombinedPdf()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-xs font-bold text-white flex items-center gap-2 shadow">
           <i class="fa-solid fa-file-pdf"></i> Download PDF
         </button>
       </div>
@@ -198,13 +200,13 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full lg:w-auto">
-          <button id="btnModeBoth" onclick="setAccessorMode('BOTH')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 border-purple-300 text-white shadow-lg">
+          <button type="button" id="btnModeBoth" onclick="setAccessorMode('BOTH')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 border-purple-300 text-white shadow-lg">
             <i class="fa-solid fa-people-arrows"></i> 1. Mode Kolaborasi (Buka Keduanya)
           </button>
-          <button id="btnModeSelf" onclick="setAccessorMode('SELF')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-slate-300 text-slate-800 hover:bg-white">
+          <button type="button" id="btnModeSelf" onclick="setAccessorMode('SELF')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-slate-300 text-slate-800 hover:bg-white">
             <i class="fa-solid fa-user-pen text-cyan-600"></i> 2. Mode Guru/Tendik
           </button>
-          <button id="btnModeSup" onclick="setAccessorMode('SUPERVISOR')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-slate-300 text-slate-800 hover:bg-white">
+          <button type="button" id="btnModeSup" onclick="setAccessorMode('SUPERVISOR')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-slate-300 text-slate-800 hover:bg-white">
             <i class="fa-solid fa-user-tie text-emerald-600"></i> 3. Mode Kepala Sekolah
           </button>
         </div>
@@ -221,10 +223,10 @@
             <p class="text-xs text-slate-700">Pilih instrumen Guru atau Tenaga Kependidikan (Tendik)</p>
           </div>
           <div class="inline-flex rounded-2xl p-1 bg-slate-200/90 border border-slate-300">
-            <button id="tabRoleGuru" onclick="switchRole('GURU')" class="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow">
+            <button type="button" id="tabRoleGuru" onclick="switchRole('GURU')" class="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow">
               <i class="fa-solid fa-chalkboard-user mr-1"></i> Instrumen Guru
             </button>
-            <button id="tabRoleTendik" onclick="switchRole('TENDIK')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900">
+            <button type="button" id="tabRoleTendik" onclick="switchRole('TENDIK')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900">
               <i class="fa-solid fa-building-user mr-1"></i> Instrumen Tendik
             </button>
           </div>
@@ -391,14 +393,14 @@
         </div>
 
         <div class="space-y-2 pt-2 border-t border-slate-300">
-          <button onclick="syncToCloudGas()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 text-xs font-extrabold text-white shadow-lg flex items-center justify-center gap-2 transition">
+          <button type="button" onclick="syncToCloudGas()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 text-xs font-extrabold text-white shadow-lg flex items-center justify-center gap-2 transition">
             <i class="fa-solid fa-cloud-arrow-up"></i> Simpan & Gabungkan Nilai ke Cloud (GAS / Database)
           </button>
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="fillRealisticDualSample()" class="py-2 rounded-xl glass-sub hover:bg-white text-xs font-bold text-slate-800 border border-slate-300 flex items-center justify-center gap-1.5">
+            <button type="button" onclick="fillRealisticDualSample()" class="py-2 rounded-xl glass-sub hover:bg-white text-xs font-bold text-slate-800 border border-slate-300 flex items-center justify-center gap-1.5">
               <i class="fa-solid fa-wand-magic-sparkles text-cyan-600"></i> Simulasi Contoh
             </button>
-            <button onclick="resetDualForm()" class="py-2 rounded-xl glass-sub hover:bg-rose-50 text-xs font-bold text-rose-700 border border-rose-300 flex items-center justify-center gap-1.5">
+            <button type="button" onclick="resetDualForm()" class="py-2 rounded-xl glass-sub hover:bg-rose-50 text-xs font-bold text-rose-700 border border-rose-300 flex items-center justify-center gap-1.5">
               <i class="fa-solid fa-rotate-left"></i> Reset
             </button>
           </div>
@@ -426,7 +428,7 @@
               <span class="text-xs font-bold text-amber-900 uppercase">
                 <i class="fa-solid fa-file-signature mr-1"></i> Kesimpulan Gabungan Otomatis (Dapat Diedit)
               </span>
-              <button onclick="regenerateAutoConclusion()" class="text-[11px] font-semibold text-cyan-700 hover:underline">
+              <button type="button" onclick="regenerateAutoConclusion()" class="text-[11px] font-semibold text-cyan-700 hover:underline">
                 <i class="fa-solid fa-arrows-rotate mr-1"></i> Perbarui Narasi Otomatis
               </button>
             </div>
@@ -574,6 +576,36 @@
       </div>
     </section>
 
+    <!-- TABEL D (REFLEKSI DIRI, CATATAN SUPERVISOR & RTL BERSAMA) -->
+    <section class="glass-card rounded-3xl p-6 space-y-4 border border-cyan-400/30">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-700">Bagian D • Catatan Kualitatif & Tindak Lanjut Kolaboratif</span>
+        <h2 class="text-lg md:text-xl font-bold text-slate-900">
+          Refleksi Diri Guru/Tendik, Catatan Pembinaan Kepala Sekolah & Kesepakatan Rencana Tindak Lanjut (RTL)
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            <i class="fa-solid fa-user-pen text-cyan-600 mr-1"></i> Refleksi Diri Guru / Tendik
+          </label>
+          <textarea id="inRefleksiDiri" rows="4" placeholder="Tuliskan refleksi kekuatan, kendala, dan area yang ingin ditingkatkan..." class="w-full rounded-xl p-3 text-xs glass-input"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            <i class="fa-solid fa-user-tie text-emerald-600 mr-1"></i> Catatan Umpan Balik Kepala Sekolah
+          </label>
+          <textarea id="inCatatanSup" rows="4" placeholder="Tuliskan apresiasi dan umpan balik konstruktif supervisor..." class="w-full rounded-xl p-3 text-xs glass-input"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            <i class="fa-solid fa-handshake-angle text-amber-600 mr-1"></i> Rencana Tindak Lanjut (RTL) Bersama
+          </label>
+          <textarea id="inRtlBersama" rows="4" placeholder="Tuliskan kesepakatan langkah tindak lanjut dan target perubahan..." class="w-full rounded-xl p-3 text-xs glass-input"></textarea>
+        </div>
+      </div>
+    </section>
+
     <!-- TABEL E (REKAPITULASI) -->
     <section class="glass-card rounded-3xl p-6 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
@@ -584,17 +616,17 @@
           </h2>
         </div>
         <div class="flex flex-wrap gap-2">
-          <button onclick="fetchFromCloudGas()" class="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-xs font-bold text-white flex items-center gap-1.5">
+          <button type="button" onclick="fetchFromCloudGas(false)" class="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-xs font-bold text-white flex items-center gap-1.5">
             <i class="fa-solid fa-rotate"></i> Segarkan dari Cloud GAS
           </button>
-          <button onclick="exportRekapToExcel()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white flex items-center gap-1.5">
+          <button type="button" onclick="exportRekapToExcel()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white flex items-center gap-1.5">
             <i class="fa-solid fa-file-excel"></i> Export Tabel Rekap (.XLS)
           </button>
         </div>
       </div>
 
       <div class="table-wrap">
-        <table class="dual-table">
+        <table class="dual-table" id="tableRekapExport">
           <thead>
             <tr>
               <th style="width: 40px; text-align: center;">No</th>
@@ -625,16 +657,16 @@
           <i class="fa-solid fa-file-signature text-cyan-400"></i> Pratinjau Laporan Hasil Gabungan (Penilaian Diri Guru & Supervisor Kepala Sekolah)
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <button onclick="downloadCombinedDocx()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white">
+          <button type="button" onclick="downloadCombinedDocx()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white">
             <i class="fa-solid fa-file-word mr-1"></i> Download DOCX
           </button>
-          <button onclick="downloadCombinedPdf()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-bold text-white">
+          <button type="button" onclick="downloadCombinedPdf()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-bold text-white">
             <i class="fa-solid fa-file-pdf mr-1"></i> Download PDF
           </button>
-          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">
+          <button type="button" onclick="window.print()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">
             <i class="fa-solid fa-print mr-1"></i> Cetak Printer
           </button>
-          <button onclick="closePreviewReport()" class="px-4 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs font-bold text-white">
+          <button type="button" onclick="closePreviewReport()" class="px-4 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-xs font-bold text-white">
             Tutup
           </button>
         </div>
@@ -649,19 +681,59 @@
     <div class="glass-card rounded-3xl p-6 max-w-lg w-full space-y-4 border border-cyan-400/30 bg-white">
       <div class="flex items-center justify-between">
         <h3 class="text-base font-bold text-slate-900"><i class="fa-solid fa-cloud text-cyan-600 mr-1.5"></i> Koneksi URL Web App Google Apps Script</h3>
-        <button onclick="closeGasConfigModal()" class="text-slate-600 hover:text-slate-900"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" onclick="closeGasConfigModal()" class="text-slate-600 hover:text-slate-900"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <p class="text-xs text-slate-700 leading-relaxed">
-        URL Web App Google Apps Script sudah terhubung secara permanen ke database sekolah.
+        URL Web App Google Apps Script terhubung ke database Google Sheets sekolah. Anda dapat mengubah atau menyimpannya di bawah ini:
       </p>
-      <input type="url" id="inGasWebAppUrl" class="w-full rounded-xl px-3.5 py-2.5 text-xs glass-input" readonly />
+      <input type="url" id="inGasWebAppUrl" class="w-full rounded-xl px-3.5 py-2.5 text-xs glass-input" />
       <div class="flex justify-end gap-2">
-        <button onclick="closeGasConfigModal()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white">Tutup</button>
+        <button type="button" onclick="saveGasConfigModal()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white">Simpan & Muat Ulang</button>
+        <button type="button" onclick="closeGasConfigModal()" class="px-4 py-2 rounded-xl bg-slate-600 hover:bg-slate-500 text-xs font-bold text-white">Tutup</button>
       </div>
     </div>
   </div>
 
   <script>
+    // =========================================================================
+    // KONFIGURASI URL GOOGLE APPS SCRIPT (GAS)
+    // =========================================================================
+    const DEFAULT_GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyiSFhT5LHgr7mrd-oSecrM3daspbmqBVswSBBeELLq2o8xrO3dFqrisliAczJtckMI/exec";
+    const LOCAL_DB_KEY = "DUAL_SUPERVISI_CLOUD_CACHE_2026";
+
+    function getActiveGasUrl() {
+      const saved = localStorage.getItem("GAS_DUAL_URL");
+      return (saved && saved.startsWith("https://script.google.com/")) ? saved.trim() : DEFAULT_GAS_WEBAPP_URL;
+    }
+
+    function openGasConfigModal() {
+      const el = document.getElementById("inGasWebAppUrl");
+      if (el) el.value = getActiveGasUrl();
+      document.getElementById("gasConfigModal")?.classList.remove("hidden");
+    }
+
+    function closeGasConfigModal() {
+      document.getElementById("gasConfigModal")?.classList.add("hidden");
+    }
+
+    function saveGasConfigModal() {
+      const el = document.getElementById("inGasWebAppUrl");
+      const val = (el?.value || "").trim() || DEFAULT_GAS_WEBAPP_URL;
+      localStorage.setItem("GAS_DUAL_URL", val);
+      closeGasConfigModal();
+      fetchFromCloudGas(false);
+    }
+
+    // Helper aman untuk mengisi value elemen
+    function setValSafe(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = val ?? "";
+    }
+    function getValSafe(id, fallback = "") {
+      const el = document.getElementById(id);
+      return el ? (el.value || fallback) : fallback;
+    }
+
     // =========================================================================
     // DATA MASTER GURU & TENDIK RESMI SDN Kaliasin VII/286 Surabaya
     // =========================================================================
@@ -824,11 +896,10 @@
     let dualObservasi = {};
     let dualDeep = {};
 
-    const LOCAL_DB_KEY = "DUAL_SUPERVISI_CLOUD_CACHE_2026";
-
     window.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("inTanggal").value = new Date().toISOString().split("T")[0];
-      document.getElementById("inGasWebAppUrl").value = localStorage.getItem("GAS_DUAL_URL") || "https://script.google.com/macros/s/AKfycbyiSFhT5LHgr7mrd-oSecrM3daspbmqBVswSBBeELLq2o8xrO3dFqrisliAczJtckMI/exec";
+      setValSafe("inTanggal", new Date().toISOString().split("T")[0]);
+      localStorage.setItem("GAS_DUAL_URL", getActiveGasUrl());
+      setValSafe("inGasWebAppUrl", getActiveGasUrl());
 
       initDualStates();
       renderSiklusGrid();
@@ -877,6 +948,7 @@
 
     function renderSiklusGrid() {
       const el = document.getElementById("siklusGrid");
+      if (!el) return;
       el.innerHTML = SIKLUS_LIST.map((s, idx) => {
         const active = s.id === currentSiklus;
         return `
@@ -884,29 +956,30 @@
             class="p-2.5 rounded-xl border text-left transition ${
               active ? 'bg-cyan-600 border-cyan-500 text-white shadow' : 'glass-sub border-slate-300 text-slate-800 hover:bg-white'
             }">
-            <div class="text-[10px] font-bold text-cyan-200">TAHAP ${idx + 1} (${s.bln})</div>
-            <div class="text-xs font-bold text-white truncate">${s.id}</div>
+            <div class="text-[10px] font-bold ${active ? 'text-cyan-100' : 'text-slate-600'}">TAHAP ${idx + 1} (${s.bln})</div>
+            <div class="text-xs font-bold ${active ? 'text-white' : 'text-slate-900'} truncate">${s.id}</div>
           </button>
         `;
       }).join("");
     }
 
     function switchRole(role) {
-      currentRole = role;
-      document.getElementById("tabRoleGuru").className = role === "GURU" ? "px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow" : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900";
-      document.getElementById("tabRoleTendik").className = role === "TENDIK" ? "px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow" : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900";
+      currentRole = role || "GURU";
+      document.getElementById("tabRoleGuru").className = currentRole === "GURU" ? "px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow" : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900";
+      document.getElementById("tabRoleTendik").className = currentRole === "TENDIK" ? "px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow" : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900";
 
-      document.getElementById("secDualDeepLearning").style.display = role === "GURU" ? "block" : "none";
-      document.getElementById("rowMiniC").style.display = role === "GURU" ? "grid" : "none";
-      document.getElementById("filterBoxGuru").style.display = role === "GURU" ? "flex" : "none";
-      document.getElementById("lblMiniB").textContent = role === "GURU" ? "B. Observasi Kelas (35%)" : "B. Observasi Tendik (75%)";
-      document.getElementById("titleSectionB").textContent = role === "GURU" ? "Tabel Komparasi 8 Indikator Rubrik Observasi Kelas" : "Tabel Komparasi 6 Indikator Rubrik Kinerja Tenaga Kependidikan";
+      document.getElementById("secDualDeepLearning").style.display = currentRole === "GURU" ? "block" : "none";
+      document.getElementById("rowMiniC").style.display = currentRole === "GURU" ? "grid" : "none";
+      document.getElementById("filterBoxGuru").style.display = currentRole === "GURU" ? "flex" : "none";
+      document.getElementById("lblMiniB").textContent = currentRole === "GURU" ? "B. Observasi Kelas (35%)" : "B. Observasi Tendik (75%)";
+      document.getElementById("titleSectionB").textContent = currentRole === "GURU" ? "Tabel Komparasi 8 Indikator Rubrik Observasi Kelas" : "Tabel Komparasi 6 Indikator Rubrik Kinerja Tenaga Kependidikan";
 
       renderDualObservasi();
       recalculateAll(true);
     }
 
     function renderDualScoreButtons(group, id, which, curVal) {
+      const numVal = Number(curVal) || 3;
       const isSelf = which === "selfScore";
       const disabled = (isSelf && accessorMode === "SUPERVISOR") || (!isSelf && accessorMode === "SELF");
       const labels = [
@@ -915,20 +988,22 @@
         { v: 3, t: "3 - Efektif" }
       ];
       return labels.map(l => {
-        const activeClass = curVal === l.v ? (isSelf ? `self-active-${l.v}` : `sup-active-${l.v}`) : "";
+        const activeClass = numVal === l.v ? (isSelf ? `self-active-${l.v}` : `sup-active-${l.v}`) : "";
         return `
           <button type="button" ${disabled ? "disabled" : ""}
             onclick="setDualScore('${group}', '${id}', '${which}', ${l.v})"
             class="score-btn ${activeClass}">
-            ${curVal === l.v ? "● " : "○ "}${l.t}
+            ${numVal === l.v ? "● " : "○ "}${l.t}
           </button>
         `;
       }).join("");
     }
 
     function getGapBadgeHtml(selfScore, supScore) {
-      const avg = ((selfScore + supScore) / 2).toFixed(2);
-      const diff = selfScore - supScore;
+      const s1 = Number(selfScore) || 3;
+      const s2 = Number(supScore) || 3;
+      const avg = ((s1 + s2) / 2).toFixed(2);
+      const diff = s1 - s2;
       let status = `<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">✓ Selaras</span>`;
       if (diff > 0) status = `<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold">▲ Guru +${diff}</span>`;
       else if (diff < 0) status = `<span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 text-[10px] font-bold">▼ Kepsek +${Math.abs(diff)}</span>`;
@@ -937,7 +1012,9 @@
 
     function renderDualPraktik() {
       const tbody = document.getElementById("tbodyDualPraktik");
+      if (!tbody) return;
       tbody.innerHTML = ASPEK_PRAKTIK.map((item, idx) => {
+        if (!dualPraktik[item.id]) dualPraktik[item.id] = { selfScore: 3, supScore: 3, note: "" };
         const st = dualPraktik[item.id];
         return `
           <tr>
@@ -953,7 +1030,7 @@
             <td>${renderDualScoreButtons("PRAKTIK", item.id, "supScore", st.supScore)}</td>
             <td style="text-align: center;">${getGapBadgeHtml(st.selfScore, st.supScore)}</td>
             <td>
-              <textarea rows="3" class="w-full rounded-lg p-2 text-xs glass-input" placeholder="Bukti..." oninput="dualPraktik['${item.id}'].note = this.value">${st.note}</textarea>
+              <textarea rows="3" class="w-full rounded-lg p-2 text-xs glass-input" placeholder="Bukti..." oninput="dualPraktik['${item.id}'].note = this.value">${st.note || ""}</textarea>
             </td>
           </tr>
         `;
@@ -962,27 +1039,31 @@
 
     function getActiveObservasiList() {
       if (currentRole === "TENDIK") return OBSERVASI_TENDIK;
-      const f = document.getElementById("selFilterIndikator").value;
+      const f = document.getElementById("selFilterIndikator")?.value || "ALL";
       if (f === "ALL") return OBSERVASI_GURU;
-      return [OBSERVASI_GURU[parseInt(f, 10)]];
+      return [OBSERVASI_GURU[parseInt(f, 10)] || OBSERVASI_GURU[0]];
     }
 
     function renderDualObservasi() {
       const tbody = document.getElementById("tbodyDualObservasi");
+      if (!tbody) return;
       const list = getActiveObservasiList();
       let html = "";
       list.forEach(ind => {
         html += `<tr class="group-row"><td colspan="6">${ind.name} — <span class="font-normal text-xs text-slate-700">${ind.desc}</span></td></tr>`;
         ind.foci.forEach(f => {
+          if (!dualObservasi[f.id]) dualObservasi[f.id] = { selfScore: 3, supScore: 3, rec: f.rec.map((_, i) => i), avd: [], note: "" };
           const st = dualObservasi[f.id];
+          const recArr = Array.isArray(st.rec) ? st.rec : [];
+          const avdArr = Array.isArray(st.avd) ? st.avd : [];
           html += `
             <tr>
               <td>
                 <strong class="text-slate-900">${f.title}</strong>
-                <textarea rows="2" class="w-full rounded-lg p-2 text-[11px] glass-input mt-2" placeholder="Catatan..." oninput="dualObservasi['${f.id}'].note = this.value">${st.note}</textarea>
+                <textarea rows="2" class="w-full rounded-lg p-2 text-[11px] glass-input mt-2" placeholder="Catatan..." oninput="dualObservasi['${f.id}'].note = this.value">${st.note || ""}</textarea>
               </td>
-              <td>${f.rec.map((r, ri) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${st.rec.includes(ri)?'checked':''} onchange="toggleDualCheck('OBSERVASI','${f.id}','rec',${ri})" /><span>${r}</span></label>`).join("")}</td>
-              <td>${f.avd.map((a, ai) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${st.avd.includes(ai)?'checked':''} onchange="toggleDualCheck('OBSERVASI','${f.id}','avd',${ai})" /><span>${a}</span></label>`).join("")}</td>
+              <td>${f.rec.map((r, ri) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${recArr.includes(ri)?'checked':''} onchange="toggleDualCheck('OBSERVASI','${f.id}','rec',${ri})" /><span>${r}</span></label>`).join("")}</td>
+              <td>${f.avd.map((a, ai) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${avdArr.includes(ai)?'checked':''} onchange="toggleDualCheck('OBSERVASI','${f.id}','avd',${ai})" /><span>${a}</span></label>`).join("")}</td>
               <td>${renderDualScoreButtons("OBSERVASI", f.id, "selfScore", st.selfScore)}</td>
               <td>${renderDualScoreButtons("OBSERVASI", f.id, "supScore", st.supScore)}</td>
               <td style="text-align: center;">${getGapBadgeHtml(st.selfScore, st.supScore)}</td>
@@ -995,21 +1076,25 @@
 
     function renderDualDeep() {
       const tbody = document.getElementById("tbodyDualDeep");
+      if (!tbody) return;
       tbody.innerHTML = DEEP_LEARNING_LIST.map(dl => {
+        if (!dualDeep[dl.id]) dualDeep[dl.id] = { selfScore: 3, supScore: 3, rec: dl.rec.map((_, i) => i), avd: [], note: "" };
         const st = dualDeep[dl.id];
+        const recArr = Array.isArray(st.rec) ? st.rec : [];
+        const avdArr = Array.isArray(st.avd) ? st.avd : [];
         return `
           <tr>
             <td>
               <strong class="text-slate-900">${dl.title}</strong>
               <div class="text-[11px] text-slate-600 mt-1">${dl.sub}</div>
             </td>
-            <td>${dl.rec.map((r, ri) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${st.rec.includes(ri)?'checked':''} onchange="toggleDualCheck('DEEP','${dl.id}','rec',${ri})" /><span>${r}</span></label>`).join("")}</td>
-            <td>${dl.avd.map((a, ai) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${st.avd.includes(ai)?'checked':''} onchange="toggleDualCheck('DEEP','${dl.id}','avd',${ai})" /><span>${a}</span></label>`).join("")}</td>
+            <td>${dl.rec.map((r, ri) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${recArr.includes(ri)?'checked':''} onchange="toggleDualCheck('DEEP','${dl.id}','rec',${ri})" /><span>${r}</span></label>`).join("")}</td>
+            <td>${dl.avd.map((a, ai) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${avdArr.includes(ai)?'checked':''} onchange="toggleDualCheck('DEEP','${dl.id}','avd',${ai})" /><span>${a}</span></label>`).join("")}</td>
             <td>${renderDualScoreButtons("DEEP", dl.id, "selfScore", st.selfScore)}</td>
             <td>${renderDualScoreButtons("DEEP", dl.id, "supScore", st.supScore)}</td>
             <td style="text-align: center;">
               ${getGapBadgeHtml(st.selfScore, st.supScore)}
-              <input type="text" value="${st.note}" placeholder="MPI..." oninput="dualDeep['${dl.id}'].note = this.value" class="w-full rounded-lg px-2 py-1 text-[11px] glass-input mt-2" />
+              <input type="text" value="${st.note || ""}" placeholder="MPI..." oninput="dualDeep['${dl.id}'].note = this.value" class="w-full rounded-lg px-2 py-1 text-[11px] glass-input mt-2" />
             </td>
           </tr>
         `;
@@ -1017,14 +1102,22 @@
     }
 
     function setDualScore(group, id, which, val) {
-      if (group === "PRAKTIK") dualPraktik[id][which] = val;
-      else if (group === "OBSERVASI") dualObservasi[id][which] = val;
-      else if (group === "DEEP") dualDeep[id][which] = val;
+      if (group === "PRAKTIK") {
+        dualPraktik[id][which] = val;
+        renderDualPraktik();
+      } else if (group === "OBSERVASI") {
+        dualObservasi[id][which] = val;
+        renderDualObservasi();
+      } else if (group === "DEEP") {
+        dualDeep[id][which] = val;
+        renderDualDeep();
+      }
       recalculateAll(true);
     }
 
     function toggleDualCheck(group, id, type, idx) {
       const target = group === "OBSERVASI" ? dualObservasi[id] : dualDeep[id];
+      if (!Array.isArray(target[type])) target[type] = [];
       const arr = target[type];
       const pos = arr.indexOf(idx);
       if (pos >= 0) arr.splice(pos, 1);
@@ -1032,8 +1125,8 @@
     }
 
     function onRatioChange() {
-      studentPctSelf = parseInt(document.getElementById("sliderPctSelf").value, 10);
-      studentPctSup = parseInt(document.getElementById("sliderPctSup").value, 10);
+      studentPctSelf = parseInt(document.getElementById("sliderPctSelf").value, 10) || 85;
+      studentPctSup = parseInt(document.getElementById("sliderPctSup").value, 10) || 80;
       document.getElementById("lblPctSelf").textContent = studentPctSelf;
       document.getElementById("lblCeramahSelf").textContent = 100 - studentPctSelf;
       document.getElementById("lblPctSup").textContent = studentPctSup;
@@ -1045,23 +1138,23 @@
     }
 
     function recalculateAll(autoUpdateNarrative) {
-      const selfA = ASPEK_PRAKTIK.reduce((acc, p) => acc + dualPraktik[p.id].selfScore, 0) / (ASPEK_PRAKTIK.length * 3) * 100;
-      const supA = ASPEK_PRAKTIK.reduce((acc, p) => acc + dualPraktik[p.id].supScore, 0) / (ASPEK_PRAKTIK.length * 3) * 100;
+      const selfA = ASPEK_PRAKTIK.reduce((acc, p) => acc + (Number(dualPraktik[p.id]?.selfScore) || 3), 0) / (ASPEK_PRAKTIK.length * 3) * 100;
+      const supA = ASPEK_PRAKTIK.reduce((acc, p) => acc + (Number(dualPraktik[p.id]?.supScore) || 3), 0) / (ASPEK_PRAKTIK.length * 3) * 100;
       const avgA = (selfA + supA) / 2;
 
       const obsList = getActiveObservasiList();
       const foci = [];
       obsList.forEach(i => i.foci.forEach(f => foci.push(f)));
-      const selfB = foci.reduce((acc, f) => acc + dualObservasi[f.id].selfScore, 0) / (foci.length * 3) * 100;
-      const supB = foci.reduce((acc, f) => acc + dualObservasi[f.id].supScore, 0) / (foci.length * 3) * 100;
+      const selfB = foci.reduce((acc, f) => acc + (Number(dualObservasi[f.id]?.selfScore) || 3), 0) / (foci.length * 3) * 100;
+      const supB = foci.reduce((acc, f) => acc + (Number(dualObservasi[f.id]?.supScore) || 3), 0) / (foci.length * 3) * 100;
       const avgB = (selfB + supB) / 2;
 
       let selfC = 0, supC = 0, avgC = 0;
       let totalSelf = 0, totalSup = 0, totalAvg = 0;
 
       if (currentRole === "GURU") {
-        const rawSelfC = DEEP_LEARNING_LIST.reduce((acc, d) => acc + dualDeep[d.id].selfScore, 0) / (DEEP_LEARNING_LIST.length * 3) * 100;
-        const rawSupC = DEEP_LEARNING_LIST.reduce((acc, d) => acc + dualDeep[d.id].supScore, 0) / (DEEP_LEARNING_LIST.length * 3) * 100;
+        const rawSelfC = DEEP_LEARNING_LIST.reduce((acc, d) => acc + (Number(dualDeep[d.id]?.selfScore) || 3), 0) / (DEEP_LEARNING_LIST.length * 3) * 100;
+        const rawSupC = DEEP_LEARNING_LIST.reduce((acc, d) => acc + (Number(dualDeep[d.id]?.supScore) || 3), 0) / (DEEP_LEARNING_LIST.length * 3) * 100;
         selfC = (rawSelfC * 0.85) + (studentPctSelf * 0.15);
         supC = (rawSupC * 0.85) + (studentPctSup * 0.15);
         avgC = (selfC + supC) / 2;
@@ -1109,15 +1202,15 @@
       };
 
       if (autoUpdateNarrative) {
-        document.getElementById("txtAutoConclusion").value = generateAutoConclusionText(summaryObj);
+        setValSafe("txtAutoConclusion", generateAutoConclusionText(summaryObj));
       }
-      summaryObj.autoConclusion = document.getElementById("txtAutoConclusion").value;
+      summaryObj.autoConclusion = getValSafe("txtAutoConclusion");
       renderDualCharts(summaryObj);
       return summaryObj;
     }
 
     function generateAutoConclusionText(sc) {
-      const nama = document.getElementById("inNama").value || (currentRole === "GURU" ? "Guru" : "Tenaga Kependidikan");
+      const nama = getValSafe("inNama", currentRole === "GURU" ? "Guru" : "Tenaga Kependidikan");
       return `KESIMPULAN GABUNGAN SUPERVISI: Berdasarkan hasil penggabungan nilai Penilaian Diri ${nama} (${sc.totalSelf}) dan Penilaian Supervisor Kepala Sekolah (${sc.totalSup}), diperoleh Rata-Rata Nilai Akhir Gabungan sebesar ${sc.totalAvg}/100 dengan predikat "${sc.predicate}". Tingkat persepsi kedua pihak menunjukkan kategori ${sc.gapLabel}.`;
     }
 
@@ -1177,59 +1270,79 @@
       return {
         id: currentRecordId || ("SPV-" + Date.now()),
         statusSupervisi: accessorMode === "SELF" ? "Menunggu Verifikasi Kepala Sekolah" : "Lengkap",
-        role: currentRole, siklus: currentSiklus,
-        modeKop: document.getElementById("selModeKop").value,
-        sekolah: document.getElementById("inSekolah").value || "SDN Kaliasin VII/286 Surabaya",
-        tanggal: document.getElementById("inTanggal").value, semester: document.getElementById("inSemester").value,
-        nama: document.getElementById("inNama").value || "Guru SDN Kaliasin VII", nip: document.getElementById("inNip").value || "-",
-        mapel: document.getElementById("inMapel").value || "-", supervisor: document.getElementById("inSupervisor").value || "Ardiyatna Pranata, S.Pd",
-        nipSupervisor: document.getElementById("inNipSupervisor").value || "199201052015011001", pejabatKop: document.getElementById("inPejabatKop").value || "-",
-        studentPctSelf, studentPctSup, scores: sc,
-        refleksiDiri: document.getElementById("inRefleksiDiri").value || "-",
-        catatanSupervisor: document.getElementById("inCatatanSup").value || "-",
-        rtlBersama: document.getElementById("inRtlBersama").value || "-",
-        rawState: { dualPraktik: JSON.parse(JSON.stringify(dualPraktik)), dualObservasi: JSON.parse(JSON.stringify(dualObservasi)), dualDeep: JSON.parse(JSON.stringify(dualDeep)) },
+        role: currentRole,
+        siklus: currentSiklus,
+        modeKop: getValSafe("selModeKop", "SEKOLAH"),
+        sekolah: getValSafe("inSekolah", "SDN Kaliasin VII/286 Surabaya"),
+        tanggal: getValSafe("inTanggal"),
+        semester: getValSafe("inSemester", "2026/2027 - Ganjil"),
+        nama: getValSafe("inNama", "Guru SDN Kaliasin VII"),
+        nip: getValSafe("inNip", "-"),
+        mapel: getValSafe("inMapel", "-"),
+        supervisor: getValSafe("inSupervisor", "Ardiyatna Pranata, S.Pd"),
+        nipSupervisor: getValSafe("inNipSupervisor", "199201052015011001"),
+        pejabatKop: getValSafe("inPejabatKop", "-"),
+        studentPctSelf,
+        studentPctSup,
+        scores: sc,
+        refleksiDiri: getValSafe("inRefleksiDiri", "-"),
+        catatanSupervisor: getValSafe("inCatatanSup", "-"),
+        rtlBersama: getValSafe("inRtlBersama", "-"),
+        rawState: {
+          dualPraktik: JSON.parse(JSON.stringify(dualPraktik)),
+          dualObservasi: JSON.parse(JSON.stringify(dualObservasi)),
+          dualDeep: JSON.parse(JSON.stringify(dualDeep))
+        },
         obsListUsed: getActiveObservasiList()
       };
     }
 
     function buildCombinedPrintHTML(d) {
       const praktikRows = ASPEK_PRAKTIK.map((p, idx) => {
-        const st = d.rawState.dualPraktik[p.id];
-        return `<tr><td>${idx + 1}</td><td><strong>${p.aspect}</strong></td><td>${p.question}</td><td>${st.selfScore}</td><td>${st.supScore}</td><td>${((st.selfScore+st.supScore)/2).toFixed(2)}</td><td>${st.note || "-"}</td></tr>`;
+        const st = d.rawState.dualPraktik[p.id] || { selfScore: 3, supScore: 3, note: "-" };
+        return `<tr><td style="text-align:center;">${idx + 1}</td><td><strong>${p.aspect}</strong></td><td>${p.question}</td><td style="text-align:center;">${st.selfScore}</td><td style="text-align:center;">${st.supScore}</td><td style="text-align:center; font-weight:bold;">${((Number(st.selfScore)+Number(st.supScore))/2).toFixed(2)}</td><td>${st.note || "-"}</td></tr>`;
       }).join("");
 
       let obsRows = "";
       d.obsListUsed.forEach(ind => {
         obsRows += `<tr><td colspan="6" style="background:#e2e8f0; font-weight:bold;">${ind.name}</td></tr>`;
         ind.foci.forEach(f => {
-          const st = d.rawState.dualObservasi[f.id];
-          obsRows += `<tr><td>${f.title}</td><td>${st.note || "-"}</td><td>-</td><td>${st.selfScore}</td><td>${st.supScore}</td><td>${((st.selfScore+st.supScore)/2).toFixed(2)}</td></tr>`;
+          const st = d.rawState.dualObservasi[f.id] || { selfScore: 3, supScore: 3, note: "-" };
+          obsRows += `<tr><td><strong>${f.title}</strong></td><td colspan="2">${st.note || "-"}</td><td style="text-align:center;">${st.selfScore}</td><td style="text-align:center;">${st.supScore}</td><td style="text-align:center; font-weight:bold;">${((Number(st.selfScore)+Number(st.supScore))/2).toFixed(2)}</td></tr>`;
         });
       });
 
       return `
-        <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:6px; margin-bottom:10px;">
+        <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:6px; margin-bottom:10px; color:#000;">
           <div style="font-size:12pt; font-weight:bold;">PEMERINTAH KOTA SURABAYA - DINAS PENDIDIKAN</div>
           <div style="font-size:14pt; font-weight:bold;">${d.sekolah}</div>
-          <div style="font-size:10pt;">LAPORAN HASIL GABUNGAN SUPERVISI (${d.role})</div>
+          <div style="font-size:10pt;">LAPORAN HASIL GABUNGAN SUPERVISI (${d.role}) - SIKLUS: ${d.siklus.toUpperCase()}</div>
         </div>
-        <table border="1" cellpadding="6" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:10pt;">
-          <tr><td><strong>Nama Pegawai:</strong> ${d.nama} (${d.nip})</td><td><strong>Tanggal:</strong> ${d.tanggal}</td></tr>
+        <table border="1" cellpadding="6" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:10pt; color:#000;">
+          <tr><td><strong>Nama Pegawai:</strong> ${d.nama} (NIP: ${d.nip})</td><td><strong>Tanggal:</strong> ${d.tanggal}</td></tr>
           <tr><td><strong>Jabatan/Mapel:</strong> ${d.mapel}</td><td><strong>Supervisor:</strong> ${d.supervisor}</td></tr>
-          <tr><td><strong>Nilai Akhir Rata-Rata:</strong> ${d.scores.totalAvg} / 100 (${d.scores.predicate})</td><td><strong>Selisih (Gap):</strong> ${d.scores.gapLabel}</td></tr>
+          <tr><td><strong>Nilai Diri vs Kepsek:</strong> ${d.scores.totalSelf} vs ${d.scores.totalSup}</td><td><strong>Rata-Rata Akhir:</strong> <strong>${d.scores.totalAvg} / 100 (${d.scores.predicate})</strong></td></tr>
         </table>
-        <h4 style="margin-top:15px;">Kesimpulan Gabungan:</h4>
-        <p style="font-size:10pt;">${d.scores.autoConclusion}</p>
-        <h4 style="margin-top:15px;">A. Praktik Kinerja</h4>
-        <table border="1" cellpadding="5" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:9.5pt;">
+        <h4 style="margin-top:12px; margin-bottom:4px; color:#000;">Kesimpulan Gabungan:</h4>
+        <p style="font-size:10pt; color:#000; margin-top:0;">${d.scores.autoConclusion}</p>
+        <h4 style="margin-top:12px; margin-bottom:4px; color:#000;">A. Praktik Kinerja</h4>
+        <table border="1" cellpadding="5" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:9pt; color:#000;">
           <thead><tr style="background:#f1f5f9;"><th>No</th><th>Aspek</th><th>Pertanyaan</th><th>Guru</th><th>Kepsek</th><th>Rata</th><th>Catatan</th></tr></thead>
           <tbody>${praktikRows}</tbody>
         </table>
-        <table style="width:100%; margin-top:25px; border:none;">
+        <h4 style="margin-top:12px; margin-bottom:4px; color:#000;">B. Observasi Kinerja</h4>
+        <table border="1" cellpadding="5" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:9pt; color:#000;">
+          <thead><tr style="background:#f1f5f9;"><th>Fokus Perilaku</th><th colspan="2">Catatan Observasi</th><th>Guru</th><th>Kepsek</th><th>Rata</th></tr></thead>
+          <tbody>${obsRows}</tbody>
+        </table>
+        <h4 style="margin-top:12px; margin-bottom:4px; color:#000;">C. Refleksi, Umpan Balik & Rencana Tindak Lanjut (RTL)</h4>
+        <table border="1" cellpadding="6" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:9.5pt; color:#000;">
+          <tr><td style="width:33%;"><strong>Refleksi Diri:</strong><br/>${d.refleksiDiri}</td><td style="width:33%;"><strong>Catatan Kepala Sekolah:</strong><br/>${d.catatanSupervisor}</td><td style="width:34%;"><strong>RTL Bersama:</strong><br/>${d.rtlBersama}</td></tr>
+        </table>
+        <table style="width:100%; margin-top:25px; border:none; color:#000;">
           <tr>
-            <td style="text-align:center; border:none;">Mengetahui,<br/><strong>Kepala Sekolah</strong><br/><br/><br/><u><strong>${d.supervisor}</strong></u><br/>NIP. ${d.nipSupervisor}</td>
-            <td style="text-align:center; border:none;">Surabaya, ${d.tanggal}<br/><strong>${d.role}</strong><br/><br/><br/><u><strong>${d.nama}</strong></u><br/>NIP. ${d.nip}</td>
+            <td style="text-align:center; border:none;">Mengetahui,<br/><strong>Kepala Sekolah</strong><br/><br/><br/><br/><u><strong>${d.supervisor}</strong></u><br/>NIP. ${d.nipSupervisor}</td>
+            <td style="text-align:center; border:none;">Surabaya, ${d.tanggal}<br/><strong>${d.role === 'GURU' ? 'Guru yang Disupervisi' : 'Tenaga Kependidikan'}</strong><br/><br/><br/><br/><u><strong>${d.nama}</strong></u><br/>NIP. ${d.nip}</td>
           </tr>
         </table>
       `;
@@ -1242,156 +1355,335 @@
     function closePreviewReport() { document.getElementById("previewModal").classList.add("hidden"); }
 
     function downloadCombinedDocx() {
-      const htmlBody = buildCombinedPrintHTML(collectFullDualData());
-      const wordDoc = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Laporan</title></head><body>${htmlBody}</body></html>`;
+      const d = collectFullDualData();
+      const htmlBody = buildCombinedPrintHTML(d);
+      const wordDoc = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Laporan Supervisi</title></head><body>${htmlBody}</body></html>`;
       const blob = new Blob(["\ufeff", wordDoc], { type: "application/msword;charset=utf-8" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `Laporan_Supervisi_${Date.now()}.docx`;
+      a.download = `Laporan_Supervisi_${(d.nama || "Pegawai").replace(/\s+/g, "_")}.doc`;
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
     function downloadCombinedPdf() {
-      html2pdf().set({ margin: [8,8,8,8], filename: `Laporan_Supervisi_${Date.now()}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(document.getElementById("printableArea")).save();
+      const d = collectFullDualData();
+      const area = document.getElementById("printableArea");
+      area.innerHTML = buildCombinedPrintHTML(d);
+      html2pdf().set({
+        margin: [8, 8, 8, 8],
+        filename: `Laporan_Supervisi_${(d.nama || "Pegawai").replace(/\s+/g, "_")}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).from(area).save();
     }
-
-    const DEFAULT_GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyiSFhT5LHgr7mrd-oSecrM3daspbmqBVswSBBeELLq2o8xrO3dFqrisliAczJtckMI/exec";
-    function getActiveGasUrl() { return DEFAULT_GAS_WEBAPP_URL; }
 
     function updateCloudIndicator(isConnected, textMsg) {
       const badge = document.getElementById("badgeSyncStatus");
       if (!badge) return;
-      badge.className = isConnected ? "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300" : "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300";
-      badge.innerHTML = `<i class="fa-solid fa-cloud-check mr-1"></i> ${textMsg || "Terhubung ke Google Sheets"}`;
+      badge.className = isConnected
+        ? "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300"
+        : "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300";
+      badge.innerHTML = `<i class="fa-solid ${isConnected ? 'fa-cloud-check' : 'fa-database'} mr-1"></i> ${textMsg || "Terhubung ke Google Sheets"}`;
+    }
+
+    // Normalisasi record dari Google Sheets agar aman apabila rawState/scores berbentuk JSON string
+    function normalizeRecord(raw) {
+      if (!raw || typeof raw !== "object") return null;
+      const rec = Object.assign({}, raw);
+      if (typeof rec.scores === "string") {
+        try { rec.scores = JSON.parse(rec.scores); } catch (e) { rec.scores = {}; }
+      }
+      if (typeof rec.rawState === "string") {
+        try { rec.rawState = JSON.parse(rec.rawState); } catch (e) { rec.rawState = null; }
+      }
+      rec.nama = rec.nama || rec.namaGuru || rec.nama_pegawai || "Guru SDN Kaliasin VII";
+      rec.nip = rec.nip || rec.nipPegawai || "-";
+      rec.role = (rec.role || "GURU").toUpperCase();
+      rec.siklus = rec.siklus || "Observasi Kinerja";
+      rec.mapel = rec.mapel || "-";
+      rec.tanggal = rec.tanggal ? String(rec.tanggal).split("T")[0] : new Date().toISOString().split("T")[0];
+      return rec;
     }
 
     function getCachedRecords() {
-      try { return JSON.parse(localStorage.getItem(LOCAL_DB_KEY) || "[]"); } catch (e) { return []; }
+      try {
+        const arr = JSON.parse(localStorage.getItem(LOCAL_DB_KEY) || "[]");
+        return Array.isArray(arr) ? arr.map(normalizeRecord).filter(Boolean) : [];
+      } catch (e) {
+        return [];
+      }
     }
-    function saveCachedRecords(list) { localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(list)); }
+
+    function saveCachedRecords(list) {
+      const normalized = Array.isArray(list) ? list.map(normalizeRecord).filter(Boolean) : [];
+      localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(normalized));
+      return normalized;
+    }
 
     function syncDropdownsWithRecords(records) {
       if (!Array.isArray(records)) return;
       records.forEach(rec => {
         if (!rec || !rec.nama) return;
         if (!masterPegawai.some(p => p.nama.trim().toLowerCase() === rec.nama.trim().toLowerCase())) {
-          masterPegawai.unshift({ role: rec.role || "GURU", nama: rec.nama, nip: rec.nip || "-", mapel: rec.mapel || "-", sekolah: rec.sekolah || "SDN Kaliasin VII/286 Surabaya" });
+          masterPegawai.unshift({
+            role: rec.role || "GURU",
+            nama: rec.nama,
+            nip: rec.nip || "-",
+            mapel: rec.mapel || "-",
+            sekolah: rec.sekolah || "SDN Kaliasin VII/286 Surabaya"
+          });
         }
       });
       renderQuickPegawaiDropdown();
+
       const selCloud = document.getElementById("selCloudSubmitted");
-      document.getElementById("countCloudRecords").textContent = records.length;
+      const countEl = document.getElementById("countCloudRecords");
+      if (countEl) countEl.textContent = records.length;
+
       if (selCloud) {
-        selCloud.innerHTML = records.length === 0 ? `<option value="">-- Belum Ada Data --</option>` : records.map((r, i) => `<option value="${i}">#${i+1} [${r.role}] ${r.nama} (${r.siklus}) - Skor: ${r.scores?.totalAvg || '-'}</option>`).join("");
+        selCloud.innerHTML = records.length === 0
+          ? `<option value="">-- Belum Ada Data dari Cloud (Klik 'Tarik Data Guru') --</option>`
+          : records.map((r, i) => {
+              const avgScore = r.scores?.totalAvg ?? r.totalAvg ?? "-";
+              return `<option value="${i}">#${i + 1} [${r.role}] ${r.nama} (${r.siklus}) - Skor: ${avgScore}</option>`;
+            }).join("");
       }
+      renderHistoryTable();
     }
 
-    function onSelectCloudRecord(val) { if(val !== "") loadDualRecord(parseInt(val, 10), false); }
+    function onSelectCloudRecord(val) {
+      if (val !== "") loadDualRecord(parseInt(val, 10), false);
+    }
+
     function loadSelectedCloudBtn() {
       const sel = document.getElementById("selCloudSubmitted");
-      if(sel && sel.value !== "") loadDualRecord(parseInt(sel.value, 10), false);
+      if (sel && sel.value !== "") {
+        loadDualRecord(parseInt(sel.value, 10), false);
+      } else {
+        fetchFromCloudGas(false);
+      }
     }
 
     async function syncToCloudGas() {
       const data = collectFullDualData();
       const list = getCachedRecords();
-      const idx = list.findIndex(item => item.id === data.id || item.nama.toLowerCase() === data.nama.toLowerCase() && item.siklus === data.siklus);
-      if(idx >= 0) list[idx] = data; else list.unshift(data);
+      const idx = list.findIndex(item => item.id === data.id || (item.nama.toLowerCase() === data.nama.toLowerCase() && item.siklus === data.siklus));
+      if (idx >= 0) list[idx] = data; else list.unshift(data);
       saveCachedRecords(list);
       syncDropdownsWithRecords(list);
 
       try {
         updateCloudIndicator(true, "Menyimpan ke Google Sheets...");
         const response = await fetch(getActiveGasUrl(), {
-          method: "POST", redirect: "follow",
+          method: "POST",
+          redirect: "follow",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({ action: "saveDualAssessment", data: data })
         });
-        const resJson = await response.json();
-        if (resJson.status === "success") {
-          saveCachedRecords(resJson.records || list);
-          syncDropdownsWithRecords(resJson.records || list);
-          updateCloudIndicator(true, "Tersinkron ke Google Sheets");
+        const text = await response.text();
+        const resJson = JSON.parse(text);
+        if (resJson && (resJson.status === "success" || resJson.result === "success" || resJson.ok)) {
+          const updatedList = resJson.records || resJson.data || list;
+          const cleanList = saveCachedRecords(updatedList);
+          syncDropdownsWithRecords(cleanList);
+          updateCloudIndicator(true, `Tersinkron ke Google Sheets (${cleanList.length} Data)`);
           alert("✅ Data berhasil disimpan dan disinkronkan ke Google Sheets!");
+        } else {
+          throw new Error(resJson?.message || "Respons server belum sesuai");
         }
       } catch (err) {
-        updateCloudIndicator(false, "Tersimpan Lokal");
-        alert("✅ Data berhasil disimpan secara lokal.");
+        console.warn("Sync Cloud GAS fallback:", err);
+        updateCloudIndicator(false, "Tersimpan Lokal Browser");
+        alert("⚠️ Data disimpan di browser lokal. Pastikan deployment GAS diatur ke 'Anyone / Siapa saja'.");
       }
     }
 
     async function fetchFromCloudGas(silent = false) {
+      let json = null;
       try {
         updateCloudIndicator(true, "Memuat dari Google Sheets...");
-        const resp = await fetch(getActiveGasUrl() + "?action=getAll&t=" + Date.now(), { method: "GET", redirect: "follow" });
+        const url = getActiveGasUrl() + (getActiveGasUrl().includes("?") ? "&" : "?") + "action=getAll&t=" + Date.now();
+        const resp = await fetch(url, {
+          method: "GET",
+          redirect: "follow",
+          cache: "no-store"
+        });
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
         const text = await resp.text();
-        const json = JSON.parse(text);
-        if (json.status === "success") {
-          const recs = json.records || json.data || [];
-          if (json.masterPegawai && json.masterPegawai.length > 0) masterPegawai = json.masterPegawai;
-          saveCachedRecords(recs);
-          syncDropdownsWithRecords(recs);
-          updateCloudIndicator(true, "Terhubung ke Google Sheets");
-          if(recs.length > 0 && !silent) loadDualRecord(0, true);
-          if(!silent) alert(`✅ Berhasil memuat ${recs.length} data supervisi dari Google Sheets!`);
+        json = JSON.parse(text);
+      } catch (networkErr) {
+        console.warn("Gagal menarik data dari Cloud GAS:", networkErr);
+        const cached = getCachedRecords();
+        updateCloudIndicator(false, `Mode Lokal (${cached.length} Data Cache)`);
+        syncDropdownsWithRecords(cached);
+        if (!silent) {
+          alert("⚠️ Tidak dapat terhubung ke server GAS. Menampilkan " + cached.length + " data yang tersimpan di browser.");
         }
-      } catch (e) {
-        updateCloudIndicator(false, "Mode Lokal Browser");
-        syncDropdownsWithRecords(getCachedRecords());
-        if(!silent) alert("Menggunakan database lokal browser.");
+        return;
+      }
+
+      // Pemrosesan data dipisahkan dari catch jaringan agar error DOM tidak memicu alert palsu
+      try {
+        const isSuccess = json && (json.status === "success" || json.result === "success" || Array.isArray(json.records) || Array.isArray(json.data) || Array.isArray(json));
+        if (isSuccess) {
+          const rawRecs = Array.isArray(json) ? json : (json.records || json.data || []);
+          if (Array.isArray(json.masterPegawai) && json.masterPegawai.length > 0) {
+            masterPegawai = json.masterPegawai;
+          }
+          const cleanRecs = saveCachedRecords(rawRecs);
+          syncDropdownsWithRecords(cleanRecs);
+          updateCloudIndicator(true, `Terhubung ke Google Sheets (${cleanRecs.length} Data)`);
+
+          if (cleanRecs.length > 0) {
+            loadDualRecord(0, true);
+          }
+          if (!silent) {
+            alert(`✅ Berhasil memuat ${cleanRecs.length} data guru dari Google Sheets!`);
+          }
+        } else {
+          throw new Error(json?.message || "Status JSON bukan success");
+        }
+      } catch (parseOrRenderErr) {
+        console.error("Kesalahan saat merender data Cloud:", parseOrRenderErr);
+        const cached = getCachedRecords();
+        syncDropdownsWithRecords(cached);
+        updateCloudIndicator(true, `Data Cloud Dimuat (${cached.length} Data)`);
       }
     }
 
     function loadDualRecord(idx, noScroll) {
       const list = getCachedRecords();
       const rec = list[idx];
-      if(!rec) return;
-      currentRecordId = rec.id;
-      document.getElementById("inNama").value = rec.nama || "";
-      document.getElementById("inNip").value = rec.nip || "";
-      document.getElementById("inMapel").value = rec.mapel || "";
-      document.getElementById("inSupervisor").value = rec.supervisor || "Ardiyatna Pranata, S.Pd";
-      document.getElementById("inNipSupervisor").value = rec.nipSupervisor || "199201052015011001";
-      document.getElementById("inRefleksiDiri").value = rec.refleksiDiri || "";
-      document.getElementById("inCatatanSup").value = rec.catatanSupervisor || "";
-      document.getElementById("inRtlBersama").value = rec.rtlBersama || "";
-      if(rec.rawState) {
-        if(rec.rawState.dualPraktik) dualPraktik = JSON.parse(JSON.stringify(rec.rawState.dualPraktik));
-        if(rec.rawState.dualObservasi) dualObservasi = JSON.parse(JSON.stringify(rec.rawState.dualObservasi));
-        if(rec.rawState.dualDeep) dualDeep = JSON.parse(JSON.stringify(rec.rawState.dualDeep));
+      if (!rec) return;
+
+      currentRecordId = rec.id || ("SPV-" + Date.now());
+      if (rec.role) switchRole(rec.role);
+      if (rec.siklus) {
+        currentSiklus = rec.siklus;
+        renderSiklusGrid();
       }
-      renderDualPraktik(); renderDualObservasi(); renderDualDeep(); recalculateAll(true);
-      if(!noScroll) window.scrollTo({ top: 0, behavior: "smooth" });
+
+      setValSafe("inSekolah", rec.sekolah || "SDN Kaliasin VII/286 Surabaya");
+      setValSafe("inTanggal", rec.tanggal || new Date().toISOString().split("T")[0]);
+      setValSafe("inSemester", rec.semester || "2026/2027 - Ganjil");
+      setValSafe("inNama", rec.nama || "");
+      setValSafe("inNip", rec.nip || "-");
+      setValSafe("inMapel", rec.mapel || "-");
+      setValSafe("inSupervisor", rec.supervisor || "Ardiyatna Pranata, S.Pd");
+      setValSafe("inNipSupervisor", rec.nipSupervisor || "199201052015011001");
+      setValSafe("inPejabatKop", rec.pejabatKop || "");
+      setValSafe("inRefleksiDiri", rec.refleksiDiri || "");
+      setValSafe("inCatatanSup", rec.catatanSupervisor || "");
+      setValSafe("inRtlBersama", rec.rtlBersama || "");
+
+      if (rec.studentPctSelf) {
+        studentPctSelf = Number(rec.studentPctSelf) || 85;
+        setValSafe("sliderPctSelf", studentPctSelf);
+      }
+      if (rec.studentPctSup) {
+        studentPctSup = Number(rec.studentPctSup) || 80;
+        setValSafe("sliderPctSup", studentPctSup);
+      }
+
+      initDualStates();
+      if (rec.rawState && typeof rec.rawState === "object") {
+        if (rec.rawState.dualPraktik) {
+          Object.assign(dualPraktik, JSON.parse(JSON.stringify(rec.rawState.dualPraktik)));
+        }
+        if (rec.rawState.dualObservasi) {
+          Object.assign(dualObservasi, JSON.parse(JSON.stringify(rec.rawState.dualObservasi)));
+        }
+        if (rec.rawState.dualDeep) {
+          Object.assign(dualDeep, JSON.parse(JSON.stringify(rec.rawState.dualDeep)));
+        }
+      }
+
+      const selCloud = document.getElementById("selCloudSubmitted");
+      if (selCloud) selCloud.value = String(idx);
+
+      renderDualPraktik();
+      renderDualObservasi();
+      renderDualDeep();
+      onRatioChange();
+      recalculateAll(true);
+
+      if (!noScroll) window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderHistoryTable() {
+      const tbody = document.getElementById("tbodyCloudHistory");
+      if (!tbody) return;
+      const list = getCachedRecords();
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding:18px;" class="text-slate-600 font-semibold">Belum ada data supervisi. Klik <strong>"Tarik Data Guru (Cloud)"</strong> atau simpan penilaian baru.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = list.map((r, i) => {
+        const sc = r.scores || {};
+        const tSelf = sc.totalSelf ?? r.totalSelf ?? "-";
+        const tSup = sc.totalSup ?? r.totalSup ?? "-";
+        const tAvg = sc.totalAvg ?? r.totalAvg ?? "-";
+        const gapLbl = sc.gapLabel ?? "-";
+        const pred = sc.predicate ?? "-";
+        return `
+          <tr>
+            <td style="text-align:center; font-weight:800;">${i + 1}</td>
+            <td><strong>${r.tanggal || "-"}</strong><br/><span class="text-[11px] text-slate-600">${r.siklus || "-"}</span></td>
+            <td><span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 text-[11px] font-bold">${r.role || "GURU"}</span></td>
+            <td><strong>${r.nama || "-"}</strong><br/><span class="text-[11px] text-slate-600">NIP: ${r.nip || "-"}</span></td>
+            <td>${r.mapel || "-"}</td>
+            <td style="text-align:center; font-weight:700; color:#0369a1;">${tSelf}</td>
+            <td style="text-align:center; font-weight:700; color:#047857;">${tSup}</td>
+            <td style="text-align:center; font-weight:800; color:#b45309;">${tAvg}</td>
+            <td style="text-align:center; font-size:11px;">${gapLbl}</td>
+            <td><span class="font-bold text-emerald-800">${pred}</span></td>
+            <td style="text-align:center;">
+              <button type="button" onclick="loadDualRecord(${i}, false)" class="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-[11px] font-bold shadow">
+                <i class="fa-solid fa-folder-open mr-1"></i> Buka
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
     }
 
     function renderQuickPegawaiDropdown() {
       const sel = document.getElementById("selQuickPegawai");
-      if(!sel) return;
+      if (!sel) return;
       sel.innerHTML = `<option value="">-- Pilih Guru SDN Kaliasin VII/286 --</option>` + masterPegawai.map((p, i) => `<option value="${i}">[${p.role}] ${p.nama}</option>`).join("");
     }
 
     function onSelectQuickPegawai(val) {
-      if(val === "") return;
+      if (val === "") return;
       const p = masterPegawai[parseInt(val, 10)];
-      if(!p) return;
+      if (!p) return;
+
+      // Cek apakah guru ini sudah punya data di Cloud Cache
+      const existingIdx = getCachedRecords().findIndex(r => r.nama.trim().toLowerCase() === p.nama.trim().toLowerCase());
+      if (existingIdx >= 0) {
+        loadDualRecord(existingIdx, false);
+        return;
+      }
+
       currentRecordId = "SPV-" + Date.now();
       switchRole(p.role);
-      document.getElementById("inNama").value = p.nama;
-      document.getElementById("inNip").value = p.nip;
-      document.getElementById("inMapel").value = p.mapel;
+      setValSafe("inNama", p.nama);
+      setValSafe("inNip", p.nip);
+      setValSafe("inMapel", p.mapel);
       recalculateAll(true);
     }
 
     function importPegawaiCsv(ev) {
       const f = ev.target.files[0];
-      if(!f) return;
+      if (!f) return;
       const r = new FileReader();
       r.onload = e => {
         const lines = e.target.result.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
         lines.forEach((line, i) => {
           if (i === 0 && /nama/i.test(line)) return;
           const c = line.split(/[,;\t]/).map(x => x.replace(/^"|"$/g, "").trim());
-          if(c.length >= 1) masterPegawai.unshift({ role: "GURU", nama: c[0], nip: c[1]||"-", mapel: c[2]||"Guru Kelas", sekolah: "SDN Kaliasin VII/286 Surabaya" });
+          if (c.length >= 1) masterPegawai.unshift({ role: "GURU", nama: c[0], nip: c[1] || "-", mapel: c[2] || "Guru Kelas", sekolah: "SDN Kaliasin VII/286 Surabaya" });
         });
         renderQuickPegawaiDropdown();
         alert("✅ Data pegawai berhasil diimpor!");
@@ -1400,22 +1692,47 @@
     }
 
     function fillRealisticDualSample() {
-      document.getElementById("inNama").value = "Erna Kartika, S.Pd";
-      document.getElementById("inNip").value = "198205122008012015";
-      document.getElementById("inMapel").value = "Kelas IV / IPAS (PBL & MPI)";
-      document.getElementById("inSupervisor").value = "Ardiyatna Pranata, S.Pd";
-      document.getElementById("inNipSupervisor").value = "199201052015011001";
-      document.getElementById("inRefleksiDiri").value = "Pembelajaran berbasis projek berjalan lancar dengan antusiasme siswa yang tinggi.";
-      document.getElementById("inCatatanSup").value = "Sangat baik dalam mengintegrasikan Media Pembelajaran Interaktif (MPI).";
-      document.getElementById("inRtlBersama").value = "Pertahankan konsistensi penerapan metode pembelajaran mendalam.";
-      renderDualPraktik(); renderDualObservasi(); renderDualDeep(); recalculateAll(true);
+      setValSafe("inNama", "Erna Kartika, S.Pd");
+      setValSafe("inNip", "198205122008012015");
+      setValSafe("inMapel", "Kelas IV / IPAS (PBL & MPI)");
+      setValSafe("inSupervisor", "Ardiyatna Pranata, S.Pd");
+      setValSafe("inNipSupervisor", "199201052015011001");
+      setValSafe("inRefleksiDiri", "Pembelajaran berbasis projek berjalan lancar dengan antusiasme siswa yang tinggi.");
+      setValSafe("inCatatanSup", "Sangat baik dalam mengintegrasikan Media Pembelajaran Interaktif (MPI).");
+      setValSafe("inRtlBersama", "Pertahankan konsistensi penerapan metode pembelajaran mendalam.");
+      renderDualPraktik();
+      renderDualObservasi();
+      renderDualDeep();
+      recalculateAll(true);
     }
 
-    function resetDualForm() { currentRecordId = null; initDualStates(); renderDualPraktik(); renderDualObservasi(); renderDualDeep(); recalculateAll(true); }
-    function renderHistoryTask() {}
-    function exportRekapToExcel() { alert("Fitur Export Excel siap digunakan."); }
+    function resetDualForm() {
+      currentRecordId = null;
+      initDualStates();
+      setValSafe("inNama", "");
+      setValSafe("inNip", "");
+      setValSafe("inMapel", "");
+      setValSafe("inRefleksiDiri", "");
+      setValSafe("inCatatanSup", "");
+      setValSafe("inRtlBersama", "");
+      renderDualPraktik();
+      renderDualObservasi();
+      renderDualDeep();
+      recalculateAll(true);
+    }
+
+    function exportRekapToExcel() {
+      const table = document.getElementById("tableRekapExport");
+      if (!table) return;
+      const html = `<html><head><meta charset="utf-8"></head><body><h3>Rekapitulasi Supervisi SDN Kaliasin VII/286 Surabaya</h3>${table.outerHTML}</body></html>`;
+      const blob = new Blob(["\ufeff", html], { type: "application/vnd.ms-excel" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `Rekap_Supervisi_SDN_Kaliasin_VII_${Date.now()}.xls`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+
     function onChangeKopMode() { recalculateAll(false); }
-    function renderHistoryTable() {}
   </script>
 </body>
 </html>
