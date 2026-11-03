@@ -140,7 +140,7 @@
     .card.border-success { border-top-color: #198754 !important; }
     .card.border-danger  { border-top-color: #dc3545 !important; }
     .card.border-warning { border-top-color: #ffc107 !important; }
-    .card.border-info    { border-top-color: #0dc<div class="nav-item" id=af0 !important; }
+    .card.border-info    { border-top-color: #0dcaf0 !important; }
     .card.border-dark    { border-top-color: #212529 !important; }
 	
 	
@@ -329,34 +329,91 @@
         <!-- 2. PANTAU UJIAN LIVE (PUSAT KOMANDO KEPSEK)-->
         <!-- ========================================== -->
         <div id="view-pantau" class="view-section hidden">
-            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
+            <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
                 <div>
                     <h5 class="fw-bold m-0"><i class="bi bi-activity text-primary me-2"></i>Pusat Komando Ujian (Live)</h5>
-                    <small class="text-muted">Pantau aktivitas seluruh siswa yang sedang mengerjakan asesmen saat ini.</small>
+                    <small class="text-muted">Pantau siswa yang sedang mengerjakan maupun yang sudah selesai secara real-time.</small>
                 </div>
-                <div class="d-flex gap-2 align-items-center">
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                    <div class="btn-group shadow-sm rounded-pill overflow-hidden" role="group">
+                        <button type="button" class="btn btn-sm btn-primary fw-bold px-3" id="tab-live-sekolah" onclick="setModeLiveSekolah('SAYA')">
+                            <i class="bi bi-building-check me-1"></i> Sekolah Saya <span class="badge bg-white text-primary ms-1" id="badge-live-saya">0</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-primary bg-white fw-bold px-3" id="tab-live-lain" onclick="setModeLiveSekolah('LAIN')">
+                            <i class="bi bi-globe me-1"></i> Sekolah Lain <span class="badge bg-primary text-white ms-1" id="badge-live-lain">0</span>
+                        </button>
+                    </div>
                     <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill d-flex align-items-center gap-2">
-                        <span class="spinner-grow spinner-grow-sm" role="status"></span> Live Update
+                        <span class="spinner-grow spinner-grow-sm" role="status"></span> Live
                     </span>
-                    <button class="btn btn-outline-primary rounded-pill fw-bold px-4" onclick="loadLiveProctoringKepsek()"><i class="bi bi-arrow-clockwise me-1"></i> Segarkan Data</button>
+                    <button class="btn btn-sm btn-outline-primary rounded-pill fw-bold px-3 py-2" onclick="loadLiveProctoringKepsek()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Segarkan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Ringkasan Statistik Live -->
+            <div class="row g-3 mb-3">
+                <div class="col-6 col-md-3">
+                    <div class="stat-card py-3"><small class="text-muted fw-bold">Total Peserta</small><h4 class="fw-bold m-0 text-primary mt-1" id="live-stat-total">0</h4></div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-card py-3" style="border-left-color: #10b981;"><small class="text-muted fw-bold">Selesai Mengerjakan</small><h4 class="fw-bold m-0 text-success mt-1" id="live-stat-selesai">0</h4></div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-card py-3" style="border-left-color: #3b82f6;"><small class="text-muted fw-bold">Sedang Mengerjakan</small><h4 class="fw-bold m-0 text-info mt-1" id="live-stat-aktif">0</h4></div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-card py-3" style="border-left-color: #ef4444;"><small class="text-muted fw-bold">Idle / Terputus</small><h4 class="fw-bold m-0 text-danger mt-1" id="live-stat-putus">0</h4></div>
+                </div>
+            </div>
+
+            <!-- Baris Filter Live Ujian -->
+            <div class="card border-0 shadow-sm rounded-4 bg-white mb-3 p-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-3">
+                        <input type="text" id="filter-live-nama" class="form-control form-control-sm border-secondary-subtle" placeholder="🔍 Cari nama siswa..." oninput="renderTabelLiveKepsek()">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-live-ujian" class="form-select form-select-sm border-secondary-subtle" onchange="renderTabelLiveKepsek()">
+                            <option value="">-- Semua Asesmen --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="filter-live-kelas" class="form-select form-select-sm border-secondary-subtle" onchange="renderTabelLiveKepsek()">
+                            <option value="">-- Semua Kelas --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="filter-live-status" class="form-select form-select-sm border-secondary-subtle" onchange="renderTabelLiveKepsek()">
+                            <option value="">-- Semua Status --</option>
+                            <option value="SELESAI">✅ Selesai Mengerjakan</option>
+                            <option value="AKTIF">🟢 Sedang Mengerjakan</option>
+                            <option value="TERPUTUS">🔴 Idle / Terputus</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <button class="btn btn-sm btn-light border w-100 fw-bold text-secondary" onclick="resetFilterLive()">Reset Filter</button>
+                    </div>
                 </div>
             </div>
 
             <div class="card border-0 shadow-sm rounded-4 bg-white">
                 <div class="card-body p-0">
-                    <div class="table-responsive" style="max-height: 60vh; overflow-y: auto;">
+                    <div class="table-responsive" style="max-height: 55vh; overflow-y: auto;">
                         <table class="table table-hover align-middle m-0 text-center text-nowrap">
                             <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
                                     <th>Asesmen / Mapel</th>
-                                    <th>Nama Siswa</th>
+                                    <th class="text-start">Nama Siswa</th>
                                     <th>Kelas</th>
                                     <th>Status Pengerjaan</th>
-                                    <th>Waktu Ping Terakhir</th>
+                                    <th>Nilai</th>
+                                    <th>Waktu Aktivitas</th>
                                 </tr>
                             </thead>
                             <tbody id="tb-kepsek-live">
-                                <tr><td colspan="5" class="py-5 text-muted">Sedang memindai aktivitas siswa...</td></tr>
+                                <tr><td colspan="6" class="py-5 text-muted">Sedang memindai aktivitas siswa...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -365,17 +422,27 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- 3. TELAAH SOAL -->
+        <!-- 3. TELAAH SOAL (TERPISAH SEKOLAH)          -->
         <!-- ========================================== -->
         <div id="view-telaah" class="view-section hidden">
-            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light">
+            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
                 <div>
                     <h5 class="fw-bold m-0"><i class="bi bi-file-earmark-check text-primary me-2"></i>Telaah & Persetujuan Soal</h5>
                     <small class="text-muted">Pilih asesmen buatan guru untuk ditelaah kelayakannya.</small>
                 </div>
-                <select class="form-select w-auto fw-bold text-primary border-primary shadow-sm rounded-pill px-4" id="kepsek-filter-ujian" onchange="tarikSoalUntukTelaah()">
-                    <option value="">-- Pilih Asesmen Guru --</option>
-                </select>
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                    <div class="btn-group shadow-sm rounded-pill overflow-hidden" role="group">
+                        <button type="button" class="btn btn-sm btn-primary fw-bold px-3" id="tab-telaah-saya" onclick="setModeTelaahSekolah('SAYA')">
+                            <i class="bi bi-building-check me-1"></i> Sekolah Saya
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-primary bg-white fw-bold px-3" id="tab-telaah-lain" onclick="setModeTelaahSekolah('LAIN')">
+                            <i class="bi bi-globe me-1"></i> Sekolah Lain
+                        </button>
+                    </div>
+                    <select class="form-select w-auto fw-bold text-primary border-primary shadow-sm rounded-pill px-4" id="kepsek-filter-ujian" onchange="tarikSoalUntukTelaah()">
+                        <option value="">-- Pilih Asesmen Guru --</option>
+                    </select>
+                </div>
             </div>
 
             <div class="row g-3 mb-4">
@@ -398,63 +465,106 @@
             </div>
         </div>
 
-<!-- ======================================================= -->
-        <!-- 3.4 SUPERVISI (MODE BINGKAI / BLUE GLASSMORPHIC)        -->
+        <!-- ======================================================= -->
+        <!-- 3.4 SUPERVISI (DENGAN PARAMETER IDENTITAS SEKOLAH)      -->
         <!-- ======================================================= -->
         <div id="view-supervisi-app" class="view-section hidden">
-          <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded-4 glass-blue-header">
+          <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded-4 glass-blue-header flex-wrap gap-2">
             <div class="d-flex align-items-center">
                <div class="bg-primary bg-opacity-25 text-primary rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="border: 1px solid rgba(37, 99, 235, 0.3);">
                  <i class="bi bi-clipboard2-pulse-fill fs-5" style="color: #1d4ed8;"></i>
                </div>
                <div>
-                 <h5 class="fw-bold m-0" style="color: #1e3a8a;">Portal Supervisi Akademik</h5>
-                 <small style="color: #3b82f6; font-weight: 500;">Sistem Instrumen & Pemantauan Supervisi Terpadu</small>
+                 <h5 class="fw-bold m-0" style="color: #1e3a8a;">Portal Supervisi Akademik <span class="badge bg-primary ms-2" id="badge-supervisi-sekolah">Sekolah</span></h5>
+                 <small style="color: #3b82f6; font-weight: 500;">Sistem Instrumen & Pemantauan Supervisi Terpadu (Tersinkronisasi Kode Sekolah)</small>
                </div>
             </div>
             <div class="d-flex gap-2">
                 <button class="btn btn-sm btn-glass-blue fw-bold rounded-pill px-3" onclick="bukaFullscreenSupervisi(event)">
                   <i class="bi bi-arrows-fullscreen me-1"></i> Layar Penuh
                 </button>
-                <button class="btn btn-sm btn-glass-blue fw-bold rounded-pill px-3" onclick="document.getElementById('iframe-supervisi-app').src = document.getElementById('iframe-supervisi-app').src">
-                  <i class="bi bi-arrow-clockwise me-1"></i> Muat Ulang
+                <button class="btn btn-sm btn-glass-blue fw-bold rounded-pill px-3" onclick="sinkronisasiIframeSekolah(true)">
+                  <i class="bi bi-arrow-clockwise me-1"></i> Muat Ulang Sekolah Saya
                 </button>
             </div>
           </div>
           
-          <!-- Jendela Iframe -->
           <div class="card rounded-4 overflow-hidden glass-blue-card p-1 mb-4">
               <iframe 
                 id="iframe-supervisi-app"
                 src="https://edusbypro.github.io/ASESPRO/supervisi" 
                 width="100%" 
                 class="rounded-3"
+                onload="kirimDataSekolahKeIframe()"
                 style="height: calc(100vh - 190px); min-height: 600px; border: none; background-color: #f8fafc; display: block;">
               </iframe>
           </div>
         </div>
 
-<!-- ========================================== -->
-        <!-- 3.5 PANTAU KINERJA GURU -->
+        <!-- ========================================== -->
+        <!-- 3.5 PANTAU KINERJA GURU (TERPISAH + FILTER)-->
         <!-- ========================================== -->
         <div id="view-kinerja" class="view-section hidden">
-            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border border-success-subtle">
+            <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-4 rounded-4 shadow-sm border border-success-subtle flex-wrap gap-3">
                 <div>
                     <h5 class="fw-bold m-0 text-success"><i class="bi bi-journal-arrow-up me-2"></i>Pantau Laporan Kinerja Guru</h5>
-                    <small class="text-muted">Daftar file RPP, Soal, Media, dll yang diunggah oleh guru.</small>
+                    <small class="text-muted">Daftar perangkat RPP, Soal, Media, dll yang diunggah oleh guru.</small>
                 </div>
-                <button class="btn btn-outline-success rounded-pill fw-bold" onclick="tarikDataKinerjaGuru()"><i class="bi bi-arrow-clockwise me-1"></i> Segarkan</button>
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                    <div class="btn-group shadow-sm rounded-pill overflow-hidden" role="group">
+                        <button type="button" class="btn btn-sm btn-success fw-bold px-3" id="tab-kinerja-saya" onclick="setModeKinerjaSekolah('SAYA')">
+                            <i class="bi bi-building-check me-1"></i> Guru Sekolah Saya <span class="badge bg-white text-success ms-1" id="badge-kinerja-saya">0</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-success bg-white fw-bold px-3" id="tab-kinerja-lain" onclick="setModeKinerjaSekolah('LAIN')">
+                            <i class="bi bi-globe me-1"></i> Guru Sekolah Lain <span class="badge bg-success text-white ms-1" id="badge-kinerja-lain">0</span>
+                        </button>
+                    </div>
+                    <button class="btn btn-sm btn-outline-success rounded-pill fw-bold px-3 py-2" onclick="tarikDataKinerjaGuru()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Segarkan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Baris Filter Pencarian Kinerja Guru -->
+            <div class="card border-0 shadow-sm rounded-4 bg-white mb-3 p-3">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-person-search me-1"></i>Cari Nama / NIP Guru</label>
+                        <input type="text" id="filter-kinerja-nama" class="form-control form-control-sm border-success-subtle" placeholder="Ketik nama guru..." oninput="renderTabelKinerjaGuru()">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-easel me-1"></i>Kelas / Mapel</label>
+                        <select id="filter-kinerja-kelas" class="form-select form-select-sm border-success-subtle" onchange="renderTabelKinerjaGuru()">
+                            <option value="">-- Semua Kelas --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-folder2-open me-1"></i>Jenis Upload</label>
+                        <select id="filter-kinerja-jenis" class="form-select form-select-sm border-success-subtle" onchange="renderTabelKinerjaGuru()">
+                            <option value="">-- Semua Jenis Upload --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-calendar-event me-1"></i>Tanggal Upload</label>
+                        <input type="date" id="filter-kinerja-tanggal" class="form-control form-control-sm border-success-subtle" onchange="renderTabelKinerjaGuru()">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-sm btn-light border w-100 fw-bold text-secondary" onclick="resetFilterKinerja()">
+                            <i class="bi bi-x-circle me-1"></i> Reset Filter
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-0">
-                    <div class="table-responsive" style="max-height: 60vh; overflow-y: auto;">
+                    <div class="table-responsive" style="max-height: 55vh; overflow-y: auto;">
                         <table class="table table-hover align-middle m-0 text-nowrap">
                             <thead class="table-light text-muted" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
-                                    <th>Nama Guru</th>
+                                    <th class="ps-4">Nama Guru</th>
                                     <th>Jenis Upload</th>
-                                    <th>Kelas/Mapel</th>
+                                    <th>Kelas / Mapel</th>
                                     <th>Tgl Upload</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -601,18 +711,27 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- 6. LINK EKSTERNAL -->
+        <!-- 6. LINK EKSTERNAL (TERPISAH SEKOLAH)       -->
+        <!-- ========================================== -->
         <div id="view-link" class="view-section hidden">
           <div class="mb-4 d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border border-light flex-wrap gap-3">
               <div>
                   <h5 class="fw-bold m-0"><i class="bi bi-link-45deg text-success me-2"></i>Tugas Link Eksternal</h5>
                   <small class="text-muted">Pantau link Quizizz, GForm, Kahoot, dll yang dibagikan guru.</small>
               </div>
-              <div class="d-flex gap-2">
-                  <select id="filter-link-guru" class="form-select border-success text-success fw-bold rounded-pill px-4" onchange="loadLinkAdmin()">
+              <div class="d-flex gap-2 align-items-center flex-wrap">
+                  <div class="btn-group shadow-sm rounded-pill overflow-hidden" role="group">
+                      <button type="button" class="btn btn-sm btn-success fw-bold px-3" id="tab-link-saya" onclick="setModeLinkSekolah('SAYA')">
+                          <i class="bi bi-building-check me-1"></i> Sekolah Saya <span class="badge bg-white text-success ms-1" id="badge-link-saya">0</span>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-outline-success bg-white fw-bold px-3" id="tab-link-lain" onclick="setModeLinkSekolah('LAIN')">
+                          <i class="bi bi-globe me-1"></i> Sekolah Lain <span class="badge bg-success text-white ms-1" id="badge-link-lain">0</span>
+                      </button>
+                  </div>
+                  <select id="filter-link-guru" class="form-select form-select-sm border-success text-success fw-bold rounded-pill px-3" style="width: auto;" onchange="renderLinkAdmin()">
                       <option value="SEMUA">-- Semua Guru --</option>
                   </select>
-                  <button class="btn btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddLink')"><i class="bi bi-plus-lg me-1"></i> Tambah Link</button>
+                  <button class="btn btn-sm btn-success px-4 py-2 fw-bold rounded-pill shadow-sm" onclick="bukaModal('modalAddLink')"><i class="bi bi-plus-lg me-1"></i> Tambah Link</button>
               </div>
           </div>
           <div class="row g-4" id="container-link-admin"></div>
@@ -1144,7 +1263,7 @@
                   <div class="col-md-6"><label class="form-label small fw-bold">NPSN</label><input type="text" id="set-npsn" class="form-control" required></div>
                   <div class="col-md-6"><label class="form-label small fw-bold">Nama Kepala Sekolah</label><input type="text" id="set-admin" class="form-control" placeholder="Nama Lengkap & Gelar" required></div>
 <div class="col-md-6"><label class="form-label small fw-bold">NIP Kepala Sekolah</label><input type="text" id="set-nip-kepsek" class="form-control" placeholder="Kosongkan jika tidak ada"></div>
-                      <label class="form-label small fw-bold">Upload Logo Sekolah</label>
+                      <div class="col-md-6"><label class="form-label small fw-bold">Upload Logo Sekolah</label>
                       <div class="d-flex align-items-center gap-3">
                           <img id="preview-logo" src="" style="width: 45px; height: 45px; object-fit: contain; border: 1px solid #ccc; background: white;">
                           <input type="file" id="upload-logo-file" class="form-control" accept="image/png, image/jpeg, image/jpg" onchange="konversiLogoKeBase64(event)">
@@ -3027,6 +3146,653 @@ function cetakLaporanABKPDF() {
         });
     });
 }
+
+
+// =========================================================
+    // VARIABEL TAMBAHAN UNTUK PEMISAHAN SEKOLAH & FILTER
+    // =========================================================
+    let kepsekSoalAktif = [];
+    let rawKinerjaData = [];
+    let modeKinerjaSekolah = 'SAYA'; // 'SAYA' atau 'LAIN'
+    let rawLiveData = [];
+    let modeLiveSekolah = 'SAYA';    // 'SAYA' atau 'LAIN'
+    let rawLinkData = [];
+    let modeLinkSekolah = 'SAYA';    // 'SAYA' atau 'LAIN'
+    let modeTelaahSekolah = 'SAYA';  // 'SAYA' atau 'LAIN'
+
+    // =========================================================
+    // 1. PARSER TANGGAL INDONESIA AKURAT (SOLUSI BUG "TERPUTUS")
+    // =========================================================
+    function parseSafeDate(str) {
+        if (!str) return new Date(0);
+        if (str instanceof Date) return str;
+        let s = String(str).trim();
+
+        // Prioritas 1: Format Indonesia DD/MM/YYYY atau DD-MM-YYYY (dengan/tanpa jam)
+        let matchID = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:\s+(\d{1,2})[:\.](\d{1,2})(?:[:\.](\d{1,2}))?)?/);
+        if (matchID) {
+            let day = parseInt(matchID[1], 10);
+            let month = parseInt(matchID[2], 10) - 1;
+            let year = parseInt(matchID[3], 10);
+            let hr = parseInt(matchID[4] || 0, 10);
+            let min = parseInt(matchID[5] || 0, 10);
+            let sec = parseInt(matchID[6] || 0, 10);
+            return new Date(year, month, day, hr, min, sec);
+        }
+
+        // Prioritas 2: Format ISO YYYY-MM-DD atau YYYY/MM/DD
+        let matchISO = s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})(?:[T\s]+(\d{1,2})[:\.](\d{1,2})(?:[:\.](\d{1,2}))?)?/);
+        if (matchISO && !s.includes('Z')) {
+            return new Date(
+                parseInt(matchISO[1], 10),
+                parseInt(matchISO[2], 10) - 1,
+                parseInt(matchISO[3], 10),
+                parseInt(matchISO[4] || 0, 10),
+                parseInt(matchISO[5] || 0, 10),
+                parseInt(matchISO[6] || 0, 10)
+            );
+        }
+
+        let d = new Date(s);
+        return !isNaN(d.getTime()) ? d : new Date(0);
+    }
+
+    // =========================================================
+    // 2. HELPER DETEKSI KEPEMILIKAN SEKOLAH (CERDAS & BERLAPIS)
+    // =========================================================
+    function normStr(val) {
+        return String(val || '').toLowerCase().trim();
+    }
+
+    // Mengecek apakah nama tanpa gelar cocok dengan daftar guru sekolah
+    function cleanNamaGelar(nama) {
+        return normStr(nama).split(',')[0].replace(/^(drs\.|dra\.|ir\.|h\.|hj\.)\s*/i, '').trim();
+    }
+
+    function isGuruSekolahSaya(item) {
+        if (!currentUser) return true;
+        let myKode = normStr(currentUser.kode_sekolah);
+        let mySekolah = normStr((currentUser.nama_sekolah || '').split(':')[0]);
+
+        // Layer 1: Cek properti kodeSekolah / asalSekolah jika dikirim oleh backend
+        let itemKode = normStr(item.kodeSekolah || item.kode_sekolah || item.kode);
+        if (itemKode) return itemKode === myKode;
+
+        let itemSekolah = normStr(item.namaSekolah || item.nama_sekolah || item.sekolah || item.asalSekolah);
+        if (itemSekolah && mySekolah) return itemSekolah.includes(mySekolah) || mySekolah.includes(itemSekolah);
+
+        // Layer 2: Cocokkan dengan daftar guru sekolah (activeGuruData) atau akun Kepsek sendiri
+        let targetNama = normStr(item.namaGuru || item.nama_guru || item.nama || item.pembuat);
+        let targetUser = normStr(item.username || item.user || item.pembuat);
+        let targetNip  = normStr(item.nip);
+
+        if (targetUser && targetUser === normStr(currentUser.username)) return true;
+        if (targetNama && cleanNamaGelar(targetNama) === cleanNamaGelar(currentUser.nama)) return true;
+
+        if (Array.isArray(activeGuruData) && activeGuruData.length > 0) {
+            return activeGuruData.some(g => {
+                let gUser = normStr(g.username);
+                let gNama = normStr(g.nama);
+                let gNip  = normStr(g.nip);
+                return (targetUser && gUser === targetUser) ||
+                       (targetNama && (gNama === targetNama || cleanNamaGelar(gNama) === cleanNamaGelar(targetNama))) ||
+                       (targetNip && targetNip !== '-' && gNip && gNip === targetNip);
+            });
+        }
+        return true;
+    }
+
+    function isSiswaSekolahSaya(item) {
+        if (!currentUser) return true;
+        let myKode = normStr(currentUser.kode_sekolah);
+        let mySekolah = normStr((currentUser.nama_sekolah || '').split(':')[0]);
+
+        let itemKode = normStr(item.kodeSekolah || item.kode_sekolah);
+        if (itemKode) return itemKode === myKode;
+
+        let itemSekolah = normStr(item.asalSekolah || item.namaSekolah || item.sekolah);
+        if (itemSekolah && mySekolah) return itemSekolah.includes(mySekolah) || mySekolah.includes(itemSekolah);
+
+        // Cocokkan dengan database siswa sekolah (activeSiswaData)
+        let uSiswa = normStr(item.userSiswa || item.nisn || item.user);
+        let nSiswa = normStr(item.namaSiswa || item.nama_siswa || item.nama).replace(/\s*\(ke-\d+\)/i, '').trim();
+
+        if (Array.isArray(activeSiswaData) && activeSiswaData.length > 0) {
+            return activeSiswaData.some(s => {
+                return (uSiswa && normStr(s.user) === uSiswa) ||
+                       (nSiswa && normStr(s.nama) === nSiswa);
+            });
+        }
+        return true;
+    }
+
+    function isUjianSekolahSaya(u) {
+        if (!currentUser || !u) return true;
+        let myKode = normStr(currentUser.kode_sekolah);
+        let mySekolah = normStr((currentUser.nama_sekolah || '').split(':')[0]);
+
+        // Cek kode sekolah langsung jika ada di objek ujian
+        let uKodeSekolah = normStr(u.kodeSekolah || u.kode_sekolah);
+        if (uKodeSekolah) return uKodeSekolah === myKode;
+
+        // Cek pembuat ujian jika ada
+        if (u.pembuat || u.username || u.namaGuru) {
+            return isGuruSekolahSaya({ pembuat: u.pembuat, username: u.username, namaGuru: u.namaGuru });
+        }
+
+        // Cek target asalSekolah pada pengaturan ujian
+        let uAsal = normStr(u.asalSekolah);
+        if (uAsal && mySekolah) {
+            return uAsal.includes(mySekolah) || uAsal.includes(myKode);
+        }
+
+        return true; // Default jika ujian dibuat di dalam ruang sekolah yang sama
+    }
+
+    // =========================================================
+    // 3. LOAD DATA AWAL KEPSEK (OTOMATIS MUAT DATA GURU & IFRAME)
+    // =========================================================
+    function loadDataAwalKepsek() {
+        // Tarik daftar guru sekolah terlebih dahulu di background untuk referensi filter lintas menu
+        panggilAPI("getDataGuruBackend", { kodeSekolah: currentUser.kode_sekolah }).then(dGuru => {
+            activeGuruData = dGuru || [];
+        }).catch(() => {});
+
+        panggilAPI("getAdminData", { kodeSekolah: currentUser.kode_sekolah }).then(data => {
+            if (!data || data.error) return;
+            activeUjianData = data.ujian || [];
+            activeSiswaData = data.siswa || [];
+            activeKisiData  = data.kisi || [];
+
+            // Hitung statistik khusus sekolah sendiri
+            let ujianSekolahSaya = activeUjianData.filter(u => isUjianSekolahSaya(u));
+            let jumlahUjianAktif = ujianSekolahSaya.filter(u => u.status === 'AKTIF').length;
+
+            document.getElementById('stat-siswa').innerText = data.stats.siswa_aktif || activeSiswaData.length || 0;
+            document.getElementById('stat-ujian').innerText = jumlahUjianAktif;
+            document.getElementById('stat-soal').innerText  = data.stats.jml_soal || 0;
+
+            if (document.getElementById('set-nama')) {
+                document.getElementById('set-nama').value = data.setting.nama || '';
+                document.getElementById('set-npsn').value = data.setting.npsn || '';
+                document.getElementById('set-admin').value = data.setting.adminName || '';
+                document.getElementById('set-apikey').value = data.setting.apiKey || '';
+                if (data.setting.logo) {
+                    document.getElementById('set-logo').value = data.setting.logo;
+                    document.getElementById('preview-logo').src = data.setting.logo;
+                }
+            }
+
+            renderTabelUjianAdmin();
+            renderDropdownUjianTelaah();
+            inisiatifDropdownKelasLangsung();
+            sinkronisasiIframeSekolah(false);
+        });
+    }
+
+    // =========================================================
+    // 4. PERBAIKAN MENU TELAAH & PERSETUJUAN SOAL (POIN 5)
+    // =========================================================
+    function setModeTelaahSekolah(mode) {
+        modeTelaahSekolah = mode;
+        document.getElementById('tab-telaah-saya').className = mode === 'SAYA' ? 'btn btn-sm btn-primary fw-bold px-3' : 'btn btn-sm btn-outline-primary bg-white fw-bold px-3';
+        document.getElementById('tab-telaah-lain').className = mode === 'LAIN' ? 'btn btn-sm btn-primary fw-bold px-3' : 'btn btn-sm btn-outline-primary bg-white fw-bold px-3';
+        renderDropdownUjianTelaah();
+        document.getElementById('tb-kepsek-telaah').innerHTML = '<tr><td colspan="5" class="py-5 text-muted"><i class="bi bi-arrow-up-circle fs-3 d-block mb-2"></i>Pilih asesmen di atas terlebih dahulu.</td></tr>';
+    }
+
+    function renderDropdownUjianTelaah() {
+        let daftar = activeUjianData.filter(u => !String(u.status).startsWith('SAMPAH_'));
+        let filtered = daftar.filter(u => modeTelaahSekolah === 'SAYA' ? isUjianSekolahSaya(u) : !isUjianSekolahSaya(u));
+
+        let opt = `<option value="">-- Pilih Asesmen (${filtered.length} Tersedia) --</option>`;
+        filtered.forEach(u => {
+            opt += `<option value="${u.kode}">${u.nama} (${u.mapel})</option>`;
+        });
+        let el = document.getElementById('kepsek-filter-ujian');
+        if (el) el.innerHTML = opt;
+    }
+
+    // =========================================================
+    // 5. PERBAIKAN PANTAU UJIAN LIVE (POIN 2)
+    // =========================================================
+    function setModeLiveSekolah(mode) {
+        modeLiveSekolah = mode;
+        document.getElementById('tab-live-saya').className = mode === 'SAYA' ? 'btn btn-sm btn-primary fw-bold px-3' : 'btn btn-sm btn-outline-primary bg-white fw-bold px-3';
+        document.getElementById('tab-live-lain').className = mode === 'LAIN' ? 'btn btn-sm btn-primary fw-bold px-3' : 'btn btn-sm btn-outline-primary bg-white fw-bold px-3';
+        renderTabelLiveKepsek();
+    }
+
+    function resetFilterLive() {
+        document.getElementById('filter-live-nama').value = '';
+        document.getElementById('filter-live-ujian').value = '';
+        document.getElementById('filter-live-kelas').value = '';
+        document.getElementById('filter-live-status').value = '';
+        renderTabelLiveKepsek();
+    }
+
+    function loadLiveProctoringKepsek() {
+        let tbody = document.getElementById('tb-kepsek-live');
+        if (rawLiveData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="py-5"><span class="spinner-border text-primary"></span><br><small class="text-muted mt-2 d-block">Memindai aktivitas ujian...</small></td></tr>';
+        }
+
+        panggilAPI("getSemuaHasil", { kodeSekolah: currentUser.kode_sekolah }).then(semuaHasil => {
+            // Gabungkan log per siswa per ujian agar jika siswa sudah SELESAI, log lama "Sedang Mengerjakan" tidak nyangkut jadi "Terputus"
+            let mapUnik = {};
+            (semuaHasil || []).forEach(h => {
+                let key = `${normStr(h.userSiswa || h.namaSiswa)}__${normStr(h.kodeUjian)}`;
+                let dtBaru = parseSafeDate(h.tanggal).getTime();
+                let isSelesaiBaru = normStr(h.status).includes('selesai') || (h.nilaiAkhir !== undefined && h.nilaiAkhir !== "" && normStr(h.status) !== 'sedang mengerjakan');
+
+                if (!mapUnik[key]) {
+                    mapUnik[key] = h;
+                } else {
+                    let lama = mapUnik[key];
+                    let dtLama = parseSafeDate(lama.tanggal).getTime();
+                    let isSelesaiLama = normStr(lama.status).includes('selesai') || (lama.nilaiAkhir !== undefined && lama.nilaiAkhir !== "" && normStr(lama.status) !== 'sedang mengerjakan');
+
+                    // Prioritaskan data yang sudah berstatus Selesai, atau yang waktunya paling baru
+                    if (isSelesaiBaru && !isSelesaiLama) {
+                        mapUnik[key] = h;
+                    } else if (isSelesaiBaru === isSelesaiLama && dtBaru >= dtLama) {
+                        mapUnik[key] = h;
+                    }
+                }
+            });
+
+            rawLiveData = Object.values(mapUnik).sort((a, b) => parseSafeDate(b.tanggal).getTime() - parseSafeDate(a.tanggal).getTime());
+
+            // Hitung badge tab Sekolah Saya vs Sekolah Lain
+            let jmlSaya = rawLiveData.filter(h => isSiswaSekolahSaya(h)).length;
+            let jmlLain = rawLiveData.length - jmlSaya;
+            if (document.getElementById('badge-live-saya')) document.getElementById('badge-live-saya').innerText = jmlSaya;
+            if (document.getElementById('badge-live-lain')) document.getElementById('badge-live-lain').innerText = jmlLain;
+
+            renderTabelLiveKepsek();
+        });
+    }
+
+    function renderTabelLiveKepsek() {
+        let dataSekolah = rawLiveData.filter(h => modeLiveSekolah === 'SAYA' ? isSiswaSekolahSaya(h) : !isSiswaSekolahSaya(h));
+
+        // Populasi dropdown filter Asesmen & Kelas jika belum terisi
+        let selUjian = document.getElementById('filter-live-ujian');
+        let selKelas = document.getElementById('filter-live-kelas');
+        if (selUjian) {
+            let valUjian = selUjian.value;
+            let listKode = [...new Set(dataSekolah.map(h => h.kodeUjian).filter(Boolean))];
+            let optU = '<option value="">-- Semua Asesmen --</option>';
+            listKode.forEach(k => {
+                let info = activeUjianData.find(u => u.kode === k) || { nama: k };
+                optU += `<option value="${k}">${info.nama}</option>`;
+            });
+            selUjian.innerHTML = optU;
+            selUjian.value = valUjian;
+        }
+        if (selKelas) {
+            let valKelas = selKelas.value;
+            let listKelas = [...new Set(dataSekolah.map(h => String(h.kelas || '').trim()).filter(Boolean))].sort();
+            let optK = '<option value="">-- Semua Kelas --</option>';
+            listKelas.forEach(c => optK += `<option value="${c}">Kelas ${c}</option>`);
+            selKelas.innerHTML = optK;
+            selKelas.value = valKelas;
+        }
+
+        let fNama   = normStr(document.getElementById('filter-live-nama') ? document.getElementById('filter-live-nama').value : '');
+        let fUjian  = document.getElementById('filter-live-ujian') ? document.getElementById('filter-live-ujian').value : '';
+        let fKelas  = document.getElementById('filter-live-kelas') ? document.getElementById('filter-live-kelas').value : '';
+        let fStatus = document.getElementById('filter-live-status') ? document.getElementById('filter-live-status').value : '';
+
+        let wNow = new Date().getTime();
+        let cTotal = 0, cSelesai = 0, cAktif = 0, cPutus = 0;
+        let html = '';
+
+        dataSekolah.forEach(h => {
+            let dt = parseSafeDate(h.tanggal);
+            let gapDetik = Math.max(0, Math.floor((wNow - dt.getTime()) / 1000));
+            let stRaw = normStr(h.status);
+            let punyaNilai = h.nilaiAkhir !== undefined && h.nilaiAkhir !== "" && h.nilaiAkhir !== null;
+
+            let kategoriStatus = 'AKTIF';
+            let badgeHtml = '';
+
+            if (stRaw.includes('selesai') || (punyaNilai && stRaw !== 'sedang mengerjakan')) {
+                kategoriStatus = 'SELESAI';
+                badgeHtml = `<span class="badge bg-success px-3 py-2 rounded-pill"><i class="bi bi-check-circle-fill me-1"></i> Selesai Mengerjakan</span>`;
+            } else if (gapDetik <= 900) { 
+                // Ping dalam 15 menit terakhir = Aktif mengerjakan
+                kategoriStatus = 'AKTIF';
+                badgeHtml = `<span class="badge bg-primary px-3 py-2 rounded-pill"><i class="bi bi-broadcast me-1"></i> Sedang Mengerjakan</span>`;
+            } else {
+                kategoriStatus = 'TERPUTUS';
+                badgeHtml = `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill"><i class="bi bi-wifi-off me-1"></i> Idle / Terputus</span>`;
+            }
+
+            // Hitung statistik sebelum filter status
+            cTotal++;
+            if (kategoriStatus === 'SELESAI') cSelesai++;
+            else if (kategoriStatus === 'AKTIF') cAktif++;
+            else cPutus++;
+
+            // Terapkan filter pencarian
+            if (fNama && !normStr(h.namaSiswa).includes(fNama) && !normStr(h.userSiswa).includes(fNama)) return;
+            if (fUjian && h.kodeUjian !== fUjian) return;
+            if (fKelas && String(h.kelas).trim() !== fKelas) return;
+            if (fStatus && kategoriStatus !== fStatus) return;
+
+            let info = activeUjianData.find(u => u.kode === h.kodeUjian) || { nama: h.kodeUjian, mapel: '' };
+            let skorTampil = kategoriStatus === 'SELESAI' && punyaNilai ? `<span class="fw-bold text-success fs-6">${h.nilaiAkhir}</span>` : `<span class="text-muted">-</span>`;
+            let waktuTampil = dt.getTime() > 0 ? dt.toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : (h.tanggal || '-');
+
+            html += `<tr>
+                <td><b class="text-primary">${info.nama}</b><br><small class="text-muted">${info.mapel || h.kodeUjian}</small></td>
+                <td class="text-start"><b>${h.namaSiswa}</b><br><small class="text-muted">${h.userSiswa || ''}</small></td>
+                <td><span class="badge border text-dark">Kls ${h.kelas}</span></td>
+                <td>${badgeHtml}</td>
+                <td>${skorTampil}</td>
+                <td class="small text-muted">${waktuTampil}</td>
+            </tr>`;
+        });
+
+        document.getElementById('live-stat-total').innerText   = cTotal;
+        document.getElementById('live-stat-selesai').innerText = cSelesai;
+        document.getElementById('live-stat-aktif').innerText   = cAktif;
+        document.getElementById('live-stat-putus').innerText   = cPutus;
+
+        document.getElementById('tb-kepsek-live').innerHTML = html || '<tr><td colspan="6" class="py-5 text-muted">Tidak ada data aktivitas siswa yang sesuai filter.</td></tr>';
+    }
+
+    // =========================================================
+    // 6. PERBAIKAN PANTAU KINERJA GURU + 4 FILTER (POIN 1)
+    // =========================================================
+    function setModeKinerjaSekolah(mode) {
+        modeKinerjaSekolah = mode;
+        document.getElementById('tab-kinerja-saya').className = mode === 'SAYA' ? 'btn btn-sm btn-success fw-bold px-3' : 'btn btn-sm btn-outline-success bg-white fw-bold px-3';
+        document.getElementById('tab-kinerja-lain').className = mode === 'LAIN' ? 'btn btn-sm btn-success fw-bold px-3' : 'btn btn-sm btn-outline-success bg-white fw-bold px-3';
+        populateDropdownFilterKinerja();
+        renderTabelKinerjaGuru();
+    }
+
+    function resetFilterKinerja() {
+        document.getElementById('filter-kinerja-nama').value = '';
+        document.getElementById('filter-kinerja-kelas').value = '';
+        document.getElementById('filter-kinerja-jenis').value = '';
+        document.getElementById('filter-kinerja-tanggal').value = '';
+        renderTabelKinerjaGuru();
+    }
+
+    function tarikDataKinerjaGuru() {
+        const tbody = document.getElementById('tb-kinerja-guru');
+        tbody.innerHTML = '<tr><td colspan="5" class="py-5 text-center"><span class="spinner-border text-success"></span><br>Menarik laporan kinerja...</td></tr>';
+
+        // Pastikan data guru sekolah sudah termuat agar pemisahan sekolah akurat
+        let promiseGuru = (activeGuruData && activeGuruData.length > 0)
+            ? Promise.resolve(activeGuruData)
+            : panggilAPI("getDataGuruBackend", { kodeSekolah: currentUser.kode_sekolah }).then(d => { activeGuruData = d || []; return activeGuruData; }).catch(() => []);
+
+        promiseGuru.then(() => {
+            return panggilAPI("getKinerjaGuruBackend", { kodeSekolah: currentUser.kode_sekolah });
+        }).then(res => {
+            let arrayKinerja = Array.isArray(res) ? res : (res.data || []);
+            rawKinerjaData = [...arrayKinerja].reverse();
+
+            let jmlSaya = rawKinerjaData.filter(k => isGuruSekolahSaya(k)).length;
+            let jmlLain = rawKinerjaData.length - jmlSaya;
+            if (document.getElementById('badge-kinerja-saya')) document.getElementById('badge-kinerja-saya').innerText = jmlSaya;
+            if (document.getElementById('badge-kinerja-lain')) document.getElementById('badge-kinerja-lain').innerText = jmlLain;
+
+            populateDropdownFilterKinerja();
+            renderTabelKinerjaGuru();
+        }).catch(err => {
+            tbody.innerHTML = `<tr><td colspan="5" class="py-5 text-center text-danger">Gagal menarik data: ${err.message}</td></tr>`;
+        });
+    }
+
+    function populateDropdownFilterKinerja() {
+        let dataMode = rawKinerjaData.filter(k => modeKinerjaSekolah === 'SAYA' ? isGuruSekolahSaya(k) : !isGuruSekolahSaya(k));
+
+        let selKelas = document.getElementById('filter-kinerja-kelas');
+        let selJenis = document.getElementById('filter-kinerja-jenis');
+
+        if (selKelas) {
+            let curK = selKelas.value;
+            let listKelas = [...new Set(dataMode.map(k => String(k.kelas || '').trim()).filter(Boolean))].sort();
+            let optK = '<option value="">-- Semua Kelas --</option>';
+            listKelas.forEach(c => optK += `<option value="${c}">Kelas ${c}</option>`);
+            selKelas.innerHTML = optK;
+            selKelas.value = curK;
+        }
+
+        if (selJenis) {
+            let curJ = selJenis.value;
+            let listJenis = [...new Set(dataMode.map(k => String(k.jenis || '').trim()).filter(Boolean))].sort();
+            let optJ = '<option value="">-- Semua Jenis Upload --</option>';
+            listJenis.forEach(j => optJ += `<option value="${j}">${j}</option>`);
+            selJenis.innerHTML = optJ;
+            selJenis.value = curJ;
+        }
+    }
+
+    function renderTabelKinerjaGuru() {
+        const tbody = document.getElementById('tb-kinerja-guru');
+        let dataMode = rawKinerjaData.filter(k => modeKinerjaSekolah === 'SAYA' ? isGuruSekolahSaya(k) : !isGuruSekolahSaya(k));
+
+        let fNama  = normStr(document.getElementById('filter-kinerja-nama') ? document.getElementById('filter-kinerja-nama').value : '');
+        let fKelas = document.getElementById('filter-kinerja-kelas') ? document.getElementById('filter-kinerja-kelas').value : '';
+        let fJenis = document.getElementById('filter-kinerja-jenis') ? document.getElementById('filter-kinerja-jenis').value : '';
+        let fTgl   = document.getElementById('filter-kinerja-tanggal') ? document.getElementById('filter-kinerja-tanggal').value : ''; // Format YYYY-MM-DD
+
+        let html = '';
+        dataMode.forEach(k => {
+            // 1. Filter Nama / NIP
+            if (fNama && !normStr(k.namaGuru).includes(fNama) && !normStr(k.nip).includes(fNama)) return;
+            // 2. Filter Kelas / Mapel
+            if (fKelas && String(k.kelas || '').trim() !== fKelas && !normStr(k.mapel).includes(normStr(fKelas))) return;
+            // 3. Filter Jenis Upload
+            if (fJenis && String(k.jenis || '').trim() !== fJenis) return;
+            // 4. Filter Tanggal Upload
+            if (fTgl) {
+                let dtItem = parseSafeDate(k.tglUpload);
+                let isoItem = !isNaN(dtItem.getTime()) && dtItem.getTime() > 0
+                    ? `${dtItem.getFullYear()}-${String(dtItem.getMonth() + 1).padStart(2, '0')}-${String(dtItem.getDate()).padStart(2, '0')}`
+                    : String(k.tglUpload || '');
+                if (!isoItem.includes(fTgl)) return;
+            }
+
+            let icon = "bi-file-earmark-text text-secondary";
+            let jns = String(k.jenis || '');
+            if (jns.includes('RPP')) icon = "bi-journal-bookmark-fill text-success";
+            else if (jns.includes('Media')) icon = "bi-play-btn-fill text-primary";
+            else if (jns.includes('Soal')) icon = "bi-card-checklist text-danger";
+
+            let infoSekolahLain = modeKinerjaSekolah === 'LAIN' && (k.namaSekolah || k.kodeSekolah)
+                ? `<span class="badge bg-secondary bg-opacity-10 text-secondary border ms-1">${k.namaSekolah || k.kodeSekolah}</span>`
+                : '';
+
+            html += `
+            <tr>
+                <td class="ps-4">
+                    <div class="fw-bold text-dark">${k.namaGuru || '-'} ${infoSekolahLain}</div>
+                    <small class="text-muted">NIP: ${k.nip || '-'}</small>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi ${icon} fs-5"></i>
+                        <span class="badge border text-dark">${jns}</span>
+                    </div>
+                </td>
+                <td><span class="fw-bold text-primary">Kls: ${k.kelas || '-'}</span><br><small>${k.mapel || '-'}</small></td>
+                <td class="small text-muted">${k.tglUpload || '-'}</td>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm rounded-pill fw-bold shadow-sm" onclick="window.open('${k.link}', '_blank')">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Buka / Pratinjau File
+                    </button>
+                </td>
+            </tr>`;
+        });
+
+        tbody.innerHTML = html || `<tr><td colspan="5" class="py-5 text-center text-muted">Tidak ada data unggahan guru pada kategori/filter ini.</td></tr>`;
+    }
+
+    // =========================================================
+    // 7. PERBAIKAN LINK EKSTERNAL TERPISAH SEKOLAH (POIN 3)
+    // =========================================================
+    function setModeLinkSekolah(mode) {
+        modeLinkSekolah = mode;
+        document.getElementById('tab-link-saya').className = mode === 'SAYA' ? 'btn btn-sm btn-success fw-bold px-3' : 'btn btn-sm btn-outline-success bg-white fw-bold px-3';
+        document.getElementById('tab-link-lain').className = mode === 'LAIN' ? 'btn btn-sm btn-success fw-bold px-3' : 'btn btn-sm btn-outline-success bg-white fw-bold px-3';
+        populateFilterGuruLink();
+        renderLinkAdmin();
+    }
+
+    function loadLinkAdmin() {
+        let promiseGuru = (activeGuruData && activeGuruData.length > 0)
+            ? Promise.resolve(activeGuruData)
+            : panggilAPI("getDataGuruBackend", { kodeSekolah: currentUser.kode_sekolah }).then(d => { activeGuruData = d || []; return activeGuruData; }).catch(() => []);
+
+        promiseGuru.then(() => {
+            return panggilAPI("getLinkEksternalBackend", { kodeSekolah: currentUser.kode_sekolah });
+        }).then(data => {
+            rawLinkData = data || [];
+
+            let jmlSaya = rawLinkData.filter(L => isGuruSekolahSaya(L)).length;
+            let jmlLain = rawLinkData.length - jmlSaya;
+            if (document.getElementById('badge-link-saya')) document.getElementById('badge-link-saya').innerText = jmlSaya;
+            if (document.getElementById('badge-link-lain')) document.getElementById('badge-link-lain').innerText = jmlLain;
+
+            populateFilterGuruLink();
+            renderLinkAdmin();
+
+            let classes = [...new Set(activeSiswaData.map(s => String(s.kelas).trim()).filter(k => k && k !== '-'))].sort();
+            let opt = `<option value="${classes.join(', ')}">-- Semua Kelas --</option>`;
+            classes.forEach(c => opt += `<option value="${c}">Kelas ${c}</option>`);
+            if (document.getElementById('lnk-kelas')) document.getElementById('lnk-kelas').innerHTML = opt;
+        });
+    }
+
+    function populateFilterGuruLink() {
+        let selectFilter = document.getElementById('filter-link-guru');
+        if (!selectFilter) return;
+
+        let dataMode = rawLinkData.filter(L => modeLinkSekolah === 'SAYA' ? isGuruSekolahSaya(L) : !isGuruSekolahSaya(L));
+        let semuaPembuat = [...new Set(dataMode.map(l => l.pembuat).filter(Boolean))];
+
+        let htmlOpt = `<option value="SEMUA">-- Semua Guru (${semuaPembuat.length}) --</option>`;
+        semuaPembuat.forEach(p => {
+            let infoGuru = activeGuruData.find(g => normStr(g.username) === normStr(p) || normStr(g.nama) === normStr(p));
+            let namaTampil = infoGuru ? infoGuru.nama : p;
+            htmlOpt += `<option value="${p}">${namaTampil}</option>`;
+        });
+        selectFilter.innerHTML = htmlOpt;
+    }
+
+    function renderLinkAdmin() {
+        let selectFilter = document.getElementById('filter-link-guru');
+        let filterPembuat = selectFilter ? selectFilter.value : "SEMUA";
+
+        let filteredLinks = rawLinkData.filter(L => modeLinkSekolah === 'SAYA' ? isGuruSekolahSaya(L) : !isGuruSekolahSaya(L));
+        if (filterPembuat !== "SEMUA") {
+            filteredLinks = filteredLinks.filter(l => l.pembuat === filterPembuat);
+        }
+
+        let html = '';
+        filteredLinks.forEach(L => {
+            let c = L.status === 'AKTIF' ? 'checked' : '';
+            let infoGuru = activeGuruData.find(g => normStr(g.username) === normStr(L.pembuat) || normStr(g.nama) === normStr(L.pembuat));
+            let namaTampil = infoGuru ? infoGuru.nama : (L.pembuat || 'Guru');
+
+            html += `<div class="col-md-6 col-xl-4">
+                <div class="card h-100 shadow-sm rounded-4 border border-success-subtle">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge bg-success bg-opacity-10 text-success">${L.platform}</span>
+                            <span class="badge border text-dark">${L.status}</span>
+                        </div>
+                        <h5 class="fw-bold mb-1">${L.nama}</h5>
+                        <p class="small text-muted mb-1">Dibuat oleh: <b>${namaTampil}</b></p>
+                        <p class="small text-muted mb-3 border-bottom pb-2">Target: Kelas ${L.kelas}</p>
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" ${c} onchange="panggilAPI('toggleStatusLinkBackend', {kodeSekolah:currentUser.kode_sekolah, idLink:'${L.id_link}', status:this.checked?'AKTIF':'DRAFT'})">
+                            <label class="small fw-bold">Tampilkan ke Siswa</label>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-success btn-sm rounded-pill w-100" onclick="window.open('${L.url}')">Cek Link</button>
+                            <button class="btn text-danger p-0" onclick="if(confirm('Hapus link ini?')) panggilAPI('hapusLinkEksternalBackend', {kodeSekolah:currentUser.kode_sekolah, idLink:'${L.id_link}'}).then(()=>loadLinkAdmin())"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        });
+        document.getElementById('container-link-admin').innerHTML = html || '<div class="col-12 py-5 text-center text-muted">Tidak ada link eksternal pada kategori ini.</div>';
+    }
+
+    // Perbaikan fungsi simpanLinkEksternal (menghapus duplikat yang menghilangkan 'pembuat')
+    function simpanLinkEksternal(e) {
+        e.preventDefault();
+        panggilAPI("simpanLinkEksternalBackend", {
+            kodeSekolah: currentUser.kode_sekolah,
+            nama: document.getElementById('lnk-nama').value,
+            platform: document.getElementById('lnk-platform').value,
+            kelas: document.getElementById('lnk-kelas').value,
+            url: document.getElementById('lnk-url').value,
+            pembuat: currentUser.username || currentUser.nama
+        }).then(r => {
+            if (r.success) {
+                tutupModal('modalAddLink');
+                loadLinkAdmin();
+            }
+        });
+    }
+
+    // =========================================================
+    // 8. SINKRONISASI SEKOLAH KE IFRAME SUPERVISI AKADEMIK (POIN 4)
+    // =========================================================
+    function sinkronisasiIframeSekolah(forceReload = false) {
+        if (!currentUser) return;
+        let cleanSchool = (currentUser.nama_sekolah || '').split(':')[0].trim();
+        let badgeSup = document.getElementById('badge-supervisi-sekolah');
+        if (badgeSup) badgeSup.innerText = cleanSchool;
+
+        let iframeSup = document.getElementById('iframe-supervisi-app');
+        if (iframeSup) {
+            let params = new URLSearchParams({
+                kode_sekolah: currentUser.kode_sekolah || '',
+                nama_sekolah: cleanSchool,
+                nama_kepsek: currentUser.nama || '',
+                nip_kepsek: document.getElementById('set-nip-kepsek') ? document.getElementById('set-nip-kepsek').value : ''
+            });
+            let targetUrl = `https://edusbypro.github.io/ASESPRO/supervisi?${params.toString()}`;
+            if (forceReload || !iframeSup.src.includes('kode_sekolah=')) {
+                iframeSup.src = targetUrl;
+            }
+        }
+    }
+
+    function kirimDataSekolahKeIframe() {
+        let iframeSup = document.getElementById('iframe-supervisi-app');
+        if (iframeSup && iframeSup.contentWindow && currentUser) {
+            iframeSup.contentWindow.postMessage({
+                type: 'INIT_SEKOLAH_KEPSEK',
+                kode_sekolah: currentUser.kode_sekolah,
+                nama_sekolah: (currentUser.nama_sekolah || '').split(':')[0].trim(),
+                nama_kepsek: currentUser.nama,
+                daftar_guru: activeGuruData || []
+            }, '*');
+        }
+    }
+
+    function bukaFullscreenSupervisi(event) {
+        const container = document.getElementById("view-supervisi-app");
+        container.classList.toggle("pseudo-fullscreen");
+        const btn = event.currentTarget;
+        if (container.classList.contains("pseudo-fullscreen")) {
+            btn.innerHTML = '<i class="bi bi-fullscreen-exit me-1"></i> Tutup Layar Penuh';
+        } else {
+            btn.innerHTML = '<i class="bi bi-arrows-fullscreen me-1"></i> Layar Penuh';
+        }
+    }
+
 	
   </script>
 </body>
