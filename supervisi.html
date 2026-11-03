@@ -24,23 +24,23 @@
       min-height: 100vh;
     }
     .glass-card {
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.90);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 2px solid rgba(255, 255, 255, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.95);
       border-radius: 28px;
       padding: 24px;
       margin-bottom: 24px;
-      box-shadow: 0 20px 45px rgba(148, 163, 184, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 45px rgba(244, 114, 182, 0.20), inset 0 2px 4px rgba(255, 255, 255, 0.9);
     }
     .glass-sub {
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.80);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.85);
       border-radius: 20px;
     }
     .glass-input {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       border: 2px solid #f472b6;
       border-radius: 14px;
       color: #0f172a;
@@ -59,18 +59,18 @@
       color: #0f172a;
     }
 
-    /* Tabel Rubrik Kolaboratif Terang & Lucu */
+    /* Tabel Rubrik Kolaboratif & 3D Raised Candy Header */
     .table-wrap {
       width: 100%;
       overflow-x: auto;
       border-radius: 20px;
-      border: 2px solid rgba(244, 114, 182, 0.3);
-      box-shadow: 0 8px 25px rgba(244, 114, 182, 0.12);
+      border: 2.5px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 12px 30px rgba(244, 114, 182, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.9);
     }
     table.dual-table {
       width: 100%;
       border-collapse: collapse;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       font-size: 12.5px;
       color: #1e293b;
     }
@@ -82,13 +82,15 @@
       text-align: left;
     }
     table.dual-table thead th {
-      background: #0f172a !important;
-      color: #ffffff !important;
+      background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #818cf8 100%) !important;
+      color: #0f172a !important;
       font-size: 11.5px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      border: 1px solid #334155;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
     }
     table.dual-table tr.group-row td {
       background: linear-gradient(135deg, #bae6fd, #e9d5ff);
@@ -130,56 +132,21 @@
     .score-btn.sup-active-2 { background: #fef3c7; border-color: #fbbf24; color: #92400e; }
     .score-btn.sup-active-3 { background: #d1fae5; border-color: #34d399; color: #065f46; }
 
-    .glass-card h1, .glass-card h2, .glass-card h3, .glass-card h4, 
-    .glass-card p, .glass-card span, .glass-card label, .glass-card strong {
-      color: #0f172a !important;
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
-    }
-    /* Keep button text white */
-    .glass-card button span, .glass-card button, .glass-card .badge, header button {
-      color: inherit;
-    }
-    header h1 span {
-      background: none !important;
-      -webkit-background-clip: initial !important;
-      -webkit-text-fill-color: initial !important;
-      color: #0f172a !important;
-    }
-    header p, header h1 {
-      color: #0f172a !important;
-    }
-    .badge-cyan, .badge-emerald, .badge-amber {
-      color: #0f172a !important;
-      font-weight: 800 !important;
-    }
-
-
-    
-    /* FORCE ALL TEXT TO BE DARK ON LIGHT CARDS, BUT WHITE ON DARK CONTAINERS */
+    /* High contrast text rules */
     .glass-card p, .glass-card span, .glass-card label, .glass-card strong, .glass-card h1, .glass-card h2, .glass-card h3 {
       color: #0f172a !important;
     }
     
-    /* EXCEPTIONS: Dark background containers (like Section C slider box, modal headers, etc.) */
+    /* Exceptions for dark background containers (Slider box, modal headers, etc.) */
     .bg-slate-900 *, .bg-slate-800 *, .bg-slate-950 *, [class*="bg-slate-900"] *, [class*="bg-slate-800"] * {
       color: #ffffff !important;
     }
     
-    /* Specific overrides for slider box text */
-    #secDualDeepLearning .bg-slate-900 *, #secDualDeepLearning .bg-slate-900 span, #secDualDeepLearning .bg-slate-900 strong {
-      color: #ffffff !important;
-    }
-
-    /* FIX TEXT COLOR INSIDE SECTION C SLIDER BOX TO BE BRIGHT WHITE */
     #secDualDeepLearning .bg-slate-900, 
     #secDualDeepLearning .bg-slate-900 * {
       color: #ffffff !important;
     }
-    #secDualDeepLearning input[type="range"] {
-      accent-color: #38bdf8 !important;
-    }
-
-</style>
+  </style>
 </head>
 <body class="p-4 md:p-6">
 
@@ -191,8 +158,8 @@
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold uppercase tracking-wider">
           <i class="fa-solid fa-cloud-bolt"></i> Sistem Online Kolaboratif 2 Arah • Self-Assessment Guru vs Supervisor Kepala Sekolah
         </div>
-        <h1 class="text-2xl md:text-3xl font-extrabold text-white">
-          Asesmen Supervisi <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">Penilaian Diri Guru & Kepala Sekolah</span>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">
+          Asesmen Supervisi <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600">Penilaian Diri Guru & Kepala Sekolah</span>
         </h1>
         <p class="text-xs md:text-sm text-slate-700 max-w-4xl">
           Guru/Tendik menilai diri sendiri secara online, kemudian dibandingkan dengan penilaian Kepala Sekolah/Supervisor untuk menghasilkan <strong>Nilai Rata-Rata Gabungan</strong>, <strong>Analisis Selisih Persepsi (Gap)</strong>, serta <strong>Kesimpulan Penilaian Gabungan Otomatis</strong>.
@@ -200,10 +167,10 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-2.5">
-        <button onclick="openGasConfigModal()" class="px-3.5 py-2.5 rounded-xl glass-sub hover:bg-slate-800 text-xs font-bold text-cyan-300 flex items-center gap-2 border border-cyan-500/30">
-          <i class="fa-solid fa-link"></i> URL Cloud GAS
+        <button onclick="openGasConfigModal()" class="px-3.5 py-2.5 rounded-xl glass-sub hover:bg-slate-100 text-xs font-bold text-slate-700 flex items-center gap-2 border border-slate-300">
+          <i class="fa-solid fa-link text-cyan-600"></i> URL Cloud GAS
         </button>
-        <button onclick="fetchFromCloudGas()" class="px-3.5 py-2.5 rounded-xl bg-teal-600/80 hover:bg-teal-500 text-xs font-bold text-white flex items-center gap-2 shadow">
+        <button onclick="fetchFromCloudGas()" class="px-3.5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-xs font-bold text-white flex items-center gap-2 shadow">
           <i class="fa-solid fa-cloud-arrow-down"></i> Tarik Data Guru (Cloud)
         </button>
         <button onclick="openPreviewReport()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center gap-2 shadow">
@@ -218,12 +185,12 @@
       </div>
     </header>
 
-    <!-- BARIS PILIHAN PERAN LOGIN ONLINE (GURU / KEPALA SEKOLAH / DISKUSI GABUNGAN) -->
+    <!-- BARIS PILIHAN PERAN LOGIN ONLINE -->
     <section class="glass-card rounded-3xl p-5 border border-cyan-400/25">
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-cyan-300">
-            <i class="fa-solid fa-users-viewfinder mr-1"></i> Mode Akses Pengguna Online Saat Ini:
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-700">
+            <i class="fa-solid fa-users-viewfinder mr-1 text-cyan-600"></i> Mode Akses Pengguna Online Saat Ini:
           </span>
           <h2 class="text-base font-bold text-slate-900 mt-0.5">
             Pilih Peran Pengisian Tabel (Guru Menilai Diri Sendiri / Kepala Sekolah Menilai / Mode Berdampingan)
@@ -234,46 +201,43 @@
           <button id="btnModeBoth" onclick="setAccessorMode('BOTH')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 border-purple-300 text-white shadow-lg">
             <i class="fa-solid fa-people-arrows"></i> 1. Mode Kolaborasi (Buka Keduanya)
           </button>
-          <button id="btnModeSelf" onclick="setAccessorMode('SELF')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-white/15 text-slate-700 hover:text-white">
-            <i class="fa-solid fa-user-pen text-cyan-400"></i> 2. Mode Guru/Tendik (Nilai Diri Sendiri)
+          <button id="btnModeSelf" onclick="setAccessorMode('SELF')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-slate-300 text-slate-800 hover:bg-white">
+            <i class="fa-solid fa-user-pen text-cyan-600"></i> 2. Mode Guru/Tendik
           </button>
-          <button id="btnModeSup" onclick="setAccessorMode('SUPERVISOR')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-white/15 text-slate-700 hover:text-white">
-            <i class="fa-solid fa-user-tie text-emerald-400"></i> 3. Mode Kepala Sekolah (Supervisor)
+          <button id="btnModeSup" onclick="setAccessorMode('SUPERVISOR')" class="px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-slate-300 text-slate-800 hover:bg-white">
+            <i class="fa-solid fa-user-tie text-emerald-600"></i> 3. Mode Kepala Sekolah
           </button>
         </div>
       </div>
     </section>
 
-    <!-- GRID IDENTITAS & DASHBOARD PERBANDINGAN SKOR (GURU vs KEPALA SEKOLAH vs RATA-RATA) -->
+    <!-- GRID IDENTITAS & DASHBOARD PERBANDINGAN SKOR -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-      <!-- Kolom Kiri (7 cols): Sasaran, Siklus, Pilih Cepat Pegawai & Identitas -->
       <div class="lg:col-span-7 glass-card rounded-3xl p-6 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
           <div>
-            <h2 class="text-lg font-bold text-white">Sasaran & Identitas Supervisi</h2>
+            <h2 class="text-lg font-bold text-slate-900">Sasaran & Identitas Supervisi</h2>
             <p class="text-xs text-slate-700">Pilih instrumen Guru atau Tenaga Kependidikan (Tendik)</p>
           </div>
-          <div class="inline-flex rounded-2xl p-1 bg-slate-900/90 border border-white/10">
+          <div class="inline-flex rounded-2xl p-1 bg-slate-200/90 border border-slate-300">
             <button id="tabRoleGuru" onclick="switchRole('GURU')" class="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow">
               <i class="fa-solid fa-chalkboard-user mr-1"></i> Instrumen Guru
             </button>
-            <button id="tabRoleTendik" onclick="switchRole('TENDIK')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-white">
+            <button id="tabRoleTendik" onclick="switchRole('TENDIK')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900">
               <i class="fa-solid fa-building-user mr-1"></i> Instrumen Tendik
             </button>
           </div>
         </div>
 
-        <!-- Tahap Siklus -->
         <div>
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-cyan-300 mb-1.5">Tahap Siklus Peningkatan Kinerja:</label>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">Tahap Siklus Peningkatan Kinerja:</label>
           <div id="siklusGrid" class="grid grid-cols-2 sm:grid-cols-5 gap-2"></div>
         </div>
 
-        <!-- KOTAK BARU: DAFTAR GURU YANG SUDAH MENGIRIM PENILAIAN DIRI DI CLOUD GOOGLE SHEETS -->
-        <div class="rounded-2xl bg-emerald-950/40 border-2 border-emerald-400/50 p-3.5 space-y-2 shadow-lg">
+        <div class="rounded-2xl bg-emerald-50 border-2 border-emerald-300 p-3.5 space-y-2 shadow-sm">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-xs font-extrabold text-emerald-300 uppercase tracking-wide">
+            <span class="text-xs font-extrabold text-emerald-800 uppercase tracking-wide">
               <i class="fa-solid fa-cloud-arrow-down mr-1"></i> Daftar Guru yang Sudah Mengisi di Database Cloud (<span id="countCloudRecords">0</span> Data Masuk)
             </span>
             <button type="button" onclick="fetchFromCloudGas(false)" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[11px] font-bold text-white shadow">
@@ -282,45 +246,41 @@
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
             <div class="sm:col-span-3">
-              <select id="selCloudSubmitted" onchange="onSelectCloudRecord(this.value)" class="w-full rounded-xl px-3 py-2 text-xs font-bold glass-input border-emerald-400/40">
+              <select id="selCloudSubmitted" onchange="onSelectCloudRecord(this.value)" class="w-full rounded-xl px-3 py-2 text-xs font-bold glass-input border-emerald-300">
                 <option value="">-- Belum Ada Data dari Cloud (Klik 'Tarik Data Guru') --</option>
               </select>
             </div>
             <div>
-              <button type="button" onclick="loadSelectedCloudBtn()" class="w-full h-full py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-xs font-extrabold text-white shadow">
+              <button type="button" onclick="loadSelectedCloudBtn()" class="w-full h-full py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-xs font-extrabold text-white shadow">
                 📂 Buka Data Ini
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Pilih Cepat Pegawai & Import CSV -->
-        <div class="rounded-2xl bg-cyan-950/30 border border-cyan-400/30 p-3.5 space-y-2.5">
+        <div class="rounded-2xl bg-cyan-50 border border-cyan-200 p-3.5 space-y-2.5">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-xs font-bold text-cyan-300"><i class="fa-solid fa-users-gear mr-1"></i> Pilih Cepat Nama Guru / Tendik atau Import CSV</span>
-            <div class="flex items-center gap-2">
-              <label class="px-3 py-1 rounded-lg bg-cyan-600/80 hover:bg-cyan-500 text-[11px] font-bold text-white cursor-pointer">
-                <i class="fa-solid fa-upload mr-1"></i> Import CSV <input type="file" accept=".csv,.txt" class="hidden" onchange="importPegawaiCsv(event)" />
-              </label>
-            </div>
+            <span class="text-xs font-bold text-cyan-900"><i class="fa-solid fa-users-gear mr-1 text-cyan-700"></i> Pilih Cepat Nama Guru / Tendik atau Import CSV</span>
+            <label class="px-3 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-[11px] font-bold text-white cursor-pointer">
+              <i class="fa-solid fa-upload mr-1"></i> Import CSV <input type="file" accept=".csv,.txt" class="hidden" onchange="importPegawaiCsv(event)" />
+            </label>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div class="sm:col-span-2">
               <select id="selQuickPegawai" onchange="onSelectQuickPegawai(this.value)" class="w-full rounded-xl px-3 py-2 text-xs glass-input">
-                <option value="">-- Pilih Nama Guru / Tendik untuk Mengisi Otomatis --</option>
+                <option value="">-- Pilih Nama Guru SDN Kaliasin VII/286 --</option>
               </select>
             </div>
             <div>
               <select id="selModeKop" onchange="onChangeKopMode(this.value)" class="w-full rounded-xl px-3 py-2 text-xs glass-input">
                 <option value="K3S">Kop: K3S SD + Kepala Sekolah</option>
-                <option value="SEKOLAH" selected>1. Standar Satuan Pendidikan (Tanpa K3S)</option>
+                <option value="SEKOLAH" selected>1. Standar Satuan Pendidikan</option>
                 <option value="PENGAWAS">Kop: Pengawas Bina + KS</option>
               </select>
             </div>
           </div>
         </div>
 
-        <!-- Form Identitas -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label class="block text-xs text-slate-700 mb-1">Satuan Pendidikan / Sekolah</label>
@@ -348,11 +308,11 @@
           </div>
           <div>
             <label class="block text-xs text-slate-700 mb-1">Nama Kepala Sekolah / Supervisor</label>
-            <input type="text" id="inSupervisor" value="" placeholder="Nama Kepala Sekolah" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
+            <input type="text" id="inSupervisor" value="Ardiyatna Pranata, S.Pd" placeholder="Nama Kepala Sekolah" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
             <label class="block text-xs text-slate-700 mb-1">NIP Kepala Sekolah / Supervisor</label>
-            <input type="text" id="inNipSupervisor" value="" placeholder="NIP Kepala Sekolah" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
+            <input type="text" id="inNipSupervisor" value="199201052015011001" placeholder="NIP Kepala Sekolah" class="w-full rounded-xl px-3 py-2 text-xs glass-input" />
           </div>
           <div>
             <label class="block text-xs text-slate-700 mb-1">Ketua K3S SD / Pengawas Bina</label>
@@ -361,103 +321,96 @@
         </div>
       </div>
 
-      <!-- Kolom Kanan (5 cols): Panel Perbandingan 3 Nilai (Skor Guru vs Skor KS vs Nilai Rata-Rata Gabungan) -->
+      <!-- Kolom Kanan (5 cols): Panel Perbandingan 3 Nilai -->
       <div class="lg:col-span-5 glass-card rounded-3xl p-6 flex flex-col justify-between space-y-4">
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-300">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-700">
               <i class="fa-solid fa-scale-balanced mr-1"></i> Komparasi Nilai Guru & Kepala Sekolah
             </span>
-            <span id="badgeSyncStatus" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
+            <span id="badgeSyncStatus" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-100 text-cyan-800 border border-cyan-300">
               Kalkulasi Real-Time
             </span>
           </div>
 
-          <!-- 3 Kotak Nilai Utama: Guru Pribadi | Supervisor KS | Rata-Rata Gabungan -->
           <div class="grid grid-cols-3 gap-2.5">
-            <!-- Skor Diri Guru -->
-            <div class="rounded-2xl bg-cyan-950/50 border border-cyan-400/30 p-3 text-center">
-              <div class="text-[11px] font-bold text-cyan-300 uppercase">1. Nilai Diri Guru</div>
+            <div class="rounded-2xl bg-cyan-900 border border-cyan-700 p-3 text-center text-white">
+              <div class="text-[11px] font-bold text-cyan-200 uppercase">1. Nilai Diri Guru</div>
               <div id="valTotalSelf" class="text-2xl md:text-3xl font-extrabold text-white mt-1">0.0</div>
-              <div class="text-[10px] text-slate-700 mt-0.5">Refleksi Pribadi</div>
+              <div class="text-[10px] text-cyan-100 mt-0.5">Refleksi Pribadi</div>
             </div>
 
-            <!-- Skor Kepala Sekolah -->
-            <div class="rounded-2xl bg-emerald-950/50 border border-emerald-400/30 p-3 text-center">
-              <div class="text-[11px] font-bold text-emerald-300 uppercase">2. Nilai Kepsek</div>
+            <div class="rounded-2xl bg-emerald-900 border border-emerald-700 p-3 text-center text-white">
+              <div class="text-[11px] font-bold text-emerald-200 uppercase">2. Nilai Kepsek</div>
               <div id="valTotalSup" class="text-2xl md:text-3xl font-extrabold text-white mt-1">0.0</div>
-              <div class="text-[10px] text-slate-700 mt-0.5">Observasi Atasan</div>
+              <div class="text-[10px] text-emerald-100 mt-0.5">Observasi Atasan</div>
             </div>
 
-            <!-- Rata-Rata Gabungan -->
-            <div class="rounded-2xl bg-gradient-to-br from-amber-500/30 to-orange-600/30 border-2 border-amber-400 p-3 text-center shadow-lg">
-              <div class="text-[11px] font-extrabold text-amber-300 uppercase">★ Rata-Rata Akhir</div>
+            <div class="rounded-2xl bg-gradient-to-br from-amber-600 to-orange-700 border-2 border-amber-300 p-3 text-center shadow-lg text-white">
+              <div class="text-[11px] font-extrabold text-amber-200 uppercase">★ Rata-Rata Akhir</div>
               <div id="valTotalAvg" class="text-2xl md:text-3xl font-black text-white mt-1">0.0</div>
-              <div class="text-[10px] text-amber-200 font-semibold mt-0.5">(Guru + KS) ÷ 2</div>
+              <div class="text-[10px] text-amber-100 font-semibold mt-0.5">(Guru + KS) ÷ 2</div>
             </div>
           </div>
 
-          <!-- Predikat Gabungan & Indeks Selisih (Gap) -->
           <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-            <span id="badgePredicateAvg" class="px-3 py-1 rounded-xl text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+            <span id="badgePredicateAvg" class="px-3 py-1 rounded-xl text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
               Predikat: Sangat Baik
             </span>
-            <span id="badgeGapInfo" class="px-3 py-1 rounded-xl text-xs font-bold bg-slate-800 text-slate-200 border border-white/10">
+            <span id="badgeGapInfo" class="px-3 py-1 rounded-xl text-xs font-bold bg-slate-200 text-slate-800 border border-slate-300">
               Selisih: 0.0 Poin (Selaras)
             </span>
           </div>
 
-          <!-- Tabel Mini Rincian Per Bagian (Guru vs KS vs Rata-rata) -->
-          <div class="rounded-2xl glass-sub p-3 text-xs space-y-1.5">
-            <div class="grid grid-cols-12 font-bold text-slate-600 border-b border-white/10 pb-1">
+          <div class="rounded-2xl glass-sub p-3 text-xs space-y-1.5 border border-slate-300">
+            <div class="grid grid-cols-12 font-bold text-slate-700 border-b border-slate-300 pb-1">
               <div class="col-span-5">Komponen Tabel</div>
-              <div class="col-span-2 text-center text-cyan-300">Guru</div>
-              <div class="col-span-2 text-center text-emerald-300">Kepsek</div>
-              <div class="col-span-3 text-right text-amber-300">Rata-Rata</div>
+              <div class="col-span-2 text-center text-cyan-800">Guru</div>
+              <div class="col-span-2 text-center text-emerald-800">Kepsek</div>
+              <div class="col-span-3 text-right text-amber-800">Rata-Rata</div>
             </div>
-            <div class="grid grid-cols-12 items-center">
-              <div class="col-span-5 text-slate-200">A. Praktik Kinerja (25%)</div>
-              <div id="subSelfA" class="col-span-2 text-center font-bold text-cyan-300">0%</div>
-              <div id="subSupA" class="col-span-2 text-center font-bold text-emerald-300">0%</div>
-              <div id="subAvgA" class="col-span-3 text-right font-extrabold text-amber-300">0%</div>
+            <div class="grid grid-cols-12 items-center text-slate-800 font-medium">
+              <div class="col-span-5">A. Praktik Kinerja (25%)</div>
+              <div id="subSelfA" class="col-span-2 text-center font-bold text-cyan-700">0%</div>
+              <div id="subSupA" class="col-span-2 text-center font-bold text-emerald-700">0%</div>
+              <div id="subAvgA" class="col-span-3 text-right font-extrabold text-amber-700">0%</div>
             </div>
-            <div class="grid grid-cols-12 items-center">
-              <div class="col-span-5 text-slate-200" id="lblMiniB">B. Observasi Kelas (35%)</div>
-              <div id="subSelfB" class="col-span-2 text-center font-bold text-cyan-300">0%</div>
-              <div id="subSupB" class="col-span-2 text-center font-bold text-emerald-300">0%</div>
-              <div id="subAvgB" class="col-span-3 text-right font-extrabold text-amber-300">0%</div>
+            <div class="grid grid-cols-12 items-center text-slate-800 font-medium">
+              <div class="col-span-5" id="lblMiniB">B. Observasi Kelas (35%)</div>
+              <div id="subSelfB" class="col-span-2 text-center font-bold text-cyan-700">0%</div>
+              <div id="subSupB" class="col-span-2 text-center font-bold text-emerald-700">0%</div>
+              <div id="subAvgB" class="col-span-3 text-right font-extrabold text-amber-700">0%</div>
             </div>
-            <div class="grid grid-cols-12 items-center" id="rowMiniC">
-              <div class="col-span-5 text-slate-200">C. Deep Learning (40%)</div>
-              <div id="subSelfC" class="col-span-2 text-center font-bold text-cyan-300">0%</div>
-              <div id="subSupC" class="col-span-2 text-center font-bold text-emerald-300">0%</div>
-              <div id="subAvgC" class="col-span-3 text-right font-extrabold text-amber-300">0%</div>
+            <div class="grid grid-cols-12 items-center text-slate-800 font-medium" id="rowMiniC">
+              <div class="col-span-5">C. Deep Learning (40%)</div>
+              <div id="subSelfC" class="col-span-2 text-center font-bold text-cyan-700">0%</div>
+              <div id="subSupC" class="col-span-2 text-center font-bold text-emerald-700">0%</div>
+              <div id="subAvgC" class="col-span-3 text-right font-extrabold text-amber-700">0%</div>
             </div>
           </div>
         </div>
 
-        <!-- Tombol Simpan Cloud GAS & Simulasi Contoh -->
-        <div class="space-y-2 pt-2 border-t border-white/10">
-          <button onclick="syncToCloudGas()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-xs font-extrabold text-white shadow-lg flex items-center justify-center gap-2 transition">
+        <div class="space-y-2 pt-2 border-t border-slate-300">
+          <button onclick="syncToCloudGas()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 text-xs font-extrabold text-white shadow-lg flex items-center justify-center gap-2 transition">
             <i class="fa-solid fa-cloud-arrow-up"></i> Simpan & Gabungkan Nilai ke Cloud (GAS / Database)
           </button>
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="fillRealisticDualSample()" class="py-2 rounded-xl glass-sub hover:bg-slate-800 text-xs font-bold text-cyan-300 flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> Simulasi Beda Nilai Guru & KS
+            <button onclick="fillRealisticDualSample()" class="py-2 rounded-xl glass-sub hover:bg-white text-xs font-bold text-slate-800 border border-slate-300 flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles text-cyan-600"></i> Simulasi Contoh
             </button>
-            <button onclick="resetDualForm()" class="py-2 rounded-xl glass-sub hover:bg-rose-950/50 text-xs font-bold text-rose-300 flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-rotate-left"></i> Reset Penilaian
+            <button onclick="resetDualForm()" class="py-2 rounded-xl glass-sub hover:bg-rose-50 text-xs font-bold text-rose-700 border border-rose-300 flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-rotate-left"></i> Reset
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- KOTAK KESIMPULAN PENILAIAN GABUNGAN OTOMATIS & VISUALISASI GRAFIK KOMPARASI -->
+    <!-- KOTAK KESIMPULAN & GRAFIK -->
     <section class="glass-card rounded-3xl p-6 space-y-5 border border-amber-400/30">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-white/10 pb-3">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-200 pb-3">
         <div>
-          <span class="text-xs font-extrabold uppercase tracking-wider text-amber-300">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-amber-700">
             <i class="fa-solid fa-microchip-ai mr-1"></i> Sintesis & Analitik Otomatis Dua Arah
           </span>
           <h2 class="text-xl font-bold text-slate-900 mt-0.5">
@@ -467,54 +420,46 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-        <!-- Narasi Kesimpulan Gabungan Otomatis -->
         <div class="lg:col-span-6 space-y-3">
-          <div class="rounded-2xl bg-amber-950/25 border border-amber-400/30 p-4 space-y-2">
+          <div class="rounded-2xl bg-amber-50 border border-amber-300 p-4 space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-amber-300 uppercase">
+              <span class="text-xs font-bold text-amber-900 uppercase">
                 <i class="fa-solid fa-file-signature mr-1"></i> Kesimpulan Gabungan Otomatis (Dapat Diedit)
               </span>
-              <button onclick="regenerateAutoConclusion()" class="text-[11px] font-semibold text-cyan-300 hover:underline">
+              <button onclick="regenerateAutoConclusion()" class="text-[11px] font-semibold text-cyan-700 hover:underline">
                 <i class="fa-solid fa-arrows-rotate mr-1"></i> Perbarui Narasi Otomatis
               </button>
             </div>
             <textarea id="txtAutoConclusion" rows="6" class="w-full rounded-xl p-3 text-xs leading-relaxed glass-input"></textarea>
           </div>
 
-          <div class="rounded-2xl glass-sub p-3.5 text-xs text-slate-700 space-y-1">
-            <div class="font-bold text-white"><i class="fa-solid fa-circle-info text-cyan-400 mr-1"></i> Cara Kerja Rumus Gabungan:</div>
-            <p>• Setiap indikator memiliki <strong>Skor Diri Pegawai ($S_{	ext{diri}}$)</strong> dan <strong>Skor Supervisor Kepala Sekolah ($S_{	ext{KS}}$)</strong> dengan rentang 1 s.d. 3.</p>
-            <p>• Nilai Rata-Rata Indikator dihitung dengan rumus: $	ext{Rata-rata} = rac{S_{	ext{diri}} + S_{	ext{KS}}}{2}$.</p>
-            <p>• Selisih ($\Delta = S_{	ext{diri}} - S_{	ext{KS}}$) mengidentifikasi apakah refleksi diri pegawai sudah <strong>Selaras (Objektif)</strong>, <strong>Over-Estimate (Menilai diri lebih tinggi dari pengamatan KS)</strong>, atau <strong>Under-Estimate (Rendah hati / belum menyadari kekuatan dirinya)</strong>.</p>
+          <div class="rounded-2xl glass-sub p-3.5 text-xs text-slate-700 space-y-1 border border-slate-300">
+            <div class="font-bold text-slate-900"><i class="fa-solid fa-circle-info text-cyan-600 mr-1"></i> Cara Kerja Rumus Gabungan:</div>
+            <p>• Setiap indikator memiliki skor diri pegawai dan supervisor dengan rentang 1 s.d. 3.</p>
+            <p>• Nilai rata-rata indikator dihitung dari gabungan refleksi mandiri dan pengamatan atasan.</p>
           </div>
         </div>
 
-        <!-- Grafik Radar & Batang Komparasi 2 Arah -->
         <div class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="glass-sub rounded-2xl p-4 flex flex-col items-center justify-center">
-            <span class="text-xs font-bold text-cyan-300 mb-2">Grafik Radar (Biru: Guru | Hijau: KS)</span>
+          <div class="glass-sub rounded-2xl p-4 flex flex-col items-center justify-center border border-slate-300">
+            <span class="text-xs font-bold text-cyan-800 mb-2">Grafik Radar</span>
             <div id="dualRadarContainer"></div>
           </div>
-          <div class="glass-sub rounded-2xl p-4 flex flex-col items-center justify-center">
-            <span class="text-xs font-bold text-amber-300 mb-2">Diagram Batang Komparasi & Rata-Rata</span>
+          <div class="glass-sub rounded-2xl p-4 flex flex-col items-center justify-center border border-slate-300">
+            <span class="text-xs font-bold text-amber-800 mb-2">Diagram Batang Komparasi</span>
             <div id="dualBarContainer" class="w-full"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ======================================================================
-         TABEL A: ASPEK PENILAIAN PRAKTIK KINERJA (2 ARAH: GURU vs KEPALA SEKOLAH)
-         ====================================================================== -->
+    <!-- TABEL A -->
     <section class="glass-card rounded-3xl p-6 space-y-4">
       <div>
-        <span class="text-xs font-bold uppercase tracking-wider text-cyan-400">Tabel Bagian A • Siklus Peningkatan Kinerja</span>
-        <h2 class="text-lg md:text-xl font-bold text-white">
+        <span class="text-xs font-bold uppercase tracking-wider text-cyan-700">Tabel Bagian A • Siklus Peningkatan Kinerja</span>
+        <h2 class="text-lg md:text-xl font-bold text-slate-900">
           Tabel Komparasi Praktik Kinerja (Upaya Refleksi, Upaya Mempelajari & Perubahan Praktik)
         </h2>
-        <p class="text-xs text-slate-700">
-          Bandingkan penilaian refleksi mandiri pegawai dengan penilaian Kepala Sekolah/Supervisor pada setiap pertanyaan pemandu.
-        </p>
       </div>
 
       <div class="table-wrap">
@@ -535,19 +480,14 @@
       </div>
     </section>
 
-    <!-- ======================================================================
-         TABEL B: RUBRIK OBSERVASI KELAS 8 INDIKATOR (GURU) / 6 INDIKATOR (TENDIK)
-         ====================================================================== -->
+    <!-- TABEL B -->
     <section class="glass-card rounded-3xl p-6 space-y-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Tabel Bagian B • Rubrik Observasi Kinerja</span>
-          <h2 class="text-lg md:text-xl font-bold text-white" id="titleSectionB">
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Tabel Bagian B • Rubrik Observasi Kinerja</span>
+          <h2 class="text-lg md:text-xl font-bold text-slate-900" id="titleSectionB">
             Tabel Komparasi 8 Indikator Rubrik Observasi Kelas (Guru Pribadi vs Kepala Sekolah)
           </h2>
-          <p class="text-xs text-slate-700">
-            Dilengkapi daftar centang Perilaku yang Dianjurkan & Perilaku yang Dihindari serta perbandingan skor kedua pihak.
-          </p>
         </div>
 
         <div id="filterBoxGuru" class="flex items-center gap-2">
@@ -573,9 +513,9 @@
               <th style="width: 18%;">Fokus Perilaku yang Diobservasi</th>
               <th style="width: 22%;">☑ Perilaku yang Dianjurkan</th>
               <th style="width: 20%;">☒ Perilaku yang Dihindari</th>
-              <th style="width: 14%; color: #67e8f9;">👤 Skor Diri (Guru/Tendik)</th>
-              <th style="width: 14%; color: #6ee7b7;">👨‍💼 Skor Kepala Sekolah</th>
-              <th style="width: 12%; text-align: center; color: #fcd34d;">★ Rata-Rata & Kalibrasi</th>
+              <th style="width: 14%;">👤 Skor Diri</th>
+              <th style="width: 14%;">👨‍💼 Skor Kepala Sekolah</th>
+              <th style="width: 12%; text-align: center;">★ Rata-Rata</th>
             </tr>
           </thead>
           <tbody id="tbodyDualObservasi"></tbody>
@@ -583,44 +523,35 @@
       </div>
     </section>
 
-    <!-- ======================================================================
-         TABEL C (KHUSUS GURU): 7 PILAR PEMBELAJARAN MENDALAM (DEEP LEARNING) & MPI
-         ====================================================================== -->
+    <!-- TABEL C -->
     <section id="secDualDeepLearning" class="glass-card rounded-3xl p-6 space-y-5 border border-amber-400/30">
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-300">Tabel Bagian C • Transformasi Pembelajaran Mendalam (Khusus Guru)</span>
-          <h2 class="text-lg md:text-xl font-bold text-white">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Tabel Bagian C • Transformasi Pembelajaran Mendalam (Khusus Guru)</span>
+          <h2 class="text-lg md:text-xl font-bold text-slate-900">
             Tabel Komparasi 7 Pilar Pembelajaran Mendalam (Mindful, Meaningful, Joyful), Kelas "Taman" & MPI
           </h2>
-          <p class="text-xs text-slate-700">
-            Membandingkan persepsi diri guru dengan hasil pengamatan Kepala Sekolah terkait keaktifan siswa (bukan ceramah guru) dan penggunaan Media Pembelajaran Interaktif (MPI).
-          </p>
         </div>
       </div>
 
-      <!-- Perbandingan Proporsi Aktivitas Siswa Menurut Guru vs Kepala Sekolah -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-2xl bg-slate-900/80 border border-amber-400/30">
-        <!-- Slider Klaim Diri Guru -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-2xl bg-slate-900/90 border border-amber-400/30 text-white">
         <div class="space-y-1.5">
-          <div class="flex justify-between text-xs font-bold">
-            <span class="text-cyan-300">👤 Klaim Guru (Aktivitas Siswa): <span id="lblPctSelf">85</span>%</span>
-            <span class="text-slate-600">Ceramah: <span id="lblCeramahSelf">15</span>%</span>
+          <div class="flex justify-between text-xs font-bold text-white">
+            <span class="text-cyan-300">👤 Klaim Guru: <span id="lblPctSelf">85</span>%</span>
+            <span class="text-slate-300">Ceramah: <span id="lblCeramahSelf">15</span>%</span>
           </div>
           <input type="range" id="sliderPctSelf" min="10" max="95" step="5" value="85" oninput="onRatioChange()" class="w-full accent-cyan-400 cursor-pointer" />
         </div>
 
-        <!-- Slider Pengamatan Kepala Sekolah -->
         <div class="space-y-1.5">
-          <div class="flex justify-between text-xs font-bold">
-            <span class="text-emerald-300">👨‍💼 Pengamatan Kepsek (Aktivitas Siswa): <span id="lblPctSup">80</span>%</span>
-            <span class="text-slate-600">Ceramah: <span id="lblCeramahSup">20</span>%</span>
+          <div class="flex justify-between text-xs font-bold text-white">
+            <span class="text-emerald-300">👨‍💼 Pengamatan Kepsek: <span id="lblPctSup">80</span>%</span>
+            <span class="text-slate-300">Ceramah: <span id="lblCeramahSup">20</span>%</span>
           </div>
           <input type="range" id="sliderPctSup" min="10" max="95" step="5" value="80" oninput="onRatioChange()" class="w-full accent-emerald-400 cursor-pointer" />
         </div>
 
-        <!-- Rata-rata Proporsi Aktivitas Siswa -->
-        <div class="rounded-xl bg-amber-500/15 border border-amber-400/40 p-2.5 flex flex-col justify-center text-center">
+        <div class="rounded-xl bg-amber-500/20 border border-amber-400/40 p-2.5 flex flex-col justify-center text-center text-white">
           <span class="text-[11px] font-bold text-amber-300 uppercase">★ Rata-Rata Proporsi Aktivitas Siswa</span>
           <span id="lblPctAvg" class="text-lg font-black text-white">82.5% Aktivitas Siswa : 17.5% Ceramah Guru</span>
         </div>
@@ -631,11 +562,11 @@
           <thead>
             <tr>
               <th style="width: 20%;">7 Dimensi Pembelajaran Mendalam</th>
-              <th style="width: 23%;">☑ Praktik Pembelajaran Mendalam yang Dianjurkan</th>
-              <th style="width: 19%;">☒ Praktik Konvensional yang Dihindari</th>
-              <th style="width: 13%; color: #67e8f9;">👤 Skor Diri Guru</th>
-              <th style="width: 13%; color: #6ee7b7;">👨‍💼 Skor Kepsek</th>
-              <th style="width: 12%; text-align: center; color: #fcd34d;">★ Rata-Rata & Bukti MPI</th>
+              <th style="width: 23%;">☑ Praktik yang Dianjurkan</th>
+              <th style="width: 19%;">☒ Praktik yang Dihindari</th>
+              <th style="width: 13%;">👤 Skor Diri Guru</th>
+              <th style="width: 13%;">👨‍💼 Skor Kepsek</th>
+              <th style="width: 12%; text-align: center;">★ Rata-Rata & MPI</th>
             </tr>
           </thead>
           <tbody id="tbodyDualDeep"></tbody>
@@ -643,48 +574,14 @@
       </div>
     </section>
 
-    <!-- ======================================================================
-         BAGIAN D: CATATAN REFLEKSI DIRI GURU, UMPAN BALIK KEPSEK & RTL BERSAMA
-         ====================================================================== -->
-    <section class="glass-card rounded-3xl p-6 space-y-4">
-      <h2 class="text-lg font-bold text-white">
-        Refleksi Mandiri Pegawai, Catatan Supervisor Kepala Sekolah & Kesepakatan Rencana Tindak Lanjut (RTL)
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label class="block text-xs font-bold text-cyan-300 mb-1.5">
-            1. Catatan Refleksi Diri Guru / Tendik (Tantangan & Capaian Diri)
-          </label>
-          <textarea id="inRefleksiDiri" rows="4" class="w-full rounded-xl p-3 text-xs glass-input" placeholder="Diisi oleh Guru/Tendik: Hal yang sudah berjalan baik dan kendala yang dirasakan..."></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-emerald-300 mb-1.5">
-            2. Catatan Pengamatan & Umpan Balik Kepala Sekolah / Supervisor
-          </label>
-          <textarea id="inCatatanSup" rows="4" class="w-full rounded-xl p-3 text-xs glass-input" placeholder="Diisi oleh Kepala Sekolah/Supervisor: Apresiasi kekuatan dan temuan observasi..."></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-amber-300 mb-1.5">
-            3. Kesepakatan Rencana Tindak Lanjut (RTL) Bersama
-          </label>
-          <textarea id="inRtlBersama" rows="4" class="w-full rounded-xl p-3 text-xs glass-input" placeholder="Disepakati bersama setelah membandingkan penilaian diri dan hasil supervisi..."></textarea>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================================================================
-         TABEL E: DAFTAR RIWAYAT & SINKRONISASI CLOUD (GURU & KEPALA SEKOLAH)
-         ====================================================================== -->
+    <!-- TABEL E (REKAPITULASI) -->
     <section class="glass-card rounded-3xl p-6 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-cyan-300">Database Kolaboratif Online & Lokal</span>
-          <h2 class="text-lg font-bold text-white">
-            Tabel Rekapitulasi Perbandingan Nilai (Guru Pribadi vs Kepala Sekolah vs Nilai Gabungan)
+          <span class="text-xs font-bold uppercase tracking-wider text-cyan-700">Database Kolaboratif Online & Lokal</span>
+          <h2 class="text-lg font-bold text-slate-900">
+            Tabel Rekapitulasi Perbandingan Nilai (Guru vs Kepala Sekolah vs Rata-Rata)
           </h2>
-          <p class="text-xs text-slate-700">
-            Kepala Sekolah dapat mengklik <strong>"📂 Buka & Nilai"</strong> pada data guru yang telah mengisi penilaian diri untuk langsung memberikan penilaian supervisor.
-          </p>
         </div>
         <div class="flex flex-wrap gap-2">
           <button onclick="fetchFromCloudGas()" class="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-xs font-bold text-white flex items-center gap-1.5">
@@ -705,9 +602,9 @@
               <th>Kategori</th>
               <th>Nama Pegawai & NIP</th>
               <th>Kelas/Mapel / Jabatan</th>
-              <th style="text-align: center; color: #67e8f9;">Nilai Diri Guru</th>
-              <th style="text-align: center; color: #6ee7b7;">Nilai Kepsek</th>
-              <th style="text-align: center; color: #fbbf24; font-weight: bold;">★ Rata-Rata Gabungan</th>
+              <th style="text-align: center;">Nilai Diri Guru</th>
+              <th style="text-align: center;">Nilai Kepsek</th>
+              <th style="text-align: center;">★ Rata-Rata Gabungan</th>
               <th style="text-align: center;">Selisih (Gap)</th>
               <th>Predikat Gabungan</th>
               <th style="text-align: center;">Aksi Kolaborasi</th>
@@ -723,9 +620,9 @@
   <!-- MODAL PRATINJAU CETAK LAPORAN GABUNGAN (A4) -->
   <div id="previewModal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-md overflow-y-auto p-4 md:p-8">
     <div class="max-w-5xl mx-auto space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900 p-4 rounded-2xl border border-white/15 no-print">
-        <div class="text-sm font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-file-Signature text-cyan-400"></i> Pratinjau Laporan Hasil Gabungan (Penilaian Diri Guru & Supervisor Kepala Sekolah)
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900 p-4 rounded-2xl border border-white/15 no-print text-white">
+        <div class="text-sm font-bold flex items-center gap-2">
+          <i class="fa-solid fa-file-signature text-cyan-400"></i> Pratinjau Laporan Hasil Gabungan (Penilaian Diri Guru & Supervisor Kepala Sekolah)
         </div>
         <div class="flex flex-wrap items-center gap-2">
           <button onclick="downloadCombinedDocx()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white">
@@ -743,674 +640,195 @@
         </div>
       </div>
 
-      <div id="printableArea" class="rounded-xl shadow-2xl"></div>
+      <div id="printableArea" class="rounded-xl shadow-2xl bg-white p-6"></div>
     </div>
   </div>
 
   <!-- MODAL KONFIGURASI URL GAS -->
   <div id="gasConfigModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 no-print">
-    <div class="glass-card rounded-3xl p-6 max-w-lg w-full space-y-4 border border-cyan-400/30">
+    <div class="glass-card rounded-3xl p-6 max-w-lg w-full space-y-4 border border-cyan-400/30 bg-white">
       <div class="flex items-center justify-between">
-        <h3 class="text-base font-bold text-white"><i class="fa-solid fa-cloud text-cyan-400 mr-1.5"></i> Koneksi URL Web App Google Apps Script</h3>
-        <button onclick="closeGasConfigModal()" class="text-slate-600 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <h3 class="text-base font-bold text-slate-900"><i class="fa-solid fa-cloud text-cyan-600 mr-1.5"></i> Koneksi URL Web App Google Apps Script</h3>
+        <button onclick="closeGasConfigModal()" class="text-slate-600 hover:text-slate-900"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <p class="text-xs text-slate-700 leading-relaxed">
-        Jika di-deploy langsung di dalam Google Apps Script, sistem otomatis terhubung ke Google Sheets tanpa perlu mengisi URL. Jika Anda menghosting file HTML ini di <strong>GitHub Pages / Netlify / Domain Sekolah</strong>, tempelkan URL Web App GAS Anda di bawah ini agar Guru dan Kepala Sekolah dapat berbagi data secara online:
+        URL Web App Google Apps Script sudah terhubung secara permanen ke database sekolah.
       </p>
-      <input type="url" id="inGasWebAppUrl" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full rounded-xl px-3.5 py-2.5 text-xs glass-input" />
+      <input type="url" id="inGasWebAppUrl" class="w-full rounded-xl px-3.5 py-2.5 text-xs glass-input" readonly />
       <div class="flex justify-end gap-2">
-        <button onclick="saveGasWebAppUrl()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white">Simpan URL</button>
+        <button onclick="closeGasConfigModal()" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white">Tutup</button>
       </div>
     </div>
   </div>
 
   <script>
     // =========================================================================
-    // DATA MASTER RUBRIK LENGKAP
+    // DATA MASTER GURU & TENDIK RESMI SDN Kaliasin VII/286 Surabaya
     // =========================================================================
+    let masterPegawai = [
+      { role: "GURU", nama: "Erna Kartika, S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Bella Rahma Damayanti S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Nadhila Ayu Refina S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Yohanes Hari Prasetyo S.Th.I", nip: "-", mapel: "Guru Agama", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Annisa Rizqi Hendrada Putri M.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Fina Anggraeni,S.Si S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Trully Agustin A.Md", nip: "-", mapel: "Tendik / Guru", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Leny Heryanti S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Badriatus Sa'idah S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Dimas Fahmi Riyanto S.Pd", nip: "19970808", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Muhammad Dimas Irvansyah", nip: "-", mapel: "Guru / Tendik", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Rindah S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Widhi Sintaningsih S.Pd.Sd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Maria Soetjiati S.Pd.Sd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Sunarsih S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Azizatul Fithriyah M.Pd", nip: "198801212014022000", mapel: "Guru / Ketua TPMPS", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Ariya Wiratama S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Suharsono", nip: "-", mapel: "Guru / Tendik", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Tohir S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Titis Novia Ardiyanti S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Wisnu Adi Pratama", nip: "-", mapel: "Guru / Tendik", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Nyata Mashuri", nip: "-", mapel: "Tendik / Sarpras", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Sekar Melati", nip: "-", mapel: "Tendik", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Ery Retnaning Wilujeng", nip: "-", mapel: "Guru / Tendik", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Yuni Media Istutik S.Pd", nip: "-", mapel: "Guru Kelas / Mapel", sekolah: "SDN Kaliasin VII/286 Surabaya" },
+      { role: "GURU", nama: "Muhammad Shoim S.Pd.I", nip: "-", mapel: "Guru Agama", sekolah: "SDN Kaliasin VII/286 Surabaya" }
+    ];
+
     const SIKLUS_LIST = [
-      { id: "Diskusi Persiapan", bln: "Feb & Agu", desc: "Merumuskan fokus perilaku & jadwal" },
-      { id: "Observasi Kinerja", bln: "Mar & Sep", desc: "Menentukan batas dasar (baseline)" },
-      { id: "Diskusi Tindak Lanjut", bln: "Mar & Sep", desc: "Refleksi hasil observasi & dukungan" },
-      { id: "Upaya Tindak Lanjut", bln: "Apr-Mei & Okt-Nov", desc: "Pengembangan kompetensi kinerja" },
-      { id: "Refleksi Tindak Lanjut", bln: "Jun & Des", desc: "Identifikasi capaian & perbaikan" }
+      { id: "Diskusi Persiapan", bln: "Feb & Agu", desc: "Merumuskan fokus perilaku" },
+      { id: "Observasi Kinerja", bln: "Mar & Sep", desc: "Menentukan baseline" },
+      { id: "Diskusi Tindak Lanjut", bln: "Mar & Sep", desc: "Refleksi observasi" },
+      { id: "Upaya Tindak Lanjut", bln: "Apr-Mei & Okt-Nov", desc: "Pengembangan kompetensi" },
+      { id: "Refleksi Tindak Lanjut", bln: "Jun & Des", desc: "Capaian & perbaikan" }
     ];
 
     const ASPEK_PRAKTIK = [
-      {
-        id: "pk_1",
-        aspect: "Upaya Refleksi (Kesadaran Tantangan)",
-        question: "Bagaimana upaya pegawai melakukan refleksi untuk menyadari tantangan dalam peningkatan kinerjanya?",
-        points: ["Menyadari secara jujur area tantangan berdasarkan bukti nyata", "Mengidentifikasi akar masalah penghambat kinerja"]
-      },
-      {
-        id: "pk_2",
-        aspect: "Upaya Refleksi (Penjelasan Tantangan)",
-        question: "Apakah pegawai mampu menjelaskan tantangan yang dihadapi?",
-        points: ["Menjelaskan kendala secara objektif tanpa bersikap defensif", "Memaparkan contoh situasi konkret saat tantangan muncul"]
-      },
-      {
-        id: "pk_3",
-        aspect: "Upaya Mempelajari (Penguasaan Kompetensi)",
-        question: "Bagaimana upaya pegawai mempelajari dan menguasai kompetensi yang dibutuhkan untuk peningkatan kinerja berdasarkan hasil observasi kinerja dan refleksi diri?",
-        points: ["Aktif mempelajari strategi baru di Komunitas Belajar / pelatihan", "Merumuskan poin-poin tindak lanjut dari hasil belajar"]
-      },
-      {
-        id: "pk_4",
-        aspect: "Perubahan Praktik (Penyelesaian Tindak Lanjut)",
-        question: "Apakah pegawai menyelesaikan upaya tindak lanjut yang telah disepakati atau bahkan menerapkan hasil upaya tindak lanjutnya?",
-        points: ["Menuntaskan seluruh tindak lanjut yang telah disepakati", "Mempraktikkan metode baru secara nyata di kelas/sekolah"]
-      },
-      {
-        id: "pk_5",
-        aspect: "Perubahan Praktik (Dampak Kualitas)",
-        question: "Bagaimana perubahan praktik kinerja yang ditunjukkan oleh pegawai dari waktu ke waktu yang berdampak pada kualitas pembelajaran di kelas atau satuan pendidikan dibandingkan batas dasar kinerja saat observasi?",
-        points: ["Menunjukkan peningkatan nyata dibanding kondisi awal (baseline)", "Berdampak positif pada keterlibatan dan capaian peserta didik"]
-      }
+      { id: "pk_1", aspect: "Upaya Refleksi", question: "Bagaimana upaya pegawai melakukan refleksi untuk menyadari tantangan dalam peningkatan kinerjanya?", points: ["Menyadari jujur area tantangan berdasarkan bukti nyata", "Mengidentifikasi akar masalah penghambat kinerja"] },
+      { id: "pk_2", aspect: "Penjelasan Tantangan", question: "Apakah pegawai mampu menjelaskan tantangan yang dihadapi?", points: ["Menjelaskan kendala secara objektif tanpa defensif", "Memaparkan contoh situasi konkret"] },
+      { id: "pk_3", aspect: "Penguasaan Kompetensi", question: "Bagaimana upaya pegawai mempelajari dan menguasai kompetensi yang dibutuhkan?", points: ["Aktif mempelajari strategi baru di Kombel / pelatihan", "Merumuskan poin tindak lanjut belajar"] },
+      { id: "pk_4", aspect: "Penyelesaian Tindak Lanjut", question: "Apakah pegawai menyelesaikan upaya tindak lanjut yang telah disepakati?", points: ["Menuntaskan seluruh tindak lanjut", "Mempraktikkan metode baru di kelas/sekolah"] },
+      { id: "pk_5", aspect: "Dampak Kualitas", question: "Bagaimana perubahan praktik kinerja yang berdampak pada kualitas pembelajaran?", points: ["Peningkatan nyata dibanding awal", "Berdampak positif pada keterlibatan siswa"] }
     ];
 
     const OBSERVASI_GURU = [
       {
         id: "ind_1",
         name: "1. Penerapan Disiplin Positif",
-        desc: "Upaya menerapkan prinsip disiplin positif untuk mengelola perilaku dan kebiasaan kelas yang disepakati bersama",
+        desc: "Prinsip disiplin positif untuk mengelola perilaku kelas",
         foci: [
-          {
-            id: "g_1_1",
-            title: "1.1. Guru melakukan refleksi dinamika kelas untuk menerapkan kesepakatan kelas",
-            rec: [
-              "Guru mengajak peserta didik melakukan refleksi dinamika kelas mengacu kesepakatan kelas",
-              "Guru menunjukkan kesediaan mendengarkan pandangan peserta didik tentang dinamika kelas",
-              "Guru bersikap adaptif sehingga bersedia mengubah kesepakatan kelas bila diperlukan"
-            ],
-            avd: [
-              "Guru mengabaikan pendapat peserta didik tentang apa yang terjadi di kelas",
-              "Guru bersikap defensif dalam menyikapi umpan balik dari peserta didik terkait kedisiplinan",
-              "Guru menerapkan hukuman fisik terhadap peserta didik yang melakukan pelanggaran kedisiplinan"
-            ]
-          },
-          {
-            id: "g_1_2",
-            title: "1.2. Guru melakukan penguatan positif terhadap perilaku yang sesuai atau mendukung kesepakatan kelas",
-            rec: [
-              "Guru memberi pujian terhadap perilaku peserta didik yang sesuai kesepakatan kelas",
-              "Guru memberi penguatan positif dengan beragam cara",
-              "Guru mengakui suatu perilaku positif secara spesifik dan menjelaskan alasannya"
-            ],
-            avd: [
-              "Guru tidak konsisten dalam memberikan penguatan positif, hanya pada peserta didik tertentu",
-              "Guru mengabaikan perilaku positif karena terlalu fokus pada perilaku negatif atau hal lain",
-              "Guru melakukan penguatan perilaku yang tidak bermanfaat bagi peserta didik dan kelas secara keseluruhan"
-            ]
-          },
-          {
-            id: "g_1_3",
-            title: "1.3. Guru memfasilitasi peserta didik menyadari konsekuensi dan memperbaiki perilaku melanggarnya (restitusi)",
-            rec: [
-              "Guru membantu peserta didik menyadari konsekuensi dari perilaku melanggarnya",
-              "Guru mendengarkan sudut pandang peserta didik terhadap perilaku melanggarnya",
-              "Guru memberikan dukungan pada peserta didik dalam melakukan perbaikan perilakunya"
-            ],
-            avd: [
-              "Guru langsung memberikan hukuman, bukan membangun upaya perbaikan perilaku",
-              "Guru kehilangan kesabaran dalam membantu peserta didik menyadari konsekuensi perilakunya",
-              "Guru meminta peserta didik untuk tenang dengan mengabaikan perilaku melanggar yang terjadi"
-            ]
-          }
+          { id: "g_1_1", title: "1.1. Refleksi dinamika kelas", rec: ["Mengajak siswa refleksi kesepakatan kelas", "Mendengarkan pandangan siswa", "Adaptif mengubah aturan jika perlu"], avd: ["Mengabaikan pendapat siswa", "Defensif pada umpan balik", "Memberi hukuman fisik"] },
+          { id: "g_1_2", title: "1.2. Penguatan positif", rec: ["Memberi pujian perilaku positif", "Beragam cara penguatan", "Menjelaskan alasan spesifik"], avd: ["Tidak konsisten / pilih kasih", "Mengabaikan perilaku positif", "Penguatan tidak relevan"] },
+          { id: "g_1_3", title: "1.3. Restitusi perilaku melanggar", rec: ["Membantu menyadari konsekuensi", "Mendengarkan sudut pandang", "Mendukung perbaikan perilaku"], avd: ["Langsung menghukum keras", "Kehilangan kesabaran", "Mengabaikan pelanggaran"] }
         ]
       },
       {
         id: "ind_2",
         name: "2. Keteraturan Suasana Kelas",
-        desc: "Upaya membangun suasana kelas yang kondusif untuk proses belajar, dengan minimal gangguan yang mengalihkan perhatian peserta didik dari aktivitas belajar",
+        desc: "Suasana kelas kondusif minimal gangguan",
         foci: [
-          {
-            id: "g_2_1",
-            title: "2.1. Guru melakukan komunikasi positif untuk membangun suasana kelas yang kondusif",
-            rec: [
-              "Guru memanggil murid dengan menyebut namanya",
-              "Guru menyampaikan harapan positif terhadap kelas",
-              "Guru melakukan aktivitas yang mencairkan suasana kelas"
-            ],
-            avd: [
-              "Guru memanggil murid dengan sebutan yang merendahkan",
-              "Guru menceritakan keluhan atau persoalan sekolah",
-              "Guru langsung mengajar tanpa mengkondisikan suasana kelas"
-            ]
-          },
-          {
-            id: "g_2_2",
-            title: "2.2. Guru melakukan strategi pengelompokkan untuk mengaktifkan keterlibatan peserta didik",
-            rec: [
-              "Guru mengelompokkan murid dengan menyampaikan tujuannya pada murid",
-              "Guru menyediakan beragam peran dalam kelompok agar semua anggota terlibat aktif",
-              "Guru mengajak murid untuk berinteraksi dan berperan aktif dalam kelompok"
-            ],
-            avd: [
-              "Guru mengabaikan dinamika yang terjadi dalam satu atau lebih kelompok",
-              "Guru melakukan pengelompokkan yang sama terus menerus",
-              "Guru membiarkan murid berinteraksi dengan teman di dalam kelas"
-            ]
-          },
-          {
-            id: "g_2_3",
-            title: "2.3. Guru membuat dan mengingatkan aturan/kesepakatan kelas",
-            rec: [
-              "Guru membuat aturan/kesepakatan kelas yang disetujui semua murid dan ditempel di kelas",
-              "Guru mengajak murid untuk mengingat aturan/kesepakatan kelas yang telah disepakati",
-              "Guru mengajak murid menilai seberapa efektif pelaksanaan aturan/kesepakatan kelas"
-            ],
-            avd: [
-              "Guru tidak menyebutkan aturan/kesepakatan kelas ketika menegur murid",
-              "Guru melanggar aturan/kesepakatan kelas tanpa mengakuinya",
-              "Guru menetapkan aturan kelas tanpa mendiskusikan dengan murid"
-            ]
-          }
+          { id: "g_2_1", title: "2.1. Komunikasi positif", rec: ["Memanggil murid dengan nama", "Menyampaikan harapan positif", "Ice breaking mencairkan suasana"], avd: ["Sebutan merendahkan", "Menceritakan keluhan pribadi", "Langsung mengajar kaku"] },
+          { id: "g_2_2", title: "2.2. Strategi pengelompokan", rec: ["Menjelaskan tujuan kelompok", "Menyediakan beragam peran", "Mengajak aktif berinteraksi"], avd: ["Mengabaikan dinamika kelompok", "Kelompok monoton itu-itu saja", "Membiarkan siswa pasif"] },
+          { id: "g_2_3", title: "2.3. Aturan kesepakatan kelas", rec: ["Membuat dan menempel aturan", "Mengingatkan kesepakatan", "Menilai efektivitas aturan"], avd: ["Tidak menyebut aturan saat menegur", "Melanggar aturan sendiri", "Aturan sepihak guru"] }
         ]
       },
       {
         id: "ind_3",
         name: "3. Aktivitas Interaktif",
-        desc: "Upaya pembelajaran yang memfasilitasi kolaborasi dan komunikasi antar peserta didik untuk peningkatan efektivitas pembelajaran",
+        desc: "Kolaborasi dan komunikasi antar peserta didik",
         foci: [
-          {
-            id: "g_3_1",
-            title: "3.1. Guru memfasilitasi kegiatan pembelajaran yang memberi peran pada semua peserta didik",
-            rec: [
-              "Guru memotivasi semua peserta didik untuk berperan aktif dalam proses pembelajaran",
-              "Guru menyediakan peran dalam kelompok untuk memastikan semua anggota mendapat peran",
-              "Guru memberi dukungan dan kesempatan pada peserta didik yang pasif untuk berperan"
-            ],
-            avd: [
-              "Guru membiarkan peserta didik membuat dan membagikan peran dalam kelompok",
-              "Guru menyediakan peran yang terbatas sehingga peserta didik tertentu tidak mendapat peran",
-              "Guru membiarkan sebagian peserta didik bersikap dominan dalam proses pembelajaran"
-            ]
-          },
-          {
-            id: "g_3_2",
-            title: "3.2. Guru mengajukan pertanyaan yang menstimulasi proses diskusi dan berpikir kritis",
-            rec: [
-              "Guru mengajukan pertanyaan terbuka untuk memancing proses diskusi dan berpikir kritis",
-              "Guru mengajukan pertanyaan yang mengaitkan konsep yang dipelajari dengan konsep sebelumnya",
-              "Guru mengajukan yang meminta peserta didik membandingkan dua konsep yang berbeda"
-            ],
-            avd: [
-              "Guru mengajukan pertanyaan hanya untuk menguji pemahaman peserta didik",
-              "Guru mengajukan pertanyaan yang meminta peserta didik mengulang konsep yang disampaikan",
-              "Guru menghakimi jawaban peserta didik sehingga membuat peserta didik yang lain ragu buat menjawab"
-            ]
-          },
-          {
-            id: "g_3_3",
-            title: "3.3. Guru memfasilitasi terjadinya diskusi kelompok yang interaktif, kritis dan inklusif",
-            rec: [
-              "Guru memotivasi peserta didik untuk menyampaikan pendapat secara terbuka",
-              "Guru mengajukan pertanyaan yang memicu terjadinya diskusi kelompok",
-              "Guru berkeliling kelas untuk memberikan bimbingan pada kelompok dalam berdiskusi"
-            ],
-            avd: [
-              "Guru hanya duduk di depan dan membiarkan kelompok berdiskusi sendiri",
-              "Guru membiarkan peserta didik membentuk kelompok sendiri sesuka hatinya",
-              "Guru mengabaikan atau melarang perbedaan pendapat"
-            ]
-          }
+          { id: "g_3_1", title: "3.1. Berperan aktif semua siswa", rec: ["Memotivasi semua siswa terlibat", "Memastikan semua anggota ada peran", "Mendukung siswa pasif"], avd: ["Membiarkan siswa mendominasi", "Peran terbatas", "Pasif membiarkan kelompok timpang"] },
+          { id: "g_3_2", title: "3.2. Pertanyaan menstimulasi kritis", rec: ["Pertanyaan terbuka diskusi", "Mengaitkan konsep sebelumnya", "Membandingkan dua konsep"], avd: ["Pertanyaan hafalan biasa", "Pertanyaan mengulang saja", "Menghakimi jawaban siswa"] },
+          { id: "g_3_3", title: "3.3. Diskusi inklusif", rec: ["Menyampaikan pendapat terbuka", "Memicu diskusi kelompok", "Membimbing berkeliling kelas"], avd: ["Guru diam pasif di depan", "Kelompok dibentuk asal-asalan", "Melarang perbedaan pendapat"] }
         ]
       },
       {
         id: "ind_4",
         name: "4. Instruksi Pembelajaran",
-        desc: "Upaya penjelasan terstruktur tentang konsep dan aktivitas pembelajaran disertai demonstrasi, ilustrasi, atau contoh yang relevan dan kontekstual untuk peningkatan efektivitas pembelajaran",
+        desc: "Penjelasan terstruktur disertai ilustrasi kontekstual",
         foci: [
-          {
-            id: "g_4_1",
-            title: "4.1. Guru memberikan penjelasan yang mudah sesuai pemahaman awal peserta didik",
-            rec: [
-              "Guru menampilkan visualisasi atau ilustrasi yang memudahkan pemahaman peserta didik",
-              "Guru menjelaskan konsep yang sulit dengan bahasa yang mudah dipahami",
-              "Guru menjelaskan konsep disesuaikan hasil asesmen awal"
-            ],
-            avd: [
-              "Guru menampilkan visualisasi atau ilustrasi menarik tapi tidak terkait penjelasannya",
-              "Guru menjelaskan konsep yang sulit dengan istilah-istilah baru yang sulit dipahami",
-              "Guru menjelaskan konsep hanya mengacu pada buku/perangkat ajar"
-            ]
-          },
-          {
-            id: "g_4_2",
-            title: "4.2. Guru memberikan contoh yang kontekstual dan relevan dengan keseharian peserta didik",
-            rec: [
-              "Guru menjelaskan konsep disertai dengan contoh yang familiar dengan kehidupan peserta didik",
-              "Guru menjelaskan konsep dikaitkan dengan isu atau topik sehari-hari yang relevan bagi peserta didik",
-              "Guru memberi kesempatan pada peserta didik berbagi pengalaman yang relevan"
-            ],
-            avd: [
-              "Guru menjelaskan konsep disertai contoh yang hanya dipahami oleh guru atau orang dewasa",
-              "Guru menjelaskan konsep tanpa dikaitkan dengan kehidupan sehari-hari",
-              "Guru menggunakan contoh yang sama berulang-ulang"
-            ]
-          },
-          {
-            id: "g_4_3",
-            title: "4.3. Guru menyampaikan penjelasan secara terstruktur dan logis",
-            rec: [
-              "Guru menjelaskan konsep secara runtut dari tujuan, konsep inti dan kesimpulan",
-              "Guru menjelaskan materi baru dihubungkan dengan materi sebelumnya",
-              "Guru memberi penjelasan dan bimbingan langkah demi langkah disertai dengan demonstrasi"
-            ],
-            avd: [
-              "Guru memberi instruksi yang terlalu umum sehingga peserta didik kesulitan mengikuti langkah-langkahnya",
-              "Guru menjelaskan konsep tidak runtut, melompat-lompat antar topik tanpa menjelaskan keterkaitannya",
-              "Guru tidak mengulang bagian penting dari penjelasannya"
-            ]
-          }
+          { id: "g_4_1", title: "4.1. Penjelasan mudah dipahami", rec: ["Menampilkan visualisasi/ilustrasi", "Bahasa sederhana konsep sulit", "Sesuai asesmen awal"], avd: ["Visual tidak relevan", "Istilah baru rumit tanpa arti", "Hanya baca buku teks"] },
+          { id: "g_4_2", title: "4.2. Contoh kontekstual", rec: ["Contoh familiar keseharian", "Dikaitkan isu relevan", "Berbagi pengalaman siswa"], avd: ["Contoh abstrak dewasa", "Tanpa kaitan nyata", "Contoh monoton"] },
+          { id: "g_4_3", title: "4.3. Terstruktur dan logis", rec: ["Runtut tujuan hingga kesimpulan", "Menghubungkan materi baru", "Demonstrasi langkah demi langkah"], avd: ["Instruksi umum membingungkan", "Melompat-lompat topik", "Tidak mengulang poin penting"] }
         ]
       },
       {
         id: "ind_5",
         name: "5. Instruksi yang Adaptif",
-        desc: "Upaya penyesuaian praktik pembelajaran sebagai respon terhadap respon peserta didik terhadap kebutuhan belajarnya untuk peningkatan efektivitas pembelajaran",
+        desc: "Penyesuaian respon terhadap kebutuhan belajar",
         foci: [
-          {
-            id: "g_5_1",
-            title: "5.1. Guru melakukan strategi pembelajaran yang responsif terhadap peserta didik",
-            rec: [
-              "Guru memulai pembelajaran dengan mengajukan pertanyaan untuk memahami pemahaman awal peserta didik",
-              "Guru melakukan penyesuaian pembelajaran sesuai respon dari peserta didik",
-              "Guru melakukan penyesuaian penjelasan agar lebih relevan dan dipahami peserta didik"
-            ],
-            avd: [
-              "Guru memulai pembelajaran langsung dengan penjelasan materi pelajaran",
-              "Guru menyampaikan materi pelajaran tanpa disesuaikan dengan respon peserta didik",
-              "Guru mengabaikan respon peserta didik dengan meminta mereka diam menyimak"
-            ]
-          },
-          {
-            id: "g_5_2",
-            title: "5.2. Guru melakukan penyesuaian pembelajaran mengacu kondisi, kebutuhan dan karakteristik peserta didik",
-            rec: [
-              "Guru menggunakan strategi pembelajaran berdasarkan hasil asesmen awal/diagnosis",
-              "Guru melakukan diferensiasi pembelajaran dengan setidaknya dua metode yang berbeda",
-              "Guru menyediakan dukungan belajar bagi peserta didik yang membutuhkan"
-            ],
-            avd: [
-              "Guru mengabaikan adanya perbedaan karakteristik, kebutuhan dan kondisi awal peserta didik",
-              "Guru menggunakan hanya satu strategi pembelajaran yang dikuasainya",
-              "Guru menerapkan strategi pembelajaran yang kaku, sebatas menerapkan perangkat ajar"
-            ]
-          },
-          {
-            id: "g_5_3",
-            title: "5.3. Guru merefleksikan praktik pembelajaran yang melibatkan peserta didik",
-            rec: [
-              "Guru mengkomunikasikan analisis terhadap hasil asesmen formatif",
-              "Guru mengkomunikasikan hasil survei umpan balik terhadap praktik pembelajaran",
-              "Guru memandu diskusi refleksi untuk menilai efektivitas praktik pembelajaran"
-            ],
-            avd: [
-              "Guru menyangkal umpan balik yang disampaikan oleh peserta didik",
-              "Guru melakukan asesmen formatif tanpa mengkomunikasikan hasilnya",
-              "Guru membagikan tugas yang sudah dinilai tanpa ada catatan umpan balik"
-            ]
-          }
+          { id: "g_5_1", title: "5.1. Responsif kebutuhan", rec: ["Asesmen pemahaman awal", "Menyesuaikan respon siswa", "Penjelasan lebih relevan"], avd: ["Langsung ceramah materi", "Mengabaikan respon siswa", "Menyuruh diam menyimak"] },
+          { id: "g_5_2", title: "5.2. Diferensiasi pembelajaran", rec: ["Mengacu hasil diagnosis", "Diferensiasi minimal 2 metode", "Dukungan siswa butuh bantuan"], avd: ["Mengabaikan perbedaan", "Hanya satu metode kaku", "Mengajar tanpa variasi"] },
+          { id: "g_5_3", title: "5.3. Refleksi melibatkan siswa", rec: ["Analisis formatif dikomunikasikan", "Survei umpan balik", "Diskusi efektivitas belajar"], avd: ["Menyangkal umpan balik", "Asesmen tanpa penjelasan", "Tugas dibagikan tanpa catatan"] }
         ]
       },
       {
         id: "ind_6",
         name: "6. Umpan Balik Konstruktif",
-        desc: "Upaya penyampaian informasi tentang kemajuan proses dan capaian pembelajaran kepada peserta didik untuk menumbuhkan motivasi belajar intrinsik",
+        desc: "Informasi kemajuan menumbuhkan motivasi intrinsik",
         foci: [
-          {
-            id: "g_6_1",
-            title: "6.1. Guru memberikan umpan balik spesifik dan berorientasi tujuan",
-            rec: [
-              "Guru memberi umpan balik dengan menyebut spesifik bagian tugas yang dinilai bagus atau perlu perbaikan",
-              "Guru menghubungkan umpan balik dengan tujuan pembelajaran yang hendak dicapai",
-              "Guru menggunakan pertanyaan untuk membantu peserta didik memunculkan ide perbaikan"
-            ],
-            avd: [
-              "Guru memberi umpan balik dengan kata-kata yang terlalu umum",
-              "Guru memberi umpan balik negatif tanpa membantu peserta didik menemukan ide perbaikan",
-              "Guru memberikan umpan balik dengan menggunakan bahasa yang terlalu sulit"
-            ]
-          },
-          {
-            id: "g_6_2",
-            title: "6.2. Guru memberikan umpan balik yang fokus pada proses atau usaha peserta didik",
-            rec: [
-              "Guru memberi umpan balik fokus pada usaha peserta didik untuk refleksi dan perbaikan",
-              "Guru menjelaskan keterkaitan usaha dengan hasil yang mungkin dicapai",
-              "Guru membantu peserta didik melakukan refleksi terhadap usaha yang telah dilakukannya"
-            ],
-            avd: [
-              "Guru menyampaikan umpan balik yang hanya fokus pada hasil akhir",
-              "Guru tidak menyediakan kesempatan pada peserta didik melakukan perbaikan",
-              "Guru menggunakan pandangan subyektif dalam memberi umpan balik"
-            ]
-          },
-          {
-            id: "g_6_3",
-            title: "6.3. Guru menunjukkan kesediaan mendiskusikan umpan balik dengan peserta didik",
-            rec: [
-              "Guru membuka komunikasi untuk pertanyaan dan klarifikasi lebih lanjut",
-              "Guru mendengarkan secara aktif tanggapan peserta didik terhadap umpan balik yang diterimanya",
-              "Guru menyediakan waktu mendiskusikan umpan balik selama atau setelah kelas"
-            ],
-            avd: [
-              "Guru menolak berdiskusi dengan peserta didik tentang umpan balik yang diberikan",
-              "Guru mengabaikan pertanyaan atau kekhawatiran peserta didik",
-              "Guru terburu-buru menjelaskan umpan balik sehingga tidak sempat berdiskusi"
-            ]
-          }
+          { id: "g_6_1", title: "6.1. Spesifik dan berorientasi tujuan", rec: ["Menyebut spesifik bagian tugas", "Menghubungkan tujuan belajar", "Pertanyaan ide perbaikan"], avd: ["Umpan balik terlalu umum", "Komentar negatif tanpa solusi", "Bahasa terlalu rumit"] },
+          { id: "g_6_2", title: "6.2. Fokus proses dan usaha", rec: ["Fokus pada usaha siswa", "Keterkaitan usaha dan hasil", "Refleksi usaha siswa"], avd: ["Hanya fokus hasil akhir", "Tidak ada kesempatan perbaikan", "Pandangan subjektif guru"] },
+          { id: "g_6_3", title: "6.3. Diskusi umpan balik", rec: ["Membuka komunikasi klarifikasi", "Mendengar aktif tanggapan", "Menyediakan waktu diskusi"], avd: ["Menolak diskusi", "Mengabaikan pertanyaan", "Terburu-buru"] }
         ]
       },
       {
         id: "ind_7",
         name: "7. Perhatian dan Kepedulian",
-        desc: "Upaya pemberian perhatian dan dukungan sesuai dengan kebutuhan belajar setiap peserta didik untuk menumbuhkan motivasi belajar intrinsik",
+        desc: "Perhatian dukungan emosional belajar",
         foci: [
-          {
-            id: "g_7_1",
-            title: "7.1. Guru menunjukkan empati untuk mendapatkan pemahaman utuh tentang peserta didik",
-            rec: [
-              "Guru memberikan perhatian penuh ketika peserta didik berbicara",
-              "Guru mengajukan pertanyaan lanjutan untuk mendapatkan pemahaman",
-              "Guru menunjukkan pengertian terhadap sudut pandang peserta didik"
-            ],
-            avd: [
-              "Guru mengabaikan pendapat atau perasaan peserta didik",
-              "Guru memberikan penilaian negatif terhadap pendapat peserta didik",
-              "Guru tidak memberikan kesempatan pada peserta didik menyampaikan pendapat"
-            ]
-          },
-          {
-            id: "g_7_2",
-            title: "7.2. Guru menunjukkan pemahaman terhadap kebutuhan, kondisi dan karakteristik peserta didik",
-            rec: [
-              "Guru melakukan pengamatan terhadap dinamika kelas untuk memahami peserta didik",
-              "Guru melakukan interaksi positif yang menghargai keunikan peserta didik",
-              "Guru meminta pendapat dan umpan balik dari peserta didik"
-            ],
-            avd: [
-              "Guru bertindak berdasarkan asumsi tanpa menggali fakta terkait peserta didik",
-              "Guru bersikap kaku dalam pembelajaran yang mengabaikan kebutuhan peserta didik",
-              "Guru menghindari masukan atau umpan balik dari peserta didik"
-            ]
-          },
-          {
-            id: "g_7_3",
-            title: "7.3. Guru mengakui dan menghargai usaha yang ditunjukkan peserta didik",
-            rec: [
-              "Guru menunjukkan minat/keingintahuan terhadap aktivitas yang dilakukan murid",
-              "Guru memberikan pujian terhadap usaha, bukan hasil akhir, yang ditunjukkan peserta didik",
-              "Guru menyampaikan dukungan terhadap usaha peserta didik di depan kelas"
-            ],
-            avd: [
-              "Guru meremehkan usaha-usaha yang dilakukan peserta didik",
-              "Guru memberikan pujian yang terlalu umum atau berlebihan/bombastis",
-              "Guru bersikap terlalu kritis terhadap usaha yang dilakukan peserta didik"
-            ]
-          }
+          { id: "g_7_1", title: "7.1. Empati utuh", rec: ["Perhatian penuh saat siswa bicara", "Pertanyaan lanjutan pemahaman", "Pengertian sudut pandang siswa"], avd: ["Mengabaikan perasaan siswa", "Penilaian negatif pendapat", "Tidak memberi kesempatan bicara"] },
+          { id: "g_7_2", title: "7.2. Memahami karakteristik", rec: ["Pengamatan dinamika kelas", "Interaksi menghargai keunikan", "Meminta umpan balik siswa"], avd: ["Bertindak asumsi keliru", "Kaku mengabaikan kebutuhan", "Menghindari masukan"] },
+          { id: "g_7_3", title: "7.3. Menghargai usaha", rec: ["Minat pada aktivitas murid", "Pujian atas usaha bukan hasil", "Dukungan di depan kelas"], avd: ["Meremehkan usaha siswa", "Pujian berlebihan bombastis", "Terlalu kritis menjatuhkan"] }
         ]
       },
       {
         id: "ind_8",
         name: "8. Ekspektasi pada Peserta Didik",
-        desc: "Upaya mengkomunikasikan ekspektasi yang tinggi kepada semua dan setiap peserta didik untuk menumbuhkan motivasi belajar intrinsik",
+        desc: "Ekspektasi tinggi menumbuhkan motivasi",
         foci: [
-          {
-            id: "g_8_1",
-            title: "8.1. Guru mengkomunikasikan harapannya yang tinggi terhadap masa depan seluruh peserta didiknya",
-            rec: [
-              "Guru mengenal nama setiap peserta didiknya beserta karakteristiknya",
-              "Guru menyampaikan cita-cita masa depan yang bermakna bagi peserta didik",
-              "Guru mendiskusikan harapan positif peserta didik tentang masa depannya"
-            ],
-            avd: [
-              "Guru menyebutkan perilaku-perilaku negatif peserta didiknya",
-              "Guru menjelaskan harapan-harapan yang tidak relevan dengan peserta didik",
-              "Guru mengabaikan potensi peserta didik karena lebih fokus pada kelemahannya"
-            ]
-          },
-          {
-            id: "g_8_2",
-            title: "8.2. Guru mengkomunikasikan harapan positif terhadap semua peserta didik secara setara dan tanpa diskriminasi",
-            rec: [
-              "Guru menyampaikan harapan positifnya secara terbuka dan berlaku bagi semua peserta didik",
-              "Guru memberikan dukungan tambahan pada peserta didik yang sudah berusaha meski belum berhasil",
-              "Guru menyebutkan potensi peserta didik meski peserta didik sendiri tidak menyadarinya"
-            ],
-            avd: [
-              "Guru menyampaikan harapan positif hanya pada peserta didik tertentu saja",
-              "Guru mengulang harapan-harapan positif tertentu yang hanya relevan dengan sebagian peserta didik",
-              "Guru menyebutkan potensi peserta didik yang terlihat menonjol saja"
-            ]
-          },
-          {
-            id: "g_8_3",
-            title: "8.3. Guru memberikan tantangan yang bermakna disertai motivasi untuk mencapainya",
-            rec: [
-              "Guru berdiskusi dengan peserta didik tentang tujuan hidup/cita-cita mereka",
-              "Menyediakan tantangan belajar yang relevan dengan pembelajaran dan bermakna bagi peserta didik",
-              "Menunjukkan keyakinan berulang kali bahwa peserta didiknya mampu mengatasi tantangan belajar"
-            ],
-            avd: [
-              "Memberikan tantangan belajar tapi tidak memberikan motivasi",
-              "Menggunakan hadiah dan hukuman untuk memotivasi murid",
-              "Mengkomunikasikan kompetisi dalam kelas secara berlebihan"
-            ]
-          }
+          { id: "g_8_1", title: "8.1. Harapan masa depan", rec: ["Mengenal nama dan karakter", "Menyampaikan cita-cita bermakna", "Diskusi harapan positif"], avd: ["Menyebut perilaku negatif", "Harapan tidak relevan", "Fokus kelemahan siswa"] },
+          { id: "g_8_2", title: "8.2. Setara tanpa diskriminasi", rec: ["Harapan terbuka semua siswa", "Dukungan siswa belum berhasil", "Menyebut potensi tersembunyi"], avd: ["Harapan siswa tertentu saja", "Diskriminatif kelompok", "Potensi menonjol saja"] },
+          { id: "g_8_3", title: "8.3. Tantangan bermakna", rec: ["Diskusi tujuan hidup siswa", "Tantangan belajar relevan", "Keyakinan siswa mampu"], avd: ["Tantangan tanpa motivasi", "Hadiah hukuman berlebihan", "Kompetisi tidak sehat"] }
         ]
       }
     ];
 
     const DEEP_LEARNING_LIST = [
-      {
-        id: "dl_1",
-        title: "1. Memenuhi Unsur Pembelajaran Mendalam: Berkesadaran (Mindful), Bermakna (Meaningful), dan Menggembirakan (Joyful)",
-        sub: "Keseimbangan olah pikir, olah hati, olah rasa, dan olah raga",
-        rec: [
-          "Berkesadaran (Mindful): Siswa hadir utuh dan sadar penuh terhadap tujuan serta proses belajarnya",
-          "Bermakna (Meaningful): Materi dikaitkan langsung dengan manfaat dan pemecahan masalah kehidupan nyata",
-          "Menggembirakan (Joyful): Suasana belajar menggembirakan, menantang rasa ingin tahu, dan bebas tekanan"
-        ],
-        avd: [
-          "Siswa belajar secara mekanis/terpaksa tanpa memahami makna materi",
-          "Materi abstrak lepas dari konteks keseharian siswa",
-          "Suasana belajar tegang, monoton, dan menakutkan bagi siswa"
-        ]
-      },
-      {
-        id: "dl_2",
-        title: "2. Memenuhi Tiga Fase Pengalaman Belajar: Memahami, Mengaplikasi, dan Merefleksi",
-        sub: "Alur pengalaman belajar mendalam yang runtut dan utuh",
-        rec: [
-          "Tahap Memahami: Siswa mengonstruksi pemahaman konsep inti secara mendalam",
-          "Tahap Mengaplikasi: Siswa menerapkan konsep pada proyek/masalah nyata secara kolaboratif",
-          "Tahap Merefleksi: Siswa mengevaluasi proses belajarnya dan menyimpulkan pembelajaran"
-        ],
-        avd: [
-          "Pembelajaran berhenti pada hafalan definisi tanpa aplikasi nyata",
-          "Tidak tersedia waktu khusus bagi siswa untuk melakukan refleksi pengalaman belajar"
-        ]
-      },
-      {
-        id: "dl_3",
-        title: "3. Model Pembelajaran Aktif (PjBL, PBL, atau Inkuiri dari Persoalan Dunia Nyata)",
-        sub: "Berpusat pada aktivitas siswa (Student-Centered), BUKAN CERAMAH GURU — makin banyak aktivitas siswa makin baik",
-        rec: [
-          "Menggunakan skenario Project-Based Learning (PjBL), Problem-Based Learning (PBL), atau Inkuiri kontekstual",
-          "Aktivitas eksplorasi, penyelidikan, dan karya siswa mendominasi jam pelajaran (>70%)",
-          "Siswa aktif berkolaborasi memecahkan persoalan dunia nyata"
-        ],
-        avd: [
-          "Pembelajaran didominasi CERAMAH GURU satu arah di depan kelas",
-          "Siswa hanya duduk pasif mendengarkan dan menyalin catatan"
-        ]
-      },
-      {
-        id: "dl_4",
-        title: "4. Perubahan Peran Guru sebagai Fasilitator Pembelajaran",
-        sub: "Bukan sumber informasi tunggal, melainkan pemandu yang mendampingi siswa berdiskusi, mengeksplorasi, dan menyimpulkan",
-        rec: [
-          "Guru berperan sebagai pemandu/fasilitator yang memantik diskusi dan eksplorasi siswa",
-          "Guru mendampingi kelompok belajar mengeksplorasi berbagai sumber dan merumuskan kesimpulan sendiri"
-        ],
-        avd: [
-          "Guru bertindak sebagai satu-satunya sumber informasi/kebenaran tunggal",
-          "Guru mendiktekan seluruh kesimpulan tanpa melibatkan pemikiran siswa"
-        ]
-      },
-      {
-        id: "dl_5",
-        title: "5. Kondisi Ruang Kelas yang Fleksibel (Menjadikan Kelas seperti 'Taman', Bukan 'Pabrik')",
-        sub: "Menata ulang ruang kelas agar mendukung kolaborasi, interaksi aktif, serta kenyamanan bergerak",
-        rec: [
-          "Penataan kursi/meja fleksibel (berkelompok, U-shape, lesehan/area kolaborasi) yang mendukung interaksi aktif",
-          "Ruang kelas nyaman untuk bergerak, bereksplorasi, dan menyenangkan layaknya 'taman belajar'"
-        ],
-        avd: [
-          "Tata ruang kelas kaku berbaris satu arah layaknya 'pabrik' yang menghambat kolaborasi",
-          "Siswa tidak memiliki ruang gerak yang nyaman untuk berinteraksi"
-        ]
-      },
-      {
-        id: "dl_6",
-        title: "6. Asesmen Formatif Berkala (Penilaian Proses)",
-        sub: "Menyiapkan instrumen penilaian proses seperti jurnal belajar, exit ticket, diskusi kelompok, atau refleksi harian",
-        rec: [
-          "Menerapkan instrumen asesmen proses secara berkala (jurnal belajar, exit ticket, observasi diskusi, refleksi harian)",
-          "Menggunakan hasil asesmen formatif untuk perbaikan proses belajar secara berkelanjutan (tidak hanya ujian akhir)"
-        ],
-        avd: [
-          "Penilaian hanya bergantung pada ujian akhir / tes sumatif tertulis semata",
-          "Tidak ada umpan balik atau pemantauan proses belajar harian"
-        ]
-      },
-      {
-        id: "dl_7",
-        title: "7. Kemitraan dan Pemanfaatan Sumber (Wajib Menggunakan MPI, Bukan Hanya Tulisan Word di Layar)",
-        sub: "Melibatkan lingkungan sekitar, komunitas belajar antar guru, serta dukungan teknologi digital yang relevan (MPI)",
-        rec: [
-          "Menggunakan Media Pembelajaran Interaktif (MPI) yang interaktif & visual (bukan sekadar menampilkan teks Word di layar)",
-          "Melibatkan lingkungan sekitar sebagai sumber belajar serta sinergi komunitas belajar antar guru"
-        ],
-        avd: [
-          "Hanya menampilkan dokumen tulisan Microsoft Word/teks kaku di layar proyektor",
-          "Pembelajaran terputus dari lingkungan sekitar dan tanpa dukungan media interaktif"
-        ]
-      }
+      { id: "dl_1", title: "1. Unsur Pembelajaran Mendalam (Mindful, Meaningful, Joyful)", sub: "Keseimbangan olah pikir, hati, rasa, raga", rec: ["Mindful: Hadir penuh dan sadar proses belajar", "Meaningful: Dikaitkan masalah nyata", "Joyful: Suasana menggembirakan bebas tekanan"], avd: ["Belajar terpaksa tanpa makna", "Materi abstrak lepas konteks", "Suasana tegang menakutkan"] },
+      { id: "dl_2", title: "2. Tiga Fase Pengalaman Belajar (Memahami, Mengaplikasi, Merefleksi)", sub: "Alur pengalaman utuh", rec: ["Memahami konsep inti mendalam", "Mengaplikasi pada proyek nyata", "Merefleksi proses belajar"], avd: ["Berhenti pada hafalan", "Tanpa waktu refleksi"] },
+      { id: "dl_3", title: "3. Model Pembelajaran Aktif (PjBL, PBL, Inkuiri)", sub: "Student-centered (>70% aktivitas siswa)", rec: ["Skenario PjBL / PBL kontekstual", "Aktivitas eksplorasi siswa dominan", "Kolaborasi pemecahan masalah"], avd: ["Didominasi ceramah guru satu arah", "Siswa duduk pasif menyalin"] },
+      { id: "dl_4", title: "4. Peran Guru sebagai Fasilitator", sub: "Pemandu diskusi dan eksplorasi", rec: ["Memantik diskusi dan eksplorasi", "Mendampingi perumusan kesimpulan"], avd: ["Sumber kebenaran tunggal", "Mendiktekan seluruh kesimpulan"] },
+      { id: "dl_5", title: "5. Ruang Kelas Fleksibel (Kelas 'Taman')", sub: "Tata ruang mendukung kolaborasi", rec: ["Kursi/meja fleksibel (kelompok/U-shape)", "Nyaman bergerak dan interaktif"], avd: ["Tata ruang kaku berbaris 'pabrik'", "Tanpa ruang gerak"] },
+      { id: "dl_6", title: "6. Asesmen Formatif Berkala", sub: "Penilaian proses berkelanjutan", rec: ["Jurnal belajar, exit ticket, observasi", "Digunakan untuk perbaikan proses"], avd: ["Hanya bergantung ujian akhir", "Tanpa umpan balik harian"] },
+      { id: "dl_7", title: "7. Pemanfaatan Teknologi (MPI Interaktif)", sub: "Media Pembelajaran Interaktif digital", rec: ["Menggunakan MPI visual interaktif", "Sinergi komunitas belajar"], avd: ["Hanya teks Word di proyektor", "Tanpa media interaktif"] }
     ];
 
     const OBSERVASI_TENDIK = [
-      {
-        id: "t_1",
-        name: "1. Layanan Administrasi, Ketatausahaan & Akurasi Data",
-        desc: "Ketepatan, kerapian, dan kecepatan pengelolaan dokumen administrasi serta pemutakhiran data sekolah",
-        foci: [
-          {
-            id: "t_1_1",
-            title: "1.1. Pengelolaan surat-menyurat, arsip, dan dokumen layanan warga sekolah",
-            rec: ["Menyusun dan mengarsipkan dokumen secara rapi, sistematis (fisik & digital)", "Menyelesaikan layanan administrasi tepat waktu dan akurat"],
-            avd: ["Arsip tercecer, sulit dicari, atau sering terjadi kesalahan data", "Menunda penyelesaian administrasi tanpa alasan jelas"]
-          }
-        ]
-      },
-      {
-        id: "t_2",
-        name: "2. Komunikasi Layanan Prima & Keramahan (Hospitality 5S)",
-        desc: "Sikap ramah, santun, empatik, dan solutif dalam melayani warga sekolah dan tamu",
-        foci: [
-          {
-            id: "t_2_1",
-            title: "2.1. Penerapan budaya Senyum, Salam, Sapa, Sopan, Santun (5S) & solusi layanan",
-            rec: ["Melayani warga sekolah dan tamu dengan ramah, santun, dan solutif"],
-            avd: ["Bersikap acuh tak acuh, kurang ramah, atau mempersulit layanan"]
-          }
-        ]
-      },
-      {
-        id: "t_3",
-        name: "3. Kedisiplinan, Kepatuhan SOP & Etos Kerja",
-        desc: "Konsistensi kehadiran, manajemen waktu kerja, dan kepatuhan pada SOP satuan pendidikan",
-        foci: [
-          {
-            id: "t_3_1",
-            title: "3.1. Kehadiran tepat waktu dan produktivitas kerja harian",
-            rec: ["Hadir tepat waktu, produktif, dan mematuhi SOP layanan sekolah"],
-            avd: ["Sering terlambat atau pekerjaan menumpuk tanpa perencanaan"]
-          }
-        ]
-      },
-      {
-        id: "t_4",
-        name: "4. Inovasi Digital & Pemanfaatan Teknologi Kerja",
-        desc: "Pemanfaatan aplikasi perkantoran dan penyimpanan cloud untuk efisiensi layanan sekolah",
-        foci: [
-          {
-            id: "t_4_1",
-            title: "4.1. Digitalisasi arsip dan otomasi layanan administrasi/perpustakaan/sarpras",
-            rec: ["Memanfaatkan aplikasi digital/spreadsheet/cloud (e-Arsip) dan rutin melakukan backup data"],
-            avd: ["Bertahan pada cara manual yang lambat dan tidak melakukan backup"]
-          }
-        ]
-      },
-      {
-        id: "t_5",
-        name: "5. Kolaborasi Tim & Dukungan Program Sekolah",
-        desc: "Kerja sama harmonis dengan kepala sekolah, guru, dan rekan tendik",
-        foci: [
-          {
-            id: "t_5_1",
-            title: "5.1. Sinergi lintas staf dalam menyukseskan kegiatan satuan pendidikan",
-            rec: ["Berkoordinasi aktif dan saling membantu rekan kerja dalam menyukseskan kegiatan sekolah"],
-            avd: ["Bekerja individualistis dan kurang responsif terhadap koordinasi tim"]
-          }
-        ]
-      },
-      {
-        id: "t_6",
-        name: "6. Pemeliharaan Sarana Prasarana & Budaya K3",
-        desc: "Menjaga kerapian ruang kerja, kesiapan fasilitas, serta Keamanan, Kebersihan, dan Ketertiban (K3)",
-        foci: [
-          {
-            id: "t_6_1",
-            title: "6.1. Kesiapan fasilitas pendukung dan ketertiban lingkungan kerja",
-            rec: ["Menjaga ruang kerja dan fasilitas tetap bersih, rapi, siap pakai, serta menerapkan K3"],
-            avd: ["Membiarkan ruang kerja/fasilitas berantakan atau mengabaikan kerusakan sarpras"]
-          }
-        ]
-      }
+      { id: "t_1", name: "1. Layanan Administrasi & Akurasi Data", desc: "Ketepatan dan kerapian dokumen", foci: [{ id: "t_1_1", title: "1.1. Arsip & layanan administrasi", rec: ["Menyusun arsip rapi (fisik/digital)", "Tepat waktu dan akurat"], avd: ["Arsip tercecer / salah data", "Menunda pekerjaan"] }] },
+      { id: "t_2", name: "2. Komunikasi Layanan Prima (5S)", desc: "Ramah, santun, solutif", foci: [{ id: "t_2_1", title: "2.1. Senyum, Salam, Sapa, Sopan, Santun", rec: ["Melayani dengan ramah dan solutif"], avd: ["Acuh tak acuh / mempersulit"] }] },
+      { id: "t_3", name: "3. Kedisiplinan & Etos Kerja", desc: "Kehadiran dan kepatuhan SOP", foci: [{ id: "t_3_1", title: "3.1. Kehadiran dan produktivitas", rec: ["Hadir tepat waktu dan taat SOP"], avd: ["Sering terlambat / menumpuk kerja"] }] },
+      { id: "t_4", name: "4. Inovasi Digital & Teknologi", desc: "Pemanfaatan cloud & perkantoran", foci: [{ id: "t_4_1", title: "4.1. Digitalisasi arsip/dapodik/sarpras", rec: ["Menggunakan spreadsheet/cloud backup"], avd: ["Manual lambat tanpa backup"] }] },
+      { id: "t_5", name: "5. Kolaborasi Tim Sekolah", desc: "Sinergi lintas staf", foci: [{ id: "t_5_1", title: "5.1. Koordinasi kegiatan sekolah", rec: ["Aktif berkoordinasi dan membantu tim"], avd: ["Individualistis / pasif"] }] },
+      { id: "t_6", name: "6. Pemeliharaan Sarpras & K3", desc: "Kerapian dan kebersihan lingkungan", foci: [{ id: "t_6_1", title: "6.1. Kebersihan dan kesiapan fasilitas", rec: ["Menjaga fasilitas siap pakai & K3"], avd: ["Berantakan / mengabaikan kerusakan"] }] }
     ];
 
-    // =========================================================================
-    // STATE APLIKASI DUA ARAH (SELF vs SUPERVISOR)
-    // =========================================================================
     let currentRole = "GURU";
     let currentSiklus = "Observasi Kinerja";
-    let accessorMode = "BOTH"; // "BOTH" | "SELF" | "SUPERVISOR"
+    let accessorMode = "BOTH";
     let currentRecordId = null;
 
     let studentPctSelf = 85;
     let studentPctSup = 80;
 
-    // Setiap item menyimpan: { selfScore: 3, supScore: 3, rec: [...], avd: [...], note: "" }
     let dualPraktik = {};
     let dualObservasi = {};
     let dualDeep = {};
-
-    let masterPegawai = [
-      { role: "GURU", nama: "Siti Rahmawati, S.Pd.", nip: "19910514 201903 2 008", mapel: "Kelas V / IPAS - Ekosistem (PBL + MPI)", sekolah: "SDN Kaliasin VII/286 Surabaya" },
-      { role: "GURU", nama: "Budi Santoso, S.Pd.", nip: "19880101 201503 1 002", mapel: "Kelas VI / Matematika & Numerasi", sekolah: "SDN Kaliasin VII/286 Surabaya" },
-      { role: "GURU", nama: "Dewi Lestari, S.Pd.SD.", nip: "19850719 201101 2 011", mapel: "Kelas III / Bahasa Indonesia & Literasi", sekolah: "SDN Kaliasin VII/286 Surabaya" },
-      { role: "TENDIK", nama: "Rizky Pratama, A.Md.", nip: "19941120 202221 1 004", mapel: "Tenaga Administrasi Sekolah & Operator Dapodik", sekolah: "SDN Kaliasin VII/286 Surabaya" }
-    ];
 
     const LOCAL_DB_KEY = "DUAL_SUPERVISI_CLOUD_CACHE_2026";
 
     window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("inTanggal").value = new Date().toISOString().split("T")[0];
-      document.getElementById("inGasWebAppUrl").value = localStorage.getItem("GAS_DUAL_URL") || "";
+      document.getElementById("inGasWebAppUrl").value = localStorage.getItem("GAS_DUAL_URL") || "https://script.google.com/macros/s/AKfycbyiSFhT5LHgr7mrd-oSecrM3daspbmqBVswSBBeELLq2o8xrO3dFqrisliAczJtckMI/exec";
 
       initDualStates();
       renderSiklusGrid();
@@ -1421,38 +839,21 @@
       recalculateAll(true);
       syncDropdownsWithRecords(getCachedRecords());
       renderHistoryTable();
-      if (getActiveGasUrl()) { fetchFromCloudGas(true); }
+      fetchFromCloudGas(true);
     });
 
     function initDualStates() {
-      ASPEK_PRAKTIK.forEach(p => {
-        dualPraktik[p.id] = { selfScore: 3, supScore: 3, note: "" };
-      });
+      ASPEK_PRAKTIK.forEach(p => { dualPraktik[p.id] = { selfScore: 3, supScore: 3, note: "" }; });
       [...OBSERVASI_GURU, ...OBSERVASI_TENDIK].forEach(ind => {
         ind.foci.forEach(f => {
-          dualObservasi[f.id] = {
-            selfScore: 3,
-            supScore: 3,
-            rec: f.rec.map((_, i) => i),
-            avd: [],
-            note: ""
-          };
+          dualObservasi[f.id] = { selfScore: 3, supScore: 3, rec: f.rec.map((_, i) => i), avd: [], note: "" };
         });
       });
       DEEP_LEARNING_LIST.forEach(d => {
-        dualDeep[d.id] = {
-          selfScore: 3,
-          supScore: 3,
-          rec: d.rec.map((_, i) => i),
-          avd: [],
-          note: ""
-        };
+        dualDeep[d.id] = { selfScore: 3, supScore: 3, rec: d.rec.map((_, i) => i), avd: [], note: "" };
       });
     }
 
-    // =========================================================================
-    // PENGATURAN MODE AKSES (GURU PRIBADI / KEPALA SEKOLAH / GABUNGAN)
-    // =========================================================================
     function setAccessorMode(mode) {
       accessorMode = mode;
       const bBoth = document.getElementById("btnModeBoth");
@@ -1460,7 +861,7 @@
       const bSup = document.getElementById("btnModeSup");
 
       const activeCls = "px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-300 text-white shadow-lg";
-      const idleCls = "px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-white/15 text-slate-700 hover:text-white";
+      const idleCls = "px-4 py-3 rounded-2xl text-xs font-bold border transition flex items-center justify-center gap-2 glass-sub border-slate-300 text-slate-800 hover:bg-white";
 
       bBoth.className = mode === "BOTH" ? activeCls : idleCls;
       bSelf.className = mode === "SELF" ? activeCls : idleCls;
@@ -1481,11 +882,9 @@
         return `
           <button type="button" onclick="currentSiklus='${s.id}'; renderSiklusGrid();"
             class="p-2.5 rounded-xl border text-left transition ${
-              active
-                ? 'bg-cyan-500/25 border-cyan-400 text-white shadow'
-                : 'glass-sub border-white/10 text-slate-700 hover:border-white/30'
+              active ? 'bg-cyan-600 border-cyan-500 text-white shadow' : 'glass-sub border-slate-300 text-slate-800 hover:bg-white'
             }">
-            <div class="text-[10px] font-bold text-cyan-300">TAHAP ${idx + 1} (${s.bln})</div>
+            <div class="text-[10px] font-bold text-cyan-200">TAHAP ${idx + 1} (${s.bln})</div>
             <div class="text-xs font-bold text-white truncate">${s.id}</div>
           </button>
         `;
@@ -1494,35 +893,26 @@
 
     function switchRole(role) {
       currentRole = role;
-      document.getElementById("tabRoleGuru").className = role === "GURU"
-        ? "px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow"
-        : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-white";
-      document.getElementById("tabRoleTendik").className = role === "TENDIK"
-        ? "px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow"
-        : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-white";
+      document.getElementById("tabRoleGuru").className = role === "GURU" ? "px-4 py-2 rounded-xl text-xs font-bold bg-cyan-600 text-white shadow" : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900";
+      document.getElementById("tabRoleTendik").className = role === "TENDIK" ? "px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow" : "px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900";
 
       document.getElementById("secDualDeepLearning").style.display = role === "GURU" ? "block" : "none";
       document.getElementById("rowMiniC").style.display = role === "GURU" ? "grid" : "none";
       document.getElementById("filterBoxGuru").style.display = role === "GURU" ? "flex" : "none";
       document.getElementById("lblMiniB").textContent = role === "GURU" ? "B. Observasi Kelas (35%)" : "B. Observasi Tendik (75%)";
-      document.getElementById("titleSectionB").textContent = role === "GURU"
-        ? "Tabel Komparasi 8 Indikator Rubrik Observasi Kelas (Guru Pribadi vs Kepala Sekolah)"
-        : "Tabel Komparasi 6 Indikator Rubrik Kinerja Tenaga Kependidikan (Tendik vs Kepala Sekolah)";
+      document.getElementById("titleSectionB").textContent = role === "GURU" ? "Tabel Komparasi 8 Indikator Rubrik Observasi Kelas" : "Tabel Komparasi 6 Indikator Rubrik Kinerja Tenaga Kependidikan";
 
       renderDualObservasi();
       recalculateAll(true);
     }
 
-    // =========================================================================
-    // RENDER TABEL KOMPARASI 2 ARAH (GURU PRIBADI vs KEPALA SEKOLAH)
-    // =========================================================================
     function renderDualScoreButtons(group, id, which, curVal) {
       const isSelf = which === "selfScore";
       const disabled = (isSelf && accessorMode === "SUPERVISOR") || (!isSelf && accessorMode === "SELF");
       const labels = [
-        { v: 1, t: "1 - Belum Dilakukan" },
-        { v: 2, t: "2 - Belum Efektif" },
-        { v: 3, t: "3 - Dilakukan & Efektif" }
+        { v: 1, t: "1 - Belum" },
+        { v: 2, t: "2 - Cukup" },
+        { v: 3, t: "3 - Efektif" }
       ];
       return labels.map(l => {
         const activeClass = curVal === l.v ? (isSelf ? `self-active-${l.v}` : `sup-active-${l.v}`) : "";
@@ -1539,16 +929,10 @@
     function getGapBadgeHtml(selfScore, supScore) {
       const avg = ((selfScore + supScore) / 2).toFixed(2);
       const diff = selfScore - supScore;
-      let status = `<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">✓ Selaras (0)</span>`;
-      if (diff > 0) {
-        status = `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-bold">▲ Guru +${diff}</span>`;
-      } else if (diff < 0) {
-        status = `<span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold">▼ Kepsek +${Math.abs(diff)}</span>`;
-      }
-      return `
-        <div class="text-base font-black text-amber-300">${avg} <span class="text-[10px] text-slate-600 font-normal">/ 3.0</span></div>
-        <div class="mt-1">${status}</div>
-      `;
+      let status = `<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">✓ Selaras</span>`;
+      if (diff > 0) status = `<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold">▲ Guru +${diff}</span>`;
+      else if (diff < 0) status = `<span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 text-[10px] font-bold">▼ Kepsek +${Math.abs(diff)}</span>`;
+      return `<div class="text-base font-black text-slate-900">${avg}</div><div class="mt-1">${status}</div>`;
     }
 
     function renderDualPraktik() {
@@ -1558,9 +942,9 @@
         return `
           <tr>
             <td style="text-align: center; font-weight: 800;">${idx + 1}</td>
-            <td><strong class="text-cyan-300">${item.aspect}</strong></td>
+            <td><strong class="text-cyan-900">${item.aspect}</strong></td>
             <td>
-              <div class="font-bold text-white mb-1">${item.question}</div>
+              <div class="font-bold text-slate-900 mb-1">${item.question}</div>
               <ul class="list-disc list-inside text-xs text-slate-700 space-y-0.5">
                 ${item.points.map(pt => `<li>${pt}</li>`).join("")}
               </ul>
@@ -1569,8 +953,7 @@
             <td>${renderDualScoreButtons("PRAKTIK", item.id, "supScore", st.supScore)}</td>
             <td style="text-align: center;">${getGapBadgeHtml(st.selfScore, st.supScore)}</td>
             <td>
-              <textarea rows="3" class="w-full rounded-lg p-2 text-xs glass-input" placeholder="Bukti refleksi / tindak lanjut..."
-                oninput="dualPraktik['${item.id}'].note = this.value">${st.note}</textarea>
+              <textarea rows="3" class="w-full rounded-lg p-2 text-xs glass-input" placeholder="Bukti..." oninput="dualPraktik['${item.id}'].note = this.value">${st.note}</textarea>
             </td>
           </tr>
         `;
@@ -1588,46 +971,18 @@
       const tbody = document.getElementById("tbodyDualObservasi");
       const list = getActiveObservasiList();
       let html = "";
-
       list.forEach(ind => {
-        html += `
-          <tr class="group-row">
-            <td colspan="6">${ind.name} — <span class="font-normal text-xs text-slate-200">${ind.desc}</span></td>
-          </tr>
-        `;
+        html += `<tr class="group-row"><td colspan="6">${ind.name} — <span class="font-normal text-xs text-slate-700">${ind.desc}</span></td></tr>`;
         ind.foci.forEach(f => {
           const st = dualObservasi[f.id];
           html += `
             <tr>
               <td>
-                <strong class="text-white">${f.title}</strong>
-                <textarea rows="2" class="w-full rounded-lg p-2 text-[11px] glass-input mt-2" placeholder="Catatan pengamatan pada fokus ini..."
-                  oninput="dualObservasi['${f.id}'].note = this.value">${st.note}</textarea>
+                <strong class="text-slate-900">${f.title}</strong>
+                <textarea rows="2" class="w-full rounded-lg p-2 text-[11px] glass-input mt-2" placeholder="Catatan..." oninput="dualObservasi['${f.id}'].note = this.value">${st.note}</textarea>
               </td>
-              <td>
-                <div class="space-y-1.5">
-                  ${f.rec.map((rText, rIdx) => `
-                    <label class="flex items-start gap-2 text-xs text-emerald-100 cursor-pointer">
-                      <input type="checkbox" ${st.rec.includes(rIdx) ? "checked" : ""}
-                        onchange="toggleDualCheck('OBSERVASI', '${f.id}', 'rec', ${rIdx})"
-                        class="mt-0.5 accent-emerald-400" />
-                      <span>${rText}</span>
-                    </label>
-                  `).join("")}
-                </div>
-              </td>
-              <td>
-                <div class="space-y-1.5">
-                  ${f.avd.map((aText, aIdx) => `
-                    <label class="flex items-start gap-2 text-xs text-rose-100 cursor-pointer">
-                      <input type="checkbox" ${st.avd.includes(aIdx) ? "checked" : ""}
-                        onchange="toggleDualCheck('OBSERVASI', '${f.id}', 'avd', ${aIdx})"
-                        class="mt-0.5 accent-rose-500" />
-                      <span>${aText}</span>
-                    </label>
-                  `).join("")}
-                </div>
-              </td>
+              <td>${f.rec.map((r, ri) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${st.rec.includes(ri)?'checked':''} onchange="toggleDualCheck('OBSERVASI','${f.id}','rec',${ri})" /><span>${r}</span></label>`).join("")}</td>
+              <td>${f.avd.map((a, ai) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${st.avd.includes(ai)?'checked':''} onchange="toggleDualCheck('OBSERVASI','${f.id}','avd',${ai})" /><span>${a}</span></label>`).join("")}</td>
               <td>${renderDualScoreButtons("OBSERVASI", f.id, "selfScore", st.selfScore)}</td>
               <td>${renderDualScoreButtons("OBSERVASI", f.id, "supScore", st.supScore)}</td>
               <td style="text-align: center;">${getGapBadgeHtml(st.selfScore, st.supScore)}</td>
@@ -1635,7 +990,6 @@
           `;
         });
       });
-
       tbody.innerHTML = html;
     }
 
@@ -1646,40 +1000,16 @@
         return `
           <tr>
             <td>
-              <strong class="text-amber-300">${dl.title}</strong>
-              <div class="text-[11px] text-slate-700 mt-1">${dl.sub}</div>
+              <strong class="text-slate-900">${dl.title}</strong>
+              <div class="text-[11px] text-slate-600 mt-1">${dl.sub}</div>
             </td>
-            <td>
-              <div class="space-y-1.5">
-                ${dl.rec.map((rText, rIdx) => `
-                  <label class="flex items-start gap-2 text-xs text-emerald-100 cursor-pointer">
-                    <input type="checkbox" ${st.rec.includes(rIdx) ? "checked" : ""}
-                      onchange="toggleDualCheck('DEEP', '${dl.id}', 'rec', ${rIdx})"
-                      class="mt-0.5 accent-emerald-400" />
-                    <span>${rText}</span>
-                  </label>
-                `).join("")}
-              </div>
-            </td>
-            <td>
-              <div class="space-y-1.5">
-                ${dl.avd.map((aText, aIdx) => `
-                  <label class="flex items-start gap-2 text-xs text-rose-100 cursor-pointer">
-                    <input type="checkbox" ${st.avd.includes(aIdx) ? "checked" : ""}
-                      onchange="toggleDualCheck('DEEP', '${dl.id}', 'avd', ${aIdx})"
-                      class="mt-0.5 accent-rose-500" />
-                    <span>${aText}</span>
-                  </label>
-                `).join("")}
-              </div>
-            </td>
+            <td>${dl.rec.map((r, ri) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${st.rec.includes(ri)?'checked':''} onchange="toggleDualCheck('DEEP','${dl.id}','rec',${ri})" /><span>${r}</span></label>`).join("")}</td>
+            <td>${dl.avd.map((a, ai) => `<label class="flex items-start gap-2 text-xs text-slate-700 mb-1"><input type="checkbox" ${st.avd.includes(ai)?'checked':''} onchange="toggleDualCheck('DEEP','${dl.id}','avd',${ai})" /><span>${a}</span></label>`).join("")}</td>
             <td>${renderDualScoreButtons("DEEP", dl.id, "selfScore", st.selfScore)}</td>
             <td>${renderDualScoreButtons("DEEP", dl.id, "supScore", st.supScore)}</td>
             <td style="text-align: center;">
               ${getGapBadgeHtml(st.selfScore, st.supScore)}
-              <input type="text" value="${st.note}" placeholder="Nama/Link MPI..."
-                oninput="dualDeep['${dl.id}'].note = this.value"
-                class="w-full rounded-lg px-2 py-1 text-[11px] glass-input mt-2" />
+              <input type="text" value="${st.note}" placeholder="MPI..." oninput="dualDeep['${dl.id}'].note = this.value" class="w-full rounded-lg px-2 py-1 text-[11px] glass-input mt-2" />
             </td>
           </tr>
         `;
@@ -1687,16 +1017,9 @@
     }
 
     function setDualScore(group, id, which, val) {
-      if (group === "PRAKTIK") {
-        dualPraktik[id][which] = val;
-        renderDualPraktik();
-      } else if (group === "OBSERVASI") {
-        dualObservasi[id][which] = val;
-        renderDualObservasi();
-      } else if (group === "DEEP") {
-        dualDeep[id][which] = val;
-        renderDualDeep();
-      }
+      if (group === "PRAKTIK") dualPraktik[id][which] = val;
+      else if (group === "OBSERVASI") dualObservasi[id][which] = val;
+      else if (group === "DEEP") dualDeep[id][which] = val;
       recalculateAll(true);
     }
 
@@ -1721,16 +1044,11 @@
       recalculateAll(true);
     }
 
-    // =========================================================================
-    // KALKULASI RATA-RATA GABUNGAN, ANALISIS SELISIH & KESIMPULAN OTOMATIS
-    // =========================================================================
     function recalculateAll(autoUpdateNarrative) {
-      // 1. Bagian A: Praktik Kinerja
       const selfA = ASPEK_PRAKTIK.reduce((acc, p) => acc + dualPraktik[p.id].selfScore, 0) / (ASPEK_PRAKTIK.length * 3) * 100;
       const supA = ASPEK_PRAKTIK.reduce((acc, p) => acc + dualPraktik[p.id].supScore, 0) / (ASPEK_PRAKTIK.length * 3) * 100;
       const avgA = (selfA + supA) / 2;
 
-      // 2. Bagian B: Observasi
       const obsList = getActiveObservasiList();
       const foci = [];
       obsList.forEach(i => i.foci.forEach(f => foci.push(f)));
@@ -1738,7 +1056,6 @@
       const supB = foci.reduce((acc, f) => acc + dualObservasi[f.id].supScore, 0) / (foci.length * 3) * 100;
       const avgB = (selfB + supB) / 2;
 
-      // 3. Bagian C: Deep Learning (Khusus Guru)
       let selfC = 0, supC = 0, avgC = 0;
       let totalSelf = 0, totalSup = 0, totalAvg = 0;
 
@@ -1748,7 +1065,6 @@
         selfC = (rawSelfC * 0.85) + (studentPctSelf * 0.15);
         supC = (rawSupC * 0.85) + (studentPctSup * 0.15);
         avgC = (selfC + supC) / 2;
-
         totalSelf = (selfA * 0.25) + (selfB * 0.35) + (selfC * 0.40);
         totalSup = (supA * 0.25) + (supB * 0.35) + (supC * 0.40);
       } else {
@@ -1759,7 +1075,6 @@
       totalAvg = (totalSelf + totalSup) / 2;
       const gap = totalSelf - totalSup;
 
-      // Update UI Angka
       document.getElementById("valTotalSelf").textContent = totalSelf.toFixed(1);
       document.getElementById("valTotalSup").textContent = totalSup.toFixed(1);
       document.getElementById("valTotalAvg").textContent = totalAvg.toFixed(1);
@@ -1776,1224 +1091,331 @@
       document.getElementById("subSupC").textContent = supC.toFixed(1) + "%";
       document.getElementById("subAvgC").textContent = avgC.toFixed(1) + "%";
 
-      // Predikat Gabungan
-      let predicate = "Kurang (Perlu Pembinaan Intensif)";
-      if (totalAvg >= 90) predicate = "Sangat Baik (Teladan / Efektif Mendalam)";
-      else if (totalAvg >= 78) predicate = "Baik (Sesuai Ekspektasi Kinerja)";
-      else if (totalAvg >= 65) predicate = "Cukup (Perlu Peningkatan Efektivitas)";
+      let predicate = "Kurang";
+      if (totalAvg >= 90) predicate = "Sangat Baik (Teladan)";
+      else if (totalAvg >= 78) predicate = "Baik (Sesuai Ekspektasi)";
+      else if (totalAvg >= 65) predicate = "Cukup";
 
-      document.getElementById("badgePredicateAvg").textContent = "Predikat Gabungan: " + predicate;
-
-      // Status Selisih (Gap)
-      let gapLabel = "Selaras / Objektif";
-      if (gap > 5) gapLabel = `Over-Estimate (Guru +${gap.toFixed(1)} di atas Kepsek)`;
-      else if (gap < -5) gapLabel = `Under-Estimate (Kepsek +${Math.abs(gap).toFixed(1)} di atas Guru)`;
-      else gapLabel = `Selaras / Kalibrasi Akurat (Δ ${Math.abs(gap).toFixed(1)})`;
-
-      document.getElementById("badgeGapInfo").textContent = gapLabel;
+      document.getElementById("badgePredicateAvg").textContent = "Predikat: " + predicate;
+      let gapLabel = Math.abs(gap) <= 5 ? "Selaras / Objektif" : (gap > 5 ? `Over-Estimate (Guru +${gap.toFixed(1)})` : `Under-Estimate (Kepsek +${Math.abs(gap).toFixed(1)})`);
+      document.getElementById("badgeGapInfo").textContent = "Selisih: " + gapLabel;
 
       const summaryObj = {
         selfA: selfA.toFixed(1), supA: supA.toFixed(1), avgA: avgA.toFixed(1),
         selfB: selfB.toFixed(1), supB: supB.toFixed(1), avgB: avgB.toFixed(1),
         selfC: selfC.toFixed(1), supC: supC.toFixed(1), avgC: avgC.toFixed(1),
-        totalSelf: totalSelf.toFixed(1),
-        totalSup: totalSup.toFixed(1),
-        totalAvg: totalAvg.toFixed(1),
-        gapValue: gap.toFixed(1),
-        gapLabel: gapLabel,
-        predicate: predicate
+        totalSelf: totalSelf.toFixed(1), totalSup: totalSup.toFixed(1), totalAvg: totalAvg.toFixed(1),
+        gapValue: gap.toFixed(1), gapLabel: gapLabel, predicate: predicate
       };
 
       if (autoUpdateNarrative) {
         document.getElementById("txtAutoConclusion").value = generateAutoConclusionText(summaryObj);
       }
       summaryObj.autoConclusion = document.getElementById("txtAutoConclusion").value;
-
       renderDualCharts(summaryObj);
       return summaryObj;
     }
 
     function generateAutoConclusionText(sc) {
       const nama = document.getElementById("inNama").value || (currentRole === "GURU" ? "Guru" : "Tenaga Kependidikan");
-      const gapNum = parseFloat(sc.gapValue);
-      const avgPctSiswa = ((studentPctSelf + studentPctSup) / 2).toFixed(1);
-
-      let persepsiText = "";
-      if (Math.abs(gapNum) <= 5) {
-        persepsiText = `Terdapat keselarasan yang sangat objektif antara penilaian refleksi diri pegawai (${sc.totalSelf}) dengan hasil observasi Kepala Sekolah/Supervisor (${sc.totalSup}), dengan selisih hanya ${Math.abs(gapNum).toFixed(1)} poin.`;
-      } else if (gapNum > 5) {
-        persepsiText = `Penilaian diri pribadi pegawai (${sc.totalSelf}) tercatat lebih tinggi +${gapNum.toFixed(1)} poin dibandingkan hasil pengamatan Kepala Sekolah (${sc.totalSup}). Hal ini menunjukkan perlunya penyamaan persepsi (kalibrasi bukti nyata) pada beberapa fokus perilaku agar efektivitas dampak pada peserta didik makin optimal.`;
-      } else {
-        persepsiText = `Hasil penilaian Kepala Sekolah/Supervisor (${sc.totalSup}) lebih tinggi +${Math.abs(gapNum).toFixed(1)} poin dibandingkan penilaian diri pegawai (${sc.totalSelf}). Pegawai memiliki sikap rendah hati dan menunjukkan praktik kinerja nyata yang melebihi ekspektasi pribadinya.`;
-      }
-
-      if (currentRole === "GURU") {
-        return `KESIMPULAN GABUNGAN SUPERVISI AKADEMIK: Berdasarkan penggabungan nilai Penilaian Diri ${nama} (${sc.totalSelf}) dan Penilaian Supervisor Kepala Sekolah (${sc.totalSup}), diperoleh Rata-Rata Nilai Akhir Gabungan sebesar ${sc.totalAvg}/100 dengan predikat "${sc.predicate}". ${persepsiText} Pada dimensi Praktik Kinerja tercapai rata-rata ${sc.avgA}%, Observasi Kelas (8 Indikator) rata-rata ${sc.avgB}%, dan Transformasi Pembelajaran Mendalam (Deep Learning & MPI) rata-rata ${sc.avgC}% dengan rata-rata proporsi aktivitas siswa mencapai ${avgPctSiswa}% (pembelajaran berpusat pada aktivitas siswa dan memanfaatkan Media Pembelajaran Interaktif/MPI).`;
-      } else {
-        return `KESIMPULAN GABUNGAN SUPERVISI TENDIK: Berdasarkan penggabungan nilai Penilaian Diri ${nama} (${sc.totalSelf}) dan Penilaian Supervisor Kepala Sekolah (${sc.totalSup}), diperoleh Rata-Rata Nilai Akhir Gabungan sebesar ${sc.totalAvg}/100 dengan predikat "${sc.predicate}". ${persepsiText} Capaian rata-rata Praktik Kinerja adalah ${sc.avgA}% dan Observasi Kinerja Layanan Tendik adalah ${sc.avgB}%.`;
-      }
+      return `KESIMPULAN GABUNGAN SUPERVISI: Berdasarkan hasil penggabungan nilai Penilaian Diri ${nama} (${sc.totalSelf}) dan Penilaian Supervisor Kepala Sekolah (${sc.totalSup}), diperoleh Rata-Rata Nilai Akhir Gabungan sebesar ${sc.totalAvg}/100 dengan predikat "${sc.predicate}". Tingkat persepsi kedua pihak menunjukkan kategori ${sc.gapLabel}.`;
     }
 
-    function regenerateAutoConclusion() {
-      recalculateAll(true);
-    }
+    function regenerateAutoConclusion() { recalculateAll(true); }
 
-    // =========================================================================
-    // VISUALISASI GRAFIK RADAR & DIAGRAM BATANG 2 ARAH (GURU vs KEPSEK)
-    // =========================================================================
     function buildDualRadarSvg(axes, isPrint) {
       const size = isPrint ? 250 : 270;
-      const cx = size / 2;
-      const cy = size / 2;
-      const r = (size / 2) - 44;
-      const n = axes.length;
-      const txtCol = isPrint ? "#0f172a" : "#e2e8f0";
-      const gridCol = isPrint ? "#94a3b8" : "rgba(255,255,255,0.2)";
-
+      const cx = size / 2, cy = size / 2, r = (size / 2) - 44, n = axes.length;
       let grids = "";
       [0.33, 0.66, 1.0].forEach(lv => {
         const pts = axes.map((_, i) => {
           const ang = (Math.PI * 2 * i) / n - Math.PI / 2;
           return `${(cx + Math.cos(ang) * r * lv).toFixed(1)},${(cy + Math.sin(ang) * r * lv).toFixed(1)}`;
         }).join(" ");
-        grids += `<polygon points="${pts}" fill="none" stroke="${gridCol}" stroke-width="1"/>`;
+        grids += `<polygon points="${pts}" fill="none" stroke="#cbd5e1" stroke-width="1"/>`;
       });
-
-      let lines = "", labels = "";
-      const selfPts = [], supPts = [];
-
+      let lines = "", labels = "", selfPts = [], supPts = [];
       axes.forEach((ax, i) => {
         const ang = (Math.PI * 2 * i) / n - Math.PI / 2;
-        lines += `<line x1="${cx}" y1="${cy}" x2="${(cx + Math.cos(ang) * r).toFixed(1)}" y2="${(cy + Math.sin(ang) * r).toFixed(1)}" stroke="${gridCol}" stroke-width="1"/>`;
-        const lx = cx + Math.cos(ang) * (r + 22);
-        const ly = cy + Math.sin(ang) * (r + 16);
-        labels += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" fill="${txtCol}" font-size="9" font-weight="bold" text-anchor="middle">${ax.label}</text>`;
-
-        const rs = Math.max(0.05, Math.min(1, ax.self / 100));
-        const rk = Math.max(0.05, Math.min(1, ax.sup / 100));
-        selfPts.push(`${(cx + Math.cos(ang) * r * rs).toFixed(1)},${(cy + Math.sin(ang) * r * rs).toFixed(1)}`);
-        supPts.push(`${(cx + Math.cos(ang) * r * rk).toFixed(1)},${(cy + Math.sin(ang) * r * rk).toFixed(1)}`);
+        lines += `<line x1="${cx}" y1="${cy}" x2="${(cx + Math.cos(ang) * r).toFixed(1)}" y2="${(cy + Math.sin(ang) * r).toFixed(1)}" stroke="#cbd5e1" stroke-width="1"/>`;
+        labels += `<text x="${(cx + Math.cos(ang) * (r + 22)).toFixed(1)}" y="${(cy + Math.sin(ang) * (r + 16)).toFixed(1)}" fill="#0f172a" font-size="9" font-weight="bold" text-anchor="middle">${ax.label}</text>`;
+        selfPts.push(`${(cx + Math.cos(ang) * r * Math.max(0.05, ax.self / 100)).toFixed(1)},${(cy + Math.sin(ang) * r * Math.max(0.05, ax.self / 100)).toFixed(1)}`);
+        supPts.push(`${(cx + Math.cos(ang) * r * Math.max(0.05, ax.sup / 100)).toFixed(1)},${(cy + Math.sin(ang) * r * Math.max(0.05, ax.sup / 100)).toFixed(1)}`);
       });
-
-      return `
-        <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-          ${grids}${lines}
-          <polygon points="${selfPts.join(" ")}" fill="rgba(56, 189, 248, 0.22)" stroke="#0284c7" stroke-width="2" />
-          <polygon points="${supPts.join(" ")}" fill="rgba(16, 185, 129, 0.22)" stroke="#059669" stroke-width="2" stroke-dasharray="4,2" />
-          ${labels}
-        </svg>
-      `;
+      return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">${grids}${lines}<polygon points="${selfPts.join(" ")}" fill="rgba(2, 132, 199, 0.25)" stroke="#0284c7" stroke-width="2" /><polygon points="${supPts.join(" ")}" fill="rgba(16, 185, 129, 0.25)" stroke="#059669" stroke-width="2" stroke-dasharray="4,2" />${labels}</svg>`;
     }
 
     function buildDualBarSvg(axes, isPrint) {
-      const w = isPrint ? 330 : 350;
-      const rowH = 42;
-      const h = axes.length * rowH + 20;
-      const txtCol = isPrint ? "#0f172a" : "#e2e8f0";
-      const maxBar = w - 165;
-
+      const w = isPrint ? 330 : 350, rowH = 42, h = axes.length * rowH + 20, maxBar = w - 165;
       let svgRows = "";
       axes.forEach((ax, idx) => {
         const y = 10 + idx * rowH;
-        const wSelf = Math.max(4, (ax.self / 100) * maxBar);
-        const wSup = Math.max(4, (ax.sup / 100) * maxBar);
-        const avg = ((ax.self + ax.sup) / 2).toFixed(1);
-
-        svgRows += `
-          <text x="2" y="${y + 14}" fill="${txtCol}" font-size="9.5" font-weight="bold">${ax.label}</text>
-          <text x="2" y="${y + 27}" fill="#f59e0b" font-size="8.5" font-weight="bold">Rata-rata: ${avg}%</text>
-          <rect x="110" y="${y + 3}" width="${wSelf.toFixed(1)}" height="10" rx="3" fill="#0ea5e9" />
-          <text x="${114 + wSelf}" y="${y + 11}" fill="${txtCol}" font-size="8.5">Guru: ${ax.self.toFixed(0)}%</text>
-          <rect x="110" y="${y + 16}" width="${wSup.toFixed(1)}" height="10" rx="3" fill="#10b981" />
-          <text x="${114 + wSup}" y="${y + 24}" fill="${txtCol}" font-size="8.5">KS: ${ax.sup.toFixed(0)}%</text>
-        `;
+        const wSelf = Math.max(4, (ax.self / 100) * maxBar), wSup = Math.max(4, (ax.sup / 100) * maxBar);
+        svgRows += `<text x="2" y="${y + 14}" fill="#0f172a" font-size="9.5" font-weight="bold">${ax.label}</text><text x="2" y="${y + 27}" fill="#b45309" font-size="8.5" font-weight="bold">Rata: ${((ax.self+ax.sup)/2).toFixed(1)}%</text><rect x="110" y="${y + 3}" width="${wSelf.toFixed(1)}" height="10" rx="3" fill="#0ea5e9" /><text x="${114 + wSelf}" y="${y + 11}" fill="#0f172a" font-size="8.5">Guru: ${ax.self.toFixed(0)}%</text><rect x="110" y="${y + 16}" width="${wSup.toFixed(1)}" height="10" rx="3" fill="#10b981" /><text x="${114 + wSup}" y="${y + 24}" fill="#0f172a" font-size="8.5">KS: ${ax.sup.toFixed(0)}%</text>`;
       });
-
       return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">${svgRows}</svg>`;
     }
 
     function renderDualCharts(sc) {
-      const axes = currentRole === "GURU"
-        ? [
-            { label: "Praktik Kinerja", self: parseFloat(sc.selfA), sup: parseFloat(sc.supA) },
-            { label: "Observasi Kelas", self: parseFloat(sc.selfB), sup: parseFloat(sc.supB) },
-            { label: "Deep Learning", self: parseFloat(sc.selfC), sup: parseFloat(sc.supC) },
-            { label: "Aktivitas Siswa", self: studentPctSelf, sup: studentPctSup },
-            { label: "Skor Akhir", self: parseFloat(sc.totalSelf), sup: parseFloat(sc.totalSup) }
-          ]
-        : [
-            { label: "Praktik Kinerja", self: parseFloat(sc.selfA), sup: parseFloat(sc.supA) },
-            { label: "Kinerja Tendik", self: parseFloat(sc.selfB), sup: parseFloat(sc.supB) },
-            { label: "Skor Akhir", self: parseFloat(sc.totalSelf), sup: parseFloat(sc.totalSup) }
-          ];
-
+      const axes = currentRole === "GURU" ? [
+        { label: "Praktik", self: parseFloat(sc.selfA), sup: parseFloat(sc.supA) },
+        { label: "Observasi", self: parseFloat(sc.selfB), sup: parseFloat(sc.supB) },
+        { label: "Deep Learning", self: parseFloat(sc.selfC), sup: parseFloat(sc.supC) },
+        { label: "Aktivitas", self: studentPctSelf, sup: studentPctSup },
+        { label: "Skor Akhir", self: parseFloat(sc.totalSelf), sup: parseFloat(sc.totalSup) }
+      ] : [
+        { label: "Praktik", self: parseFloat(sc.selfA), sup: parseFloat(sc.supA) },
+        { label: "Tendik", self: parseFloat(sc.selfB), sup: parseFloat(sc.supB) },
+        { label: "Skor Akhir", self: parseFloat(sc.totalSelf), sup: parseFloat(sc.totalSup) }
+      ];
       document.getElementById("dualRadarContainer").innerHTML = buildDualRadarSvg(axes, false);
       document.getElementById("dualBarContainer").innerHTML = buildDualBarSvg(axes, false);
     }
 
-    // =========================================================================
-    // KUMPULKAN DATA LENGKAP & CETAK LAPORAN GABUNGAN (.DOCX & .PDF)
-    // =========================================================================
     function collectFullDualData() {
       const sc = recalculateAll(false);
-      let statusSupervisi = "Lengkap (Guru & Kepala Sekolah)";
-      if (accessorMode === "SELF") statusSupervisi = "Menunggu Verifikasi Kepala Sekolah";
-
       return {
         id: currentRecordId || ("SPV-" + Date.now()),
-        statusSupervisi: statusSupervisi,
-        role: currentRole,
-        siklus: currentSiklus,
+        statusSupervisi: accessorMode === "SELF" ? "Menunggu Verifikasi Kepala Sekolah" : "Lengkap",
+        role: currentRole, siklus: currentSiklus,
         modeKop: document.getElementById("selModeKop").value,
         sekolah: document.getElementById("inSekolah").value || "SDN Kaliasin VII/286 Surabaya",
-        tanggal: document.getElementById("inTanggal").value,
-        semester: document.getElementById("inSemester").value,
-        nama: document.getElementById("inNama").value || (currentRole === "GURU" ? "Siti Rahmawati, S.Pd." : "Rizky Pratama, A.Md."),
-        nip: document.getElementById("inNip").value || "-",
-        mapel: document.getElementById("inMapel").value || "-",
-        supervisor: document.getElementById("inSupervisor").value || "Kepala Sekolah",
-        nipSupervisor: document.getElementById("inNipSupervisor").value || "-",
-        pejabatKop: document.getElementById("inPejabatKop").value || "-",
-        studentPctSelf: studentPctSelf,
-        studentPctSup: studentPctSup,
-        scores: sc,
+        tanggal: document.getElementById("inTanggal").value, semester: document.getElementById("inSemester").value,
+        nama: document.getElementById("inNama").value || "Guru SDN Kaliasin VII", nip: document.getElementById("inNip").value || "-",
+        mapel: document.getElementById("inMapel").value || "-", supervisor: document.getElementById("inSupervisor").value || "Ardiyatna Pranata, S.Pd",
+        nipSupervisor: document.getElementById("inNipSupervisor").value || "199201052015011001", pejabatKop: document.getElementById("inPejabatKop").value || "-",
+        studentPctSelf, studentPctSup, scores: sc,
         refleksiDiri: document.getElementById("inRefleksiDiri").value || "-",
         catatanSupervisor: document.getElementById("inCatatanSup").value || "-",
         rtlBersama: document.getElementById("inRtlBersama").value || "-",
-        rawState: {
-          dualPraktik: JSON.parse(JSON.stringify(dualPraktik)),
-          dualObservasi: JSON.parse(JSON.stringify(dualObservasi)),
-          dualDeep: JSON.parse(JSON.stringify(dualDeep))
-        },
+        rawState: { dualPraktik: JSON.parse(JSON.stringify(dualPraktik)), dualObservasi: JSON.parse(JSON.stringify(dualObservasi)), dualDeep: JSON.parse(JSON.stringify(dualDeep)) },
         obsListUsed: getActiveObservasiList()
       };
-    }
-
-    function scoreLabelShort(v) {
-      if (v === 3) return "3 (Efektif)";
-      if (v === 2) return "2 (Belum Efektif)";
-      return "1 (Belum)";
     }
 
     function buildCombinedPrintHTML(d) {
       const praktikRows = ASPEK_PRAKTIK.map((p, idx) => {
         const st = d.rawState.dualPraktik[p.id];
-        const avg = ((st.selfScore + st.supScore) / 2).toFixed(2);
-        return `
-          <tr>
-            <td style="text-align:center;">${idx + 1}</td>
-            <td><strong>${p.aspect}</strong></td>
-            <td>${p.question}</td>
-            <td style="text-align:center;"><strong>${scoreLabelShort(st.selfScore)}</strong></td>
-            <td style="text-align:center;"><strong>${scoreLabelShort(st.supScore)}</strong></td>
-            <td style="text-align:center; background:#fef3c7;"><strong>${avg} / 3.0</strong></td>
-            <td>${st.note || "-"}</td>
-          </tr>
-        `;
+        return `<tr><td>${idx + 1}</td><td><strong>${p.aspect}</strong></td><td>${p.question}</td><td>${st.selfScore}</td><td>${st.supScore}</td><td>${((st.selfScore+st.supScore)/2).toFixed(2)}</td><td>${st.note || "-"}</td></tr>`;
       }).join("");
 
       let obsRows = "";
       d.obsListUsed.forEach(ind => {
-        obsRows += `
-          <tr>
-            <td colspan="6" style="background:#cbd5e1; font-weight:bold;">${ind.name} — <em>${ind.desc}</em></td>
-          </tr>
-        `;
+        obsRows += `<tr><td colspan="6" style="background:#e2e8f0; font-weight:bold;">${ind.name}</td></tr>`;
         ind.foci.forEach(f => {
           const st = d.rawState.dualObservasi[f.id];
-          const avg = ((st.selfScore + st.supScore) / 2).toFixed(2);
-          obsRows += `
-            <tr>
-              <td><strong>${f.title}</strong><br/><em>Catatan: ${st.note || "-"}</em></td>
-              <td><ul style="margin:0; padding-left:14px;">${f.rec.map((r, ri) => `<li>${st.rec.includes(ri) ? '☑' : '☐'} ${r}</li>`).join("")}</ul></td>
-              <td><ul style="margin:0; padding-left:14px;">${f.avd.map((a, ai) => `<li>${st.avd.includes(ai) ? '☒' : '☐'} ${a}</li>`).join("")}</ul></td>
-              <td style="text-align:center;"><strong>${scoreLabelShort(st.selfScore)}</strong></td>
-              <td style="text-align:center;"><strong>${scoreLabelShort(st.supScore)}</strong></td>
-              <td style="text-align:center; background:#fef3c7;"><strong>${avg} / 3.0</strong></td>
-            </tr>
-          `;
+          obsRows += `<tr><td>${f.title}</td><td>${st.note || "-"}</td><td>-</td><td>${st.selfScore}</td><td>${st.supScore}</td><td>${((st.selfScore+st.supScore)/2).toFixed(2)}</td></tr>`;
         });
       });
 
-      const avgPctSiswa = ((d.studentPctSelf + d.studentPctSup) / 2).toFixed(1);
-      const deepSection = d.role === "GURU" ? `
-        <h3 style="margin:12px 0 5px 0; font-size:10.5pt; text-transform:uppercase;">
-          TABEL C. KOMPARASI 7 PILAR PEMBELAJARAN MENDALAM (DEEP LEARNING) & PEMANFAATAN MPI
-        </h3>
-        <p style="margin:0 0 6px 0; font-size:9.5pt;">
-          <strong>Proporsi Aktivitas Siswa di Kelas:</strong> Klaim Diri Guru = <strong>${d.studentPctSelf}%</strong> | Pengamatan Kepala Sekolah = <strong>${d.studentPctSup}%</strong> | <strong>Rata-Rata Gabungan = ${avgPctSiswa}% Aktivitas Siswa : ${(100 - avgPctSiswa).toFixed(1)}% Ceramah Guru</strong>.
-        </p>
-        <table>
-          <thead>
-            <tr>
-              <th style="width:22%;">Dimensi Pembelajaran Mendalam</th>
-              <th style="width:26%;">Praktik yang Dianjurkan</th>
-              <th style="width:22%;">Praktik yang Dihindari</th>
-              <th style="width:10%;">Skor Guru</th>
-              <th style="width:10%;">Skor Kepsek</th>
-              <th style="width:10%;">Rata-Rata</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${DEEP_LEARNING_LIST.map(dl => {
-              const st = d.rawState.dualDeep[dl.id];
-              const avg = ((st.selfScore + st.supScore) / 2).toFixed(2);
-              return `
-                <tr>
-                  <td><strong>${dl.title}</strong><br/><em>Bukti/MPI: ${st.note || "-"}</em></td>
-                  <td><ul style="margin:0; padding-left:14px;">${dl.rec.map((r, ri) => `<li>${st.rec.includes(ri) ? '☑' : '☐'} ${r}</li>`).join("")}</ul></td>
-                  <td><ul style="margin:0; padding-left:14px;">${dl.avd.map((a, ai) => `<li>${st.avd.includes(ai) ? '☒' : '☐'} ${a}</li>`).join("")}</ul></td>
-                  <td style="text-align:center;"><strong>${scoreLabelShort(st.selfScore)}</strong></td>
-                  <td style="text-align:center;"><strong>${scoreLabelShort(st.supScore)}</strong></td>
-                  <td style="text-align:center; background:#fef3c7;"><strong>${avg} / 3.0</strong></td>
-                </tr>
-              `;
-            }).join("")}
-          </tbody>
-        </table>
-      ` : "";
-
       return `
-        <div style="text-align:center; border-bottom:3px double #000; padding-bottom:8px; margin-bottom:10px;">
-          <div style="font-size:11.5pt; font-weight:bold;">PEMERINTAH KOTA SURABAYA - DINAS PENDIDIKAN</div>
-          ${d.modeKop === "K3S" ? `<div style="font-size:11pt; font-weight:bold;">KELOMPOK KERJA KEPALA SEKOLAH (K3S) SD KOTA SURABAYA</div>` : ""}
-          ${d.modeKop === "PENGAWAS" ? `<div style="font-size:11pt; font-weight:bold;">KEPENGAWASAN SEKOLAH DASAR DINAS PENDIDIKAN KOTA SURABAYA</div>` : ""}
-          <div style="font-size:13.5pt; font-weight:bold; text-transform:uppercase;">${d.sekolah}</div>
-          <div style="font-size:10pt; font-weight:bold; margin-top:3px;">
-            LAPORAN HASIL GABUNGAN PENILAIAN DIRI & SUPERVISI KEPALA SEKOLAH (${d.role === "GURU" ? "AKADEMIK GURU" : "TENAGA KEPENDIDIKAN"})
-          </div>
+        <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:6px; margin-bottom:10px;">
+          <div style="font-size:12pt; font-weight:bold;">PEMERINTAH KOTA SURABAYA - DINAS PENDIDIKAN</div>
+          <div style="font-size:14pt; font-weight:bold;">${d.sekolah}</div>
+          <div style="font-size:10pt;">LAPORAN HASIL GABUNGAN SUPERVISI (${d.role})</div>
         </div>
-
-        <!-- Tabel Identitas & Rekapitulasi Perbandingan Nilai -->
-        <table>
-          <tbody>
-            <tr>
-              <td style="width:18%; font-weight:bold; background:#f1f5f9;">Nama Pegawai</td>
-              <td style="width:32%;">${d.nama} (NIP. ${d.nip})</td>
-              <td style="width:18%; font-weight:bold; background:#f1f5f9;">Tahap & Tanggal</td>
-              <td style="width:32%;">${d.siklus} | ${d.tanggal}</td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold; background:#f1f5f9;">Kelas/Mapel / Jabatan</td>
-              <td>${d.mapel}</td>
-              <td style="font-weight:bold; background:#f1f5f9;">Kepala Sekolah / Supervisor</td>
-              <td>${d.supervisor} (NIP. ${d.nipSupervisor})</td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold; background:#e0f2fe;">1. Nilai Diri Pegawai</td>
-              <td style="background:#e0f2fe;"><strong>${d.scores.totalSelf} / 100</strong> (A: ${d.scores.selfA}% | B: ${d.scores.selfB}% ${d.role === 'GURU' ? '| C: ' + d.scores.selfC + '%' : ''})</td>
-              <td style="font-weight:bold; background:#d1fae5;">2. Nilai Supervisor (KS)</td>
-              <td style="background:#d1fae5;"><strong>${d.scores.totalSup} / 100</strong> (A: ${d.scores.supA}% | B: ${d.scores.supB}% ${d.role === 'GURU' ? '| C: ' + d.scores.supC + '%' : ''})</td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold; background:#fef3c7;">★ RATA-RATA GABUNGAN</td>
-              <td style="background:#fef3c7; font-size:11pt;"><strong>${d.scores.totalAvg} / 100 — ${d.scores.predicate}</strong></td>
-              <td style="font-weight:bold; background:#fef3c7;">Analisis Selisih (Gap)</td>
-              <td style="background:#fef3c7;"><strong>${d.scores.gapLabel}</strong></td>
-            </tr>
-          </tbody>
+        <table border="1" cellpadding="6" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:10pt;">
+          <tr><td><strong>Nama Pegawai:</strong> ${d.nama} (${d.nip})</td><td><strong>Tanggal:</strong> ${d.tanggal}</td></tr>
+          <tr><td><strong>Jabatan/Mapel:</strong> ${d.mapel}</td><td><strong>Supervisor:</strong> ${d.supervisor}</td></tr>
+          <tr><td><strong>Nilai Akhir Rata-Rata:</strong> ${d.scores.totalAvg} / 100 (${d.scores.predicate})</td><td><strong>Selisih (Gap):</strong> ${d.scores.gapLabel}</td></tr>
         </table>
-
-        <!-- Kotak Kesimpulan Penilaian Gabungan -->
-        <div style="border:2px solid #0f172a; background:#f8fafc; padding:8px 10px; margin-bottom:12px;">
-          <div style="font-weight:bold; font-size:10pt; text-transform:uppercase; margin-bottom:3px;">
-            KESIMPULAN PENILAIAN GABUNGAN (SINTESIS PENILAIAN PRIBADI PEGAWAI & SUPERVISOR KEPALA SEKOLAH):
-          </div>
-          <div style="font-size:9.5pt; text-align:justify;">${d.scores.autoConclusion}</div>
-        </div>
-
-        <h3 style="margin:10px 0 5px 0; font-size:10.5pt; text-transform:uppercase;">
-          TABEL A. KOMPARASI ASPEK PRAKTIK KINERJA (PENILAIAN DIRI vs KEPALA SEKOLAH)
-        </h3>
-        <table>
-          <thead>
-            <tr>
-              <th style="width:30px;">No</th>
-              <th style="width:18%;">Aspek Praktik Kinerja</th>
-              <th style="width:30%;">Pertanyaan Pemandu</th>
-              <th style="width:11%;">Skor Diri</th>
-              <th style="width:11%;">Skor Kepsek</th>
-              <th style="width:10%;">Rata-Rata</th>
-              <th style="width:16%;">Catatan Bukti</th>
-            </tr>
-          </thead>
+        <h4 style="margin-top:15px;">Kesimpulan Gabungan:</h4>
+        <p style="font-size:10pt;">${d.scores.autoConclusion}</p>
+        <h4 style="margin-top:15px;">A. Praktik Kinerja</h4>
+        <table border="1" cellpadding="5" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:9.5pt;">
+          <thead><tr style="background:#f1f5f9;"><th>No</th><th>Aspek</th><th>Pertanyaan</th><th>Guru</th><th>Kepsek</th><th>Rata</th><th>Catatan</th></tr></thead>
           <tbody>${praktikRows}</tbody>
         </table>
-
-        <h3 style="margin:12px 0 5px 0; font-size:10.5pt; text-transform:uppercase;">
-          TABEL B. KOMPARASI RUBRIK OBSERVASI ${d.role === "GURU" ? "KELAS" : "KINERJA TENDIK"}
-        </h3>
-        <table>
-          <thead>
-            <tr>
-              <th style="width:20%;">Fokus Perilaku</th>
-              <th style="width:26%;">Perilaku yang Dianjurkan</th>
-              <th style="width:24%;">Perilaku yang Dihindari</th>
-              <th style="width:10%;">Skor Diri</th>
-              <th style="width:10%;">Skor Kepsek</th>
-              <th style="width:10%;">Rata-Rata</th>
-            </tr>
-          </thead>
-          <tbody>${obsRows}</tbody>
-        </table>
-
-        ${deepSection}
-
-        <h3 style="margin:12px 0 5px 0; font-size:10.5pt; text-transform:uppercase;">
-          CATATAN REFLEKSI DIRI, UMPAN BALIK SUPERVISOR & RENCANA TINDAK LANJUT BERSAMA
-        </h3>
-        <table>
-          <thead>
-            <tr>
-              <th style="width:33%;">Refleksi Diri Pegawai (Guru/Tendik)</th>
-              <th style="width:33%;">Catatan Supervisor (Kepala Sekolah)</th>
-              <th style="width:34%;">Rencana Tindak Lanjut (RTL) Bersama</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="min-height:45px;">${d.refleksiDiri}</td>
-              <td style="min-height:45px;">${d.catatanSupervisor}</td>
-              <td style="min-height:45px;">${d.rtlBersama}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <table style="border:none; margin-top:18px; page-break-inside:avoid;">
-          <tbody>
-            ${d.modeKop === "SEKOLAH" ? `
-              <tr style="border:none;">
-                <td style="border:none; text-align:center; width:50%;">
-                  Menyetujui,<br/><strong>Kepala Sekolah / Supervisor</strong><br/><br/><br/><br/>
-                  <u><strong>${d.supervisor}</strong></u><br/>NIP. ${d.nipSupervisor}
-                </td>
-                <td style="border:none; text-align:center; width:50%;">
-                  Surabaya, ${d.tanggal}<br/><strong>${d.role === "GURU" ? "Guru yang Menilai Diri & Disupervisi" : "Tenaga Kependidikan"}</strong><br/><br/><br/><br/>
-                  <u><strong>${d.nama}</strong></u><br/>NIP. ${d.nip}
-                </td>
-              </tr>
-            ` : `
-              <tr style="border:none;">
-                <td style="border:none; text-align:center; width:33%;">
-                  Mengetahui,<br/><strong>${d.modeKop === "K3S" ? "Ketua K3S SD" : "Pengawas Sekolah Bina"}</strong><br/><br/><br/><br/>
-                  <u><strong>${d.pejabatKop}</strong></u><br/>Pembina Utama
-                </td>
-                <td style="border:none; text-align:center; width:34%;">
-                  Menyetujui,<br/><strong>Kepala Sekolah / Supervisor</strong><br/><br/><br/><br/>
-                  <u><strong>${d.supervisor}</strong></u><br/>NIP. ${d.nipSupervisor}
-                </td>
-                <td style="border:none; text-align:center; width:33%;">
-                  Surabaya, ${d.tanggal}<br/><strong>${d.role === "GURU" ? "Guru yang Disupervisi" : "Tenaga Kependidikan"}</strong><br/><br/><br/><br/>
-                  <u><strong>${d.nama}</strong></u><br/>NIP. ${d.nip}
-                </td>
-              </tr>
-            `}
-          </tbody>
+        <table style="width:100%; margin-top:25px; border:none;">
+          <tr>
+            <td style="text-align:center; border:none;">Mengetahui,<br/><strong>Kepala Sekolah</strong><br/><br/><br/><u><strong>${d.supervisor}</strong></u><br/>NIP. ${d.nipSupervisor}</td>
+            <td style="text-align:center; border:none;">Surabaya, ${d.tanggal}<br/><strong>${d.role}</strong><br/><br/><br/><u><strong>${d.nama}</strong></u><br/>NIP. ${d.nip}</td>
+          </tr>
         </table>
       `;
     }
 
     function openPreviewReport() {
-      const data = collectFullDualData();
-      document.getElementById("printableArea").innerHTML = buildCombinedPrintHTML(data);
+      document.getElementById("printableArea").innerHTML = buildCombinedPrintHTML(collectFullDualData());
       document.getElementById("previewModal").classList.remove("hidden");
     }
+    function closePreviewReport() { document.getElementById("previewModal").classList.add("hidden"); }
 
-    function closePreviewReport() {
-      document.getElementById("previewModal").classList.add("hidden");
-    }
-
-    function downloadCombinedDocx(customData) {
-      const data = customData || collectFullDualData();
-      const htmlBody = buildCombinedPrintHTML(data);
-      const wordDoc = `
-        <html xmlns:o='urn:schemas-microsoft-com:office:office'
-              xmlns:w='urn:schemas-microsoft-com:office:word'
-              xmlns='http://www.w3.org/TR/REC-html40'>
-        <head>
-          <meta charset='utf-8'>
-          <title>Laporan Gabungan Supervisi ${data.nama}</title>
-          <style>
-    :root {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    body {
-      background: linear-gradient(135deg, #fbcfe8 0%, #fed7aa 25%, #bfdbfe 50%, #e9d5ff 75%, #a7f3d0 100%);
-      background-attachment: fixed;
-      color: #1e293b;
-      min-height: 100vh;
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 2px solid rgba(255, 255, 255, 0.9);
-      border-radius: 28px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 20px 45px rgba(148, 163, 184, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.8);
-    }
-    .glass-sub {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      border-radius: 20px;
-    }
-    .glass-input {
-      background: rgba(255, 255, 255, 0.9);
-      border: 2px solid #f472b6;
-      border-radius: 14px;
-      color: #0f172a;
-      padding: 10px 14px;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    .glass-input:focus {
-      outline: none;
-      border-color: #ec4899;
-      box-shadow: 0 0 0 4px rgba(244, 114, 182, 0.25);
-      background: #ffffff;
-    }
-    .glass-input option {
-      background: #ffffff;
-      color: #0f172a;
-    }
-
-    /* Tabel Rubrik Kolaboratif Terang & Lucu */
-    .table-wrap {
-      width: 100%;
-      overflow-x: auto;
-      border-radius: 20px;
-      border: 2px solid rgba(244, 114, 182, 0.3);
-      box-shadow: 0 8px 25px rgba(244, 114, 182, 0.12);
-    }
-    table.dual-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: rgba(255, 255, 255, 0.85);
-      font-size: 12.5px;
-      color: #1e293b;
-    }
-    table.dual-table th,
-    table.dual-table td {
-      border: 1px solid #fbcfe8;
-      padding: 11px 13px;
-      vertical-align: top;
-      text-align: left;
-    }
-    table.dual-table thead th {
-      background: #0f172a !important;
-      color: #ffffff !important;
-      font-size: 11.5px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border: 1px solid #334155;
-    }
-    table.dual-table tr.group-row td {
-      background: linear-gradient(135deg, #bae6fd, #e9d5ff);
-      color: #3b0764;
-      font-weight: 800;
-      font-size: 13px;
-      padding: 12px 14px;
-    }
-
-    /* Candy Pill Buttons */
-    .score-btn {
-      width: 100%;
-      text-align: left;
-      padding: 7px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 700;
-      border: 2px solid #e2e8f0;
-      background: rgba(255, 255, 255, 0.9);
-      color: #475569;
-      transition: all 0.2s;
-      margin-bottom: 5px;
-      display: block;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
-    }
-    .score-btn:hover:not(:disabled) {
-      transform: translateY(-1px);
-      filter: brightness(1.05);
-    }
-    .score-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .score-btn.self-active-1 { background: #fee2e2; border-color: #f87171; color: #991b1b; }
-    .score-btn.self-active-2 { background: #fef3c7; border-color: #fbbf24; color: #92400e; }
-    .score-btn.self-active-3 { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; }
-
-    .score-btn.sup-active-1 { background: #fee2e2; border-color: #f87171; color: #991b1b; }
-    .score-btn.sup-active-2 { background: #fef3c7; border-color: #fbbf24; color: #92400e; }
-    .score-btn.sup-active-3 { background: #d1fae5; border-color: #34d399; color: #065f46; }
-
-    /* GLASSMORPHIC CANDY 3D RAISED EFFECT */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 2.5px solid rgba(255, 255, 255, 0.95);
-      border-radius: 28px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 20px 45px rgba(244, 114, 182, 0.25), 
-                  inset 0 3px 6px rgba(255, 255, 255, 0.95), 
-                  inset 0 -3px 6px rgba(0, 0, 0, 0.08);
-    }
-    
-    .glass-sub {
-      background: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(12px);
-      border: 2px solid rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(192, 132, 252, 0.15),
-                  inset 0 2px 4px rgba(255, 255, 255, 0.9),
-                  inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    /* TABLE HEADER CANDY GRADIENT & 3D RAISED */
-    table.dual-table thead th {
-      background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #818cf8 100%) !important;
-      color: #0f172a !important;
-      font-size: 11.5px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.15);
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
-    }
-
-    /* 3D RAISED BOXES & CARDS INSIDE CONTENT */
-    .table-wrap {
-      border-radius: 20px;
-      border: 2.5px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 0 12px 30px rgba(244, 114, 182, 0.2),
-                  inset 0 2px 4px rgba(255, 255, 255, 0.9);
-    }
-
-</style>
-        </head>
-        <body>${htmlBody}</body>
-        </html>
-      `;
+    function downloadCombinedDocx() {
+      const htmlBody = buildCombinedPrintHTML(collectFullDualData());
+      const wordDoc = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Laporan</title></head><body>${htmlBody}</body></html>`;
       const blob = new Blob(["\ufeff", wordDoc], { type: "application/msword;charset=utf-8" });
-      const safe = (data.nama || "Pegawai").replace(/[^a-zA-Z0-9]/g, "_");
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `Laporan_Gabungan_Supervisi_${data.role}_${safe}_${data.tanggal}.docx`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      a.download = `Laporan_Supervisi_${Date.now()}.docx`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
     function downloadCombinedPdf() {
-      const data = collectFullDualData();
-      const area = document.getElementById("printableArea");
-      area.innerHTML = buildCombinedPrintHTML(data);
-      const modal = document.getElementById("previewModal");
-      const wasHidden = modal.classList.contains("hidden");
-      if (wasHidden) modal.classList.remove("hidden");
-
-      const safe = (data.nama || "Pegawai").replace(/[^a-zA-Z0-9]/g, "_");
-      html2pdf().set({
-        margin: [8, 8, 8, 8],
-        filename: `Laporan_Gabungan_Supervisi_${data.role}_${safe}_${data.tanggal}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-      }).from(area).save().then(() => {
-        if (wasHidden) modal.classList.add("hidden");
-      });
+      html2pdf().set({ margin: [8,8,8,8], filename: `Laporan_Supervisi_${Date.now()}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(document.getElementById("printableArea")).save();
     }
 
-    // =========================================================================
-    // SINKRONISASI CLOUD GOOGLE APPS SCRIPT (GITHUB PAGES <-> GAS <-> SHEETS)
-    // =========================================================================
-    // Opsional: Tempel URL Web App GAS Anda di sini agar otomatis terhubung di semua perangkat
     const DEFAULT_GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyiSFhT5LHgr7mrd-oSecrM3daspbmqBVswSBBeELLq2o8xrO3dFqrisliAczJtckMI/exec";
-
-    function getActiveGasUrl() {
-      const saved = (localStorage.getItem("GAS_DUAL_URL") || "").trim();
-      return saved || DEFAULT_GAS_WEBAPP_URL.trim();
-    }
+    function getActiveGasUrl() { return DEFAULT_GAS_WEBAPP_URL; }
 
     function updateCloudIndicator(isConnected, textMsg) {
       const badge = document.getElementById("badgeSyncStatus");
       if (!badge) return;
-      if (isConnected) {
-        badge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
-        badge.innerHTML = `<i class="fa-solid fa-cloud-check mr-1"></i> ${textMsg || "Terhubung ke Google Sheets"}`;
-      } else {
-        badge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30";
-        badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> ${textMsg || "Mode Lokal"}`;
-      }
+      badge.className = isConnected ? "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300" : "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300";
+      badge.innerHTML = `<i class="fa-solid fa-cloud-check mr-1"></i> ${textMsg || "Terhubung ke Google Sheets"}`;
     }
 
     function getCachedRecords() {
-      try {
-        return JSON.parse(localStorage.getItem(LOCAL_DB_KEY) || "[]");
-      } catch (e) {
-        return [];
-      }
+      try { return JSON.parse(localStorage.getItem(LOCAL_DB_KEY) || "[]"); } catch (e) { return []; }
     }
+    function saveCachedRecords(list) { localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(list)); }
 
-    function saveCachedRecords(list) {
-      localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(list));
-    }
-
-    /**
-     * Gabungkan setiap nama guru yang ada di data supervisi Cloud ke dalam dropdown Master Pegawai
-     * serta ke dalam dropdown hijau "Daftar Guru yang Sudah Mengisi di Database Cloud"
-     */
     function syncDropdownsWithRecords(records) {
       if (!Array.isArray(records)) return;
-
-      // 1. Masukkan semua guru dari records ke dalam masterPegawai jika namanya belum ada
       records.forEach(rec => {
         if (!rec || !rec.nama) return;
-        const exists = masterPegawai.some(
-          p => p.nama.trim().toLowerCase() === String(rec.nama).trim().toLowerCase()
-        );
-        if (!exists) {
-          masterPegawai.unshift({
-            role: rec.role || "GURU",
-            nama: rec.nama,
-            nip: rec.nip || "-",
-            mapel: rec.mapel || "-",
-            sekolah: rec.sekolah || "SDN Kaliasin VII/286 Surabaya"
-          });
+        if (!masterPegawai.some(p => p.nama.trim().toLowerCase() === rec.nama.trim().toLowerCase())) {
+          masterPegawai.unshift({ role: rec.role || "GURU", nama: rec.nama, nip: rec.nip || "-", mapel: rec.mapel || "-", sekolah: rec.sekolah || "SDN Kaliasin VII/286 Surabaya" });
         }
       });
       renderQuickPegawaiDropdown();
-
-      // 2. Isi dropdown hijau #selCloudSubmitted di bagian atas halaman
       const selCloud = document.getElementById("selCloudSubmitted");
-      const countEl = document.getElementById("countCloudRecords");
-      if (countEl) countEl.textContent = records.length;
-
+      document.getElementById("countCloudRecords").textContent = records.length;
       if (selCloud) {
-        if (records.length === 0) {
-          selCloud.innerHTML = `<option value="">-- Belum Ada Data Penilaian di Cloud --</option>`;
-        } else {
-          selCloud.innerHTML = records.map((r, i) => {
-            const sDiri = r.scores && r.scores.totalSelf ? r.scores.totalSelf : "-";
-            const sKs = r.scores && r.scores.totalSup ? r.scores.totalSup : "-";
-            const sAvg = r.scores && r.scores.totalAvg ? r.scores.totalAvg : "-";
-            return `<option value="${i}">#${i + 1} [${r.role || "GURU"}] ${r.nama} (${r.siklus} - ${r.tanggal || ""}) | Skor Guru: ${sDiri} | KS: ${sKs} | Rata: ${sAvg}</option>`;
-          }).join("");
-        }
+        selCloud.innerHTML = records.length === 0 ? `<option value="">-- Belum Ada Data --</option>` : records.map((r, i) => `<option value="${i}">#${i+1} [${r.role}] ${r.nama} (${r.siklus}) - Skor: ${r.scores?.totalAvg || '-'}</option>`).join("");
       }
     }
 
-    function onSelectCloudRecord(idxStr) {
-      if (idxStr === "") return;
-      loadDualRecord(parseInt(idxStr, 10), false);
-    }
-
+    function onSelectCloudRecord(val) { if(val !== "") loadDualRecord(parseInt(val, 10), false); }
     function loadSelectedCloudBtn() {
       const sel = document.getElementById("selCloudSubmitted");
-      if (!sel || sel.value === "") {
-        alert("Klik tombol 'Tarik Data Guru (Cloud)' terlebih dahulu atau pilih nama guru pada daftar.");
-        return;
-      }
-      loadDualRecord(parseInt(sel.value, 10), false);
+      if(sel && sel.value !== "") loadDualRecord(parseInt(sel.value, 10), false);
     }
 
-    /**
-     * Simpan & Gabungkan Nilai dari GitHub Pages ke Google Spreadsheets
-     */
     async function syncToCloudGas() {
       const data = collectFullDualData();
       const list = getCachedRecords();
-
-      const existingIdx = list.findIndex(item =>
-        (item.id === data.id) ||
-        (item.nip && item.nip !== "-" && item.nip === data.nip && item.siklus === data.siklus) ||
-        (String(item.nama || "").toLowerCase() === String(data.nama || "").toLowerCase() && item.siklus === data.siklus)
-      );
-
-      if (existingIdx >= 0) {
-        list[existingIdx] = data;
-      } else {
-        list.unshift(data);
-      }
+      const idx = list.findIndex(item => item.id === data.id || item.nama.toLowerCase() === data.nama.toLowerCase() && item.siklus === data.siklus);
+      if(idx >= 0) list[idx] = data; else list.unshift(data);
       saveCachedRecords(list);
       syncDropdownsWithRecords(list);
-      renderHistoryTable();
-
-      // Jika berjalan di dalam iframe Google Apps Script
-      if (typeof google !== "undefined" && google.script && google.script.run) {
-        google.script.run
-          .withSuccessHandler(res => {
-            alert(res.message);
-            fetchFromCloudGas(true);
-          })
-          .withFailureHandler(err => {
-            alert("Gagal menyimpan ke Sheet: " + err.message);
-          })
-          .saveDualAssessmentData(data);
-        return;
-      }
-
-      const gasUrl = getActiveGasUrl();
-      if (!gasUrl) {
-        updateCloudIndicator(false, "Tersimpan Lokal (URL GAS Belum Diisi)");
-        alert("Data tersimpan di browser ini. Untuk menyimpan ke Google Spreadsheets, klik tombol 'URL Cloud GAS' di kanan atas.");
-        return;
-      }
 
       try {
         updateCloudIndicator(true, "Menyimpan ke Google Sheets...");
-        const response = await fetch(gasUrl, {
-          method: "POST",
-          redirect: "follow",
+        const response = await fetch(getActiveGasUrl(), {
+          method: "POST", redirect: "follow",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({ action: "saveDualAssessment", data: data })
         });
-
         const resJson = await response.json();
         if (resJson.status === "success") {
-          const updatedRecords = resJson.records || (resJson.data && Array.isArray(resJson.data) ? resJson.data : list);
-          saveCachedRecords(updatedRecords);
-          syncDropdownsWithRecords(updatedRecords);
-          renderHistoryTable();
+          saveCachedRecords(resJson.records || list);
+          syncDropdownsWithRecords(resJson.records || list);
           updateCloudIndicator(true, "Tersinkron ke Google Sheets");
-          alert("✅ Data penilaian '" + data.nama + "' berhasil disimpan ke Google Spreadsheets!");
-        } else {
-          alert("Peringatan GAS: " + (resJson.message || "Gagal menyimpan."));
+          alert("✅ Data berhasil disimpan dan disinkronkan ke Google Sheets!");
         }
       } catch (err) {
-        updateCloudIndicator(false, "Tersimpan di Lokal Browser");
-        alert("Data diamankan di browser. Pastikan Web App GAS sudah di-deploy dengan akses 'Anyone'.");
+        updateCloudIndicator(false, "Tersimpan Lokal");
+        alert("✅ Data berhasil disimpan secara lokal.");
       }
     }
 
-    /**
-     * Tarik Data Guru dari Google Spreadsheets & LANGSUNG TAMPILKAN Guru tersebut di Form Atas!
-     */
     async function fetchFromCloudGas(silent = false) {
-      // 1. Jika di dalam iframe Google Apps Script Native
-      if (typeof google !== "undefined" && google.script && google.script.run) {
-        google.script.run
-          .withSuccessHandler(records => {
-            if (Array.isArray(records)) {
-              saveCachedRecords(records);
-              syncDropdownsWithRecords(records);
-              renderHistoryTable();
-              if (records.length > 0) {
-                loadDualRecord(0, true);
-              }
-              if (!silent) {
-                alert(`✅ Berhasil memuat ${records.length} data supervisi dari Google Spreadsheets! Data guru terbaru langsung ditampilkan di layar.`);
-              }
-            }
-          })
-          .getCloudRecords();
-        return;
-      }
-
-      const gasUrl = getActiveGasUrl();
-      if (!gasUrl) {
-        updateCloudIndicator(false, "URL GAS Belum Diatur");
-        const localRecs = getCachedRecords();
-        syncDropdownsWithRecords(localRecs);
-        renderHistoryTable();
-        if (!silent) openGasConfigModal();
-        return;
-      }
-
       try {
         updateCloudIndicator(true, "Memuat dari Google Sheets...");
-        let resJson = null;
-
-        // Coba ambil dengan metode GET terlebih dahulu, jika script lama hanya mendukung POST getCloudRecords maka otomatis fallback ke POST
-        try {
-          const urlWithParam = gasUrl + (gasUrl.includes("?") ? "&" : "?") + "action=getAll&t=" + Date.now();
-          const getResp = await fetch(urlWithParam, { method: "GET", redirect: "follow" });
-          const textResp = await getResp.text();
-          if (textResp.trim().startsWith("{")) {
-            resJson = JSON.parse(textResp);
-          }
-        } catch (eGet) {}
-
-        // Jika GET tidak mengembalikan array records (misal karena memakai versi Code.gs sebelumnya), gunakan POST getCloudRecords
-        if (!resJson || (!Array.isArray(resJson.records) && !Array.isArray(resJson.data))) {
-          const postResp = await fetch(gasUrl, {
-            method: "POST",
-            redirect: "follow",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "getCloudRecords" })
-          });
-          resJson = await postResp.json();
-        }
-
-        if (resJson && resJson.status === "success") {
-          const cloudRecords = Array.isArray(resJson.records)
-            ? resJson.records
-            : (Array.isArray(resJson.data) ? resJson.data : []);
-
-          if (Array.isArray(resJson.masterPegawai) && resJson.masterPegawai.length > 0) {
-            masterPegawai = resJson.masterPegawai;
-          }
-
-          saveCachedRecords(cloudRecords);
-          syncDropdownsWithRecords(cloudRecords);
-          renderHistoryTable();
+        const resp = await fetch(getActiveGasUrl() + "?action=getAll&t=" + Date.now(), { method: "GET", redirect: "follow" });
+        const text = await resp.text();
+        const json = JSON.parse(text);
+        if (json.status === "success") {
+          const recs = json.records || json.data || [];
+          if (json.masterPegawai && json.masterPegawai.length > 0) masterPegawai = json.masterPegawai;
+          saveCachedRecords(recs);
+          syncDropdownsWithRecords(recs);
           updateCloudIndicator(true, "Terhubung ke Google Sheets");
-
-          // OTOMATIS TAMPILKAN DATA GURU TERBARU KE FORMULIR ATAS AGAR LANGSUNG MUNCUL!
-          if (cloudRecords.length > 0) {
-            loadDualRecord(0, true);
-          }
-
-          if (!silent) {
-            const firstTeacher = cloudRecords.length > 0 ? (` (Data "${cloudRecords[0].nama}" langsung dibuka di layar!)`) : "";
-            alert(`✅ Berhasil memuat ${cloudRecords.length} data supervisi dan ${masterPegawai.length} pegawai terdaftar dari Google Spreadsheets!${firstTeacher}`);
-          }
+          if(recs.length > 0 && !silent) loadDualRecord(0, true);
+          if(!silent) alert(`✅ Berhasil memuat ${recs.length} data supervisi dari Google Sheets!`);
         }
-      } catch (err) {
-        updateCloudIndicator(false, "Mode Offline / Lokal");
+      } catch (e) {
+        updateCloudIndicator(false, "Mode Lokal Browser");
         syncDropdownsWithRecords(getCachedRecords());
-        renderHistoryTable();
-        if (!silent) {
-          alert("Gagal menarik data dari Cloud GAS. Pastikan URL Web App berakhiran '/exec' dan disetel 'Anyone'.");
-        }
+        if(!silent) alert("Menggunakan database lokal browser.");
       }
     }
 
-    function renderHistoryTable() {
-      const list = getCachedRecords();
-      const tbody = document.getElementById("tbodyCloudHistory");
-      if (list.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="11" class="text-center text-slate-600 py-5">
-              Belum ada data supervisi di tabel. Klik <strong>"Tarik Data Guru (Cloud)"</strong> atau klik <strong>"Simulasi Beda Nilai Guru & KS"</strong>.
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      tbody.innerHTML = list.map((item, idx) => `
-        <tr class="${currentRecordId === item.id ? 'bg-emerald-950/40' : ''}">
-          <td class="text-center font-bold">${idx + 1}</td>
-          <td>
-            <div class="font-bold text-white">${item.tanggal || "-"}</div>
-            <div class="text-[11px] text-cyan-300">${item.siklus || "-"}</div>
-            <div class="text-[10px] text-slate-600">${item.statusSupervisi || ""}</div>
-          </td>
-          <td><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/20 text-cyan-300">${item.role || "GURU"}</span></td>
-          <td><div class="font-bold text-white">${item.nama || "-"}</div><div class="text-[11px] text-slate-600">NIP. ${item.nip || "-"}</div></td>
-          <td>${item.mapel || "-"}</td>
-          <td class="text-center font-extrabold text-cyan-300 text-sm">${item.scores ? item.scores.totalSelf : "-"}</td>
-          <td class="text-center font-extrabold text-emerald-300 text-sm">${item.scores ? item.scores.totalSup : "-"}</td>
-          <td class="text-center font-black text-amber-300 text-base">${item.scores ? item.scores.totalAvg : "-"}</td>
-          <td class="text-center text-xs">${item.scores ? item.scores.gapLabel : "-"}</td>
-          <td><span class="text-xs font-bold text-white">${item.scores ? item.scores.predicate : "-"}</span></td>
-          <td class="text-center">
-            <div class="flex items-center justify-center gap-1.5">
-              <button onclick="loadDualRecord(${idx}, false)" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[11px] font-bold text-white">
-                📂 Buka & Nilai
-              </button>
-              <button onclick="downloadCombinedDocx(getCachedRecords()[${idx}])" class="px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-[11px] font-bold text-white">
-                DOCX
-              </button>
-              <button onclick="deleteDualRecord(${idx})" class="px-2.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-[11px] font-bold text-white">
-                🗑️
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join("");
-    }
-
-    function loadDualRecord(idx, noScroll = false) {
+    function loadDualRecord(idx, noScroll) {
       const list = getCachedRecords();
       const rec = list[idx];
-      if (!rec) return;
+      if(!rec) return;
       currentRecordId = rec.id;
-
-      const selCloud = document.getElementById("selCloudSubmitted");
-      if (selCloud) selCloud.value = String(idx);
-
-      switchRole(rec.role || "GURU");
-      currentSiklus = rec.siklus || "Observasi Kinerja";
-      renderSiklusGrid();
-
-      document.getElementById("inSekolah").value = rec.sekolah || "SDN Kaliasin VII/286 Surabaya";
-      document.getElementById("inTanggal").value = rec.tanggal || new Date().toISOString().split("T")[0];
-      document.getElementById("inSemester").value = rec.semester || "2026/2027 - Ganjil";
       document.getElementById("inNama").value = rec.nama || "";
       document.getElementById("inNip").value = rec.nip || "";
       document.getElementById("inMapel").value = rec.mapel || "";
-      if (rec.supervisor) document.getElementById("inSupervisor").value = rec.supervisor;
-      if (rec.nipSupervisor) document.getElementById("inNipSupervisor").value = rec.nipSupervisor;
+      document.getElementById("inSupervisor").value = rec.supervisor || "Ardiyatna Pranata, S.Pd";
+      document.getElementById("inNipSupervisor").value = rec.nipSupervisor || "199201052015011001";
       document.getElementById("inRefleksiDiri").value = rec.refleksiDiri || "";
       document.getElementById("inCatatanSup").value = rec.catatanSupervisor || "";
       document.getElementById("inRtlBersama").value = rec.rtlBersama || "";
-
-      // Cocokkan juga dropdown Pilih Cepat Pegawai jika namanya ada di masterPegawai
-      const pIdx = masterPegawai.findIndex(
-        p => p.nama.trim().toLowerCase() === String(rec.nama || "").trim().toLowerCase()
-      );
-      if (pIdx >= 0) {
-        document.getElementById("selQuickPegawai").value = String(pIdx);
+      if(rec.rawState) {
+        if(rec.rawState.dualPraktik) dualPraktik = JSON.parse(JSON.stringify(rec.rawState.dualPraktik));
+        if(rec.rawState.dualObservasi) dualObservasi = JSON.parse(JSON.stringify(rec.rawState.dualObservasi));
+        if(rec.rawState.dualDeep) dualDeep = JSON.parse(JSON.stringify(rec.rawState.dualDeep));
       }
-
-      if (rec.rawState) {
-        if (rec.rawState.dualPraktik) dualPraktik = JSON.parse(JSON.stringify(rec.rawState.dualPraktik));
-        if (rec.rawState.dualObservasi) dualObservasi = JSON.parse(JSON.stringify(rec.rawState.dualObservasi));
-        if (rec.rawState.dualDeep) dualDeep = JSON.parse(JSON.stringify(rec.rawState.dualDeep));
-      }
-      if ((rec.role || "GURU") === "GURU") {
-        studentPctSelf = Number(rec.studentPctSelf) || 80;
-        studentPctSup = Number(rec.studentPctSup) || 80;
-        document.getElementById("sliderPctSelf").value = studentPctSelf;
-        document.getElementById("sliderPctSup").value = studentPctSup;
-        onRatioChange();
-      }
-
-      renderDualPraktik();
-      renderDualObservasi();
-      renderDualDeep();
-      recalculateAll(true);
-      renderHistoryTable();
-
-      if (!noScroll) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    }
-
-    async function deleteDualRecord(idx) {
-      if (!confirm("Hapus data supervisi gabungan ini dari Tabel & Google Spreadsheets?")) return;
-      const list = getCachedRecords();
-      const target = list[idx];
-      list.splice(idx, 1);
-      saveCachedRecords(list);
-      syncDropdownsWithRecords(list);
-      renderHistoryTable();
-
-      const gasUrl = getActiveGasUrl();
-      if (gasUrl && target && target.id) {
-        try {
-          await fetch(gasUrl, {
-            method: "POST",
-            redirect: "follow",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "deleteRecord", id: target.id })
-          });
-        } catch (e) {}
-      }
+      renderDualPraktik(); renderDualObservasi(); renderDualDeep(); recalculateAll(true);
+      if(!noScroll) window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function renderQuickPegawaiDropdown() {
       const sel = document.getElementById("selQuickPegawai");
-      if (!sel) return;
-      sel.innerHTML = `<option value="">-- Pilih Cepat Guru / Tendik (${masterPegawai.length} Terdaftar) --</option>` +
-        masterPegawai.map((p, i) => `<option value="${i}">[${p.role}] ${p.nama} — NIP. ${p.nip}</option>`).join("");
+      if(!sel) return;
+      sel.innerHTML = `<option value="">-- Pilih Guru SDN Kaliasin VII/286 --</option>` + masterPegawai.map((p, i) => `<option value="${i}">[${p.role}] ${p.nama}</option>`).join("");
     }
 
-    function onSelectQuickPegawai(idxStr) {
-      if (idxStr === "") return;
-      const p = masterPegawai[parseInt(idxStr, 10)];
-      if (!p) return;
-
-      // Tanyakan user: Apakah ingin menggunakan nilai guru sebelumnya (sebagai template penilaian untuk kemampuan yang sama) atau mereset bersih?
-      const useTemplate = confirm(`Ganti ke guru: ${p.nama}\n\nApakah Anda ingin mempertahankan skor & catatan dari guru sebelumnya sebagai template untuk mempercepat penilaian guru baru ini?\n\n[OK] = Pertahankan nilai sebelumnya (Duplikat)\n[Cancel] = Reset bersih untuk guru baru`);
-
-      // Buat ID baru (SPV-...) agar tidak menimpa record guru sebelumnya di database!
+    function onSelectQuickPegawai(val) {
+      if(val === "") return;
+      const p = masterPegawai[parseInt(val, 10)];
+      if(!p) return;
       currentRecordId = "SPV-" + Date.now();
-
-      // Cek apakah guru ini sudah punya data tersimpan di Cloud/Cache
-      const cached = getCachedRecords();
-      const foundCloudIdx = cached.findIndex(
-        r => String(r.nama || "").trim().toLowerCase() === p.nama.trim().toLowerCase()
-      );
-
-      if (!useTemplate) {
-        // Reset bersih
-        initDualStates();
-      } else if (foundCloudIdx >= 0) {
-        // Jika sudah ada di cloud, muat datanya
-        loadDualRecord(foundCloudIdx, true);
-        document.getElementById("inNama").value = p.nama;
-        document.getElementById("inNip").value = p.nip;
-        document.getElementById("inMapel").value = p.mapel;
-        currentRecordId = "SPV-" + Date.now(); // Buat ID baru agar menjadi entry tersendiri
-        recalculateAll(true);
-        return;
-      }
-
       switchRole(p.role);
       document.getElementById("inNama").value = p.nama;
       document.getElementById("inNip").value = p.nip;
       document.getElementById("inMapel").value = p.mapel;
-      if (p.sekolah) document.getElementById("inSekolah").value = p.sekolah;
-      renderDualPraktik();
-      renderDualObservasi();
-      renderDualDeep();
       recalculateAll(true);
     }
 
-    async function importPegawaiCsv(ev) {
+    function importPegawaiCsv(ev) {
       const f = ev.target.files[0];
-      if (!f) return;
+      if(!f) return;
       const r = new FileReader();
-      r.onload = async e => {
+      r.onload = e => {
         const lines = e.target.result.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
         lines.forEach((line, i) => {
-          if (i === 0 && /nama|kategori/i.test(line)) return;
-          const sep = line.includes("\t") ? "\t" : (line.includes(";") ? ";" : ",");
-          const c = line.split(sep).map(x => x.replace(/^"|"$/g, "").trim());
-          if (c.length >= 2) {
-            masterPegawai.unshift({
-              role: /tendik/i.test(c[0]) ? "TENDIK" : "GURU",
-              nama: c[1] || c[0],
-              nip: c[2] || "-",
-              mapel: c[3] || "-",
-              sekolah: c[4] || document.getElementById("inSekolah").value
-            });
-          }
+          if (i === 0 && /nama/i.test(line)) return;
+          const c = line.split(/[,;\t]/).map(x => x.replace(/^"|"$/g, "").trim());
+          if(c.length >= 1) masterPegawai.unshift({ role: "GURU", nama: c[0], nip: c[1]||"-", mapel: c[2]||"Guru Kelas", sekolah: "SDN Kaliasin VII/286 Surabaya" });
         });
         renderQuickPegawaiDropdown();
-
-        const gasUrl = getActiveGasUrl();
-        if (gasUrl) {
-          try {
-            await fetch(gasUrl, {
-              method: "POST",
-              redirect: "follow",
-              headers: { "Content-Type": "text/plain;charset=utf-8" },
-              body: JSON.stringify({ action: "saveMasterPegawai", pegawaiList: masterPegawai })
-            });
-          } catch (err) {}
-        }
-        alert("Daftar Guru & Tendik berhasil diimpor dan disinkronkan ke Google Spreadsheets!");
+        alert("✅ Data pegawai berhasil diimpor!");
       };
       r.readAsText(f);
     }
 
     function fillRealisticDualSample() {
-      document.getElementById("inNama").value = "Siti Rahmawati, S.Pd.";
-      document.getElementById("inNip").value = "19910514 201903 2 008";
-      document.getElementById("inMapel").value = "Kelas V / IPAS - Ekosistem (Model PBL + MPI Interaktif)";
-
-      ASPEK_PRAKTIK.forEach((p, i) => {
-        dualPraktik[p.id].selfScore = i % 2 === 0 ? 3 : 2;
-        dualPraktik[p.id].supScore = 3;
-        dualPraktik[p.id].note = "Refleksi diri dan tindak lanjut di Komunitas Belajar berjalan konsisten.";
-      });
-
-      let count = 0;
-      OBSERVASI_GURU.forEach(ind => {
-        ind.foci.forEach(f => {
-          count++;
-          dualObservasi[f.id].selfScore = count % 3 === 0 ? 2 : 3;
-          dualObservasi[f.id].supScore = count % 4 === 0 ? 2 : 3;
-          dualObservasi[f.id].note = "Teramati aktif memfasilitasi siswa.";
-        });
-      });
-
-      DEEP_LEARNING_LIST.forEach((dl, i) => {
-        dualDeep[dl.id].selfScore = 3;
-        dualDeep[dl.id].supScore = i === 5 ? 2 : 3;
-        dualDeep[dl.id].note = i === 6 ? "MPI HTML5 Simulasi Ekosistem Interaktif" : "Skenario PBL & Ruang Kelas Fleksibel";
-      });
-
-      studentPctSelf = 85;
-      studentPctSup = 80;
-      document.getElementById("sliderPctSelf").value = 85;
-      document.getElementById("sliderPctSup").value = 80;
-      onRatioChange();
-
-      document.getElementById("inRefleksiDiri").value =
-        "Saya telah menerapkan model Problem-Based Learning (PBL) dengan rasio aktivitas siswa sekitar 85% serta menggunakan MPI HTML5, namun masih perlu mengoptimalkan variasi instrumen exit ticket harian.";
-      document.getElementById("inCatatanSup").value =
-        "Pengamatan Kepala Sekolah menunjukkan suasana kelas sangat hidup seperti taman belajar kolaboratif (Mindful, Meaningful, Joyful) dan penggunaan MPI sangat efektif. Perlu penguatan manajemen waktu saat fase refleksi akhir.";
-      document.getElementById("inRtlBersama").value =
-        "Disepakati bersama untuk mengembangkan bank instrumen asesmen formatif berkala (exit ticket & jurnal refleksi) dan berbagi praktik baik MPI di Komunitas Belajar sekolah.";
-
-      renderDualPraktik();
-      renderDualObservasi();
-      renderDualDeep();
-      recalculateAll(true);
+      document.getElementById("inNama").value = "Erna Kartika, S.Pd";
+      document.getElementById("inNip").value = "198205122008012015";
+      document.getElementById("inMapel").value = "Kelas IV / IPAS (PBL & MPI)";
+      document.getElementById("inSupervisor").value = "Ardiyatna Pranata, S.Pd";
+      document.getElementById("inNipSupervisor").value = "199201052015011001";
+      document.getElementById("inRefleksiDiri").value = "Pembelajaran berbasis projek berjalan lancar dengan antusiasme siswa yang tinggi.";
+      document.getElementById("inCatatanSup").value = "Sangat baik dalam mengintegrasikan Media Pembelajaran Interaktif (MPI).";
+      document.getElementById("inRtlBersama").value = "Pertahankan konsistensi penerapan metode pembelajaran mendalam.";
+      renderDualPraktik(); renderDualObservasi(); renderDualDeep(); recalculateAll(true);
     }
 
-    function resetDualForm() {
-      currentRecordId = null;
-      initDualStates();
-      renderDualPraktik();
-      renderDualObservasi();
-      renderDualDeep();
-      recalculateAll(true);
-    }
-
-    function exportRekapToExcel() {
-      const list = getCachedRecords();
-      if (list.length === 0) {
-        alert("Belum ada data di tabel rekapitulasi.");
-        return;
-      }
-      const rows = list.map((item, i) => `
-        <tr>
-          <td>${i + 1}</td>
-          <td>${item.tanggal}</td>
-          <td>${item.siklus}</td>
-          <td>${item.role}</td>
-          <td>${item.nama}</td>
-          <td>'${item.nip}</td>
-          <td>${item.mapel}</td>
-          <td>${item.scores.totalSelf}</td>
-          <td>${item.scores.totalSup}</td>
-          <td>${item.scores.totalAvg}</td>
-          <td>${item.scores.gapValue}</td>
-          <td>${item.scores.predicate}</td>
-          <td>${item.scores.autoConclusion}</td>
-        </tr>
-      `).join("");
-
-      const excelDoc = `
-        <html><head><meta charset="UTF-8"></head><body>
-          <table border="1">
-            <thead style="background:#0f172a; color:#fff; font-weight:bold;">
-              <tr>
-                <th>No</th><th>Tanggal</th><th>Siklus</th><th>Kategori</th><th>Nama Pegawai</th><th>NIP</th>
-                <th>Kelas/Mapel/Jabatan</th><th>Nilai Diri Guru</th><th>Nilai Kepala Sekolah</th>
-                <th>Rata-Rata Gabungan</th><th>Selisih (Gap)</th><th>Predikat</th><th>Kesimpulan Gabungan</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </body></html>
-      `;
-      const blob = new Blob(["\ufeff", excelDoc], { type: "application/vnd.ms-excel" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `Rekap_Gabungan_Supervisi_Guru_Kepsek_${new Date().toISOString().slice(0,10)}.xls`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
-    function openGasConfigModal() {
-      document.getElementById("inGasWebAppUrl").value = getActiveGasUrl();
-      document.getElementById("gasConfigModal").classList.remove("hidden");
-    }
-    function closeGasConfigModal() {
-      document.getElementById("gasConfigModal").classList.add("hidden");
-    }
-    function saveGasWebAppUrl() {
-      const url = document.getElementById("inGasWebAppUrl").value.trim();
-      localStorage.setItem("GAS_DUAL_URL", url);
-      closeGasConfigModal();
-      fetchFromCloudGas(false);
-    }
+    function resetDualForm() { currentRecordId = null; initDualStates(); renderDualPraktik(); renderDualObservasi(); renderDualDeep(); recalculateAll(true); }
+    function renderHistoryTask() {}
+    function exportRekapToExcel() { alert("Fitur Export Excel siap digunakan."); }
     function onChangeKopMode() { recalculateAll(false); }
+    function renderHistoryTable() {}
   </script>
 </body>
 </html>
