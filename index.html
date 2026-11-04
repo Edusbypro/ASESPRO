@@ -3222,11 +3222,7 @@ function mulaiTimerCBT() {
         } else if (tipeSoal.includes('Kategori') || tipeSoal.includes('Katagori') || tipeSoal.includes('Kompleks')) {
             let objJawab = typeof jwbSiswa === 'object' && !Array.isArray(jwbSiswa) ? jwbSiswa : {};
             
-            // PERBAIKAN: Tambahkan variabel teks pertanyaan sebelum tabel kategori
             let htmlKat = `
-                <div class="mb-4" style="line-height: 1.6; font-size: 1.1rem; color: #333;">
-                    ${formatTeksBahasaDaerah(s.pertanyaan)}
-                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle bg-white shadow-sm rounded">
                         <thead class="table-light text-center">
